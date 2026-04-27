@@ -8,8 +8,8 @@
 | **Scope** | Tech-Stack, System-Komponenten, Datenmodell, Auth, Integrationen, LLM-Strategie, Deployment, Testing, Sprint-Plan |
 | **Out of Scope** | UI-Designs (Wireframes/Mockups → eigener Spec), Modul-Detail-Specs (Feature-Liste pro Modul → eigene Specs ab Phase 1.5), Self-Service-Sign-Up (Phase 1.5+) |
 | **Vorgänger-Spec** | `2026-04-24-icp-and-launch-story-design.md` (ICP, Personas, Launch-Story, Pricing, GTM, Risiken) |
-| **Folge-Dokumente** | Implementation-Plan via `superpowers:writing-plans` (TDD-Tasks), Naming-Session-Output (`<APP_NAME>` Auflösung) |
-| **App-Name-Platzhalter** | `<APP_NAME>` — wird in separater Naming-Session vor Code-Start aufgelöst |
+| **Folge-Dokumente** | Implementation-Plan via `superpowers:writing-plans` (TDD-Tasks) |
+| **App-Name** | **Vaeren** — finalisiert in Naming-Session 2026-04-27 (siehe `2026-04-27-naming-decision-vaeren.md`). Domain `vaeren.de` registriert + DNS bei Hetzner gesetzt. |
 
 ## 1. Kontext und Architektur-Leitprinzipien
 
@@ -89,8 +89,8 @@ Aus dem Vorgänger-Spec übernommen (kurze Ableitungen, nicht wiederholt):
 | Server | **Hetzner CAX31 ARM64 in Helsinki** (`hel1`), 8 vCPU, 16 GB RAM, 160 GB Disk, ~19 €/Monat |
 | Co-Location | **Parallel zu bestehendem Sponty-Stack** unter `/opt/ai-act/`, eigene Container mit `ai-act-`-Prefix, eigenes Docker-Network `ai-act-network` |
 | Reverse-Proxy | **Caddy 2 als Host-Service** (nicht Container), ersetzt Sponty-nginx als Port-80/443-Owner. Routet nach Domain zu Sponty-Backend bzw. ai-act-Django |
-| SSL-Zertifikate | **Let's Encrypt** über Caddy automatic HTTPS, Wildcard-Cert für `*.app.<APP_NAME>.de` via DNS-Challenge (Cloudflare-API-Token) |
-| DNS-Provider | **Cloudflare** (DNS-Challenge-tauglich, schnell) |
+| SSL-Zertifikate | **Let's Encrypt** über Caddy automatic HTTPS, Wildcard-Cert für `*.app.vaeren.de` via DNS-Challenge (Hetzner-DNS-API-Token, `caddy-dns/hetzner` Plugin) |
+| DNS-Provider | **Hetzner DNS Console** (`dns.hetzner.com`) — gleiche Hetzner-Verwaltung wie Server, kostenlos, EU-konform, API-tauglich für Caddy-Wildcard-Cert. **Bereits eingerichtet** für vaeren.de mit Records `@`, `app`, `*.app`, `hinweise`, `www` → 204.168.159.236 |
 | Container-Runtime | **Docker + Docker Compose** (Sponty-Pattern) |
 | Backup | **Hetzner Storage Box** (~4 €/Monat, 100 GB), `restic` verschlüsselt |
 | Monitoring | **Sentry EU-Region** (Free-Tier MVP, später Team-Plan), **Plausible Analytics** für Marketing-Site |
@@ -121,9 +121,9 @@ Aus dem Vorgänger-Spec übernommen (kurze Ableitungen, nicht wiederholt):
 │                                                                  │
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │  Caddy 2 (Host-Service) — Port 80/443 Reverse-Proxy      │   │
-│  │  *.app.<APP_NAME>.de  →  ai-act-django:8000              │   │
-│  │  hinweise.app.<APP_NAME>.de  →  ai-act-django:8000       │   │
-│  │  <APP_NAME>.de  →  ai-act-django:8000 (Marketing)        │   │
+│  │  *.app.vaeren.de  →  ai-act-django:8000              │   │
+│  │  hinweise.app.vaeren.de  →  ai-act-django:8000       │   │
+│  │  vaeren.de  →  ai-act-django:8000 (Marketing)        │   │
 │  │  sponty.de  →  sponty-nginx:80                           │   │
 │  └──────────────────────────────────────────────────────────┘   │
 │                            │                                     │
@@ -158,11 +158,11 @@ Aus dem Vorgänger-Spec übernommen (kurze Ableitungen, nicht wiederholt):
        ┌─────────────┼─────────────┬──────────────┬───────────────┐
        ▼             ▼             ▼              ▼               ▼
   ┌─────────┐  ┌─────────┐  ┌──────────┐   ┌──────────┐    ┌──────────┐
-  │OpenRouter│  │ Mailjet │  │Cloudflare│   │ Sentry   │    │ Hetzner  │
-  │(LLM-     │  │ (Trans- │  │(DNS +    │   │ EU       │    │ Storage  │
-  │ Multi-   │  │  aktion-│  │ DNS-     │   │ (Errors) │    │ Box      │
-  │ Provider)│  │  ale    │  │ Challenge│   │          │    │ (Backup) │
-  │          │  │  Mail)  │  │  für SSL)│   │          │    │          │
+  │OpenRouter│  │ Mailjet │  │ Hetzner  │   │ Sentry   │    │ Hetzner  │
+  │(LLM-     │  │ (Trans- │  │ DNS      │   │ EU       │    │ Storage  │
+  │ Multi-   │  │  aktion-│  │(Records +│   │ (Errors) │    │ Box      │
+  │ Provider)│  │  ale    │  │ DNS-     │   │          │    │ (Backup) │
+  │          │  │  Mail)  │  │ Challenge│   │          │    │          │
   └─────────┘  └─────────┘  └──────────┘   └──────────┘    └──────────┘
 ```
 
@@ -171,7 +171,7 @@ Aus dem Vorgänger-Spec übernommen (kurze Ableitungen, nicht wiederholt):
 ### Pattern: Schema-per-Tenant via django-tenants
 
 - **Eine Datenbank** `ai_act_db`, **mehrere Schemas** (eines pro Tenant + ein `public`-Schema)
-- Tenant-Erkennung via Subdomain: `acme.app.<APP_NAME>.de` → Schema `acme_gmbh`
+- Tenant-Erkennung via Subdomain: `acme.app.vaeren.de` → Schema `acme_gmbh`
 - HTTP-Anfrage triggert `django-tenants`-Middleware: liest Subdomain, schaltet `connection.schema_name` für die gesamte Request-Laufzeit
 - Cross-Tenant-Datenleak strukturell unmöglich, weil Tenant-A-Session physisch nie Tenant-B-Schema sieht
 
@@ -195,7 +195,7 @@ tenant = Tenant.objects.create(
     contract_start=date(2026,5,1), contract_end=date(2027,4,30),
 )
 TenantDomain.objects.create(
-    tenant=tenant, domain="acme.app.<APP_NAME>.de", is_primary=True,
+    tenant=tenant, domain="acme.app.vaeren.de", is_primary=True,
 )
 # Schema wird automatisch durch django-tenants angelegt + Migrations gefahren
 ```
@@ -244,7 +244,7 @@ Jedes neue Modul (KI-Inventar, Datenpannen, Transparenzregister, ISO-27001) erwe
 
 ### Login-Flow
 
-- **Mechanismus:** HTTP-only Session-Cookie auf `*.app.<APP_NAME>.de` (Same-Site-Domain). KEIN JWT.
+- **Mechanismus:** HTTP-only Session-Cookie auf `*.app.vaeren.de` (Same-Site-Domain). KEIN JWT.
 - **Library:** `django-allauth` + `dj-rest-auth` + `django-allauth-2fa`
 - **Tenant-Erkennung:** Subdomain → `django-tenants`-Middleware → Schema-Switch
 - **CSRF:** Django-CSRF-Token in Header `X-CSRFToken` für mutierende Requests, automatisch erzwungen durch `SessionAuthentication`
@@ -285,7 +285,7 @@ Rollen-Mapping erfolgt via `django-rules`-Library (Object-Level-Permissions).
 | OpenRouter (LLM) | Gemini 2.5 Flash + Mistral Small 3.2 (free) | OpenAI-SDK | 2 Tage | 🟡 mittel |
 | Sentry EU | Error-Monitoring | sentry-sdk[django] | 0,5 Tag | 🟢 niedrig |
 | Plausible Analytics | Marketing-Site Tracking | `<script>` snippet | 0,1 Tag | 🟢 niedrig |
-| Caddy + Let's Encrypt + Cloudflare DNS | SSL + Routing | Caddy native | 1 Tag | 🔴 hoch |
+| Caddy + Let's Encrypt + Hetzner DNS | SSL + Routing, Wildcard-Cert via Hetzner-DNS-API (caddy-dns/hetzner) | Caddy + Plugin | 1 Tag | 🔴 hoch |
 | Hetzner Storage Box | Backup | restic | 0,5 Tag | 🔴 hoch |
 
 ### Phase 1.5 (~Monat 5–6)
@@ -458,10 +458,10 @@ Build erfolgt **server-side** (ARM64-native) — keine Cross-Compile-Komplexitä
 
 Caddy läuft direkt auf dem Host (apt-installed, nicht Docker), belegt Port 80/443. Caddyfile routet:
 
-- `*.app.<APP_NAME>.de` + `<APP_NAME>.de` → `ai-act-django:8000`
+- `*.app.vaeren.de` + `vaeren.de` → `ai-act-django:8000`
 - `sponty.de` → `sponty-nginx:80`
 
-Wildcard-Cert für `*.app.<APP_NAME>.de` via Cloudflare DNS-Challenge (`CLOUDFLARE_API_TOKEN` als Env-Var).
+Wildcard-Cert für `*.app.vaeren.de` via Hetzner-DNS-Challenge (`HETZNER_DNS_API_TOKEN` als Env-Var, generiert in Hetzner DNS Console → API-Tokens).
 
 **Migration sponty-nginx → Caddy:** Geplante 30-Min-Wartung (am besten Sonntag-Nacht), siehe Sprint 8.
 
@@ -612,12 +612,14 @@ def test_tenant_isolation_strikt(acme_tenant, meier_tenant, db):
 
 | Prerequisite | Verantwortlich | Status |
 |---|---|---|
-| **`<APP_NAME>` Naming-Session** abschließen (DPMA + EUIPO + Domain-Check) | Konrad + Claude | offen |
-| **Cloudflare-Account** anlegen, DNS für `<APP_NAME>.de` einrichten | Konrad | offen (sobald Name) |
-| **`<APP_NAME>.de`-Domain registrieren** (z. B. via INWX, Hetzner, Cloudflare-Registrar) | Konrad | offen (sobald Name) |
+| **Naming-Session** abschließen → Name **Vaeren** | Konrad + Claude | ✅ erledigt 2026-04-27 |
+| **`vaeren.de`-Domain registrieren** bei Hetzner | Konrad | ✅ erledigt 2026-04-27 (4,90 €/Jahr, Auto-Renewal) |
+| **DNS für vaeren.de einrichten** in Hetzner DNS Console (Records `@`, `app`, `*.app`, `hinweise`, `www` → 204.168.159.236) | Konrad | ✅ erledigt 2026-04-27 |
+| **Hetzner-DNS-API-Token** für Caddy DNS-Challenge generieren | Konrad | offen (vor Sprint 8) |
 | **OpenRouter-Account** + API-Key | Konrad | offen |
-| **Mailjet-Account** + API-Keys, Domain-Verifizierung mit SPF/DKIM/DMARC | Konrad | offen |
+| **Mailjet-Account** + API-Keys, Domain-Verifizierung mit SPF/DKIM/DMARC für vaeren.de | Konrad | offen (vor Sprint 4) |
 | **Sentry-EU-Account** | Konrad | offen |
+| **Anwaltliche DPMA + EUIPO Markenrecherche** für „Vaeren" und Wortmarken-Anmeldung Klassen 9/35/42 (~500–800 € + 290 € DPMA-Gebühr) | Konrad | offen (vor Pilot-Kunden-Vertrag, idealerweise vor Sprint 4) |
 
 **Geschätzter Aufwand:** ~3–5 Std verteilt auf 1 Woche (vor Sprint 1).
 
@@ -664,10 +666,10 @@ Aus Vorgänger-Spec übernommen + architektur-spezifisch ergänzt:
 ## 15. Offene Fragen / Future Work
 
 - **Kanzlei-Auswahl** spätestens Sprint 4 — Output-Texte brauchen Legal-Review (3 Top-Kandidaten aus Vorgänger-Spec: SKW Schwarz, Heuking, Taylor Wessing)
-- **DNS-Provider-Entscheidung** in Sprint 8: Cloudflare (DNS-Challenge-tauglich, aber DSGVO-Schwammig) vs. Hetzner DNS (EU-clean, API für DNS-Challenge unsicherer)
+- ~~DNS-Provider-Entscheidung~~ entschieden 2026-04-27: **Hetzner DNS** (EU-clean, kostenlos, gleiche Verwaltung wie Server, `caddy-dns/hetzner` Plugin für Wildcard-Cert)
 - **Marketing-Site Tech-Stack:** Phase 1 als Django-Templates aus dem ai-act-Container, Phase 2 evtl. separates Astro/Nuxt für SEO-Boost
 - **Sentry vs. GlitchTip self-hosted:** Sentry-EU im MVP, GlitchTip-Switch ab 50+ Tenants wenn Sentry-Kosten steigen
-- **Tenant-Subdomain-Strategie:** Pro Subdomain (z. B. `acme.app.<APP_NAME>.de`) oder unter Ein-Subdomain mit Pfad-Routing? Spec setzt Subdomain — bei Cloudflare-Limit-Treffern revaluieren
+- **Tenant-Subdomain-Strategie:** Pro Subdomain (z. B. `acme.app.vaeren.de`) oder unter Ein-Subdomain mit Pfad-Routing? Spec setzt Subdomain — bei DNS-Limit-Treffern (Hetzner DNS hat keine harten Limits für Wildcard, aber ggf. Rate-Limits beim Cert-Renewal von Let's Encrypt) revaluieren
 - **HinSchG-Encryption-Key-Rotation:** Wie wird der Tenant-Schlüssel rotiert wenn z. B. ein User ausscheidet, der ihn kannte? Spec für Phase 2
 
 (Pre-Sprint-1 Prerequisites siehe §11.5)

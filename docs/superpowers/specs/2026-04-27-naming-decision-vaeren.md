@@ -100,10 +100,17 @@ In der Naming-Session wurden 6 Namen geprüft und verworfen, plus 16 weitere im 
 
 ## 5. Markenrechts-Maßnahmen (Folge-Aufgaben)
 
+### 5.0 Bereits erledigt (2026-04-27)
+
+- [x] **`vaeren.de` registriert** bei Hetzner (4,90 €/Jahr, Auto-Renewal, Inhaber Konrad Bizer)
+- [x] **DNS-Records gesetzt** in Hetzner DNS Console — `@`, `app`, `*.app`, `hinweise`, `www` zeigen alle auf `204.168.159.236` (Hetzner CAX31 Helsinki); Mail-Default-Records von Hetzner aufgeräumt
+
 ### 5.1 Empfohlen vor Pilot-Kunden-Vertrag (Sprint 4)
 
 - [ ] **Anwaltliche DPMA + EUIPO Volltext-Recherche** durch Markenanwalt (~500–800 €). Bestätigt formell, dass keine eingetragene Wortmarke „Vaeren" / „Værn" / „Vaern" in Klassen 9, 35, 42 existiert.
 - [ ] **DPMA-Wortmarken-Anmeldung** in Klassen 9 + 35 + 42 (Grundgebühr 290 € + ggf. Anwaltsgebühr 600–1.200 €). Schützt vor späteren Konkurrenten, die den Namen sehen und kopieren wollen.
+- [ ] **Hetzner-DNS-API-Token** generieren (für Caddy-Wildcard-Cert via `caddy-dns/hetzner` Plugin in Sprint 8)
+- [ ] **Mailjet-Domain-Verifizierung** für `vaeren.de` (SPF, DKIM, DMARC korrekt konfigurieren — vor Sprint 4 wenn Mail-Versand startet)
 
 ### 5.2 Optional, bei Skalierung (Phase 2 / 3)
 

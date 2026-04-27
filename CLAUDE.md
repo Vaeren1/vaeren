@@ -95,13 +95,15 @@ Aktueller Stand (Stand 2026-04-24): **Planungs-Phase abgeschlossen.** Pre-Sprint
 - **Compliance-Domain-Wissen:** Konrad ist Compliance-Neuling — Abkürzungen und Fachbegriffe immer kurz erklären. Glossar in `~/.claude/projects/-home-konrad-ai-act/memory/glossar_compliance.md`.
 - **YAGNI über Premature-Optimization:** Konrad neigt zu Scope-Erweiterungen — diese kritisch hinterfragen, nicht blind übernehmen.
 
-## Wenn `<APP_NAME>` durch echten Namen ersetzt wird
+## Produktname
 
-In separater Naming-Session entschieden — alle Vorkommen von `<APP_NAME>` in:
-- Specs (`docs/superpowers/specs/*`)
-- Infrastructure-Doku (`infrastructure/README.md`)
-- Memory (`~/.claude/projects/-home-konrad-ai-act/memory/*.md`)
-- CLAUDE.md (diese Datei)
-- Code (Django-Settings, Caddyfile, docker-compose, etc.)
+**Vaeren** (finalisiert in Naming-Session 2026-04-27, siehe `docs/superpowers/specs/2026-04-27-naming-decision-vaeren.md`).
 
-via `sed`-Replace ersetzen. Ein Commit pro Datei-Set für saubere History.
+- Schreibung Marketing/Logo: **Vaeren** (Initial-Capital)
+- Schreibung Code/Domain: `vaeren` (alles klein)
+- Hauptdomain: `vaeren.de` (registriert bei Hetzner, 4,90 €/Jahr Auto-Renewal)
+- DNS: Hetzner DNS Console (`dns.hetzner.com`)
+- DNS-Records gesetzt: `@`, `app`, `*.app`, `hinweise`, `www` → 204.168.159.236
+- `.com` bewusst NICHT im MVP-Scope (Squatter; Phase-3-Ziel)
+
+**Markenrechts-TODO vor Pilot-Kunden-Vertrag:** anwaltliche DPMA-Recherche + DPMA-Wortmarken-Anmeldung Klassen 9, 35, 42 (~290 € + Anwaltsgebühr).
