@@ -612,7 +612,6 @@ def test_tenant_isolation_strikt(acme_tenant, meier_tenant, db):
 
 | Prerequisite | Verantwortlich | Status |
 |---|---|---|
-| **PayWise-Konflikt klären:** Side-Project-Klausel im Arbeitsvertrag prüfen, ggf. mit HR/GF Gespräch suchen, dass ai-act + getrennter GitHub-Account erlaubt ist | Konrad | offen |
 | **`<APP_NAME>` Naming-Session** abschließen (DPMA + EUIPO + Domain-Check) | Konrad + Claude | offen |
 | **Cloudflare-Account** anlegen, DNS für `<APP_NAME>.de` einrichten | Konrad | offen (sobald Name) |
 | **`<APP_NAME>.de`-Domain registrieren** (z. B. via INWX, Hetzner, Cloudflare-Registrar) | Konrad | offen (sobald Name) |
