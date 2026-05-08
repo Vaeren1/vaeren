@@ -39,3 +39,22 @@ def test_schema_context_switches_connection(two_tenants):
         assert connection.schema_name == "acme_test"
     with schema_context(meier.schema_name):
         assert connection.schema_name == "meier_test"
+
+
+@pytest.mark.tenant_isolation
+def test_user_cannot_be_seen_across_schemas(two_tenants):
+    """Spec §10: User aus Tenant A darf niemals aus Tenant B sichtbar sein."""
+    from django.contrib.auth import get_user_model
+
+    from tests.factories import UserFactory
+
+    acme, meier = two_tenants
+    user_model = get_user_model()
+
+    with schema_context(acme.schema_name):
+        UserFactory(email="anna@acme.de")
+        assert user_model.objects.filter(email="anna@acme.de").exists()
+
+    with schema_context(meier.schema_name):
+        assert not user_model.objects.filter(email="anna@acme.de").exists()
+        assert user_model.objects.count() == 0

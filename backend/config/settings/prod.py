@@ -1,5 +1,5 @@
 """Prod-Settings. Wird in Sprint 8 (Production-Deploy) finalisiert."""
-from .base import *  # noqa: F401,F403
+from .base import *
 
 DEBUG = False
 SECURE_SSL_REDIRECT = True

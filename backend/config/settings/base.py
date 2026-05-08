@@ -26,6 +26,7 @@ TENANT_APPS: list[str] = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "core",
     "rest_framework",
     "drf_spectacular",
 ]
@@ -104,3 +105,5 @@ SPECTACULAR_SETTINGS = {
 
 TENANT_MODEL = "tenants.Tenant"
 TENANT_DOMAIN_MODEL = "tenants.TenantDomain"
+
+AUTH_USER_MODEL = "core.User"
