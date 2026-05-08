@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from core.models import Mitarbeiter
+from core.models import ComplianceTask, Mitarbeiter
 
 
 class SessionLoginResponseSerializer(serializers.Serializer):
@@ -30,3 +30,28 @@ class MitarbeiterSerializer(serializers.ModelSerializer):
             "updated_at",
         )
         read_only_fields = ("id", "created_at", "updated_at")
+
+
+class ComplianceTaskSerializer(serializers.ModelSerializer):
+    polymorphic_ctype = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ComplianceTask
+        fields = (
+            "id",
+            "polymorphic_ctype",
+            "titel",
+            "modul",
+            "kategorie",
+            "frist",
+            "verantwortlicher",
+            "betroffene",
+            "status",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = fields  # Read-only-API in Sprint 2
+
+    def get_polymorphic_ctype(self, obj) -> str:
+        """Wert wird in Sprint 4+ relevant, wenn Subklassen existieren."""
+        return obj.polymorphic_ctype.model if obj.polymorphic_ctype else "compliancetask"
