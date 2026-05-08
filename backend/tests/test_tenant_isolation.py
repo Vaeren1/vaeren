@@ -5,17 +5,16 @@ bricht, schlägt CI fehl und der PR kann nicht gemergt werden.
 """
 import pytest
 from django.db import connection
-from django_tenants.utils import get_tenant_model, schema_context
+from django_tenants.utils import schema_context
 
 
 @pytest.fixture
 def two_tenants(db):
     """Zwei minimal-Tenants im public-Schema, jeweils mit eigenem Schema."""
-    tenant_model = get_tenant_model()
-    acme = tenant_model(schema_name="acme_test", firma_name="ACME GmbH")
-    acme.save()  # legt Schema automatisch an
-    meier = tenant_model(schema_name="meier_test", firma_name="Meier KG")
-    meier.save()
+    from tests.factories import TenantFactory
+
+    acme = TenantFactory(schema_name="acme_test", firma_name="ACME GmbH")
+    meier = TenantFactory(schema_name="meier_test", firma_name="Meier KG")
     yield acme, meier
 
 
