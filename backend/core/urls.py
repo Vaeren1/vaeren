@@ -1,8 +1,12 @@
-from django.urls import path
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
-from .views import health
+from .views import MitarbeiterViewSet, health
 
-# Leer-Pfad, weil das Tenant-URLconf bereits "api/health/" als Mountpoint setzt.
+router = DefaultRouter()
+router.register(r"mitarbeiter", MitarbeiterViewSet, basename="mitarbeiter")
+
 urlpatterns = [
-    path("", health, name="health"),
+    path("health/", health, name="health"),
+    path("", include(router.urls)),
 ]

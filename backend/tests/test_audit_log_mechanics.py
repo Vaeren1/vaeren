@@ -1,30 +1,38 @@
 """Tests für AuditLog-Auto-Population: Signals + Mixin."""
 
-import uuid
-
 import pytest
 from django.contrib.contenttypes.models import ContentType
-from django_tenants.utils import schema_context
+from django.db import connection
+from django_tenants.utils import get_tenant_domain_model, get_tenant_model, schema_context
 
-from tests.factories import TenantDomainFactory, TenantFactory
+from tests.factories import TenantFactory
 
 
 @pytest.fixture
 def tenant(db):
     return TenantFactory(
-        schema_name=f"audmech_{uuid.uuid4().hex[:12]}",
+        schema_name="audmech_t8",
         firma_name="Audit-Mech",
     )
 
 
 @pytest.fixture
 def tenant_with_domain(db):
-    t = TenantFactory(
-        schema_name=f"audapi_{uuid.uuid4().hex[:12]}",
-        firma_name="Audit-API",
+    tenant_domain_model = get_tenant_domain_model()
+    # NOTE: Domain-Name darf KEIN Underscore enthalten (RFC 1034/1035).
+    t = TenantFactory(schema_name="audapi_t8", firma_name="Audit-API")
+    d, _ = tenant_domain_model.objects.get_or_create(
+        domain="audapi-t8.app.vaeren.local",
+        defaults={"tenant": t, "is_primary": True},
     )
-    d = TenantDomainFactory(tenant=t, domain=f"{t.schema_name}.app.vaeren.local", is_primary=True)
-    return t, d
+    yield t, d
+    # Teardown: Verbindung auf public zurücksetzen.
+    public_tenant_model = get_tenant_model()
+    try:
+        public_tenant = public_tenant_model.objects.get(schema_name="public")
+        connection.set_tenant(public_tenant)
+    except public_tenant_model.DoesNotExist:
+        connection.set_schema_to_public()
 
 
 def test_signal_fires_on_mitarbeiter_create(tenant):
@@ -76,7 +84,6 @@ def test_signal_does_not_fire_for_audit_log_itself(tenant):
         assert AuditLog.objects.count() == before + 1
 
 
-@pytest.mark.skip(reason="API-Endpoint kommt in Task 8")
 def test_mixin_captures_request_context(tenant_with_domain, settings):
     """AuditLogMixin auf ViewSet schreibt Log mit User+IP+aenderung_diff."""
     from django.test import Client
@@ -96,7 +103,8 @@ def test_mixin_captures_request_context(tenant_with_domain, settings):
         )
 
     client = Client(HTTP_HOST=domain.domain)
-    login_ok = client.login(username="qm@auditapi.de", password="ProperPass123!")
+    with schema_context(tenant.schema_name):
+        login_ok = client.login(username="qm@auditapi.de", password="ProperPass123!")
     assert login_ok, "Login muss klappen für diesen Test"
 
     resp = client.post(
