@@ -29,7 +29,11 @@ ignore = [
 [tool.ruff.format]
 quote-style = "double"
 
-[tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "config.settings.test"
-python_files = ["test_*.py"]
-addopts = "-ra --strict-markers --tb=short"
+[dependency-groups]
+dev = [
+    "factory-boy>=3.3",
+    "pytest>=8",
+    "pytest-django>=4.8",
+    "responses>=0.25",
+    "ruff>=0.6",
+]
