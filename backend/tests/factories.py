@@ -66,3 +66,17 @@ class MitarbeiterFactory(factory.django.DjangoModelFactory):
     abteilung = factory.Iterator(["Produktion", "QM", "IT", "HR", "Vertrieb"])
     rolle = "Mitarbeiter:in"
     eintritt = datetime.date(2024, 1, 1)
+
+
+from core.models import ComplianceTask, ComplianceTaskStatus  # noqa: E402
+
+
+class ComplianceTaskFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ComplianceTask
+
+    titel = factory.Sequence(lambda n: f"Compliance-Task {n}")
+    modul = "pflichtunterweisung"
+    kategorie = "schulung"
+    frist = factory.LazyAttribute(lambda o: datetime.date.today() + datetime.timedelta(days=30))
+    status = ComplianceTaskStatus.OFFEN

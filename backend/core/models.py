@@ -4,6 +4,9 @@ from typing import ClassVar
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from polymorphic.managers import PolymorphicManager
+from polymorphic.models import PolymorphicModel
+from polymorphic.query import PolymorphicQuerySet
 
 from .managers import EmailUserManager
 
@@ -77,3 +80,66 @@ class User(AbstractUser):
 
     def __str__(self) -> str:
         return f"{self.email} ({self.tenant_role})"
+
+
+class ComplianceTaskStatus(models.TextChoices):
+    OFFEN = "offen", "Offen"
+    IN_BEARBEITUNG = "in_bearbeitung", "In Bearbeitung"
+    ERLEDIGT = "erledigt", "Erledigt"
+    UEBERFAELLIG = "ueberfaellig", "Überfällig"
+
+
+class ComplianceTaskQuerySet(PolymorphicQuerySet):
+    def overdue(self):
+        from django.utils import timezone
+
+        return self.filter(
+            frist__lt=timezone.now().date(),
+        ).exclude(status=ComplianceTaskStatus.ERLEDIGT)
+
+
+class ComplianceTaskManager(PolymorphicManager.from_queryset(ComplianceTaskQuerySet)):
+    pass
+
+
+class ComplianceTask(PolymorphicModel):
+    """Engine-Modell für alle Compliance-Pflichten. Polymorphic-Base. Spec §5."""
+
+    titel = models.CharField(max_length=200)
+    modul = models.CharField(
+        max_length=50,
+        help_text="Modul-Identifier (z. B. 'pflichtunterweisung', 'hinschg')",
+    )
+    kategorie = models.CharField(max_length=50)
+    frist = models.DateField()
+    verantwortlicher = models.ForeignKey(
+        "core.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="compliance_tasks_responsible",
+    )
+    betroffene = models.ManyToManyField(
+        "core.Mitarbeiter",
+        blank=True,
+        related_name="compliance_tasks",
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=ComplianceTaskStatus.choices,
+        default=ComplianceTaskStatus.OFFEN,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = ComplianceTaskManager()
+
+    class Meta:
+        ordering: ClassVar = ["frist", "titel"]
+        indexes: ClassVar = [
+            models.Index(fields=["status", "frist"]),
+            models.Index(fields=["modul", "kategorie"]),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.titel} ({self.modul}, frist={self.frist})"

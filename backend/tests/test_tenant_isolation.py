@@ -83,3 +83,20 @@ def test_mitarbeiter_isolated_across_schemas(two_tenants):
 
     with schema_context(acme.schema_name):
         assert Mitarbeiter.objects.count() == 1
+
+
+@pytest.mark.tenant_isolation
+def test_compliance_task_isolated_across_schemas(two_tenants):
+    from core.models import ComplianceTask
+    from tests.factories import ComplianceTaskFactory
+
+    acme, meier = two_tenants
+
+    with schema_context(acme.schema_name):
+        ComplianceTaskFactory(titel="Acme-Task")
+
+    with schema_context(meier.schema_name):
+        assert ComplianceTask.objects.count() == 0
+
+    with schema_context(acme.schema_name):
+        assert ComplianceTask.objects.filter(titel="Acme-Task").exists()
