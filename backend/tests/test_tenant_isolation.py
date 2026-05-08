@@ -58,3 +58,7 @@ def test_user_cannot_be_seen_across_schemas(two_tenants):
     with schema_context(meier.schema_name):
         assert not user_model.objects.filter(email="anna@acme.de").exists()
         assert user_model.objects.count() == 0
+
+    with schema_context(acme.schema_name):
+        assert user_model.objects.count() == 1
+        assert user_model.objects.filter(email="anna@acme.de").exists()

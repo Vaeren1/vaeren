@@ -3,6 +3,8 @@ import factory
 from django.contrib.auth import get_user_model
 from django_tenants.utils import get_tenant_domain_model, get_tenant_model
 
+from core.models import TenantRole
+
 Tenant = get_tenant_model()
 TenantDomain = get_tenant_domain_model()
 User = get_user_model()
@@ -36,7 +38,7 @@ class UserFactory(factory.django.DjangoModelFactory):
         skip_postgeneration_save = True
 
     email = factory.Sequence(lambda n: f"user{n}@example.com")
-    tenant_role = "qm_leiter"
+    tenant_role = TenantRole.QM_LEITER
     is_active = True
 
     @factory.post_generation

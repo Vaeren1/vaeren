@@ -6,7 +6,7 @@ class EmailUserManager(BaseUserManager):
 
     use_in_migrations = True
 
-    def _create_user(self, email: str, password: str, **extra):
+    def _create_user(self, email: str, password: str | None, **extra):
         if not email:
             raise ValueError("Email ist Pflicht.")
         email = self.normalize_email(email)
@@ -15,15 +15,17 @@ class EmailUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email: str, password: str, **extra):
+    def create_user(self, email: str, password: str | None, **extra):
         extra.setdefault("is_staff", False)
         extra.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra)
 
-    def create_superuser(self, email: str, password: str, **extra):
+    def create_superuser(self, email: str, password: str | None, **extra):
+        from .models import TenantRole
+
         extra.setdefault("is_staff", True)
         extra.setdefault("is_superuser", True)
-        extra.setdefault("tenant_role", "geschaeftsfuehrer")
+        extra.setdefault("tenant_role", TenantRole.GESCHAEFTSFUEHRER)
         if extra.get("is_staff") is not True:
             raise ValueError("Superuser braucht is_staff=True.")
         if extra.get("is_superuser") is not True:
