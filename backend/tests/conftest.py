@@ -1,8 +1,10 @@
 """Globale pytest-Fixtures.
 
-django-tenants verlangt Test-Sonderbehandlung: pytest-django's `db`-Fixture
-mit `transactional_db` ist verlässlicher, weil django-tenants Schema-DDLs
-ausführt, die in transaktionalen Tests automatisch zurückgerollt werden.
+django-tenants legt Tenant-Schemas via `CREATE SCHEMA` (DDL) an. Da DDL
+in PostgreSQL einen impliziten Commit auslöst, kann `pytest-django`'s
+SAVEPOINT-Rollback diese Schemas nicht wieder entfernen. Deshalb
+überschreiben wir `db` so, dass es `transactional_db` (mit TRUNCATE/DROP-
+Teardown) erzwingt.
 """
 import pytest
 
@@ -13,11 +15,13 @@ def _silence_external_calls(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 @pytest.fixture
-def db(transactional_db):  # noqa: F811
+def db(transactional_db):
     """Erzwingt transactional_db für alle `db`-Fixturen.
 
-    django-tenants legt Schemas via DDL an; in normalem `db` (transaktional)
-    werden DDLs zwar gefahren, aber Cleanup ist unvollständig. transactional_db
-    nutzt full-flush nach jedem Test.
+    PostgreSQL behandelt `CREATE SCHEMA` als DDL, die innerhalb des Connection-
+    Transaction-Wrappings einen impliziten Commit auslöst. Damit überlebt
+    `pytest-django`'s normales SAVEPOINT-Rollback (`db`-Fixture) die Tenant-
+    Schemas. `transactional_db` macht stattdessen TRUNCATE/DROP beim Teardown
+    und entfernt damit auch die django-tenants-Schemas zuverlässig.
     """
     yield
