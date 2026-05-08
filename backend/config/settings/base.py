@@ -17,8 +17,8 @@ DEBUG = env.bool("DJANGO_DEBUG", default=False)
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
 SHARED_APPS: list[str] = [
-    "django_tenants",
     "tenants",
+    "django_tenants",
     "django.contrib.contenttypes",
     "django.contrib.auth",
     "django.contrib.sites",
