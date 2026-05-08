@@ -5,6 +5,8 @@ import hashlib
 from typing import ClassVar
 
 from django.contrib.auth.models import AbstractUser
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
 from polymorphic.managers import PolymorphicManager
@@ -271,3 +273,56 @@ class Notification(models.Model):
     def __str__(self) -> str:
         target = self.empfaenger_user or self.empfaenger_mitarbeiter
         return f"{self.channel} → {target}: {self.template}"
+
+
+class AuditLogAction(models.TextChoices):
+    CREATE = "create", "Erstellt"
+    UPDATE = "update", "Aktualisiert"
+    DELETE = "delete", "Gelöscht"
+    LOGIN = "login", "Login"
+    LOGOUT = "logout", "Logout"
+    EXPORT = "export", "Exportiert"
+
+
+class AuditLog(models.Model):
+    """Immutable Audit-Trail. Spec §5/§6.
+
+    actor kann NULL sein nach User-Delete; actor_email_snapshot bleibt
+    erhalten als ewiger Identifikator.
+    """
+
+    actor = models.ForeignKey(
+        "core.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="audit_logs_as_actor",
+    )
+    actor_email_snapshot = models.EmailField(blank=True, default="")
+    aktion = models.CharField(max_length=20, choices=AuditLogAction.choices)
+    target_content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    target_object_id = models.PositiveBigIntegerField(null=True, blank=True)
+    target = GenericForeignKey("target_content_type", "target_object_id")
+    aenderung_diff = models.JSONField(default=dict)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering: ClassVar = ["-timestamp"]
+        indexes: ClassVar = [
+            models.Index(fields=["actor", "-timestamp"]),
+            models.Index(fields=["target_content_type", "target_object_id"]),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.timestamp:%Y-%m-%d %H:%M} {self.actor_email_snapshot} {self.aktion}"
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError("AuditLog ist immutable — Updates verboten.")
+        super().save(*args, **kwargs)

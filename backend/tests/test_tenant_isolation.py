@@ -138,3 +138,24 @@ def test_notification_isolated_across_schemas(two_tenants):
 
     with schema_context(meier.schema_name):
         assert Notification.objects.count() == 0
+
+
+@pytest.mark.tenant_isolation
+def test_audit_log_isolated_across_schemas(two_tenants):
+    from core.models import AuditLog, AuditLogAction
+
+    acme, meier = two_tenants
+
+    with schema_context(acme.schema_name):
+        AuditLog.objects.create(
+            actor=None,
+            actor_email_snapshot="acme@x.de",
+            aktion=AuditLogAction.CREATE,
+            aenderung_diff={},
+        )
+
+    with schema_context(meier.schema_name):
+        assert AuditLog.objects.count() == 0
+
+    with schema_context(acme.schema_name):
+        assert AuditLog.objects.filter(actor_email_snapshot="acme@x.de").exists()
