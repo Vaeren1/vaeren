@@ -135,6 +135,9 @@ REST_AUTH = {
     "SESSION_LOGIN": True,
     "TOKEN_MODEL": None,  # Wir nutzen Session-Auth, kein Token-Auth
     "USER_DETAILS_SERIALIZER": "dj_rest_auth.serializers.UserDetailsSerializer",
+    # drf-spectacular kann TokenSerializer(model=None) nicht introspektieren.
+    # Da wir Session-Auth nutzen, ersetzen wir es durch einen leeren Serializer.
+    "TOKEN_SERIALIZER": "core.serializers.SessionLoginResponseSerializer",
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

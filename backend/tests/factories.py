@@ -25,6 +25,7 @@ class TenantFactory(factory.django.DjangoModelFactory):
 class TenantDomainFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = TenantDomain
+        django_get_or_create = ("domain",)
 
     tenant = factory.SubFactory(TenantFactory)
     domain = factory.LazyAttribute(lambda o: f"{o.tenant.schema_name}.app.vaeren.local")
