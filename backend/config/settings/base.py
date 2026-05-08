@@ -16,18 +16,23 @@ SECRET_KEY = env("DJANGO_SECRET_KEY", default="unsafe-default-only-for-import")
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
-# Multi-Tenant-Apps werden in Task 5 ergänzt.
 SHARED_APPS: list[str] = [
+    "django_tenants",
+    "tenants",
     "django.contrib.contenttypes",
     "django.contrib.auth",
+]
+TENANT_APPS: list[str] = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "drf_spectacular",
 ]
-TENANT_APPS: list[str] = []
 INSTALLED_APPS = SHARED_APPS + [a for a in TENANT_APPS if a not in SHARED_APPS]
 
 MIDDLEWARE = [
+    "django_tenants.middleware.main.TenantMainMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -61,7 +66,7 @@ ASGI_APPLICATION = "config.asgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django_tenants.postgresql_backend",
         "NAME": env("POSTGRES_DB", default="vaeren"),
         "USER": env("POSTGRES_USER", default="vaeren"),
         "PASSWORD": env("POSTGRES_PASSWORD", default=""),
@@ -69,6 +74,7 @@ DATABASES = {
         "PORT": env.int("POSTGRES_PORT", default=5432),
     }
 }
+DATABASE_ROUTERS = ("django_tenants.routers.TenantSyncRouter",)
 
 LANGUAGE_CODE = "de-de"
 TIME_ZONE = "Europe/Berlin"
@@ -95,3 +101,6 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "0.1.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
+
+TENANT_MODEL = "tenants.Tenant"
+TENANT_DOMAIN_MODEL = "tenants.TenantDomain"
