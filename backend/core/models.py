@@ -206,3 +206,68 @@ class Evidence(models.Model):
                 "Soft-Delete via Löschen-Markierung in Sprint 5+."
             )
         super().delete(*args, **kwargs)
+
+
+class NotificationChannel(models.TextChoices):
+    EMAIL = "email", "E-Mail"
+    IN_APP = "in_app", "In-App"
+    SMS = "sms", "SMS"
+
+
+class NotificationStatus(models.TextChoices):
+    GEPLANT = "geplant", "Geplant"
+    VERSANDT = "versandt", "Versandt"
+    GEOEFFNET = "geoeffnet", "Geöffnet"
+    BOUNCED = "bounced", "Bounced"
+    FAILED = "failed", "Failed"
+
+
+class Notification(models.Model):
+    """Notification an User ODER Mitarbeiter (XOR). Spec §5."""
+
+    empfaenger_user = models.ForeignKey(
+        "core.User",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="notifications",
+    )
+    empfaenger_mitarbeiter = models.ForeignKey(
+        "core.Mitarbeiter",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="notifications",
+    )
+    channel = models.CharField(max_length=20, choices=NotificationChannel.choices)
+    template = models.CharField(max_length=100)
+    template_kontext = models.JSONField(default=dict)
+    geplant_fuer = models.DateTimeField(null=True, blank=True)
+    versandt_am = models.DateTimeField(null=True, blank=True)
+    geoeffnet_am = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(
+        max_length=20,
+        choices=NotificationStatus.choices,
+        default=NotificationStatus.GEPLANT,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering: ClassVar = ["-created_at"]
+        constraints: ClassVar = [
+            # Django 5.0 uses check=; condition= is Django 5.1+
+            models.CheckConstraint(
+                check=(
+                    models.Q(empfaenger_user__isnull=False, empfaenger_mitarbeiter__isnull=True)
+                    | models.Q(empfaenger_user__isnull=True, empfaenger_mitarbeiter__isnull=False)
+                ),
+                name="notification_exactly_one_recipient",
+            ),
+        ]
+        indexes: ClassVar = [
+            models.Index(fields=["status", "geplant_fuer"]),
+        ]
+
+    def __str__(self) -> str:
+        target = self.empfaenger_user or self.empfaenger_mitarbeiter
+        return f"{self.channel} → {target}: {self.template}"

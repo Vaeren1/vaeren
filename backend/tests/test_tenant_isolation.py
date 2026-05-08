@@ -117,3 +117,24 @@ def test_evidence_isolated_across_schemas(two_tenants):
 
     with schema_context(acme.schema_name):
         assert Evidence.objects.filter(titel="Acme-Evidence").exists()
+
+
+@pytest.mark.tenant_isolation
+def test_notification_isolated_across_schemas(two_tenants):
+    from core.models import Notification
+    from tests.factories import MitarbeiterFactory
+
+    acme, meier = two_tenants
+
+    with schema_context(acme.schema_name):
+        ma = MitarbeiterFactory(vorname="Anna", nachname="A")
+        Notification.objects.create(
+            empfaenger_mitarbeiter=ma,
+            channel="email",
+            template="t",
+            template_kontext={},
+            status="geplant",
+        )
+
+    with schema_context(meier.schema_name):
+        assert Notification.objects.count() == 0
