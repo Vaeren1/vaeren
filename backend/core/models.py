@@ -16,6 +16,47 @@ class TenantRole(models.TextChoices):
     MITARBEITER_VIEW_ONLY = "mitarbeiter_view_only", "Mitarbeitende (nur Ansicht)"
 
 
+class MitarbeiterManager(models.Manager):
+    def active(self):
+        """Mitarbeiter mit austritt=NULL (=noch beschäftigt)."""
+        return self.get_queryset().filter(austritt__isnull=True)
+
+
+class Mitarbeiter(models.Model):
+    """Pflicht-Adressat (NICHT Login-User). Spec §5."""
+
+    vorname = models.CharField(max_length=100)
+    nachname = models.CharField(max_length=100)
+    email = models.EmailField(blank=True, default="")
+    abteilung = models.CharField(max_length=100)
+    rolle = models.CharField(max_length=100, help_text="Tätigkeit/Position")
+    eintritt = models.DateField()
+    austritt = models.DateField(null=True, blank=True)
+    external_id = models.CharField(
+        max_length=64,
+        blank=True,
+        default="",
+        help_text="ERP-Sync-ID (Phase 2)",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = MitarbeiterManager()
+
+    class Meta:
+        ordering: ClassVar = ["nachname", "vorname"]
+        constraints: ClassVar = [
+            models.UniqueConstraint(
+                fields=["external_id"],
+                condition=models.Q(external_id__gt=""),
+                name="mitarbeiter_unique_external_id_when_set",
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.nachname}, {self.vorname}"
+
+
 class User(AbstractUser):
     """Login-User innerhalb eines Tenant-Schemas."""
 

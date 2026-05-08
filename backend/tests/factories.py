@@ -49,3 +49,20 @@ class UserFactory(factory.django.DjangoModelFactory):
             return
         self.set_password(extracted or "test-password-12345")
         self.save()
+
+
+import datetime  # noqa: E402
+
+from core.models import Mitarbeiter  # noqa: E402
+
+
+class MitarbeiterFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Mitarbeiter
+
+    vorname = factory.Faker("first_name", locale="de_DE")
+    nachname = factory.Faker("last_name", locale="de_DE")
+    email = factory.LazyAttribute(lambda o: f"{o.vorname.lower()}.{o.nachname.lower()}@example.de")
+    abteilung = factory.Iterator(["Produktion", "QM", "IT", "HR", "Vertrieb"])
+    rolle = "Mitarbeiter:in"
+    eintritt = datetime.date(2024, 1, 1)
