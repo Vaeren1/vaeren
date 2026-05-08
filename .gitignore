@@ -1,10 +1,41 @@
+# Python
 .venv/
 __pycache__/
 *.pyc
-.DS_Store
+*.pyo
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# uv
+# uv.lock IS committed; only ignore caches
+.uv/
+
+# Node/Bun
+node_modules/
+.bun/
+bun.lockb.bak
+
+# Django
+*.log
+*.sqlite3
+staticfiles/
+media/
+
+# Env
 .env
 .env.local
-node_modules/
+.env.production
+.env.dev
+!.env.example
+
+# Editors / OS
 .idea/
 .vscode/
+.DS_Store
+
+# Superpowers
 .superpowers/
