@@ -1,0 +1,36 @@
+# Lokales Dev-Setup. NICHT für Production verwenden.
+# Production-Compose liegt in Sprint 8 unter docker-compose.prod.yml.
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: vaeren-dev-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-vaeren}
+      POSTGRES_USER: ${POSTGRES_USER:-vaeren}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vaeren_dev_only}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - vaeren-dev-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-vaeren}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: vaeren-dev-redis
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - vaeren-dev-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  vaeren-dev-postgres-data:
+  vaeren-dev-redis-data:
