@@ -29,7 +29,10 @@ class TenantDomainFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("domain",)
 
     tenant = factory.SubFactory(TenantFactory)
-    domain = factory.LazyAttribute(lambda o: f"{o.tenant.schema_name}.app.vaeren.local")
+    # Underscore in DNS-Labels ist RFC 1034/1035-verboten; Django blockt das via SuspiciousOperation.
+    domain = factory.LazyAttribute(
+        lambda o: f"{o.tenant.schema_name.replace('_', '-')}.app.vaeren.local"
+    )
     is_primary = True
 
 
