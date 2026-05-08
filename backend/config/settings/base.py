@@ -21,11 +21,18 @@ SHARED_APPS: list[str] = [
     "tenants",
     "django.contrib.contenttypes",
     "django.contrib.auth",
+    "django.contrib.sites",
 ]
 TENANT_APPS: list[str] = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_otp",
+    "django_otp.plugins.otp_totp",
+    "django_otp.plugins.otp_static",
+    "allauth",
+    "allauth.account",
+    "dj_rest_auth",
     "core",
     "rest_framework",
     "drf_spectacular",
@@ -39,6 +46,8 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django_otp.middleware.OTPMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -107,3 +116,25 @@ TENANT_MODEL = "tenants.Tenant"
 TENANT_DOMAIN_MODEL = "tenants.TenantDomain"
 
 AUTH_USER_MODEL = "core.User"
+
+SITE_ID = 1
+
+# django-allauth — Email-basiert
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+REST_AUTH = {
+    "USE_JWT": False,
+    "SESSION_LOGIN": True,
+    "TOKEN_MODEL": None,  # Wir nutzen Session-Auth, kein Token-Auth
+    "USER_DETAILS_SERIALIZER": "dj_rest_auth.serializers.UserDetailsSerializer",
+}
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
