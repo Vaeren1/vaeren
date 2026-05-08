@@ -24,7 +24,7 @@ Bei Unsicherheit immer zuerst hier nachsehen:
 
 - **Backend:** Python 3.12 + Django 5 LTS + DRF + django-tenants (schema-per-tenant) + Celery + Redis + Postgres 16
 - **Frontend:** React 18 + TypeScript + Vite + Tailwind + shadcn/ui + TanStack Query + Zustand + React Router 7
-- **Auth:** django-allauth + dj-rest-auth + django-allauth-2fa (TOTP-MFA aus dem MVP), Session-Cookies KEIN JWT
+- **Auth:** django-allauth + dj-rest-auth + django-otp (TOTP-MFA aus dem MVP — `django-allauth-2fa` ist abandoned + inkompatibel mit allauth>=64, deshalb der Substitution), Session-Cookies KEIN JWT
 - **Package-Manager:** `uv` (Python), `bun` (JS) — beide schneller als pip/npm, deterministische Lockfiles
 - **Linting:** Ruff (Python), Biome oder ESLint (JS)
 - **LLM:** OpenRouter als Provider-Aggregator (gleich wie Sponty), MVP-Defaults: `google/gemini-2.5-flash:free` (Fast) + `mistralai/mistral-small-3.2:free` (Reasoning). Migrations-Pfad zu Anthropic Claude in Phase 2.

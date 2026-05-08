@@ -22,6 +22,8 @@ class Tenant(TenantMixin):
     created_at = models.DateTimeField(auto_now_add=True)
 
     auto_create_schema = True
+    # PROD-Risiko: löscht das gesamte Postgres-Schema bei Tenant.delete().
+    # Vor Production-Start durch Soft-Delete + manuelles Schema-Drop ersetzen.
     auto_drop_schema = True
 
     def __str__(self) -> str:
