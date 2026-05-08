@@ -52,6 +52,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 
 import datetime  # noqa: E402
+import hashlib  # noqa: E402
 
 from core.models import Mitarbeiter  # noqa: E402
 
@@ -80,3 +81,16 @@ class ComplianceTaskFactory(factory.django.DjangoModelFactory):
     kategorie = "schulung"
     frist = factory.LazyAttribute(lambda o: datetime.date.today() + datetime.timedelta(days=30))
     status = ComplianceTaskStatus.OFFEN
+
+
+from core.models import Evidence  # noqa: E402
+
+
+class EvidenceFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Evidence
+
+    titel = factory.Sequence(lambda n: f"Evidence {n}")
+    sha256 = factory.Sequence(lambda n: hashlib.sha256(f"x-{n}".encode()).hexdigest())
+    mime_type = "application/pdf"
+    groesse_bytes = 1024

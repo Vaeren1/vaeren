@@ -1,8 +1,11 @@
 """Tenant-Schema-Baseline-Modelle. Spec §5/§6."""
 
+import datetime
+import hashlib
 from typing import ClassVar
 
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from polymorphic.managers import PolymorphicManager
 from polymorphic.models import PolymorphicModel
@@ -143,3 +146,63 @@ class ComplianceTask(PolymorphicModel):
 
     def __str__(self) -> str:
         return f"{self.titel} ({self.modul}, frist={self.frist})"
+
+
+class EvidenceManager(models.Manager):
+    def create_with_content(self, *, titel, content: bytes, mime_type: str, **extra):
+        """Helper: berechnet SHA-256 + Größe automatisch."""
+        return self.create(
+            titel=titel,
+            sha256=hashlib.sha256(content).hexdigest(),
+            mime_type=mime_type,
+            groesse_bytes=len(content),
+            **extra,
+        )
+
+
+def _default_aufbewahrung_bis():
+    return datetime.date.today() + datetime.timedelta(days=365 * 10)
+
+
+class Evidence(models.Model):
+    """Audit-Beleg, manipulationssicher. Spec §5/§6.
+
+    Immutable nach Erstellung: sha256 + flag + save/delete-Guards.
+    """
+
+    titel = models.CharField(max_length=200)
+    datei_path = models.CharField(max_length=512, blank=True, default="")
+    sha256 = models.CharField(max_length=64, db_index=True)
+    mime_type = models.CharField(max_length=100)
+    groesse_bytes = models.PositiveBigIntegerField()
+    bezug_task = models.ForeignKey(
+        "core.ComplianceTask",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="evidences",
+    )
+    aufbewahrung_bis = models.DateField(default=_default_aufbewahrung_bis)
+    immutable = models.BooleanField(default=True, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = EvidenceManager()
+
+    class Meta:
+        ordering: ClassVar = ["-created_at"]
+
+    def __str__(self) -> str:
+        return f"Evidence: {self.titel} ({self.sha256[:8]})"
+
+    def save(self, *args, **kwargs):
+        if self.pk and self.immutable:
+            raise ValidationError(f"Evidence {self.pk} ist immutable — Updates verboten.")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.immutable:
+            raise ValidationError(
+                f"Evidence {self.pk} ist immutable — Delete verboten. "
+                "Soft-Delete via Löschen-Markierung in Sprint 5+."
+            )
+        super().delete(*args, **kwargs)
