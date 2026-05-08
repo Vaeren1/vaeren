@@ -1,4 +1,5 @@
 """Tests für Custom-User-Modell mit Rollen."""
+
 import pytest
 from django.contrib.auth import get_user_model
 from django_tenants.utils import schema_context
@@ -14,9 +15,7 @@ def tenant(db):
 def test_user_uses_email_as_username(tenant):
     user_model = get_user_model()
     with schema_context(tenant.schema_name):
-        user = user_model.objects.create_user(
-            email="anna@example.com", password="x" * 12
-        )
+        user = user_model.objects.create_user(email="anna@example.com", password="x" * 12)
         assert user.email == "anna@example.com"
         assert user.username == ""
 
@@ -35,7 +34,5 @@ def test_user_has_role_field(tenant):
 def test_user_role_default_is_view_only(tenant):
     user_model = get_user_model()
     with schema_context(tenant.schema_name):
-        user = user_model.objects.create_user(
-            email="newhire@example.com", password="x" * 12
-        )
+        user = user_model.objects.create_user(email="newhire@example.com", password="x" * 12)
         assert user.tenant_role == "mitarbeiter_view_only"

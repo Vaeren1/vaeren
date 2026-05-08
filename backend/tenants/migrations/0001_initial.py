@@ -6,42 +6,76 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Tenant',
+            name="Tenant",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('schema_name', models.CharField(db_index=True, max_length=63, unique=True, validators=[django_tenants.postgresql_backend.base._check_schema_name])),
-                ('firma_name', models.CharField(max_length=200)),
-                ('plan', models.CharField(choices=[('starter', 'Starter'), ('professional', 'Professional'), ('business', 'Business')], default='professional', max_length=20)),
-                ('pilot', models.BooleanField(default=False)),
-                ('pilot_discount_percent', models.PositiveSmallIntegerField(default=0)),
-                ('mfa_required', models.BooleanField(default=False)),
-                ('locale', models.CharField(default='de-DE', max_length=10)),
-                ('contract_start', models.DateField(blank=True, null=True)),
-                ('contract_end', models.DateField(blank=True, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                (
+                    "schema_name",
+                    models.CharField(
+                        db_index=True,
+                        max_length=63,
+                        unique=True,
+                        validators=[django_tenants.postgresql_backend.base._check_schema_name],
+                    ),
+                ),
+                ("firma_name", models.CharField(max_length=200)),
+                (
+                    "plan",
+                    models.CharField(
+                        choices=[
+                            ("starter", "Starter"),
+                            ("professional", "Professional"),
+                            ("business", "Business"),
+                        ],
+                        default="professional",
+                        max_length=20,
+                    ),
+                ),
+                ("pilot", models.BooleanField(default=False)),
+                ("pilot_discount_percent", models.PositiveSmallIntegerField(default=0)),
+                ("mfa_required", models.BooleanField(default=False)),
+                ("locale", models.CharField(default="de-DE", max_length=10)),
+                ("contract_start", models.DateField(blank=True, null=True)),
+                ("contract_end", models.DateField(blank=True, null=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='TenantDomain',
+            name="TenantDomain",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('domain', models.CharField(db_index=True, max_length=253, unique=True)),
-                ('is_primary', models.BooleanField(db_index=True, default=True)),
-                ('tenant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='domains', to='tenants.tenant')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("domain", models.CharField(db_index=True, max_length=253, unique=True)),
+                ("is_primary", models.BooleanField(db_index=True, default=True)),
+                (
+                    "tenant",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="domains",
+                        to="tenants.tenant",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

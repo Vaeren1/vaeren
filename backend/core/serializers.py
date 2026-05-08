@@ -1,4 +1,5 @@
 """Core-Serializers für dj-rest-auth und API-Schema."""
+
 from rest_framework import serializers
 
 

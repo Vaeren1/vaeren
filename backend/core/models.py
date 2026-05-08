@@ -1,4 +1,5 @@
 """Tenant-Schema-Baseline-Modelle. Spec §5/§6."""
+
 from typing import ClassVar
 
 from django.contrib.auth.models import AbstractUser

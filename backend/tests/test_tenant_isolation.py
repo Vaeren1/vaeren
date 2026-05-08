@@ -3,6 +3,7 @@
 Datenleak zwischen Tenants ist nicht verhandelbar. Wenn dieser Test
 bricht, schlägt CI fehl und der PR kann nicht gemergt werden.
 """
+
 import pytest
 from django.db import connection
 from django_tenants.utils import schema_context

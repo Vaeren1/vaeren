@@ -1,4 +1,5 @@
 """Public-Schema-Modelle. Spec §5."""
+
 from django.db import models
 from django_tenants.models import DomainMixin, TenantMixin
 
@@ -11,9 +12,7 @@ class Plan(models.TextChoices):
 
 class Tenant(TenantMixin):
     firma_name = models.CharField(max_length=200)
-    plan = models.CharField(
-        max_length=20, choices=Plan.choices, default=Plan.PROFESSIONAL
-    )
+    plan = models.CharField(max_length=20, choices=Plan.choices, default=Plan.PROFESSIONAL)
     pilot = models.BooleanField(default=False)
     pilot_discount_percent = models.PositiveSmallIntegerField(default=0)
     mfa_required = models.BooleanField(default=False)

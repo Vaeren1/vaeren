@@ -1,4 +1,5 @@
 """URLs für tenant-Schemas (App-Funktionalität)."""
+
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 

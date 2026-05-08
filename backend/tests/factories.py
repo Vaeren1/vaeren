@@ -1,4 +1,5 @@
 """factory_boy Factories für Tests."""
+
 import factory
 from django.contrib.auth import get_user_model
 from django_tenants.utils import get_tenant_domain_model, get_tenant_model

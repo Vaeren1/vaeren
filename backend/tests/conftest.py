@@ -12,6 +12,7 @@ Bekanntes Problem mit django-tenants + AbstractUser: `core_user_user_permissions
 FK-Constraints fehlschlägt. Workaround: `flush` wird mit `allow_cascade=True`
 aufgerufen, indem der originale `handle()`-Call gepatcht wird.
 """
+
 import pytest
 
 

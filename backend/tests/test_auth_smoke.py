@@ -13,6 +13,7 @@ Wir testen NICHT die volle Auth-Logik (das macht Sprint 3), sondern nur:
 - ein User kann TOTP-Device anlegen und verifizieren
 - Login-Endpoint von dj-rest-auth ist erreichbar im Tenant-Kontext
 """
+
 import pytest
 from django.db import connection
 from django.test import Client

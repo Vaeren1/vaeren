@@ -1,4 +1,5 @@
 """Gemeinsame Django-Settings. Konkrete Umgebungen erweitern dies."""
+
 from pathlib import Path
 
 import environ

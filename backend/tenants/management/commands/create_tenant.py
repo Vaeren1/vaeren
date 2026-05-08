@@ -1,4 +1,5 @@
 """Tenant + Primary-Domain anlegen. Spec §4."""
+
 from django.core.management.base import BaseCommand, CommandError
 
 from tenants.models import Plan, Tenant, TenantDomain
@@ -17,9 +18,7 @@ class Command(BaseCommand):
             default=Plan.PROFESSIONAL.value,
         )
         parser.add_argument("--pilot", action="store_true")
-        parser.add_argument(
-            "--pilot-discount", type=int, default=0, help="Prozent (0-100)"
-        )
+        parser.add_argument("--pilot-discount", type=int, default=0, help="Prozent (0-100)")
 
     def handle(self, *args, **opts):
         schema = opts["schema"]

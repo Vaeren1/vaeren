@@ -1,4 +1,5 @@
 """Prod-Settings. Wird in Sprint 8 (Production-Deploy) finalisiert."""
+
 from .base import *
 
 DEBUG = False

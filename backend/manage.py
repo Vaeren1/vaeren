@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Django Management-Entry-Point."""
+
 import os
 import sys
 
@@ -9,9 +10,7 @@ def main() -> None:
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:  # pragma: no cover
-        raise ImportError(
-            "Django not installed. Run `uv sync` inside backend/."
-        ) from exc
+        raise ImportError("Django not installed. Run `uv sync` inside backend/.") from exc
     execute_from_command_line(sys.argv)
 
 
