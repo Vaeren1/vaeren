@@ -126,3 +126,54 @@ def test_mixin_captures_request_context(tenant_with_domain, settings):
         assert latest.actor.email == "qm@auditapi.de"
         assert latest.actor_email_snapshot == "qm@auditapi.de"
         assert latest.ip_address in ("127.0.0.1", "::1")
+
+
+def test_full_flow_create_via_api_logs_actor_and_ip(tenant_with_domain, settings):
+    """End-to-End: API-CREATE → AuditLog hat Actor + IP + CREATE-Aktion."""
+    from django.contrib.contenttypes.models import ContentType
+    from django.test import Client
+
+    from core.models import AuditLog, AuditLogAction, Mitarbeiter
+    from tests.factories import UserFactory
+
+    settings.ALLOWED_HOSTS = ["*"]
+    tenant, domain = tenant_with_domain
+
+    with schema_context(tenant.schema_name):
+        UserFactory(
+            email="qm@auditapi.de",
+            password="ProperPass123!",
+            tenant_role="qm_leiter",
+            is_active=True,
+        )
+        before_count = AuditLog.objects.count()
+
+    client = Client(HTTP_HOST=domain.domain)
+    with schema_context(tenant.schema_name):
+        assert client.login(username="qm@auditapi.de", password="ProperPass123!")
+
+    resp = client.post(
+        "/api/mitarbeiter/",
+        data={
+            "vorname": "Full",
+            "nachname": "Flow",
+            "email": "ff@x.de",
+            "abteilung": "X",
+            "rolle": "X",
+            "eintritt": "2024-01-01",
+        },
+        content_type="application/json",
+    )
+    assert resp.status_code == 201
+
+    with schema_context(tenant.schema_name):
+        # Erwarte mind. +1 AuditLog
+        assert AuditLog.objects.count() > before_count
+        latest = AuditLog.objects.latest("timestamp")
+        ma = Mitarbeiter.objects.get(email="ff@x.de")
+        assert latest.aktion == AuditLogAction.CREATE
+        assert latest.target_content_type == ContentType.objects.get_for_model(Mitarbeiter)
+        assert latest.target_object_id == ma.pk
+        assert latest.actor.email == "qm@auditapi.de"
+        assert latest.actor_email_snapshot == "qm@auditapi.de"
+        assert latest.ip_address in ("127.0.0.1", "::1")
