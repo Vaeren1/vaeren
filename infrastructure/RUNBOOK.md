@@ -357,7 +357,7 @@ zcat /tmp/restore-probe/var/lib/vaeren-restic/*.sql.gz | grep encryption_key
 | Brevo (Mail-Provider, 300/Tag free, EU) | ~30 min | ✅ aktiv 2026-05-09 |
 | OpenRouter API-Key | ~10 min | ✅ aktiv 2026-05-10 |
 | Hetzner Storage Box (restic) | ~15 min | ✅ aktiv 2026-05-09, daily 03:00 |
-| Sentry-EU Project | ~10 min | offen |
+| GlitchTip self-hosted (Sentry-API) | ~30 min | ✅ aktiv 2026-05-10 — `errors.app.vaeren.de` |
 | DPMA-Wortmarken-Anmeldung | Anwalt, ~6 Mo | offen (vor Pilot-Vertrag) |
 
 Auch ohne offene Punkte ist Vaeren **demo-fähig** dank Module-Fallbacks
