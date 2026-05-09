@@ -8,6 +8,7 @@
  *  4. Activity-Feed (letzte 10 Audit-Einträge)
  */
 
+import { KpiCard } from "@/components/dashboard/kpi-card";
 import { ScoreDonut } from "@/components/dashboard/score-donut";
 import {
   Card,
@@ -16,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   type DashboardActivity,
   type DashboardTask,
@@ -163,6 +165,7 @@ export function DashboardPage() {
           {this_week_tasks.length === 0 ? (
             <EmptyState
               icon={CheckCircle2}
+              tone="success"
               title="Alles im Plan."
               hint="Keine Aufgabe wird in den nächsten 7 Tagen fällig."
             />
@@ -213,51 +216,6 @@ export function DashboardPage() {
       </Card>
     </div>
   );
-}
-
-function KpiCard({
-  label,
-  value,
-  sub,
-  tone,
-  icon: Icon,
-  link,
-}: {
-  label: string;
-  value: number;
-  sub: string;
-  tone: "red" | "yellow" | "green" | "neutral";
-  icon: LucideIcon;
-  link?: string;
-}) {
-  const tones = {
-    red: "bg-rose-50 text-rose-800 border-rose-200",
-    yellow: "bg-amber-50 text-amber-800 border-amber-200",
-    green: "bg-emerald-50 text-emerald-800 border-emerald-200",
-    neutral: "bg-slate-50 text-slate-800 border-slate-200",
-  };
-  const content = (
-    <div
-      className={cn(
-        "flex h-full flex-col rounded-lg border p-4 transition",
-        tones[tone],
-        link && "cursor-pointer hover:shadow-sm",
-      )}
-    >
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-medium uppercase tracking-wide opacity-70">
-          {label}
-        </span>
-        <Icon size={16} className="opacity-60" />
-      </div>
-      <div className="mt-2 flex items-baseline gap-2">
-        <span className="text-3xl font-bold tabular-nums">{value}</span>
-      </div>
-      <p className="mt-1 text-xs opacity-80">{sub}</p>
-    </div>
-  );
-  if (link) return <Link to={link}>{content}</Link>;
-  return content;
 }
 
 function TaskRow({
@@ -416,26 +374,6 @@ function aktionLabel(a: string): string {
     default:
       return a;
   }
-}
-
-function EmptyState({
-  icon: Icon,
-  title,
-  hint,
-}: {
-  icon: LucideIcon;
-  title: string;
-  hint: string;
-}) {
-  return (
-    <div className="flex flex-col items-center justify-center py-8 text-center">
-      <div className="rounded-full bg-emerald-50 p-3 text-emerald-600">
-        <Icon size={24} />
-      </div>
-      <p className="mt-3 text-sm font-medium">{title}</p>
-      <p className="mt-1 text-xs text-slate-500">{hint}</p>
-    </div>
-  );
 }
 
 function DashboardSkeleton() {

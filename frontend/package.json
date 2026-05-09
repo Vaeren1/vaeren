@@ -10,7 +10,10 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "biome check src",
     "test": "bun test",
-    "sync-openapi": "bash scripts/sync-openapi.sh"
+    "sync-openapi": "bash scripts/sync-openapi.sh",
+    "storybook": "storybook dev -p 6006 --no-open",
+    "storybook:build": "storybook build -o storybook-static",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -34,6 +37,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@playwright/test": "^1.59.1",
+    "@storybook/react-vite": "^10.3.6",
     "@types/bun": "^1.1.13",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
@@ -41,6 +46,7 @@
     "autoprefixer": "^10.4.20",
     "openapi-typescript": "^7.4.4",
     "postcss": "^8.4.49",
+    "storybook": "^10.3.6",
     "tailwindcss": "^3.4.15",
     "typescript": "^5.7.2",
     "vite": "^6.0.0"

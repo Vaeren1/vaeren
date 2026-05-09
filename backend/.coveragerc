@@ -1,0 +1,27 @@
+[run]
+source = .
+branch = True
+omit =
+    .venv/*
+    */migrations/*
+    */management/__init__.py
+    */management/commands/__init__.py
+    config/asgi.py
+    config/wsgi.py
+    config/settings/*
+    manage.py
+    tests/*
+    scripts/*
+
+[report]
+show_missing = True
+skip_covered = True
+exclude_lines =
+    pragma: no cover
+    raise NotImplementedError
+    if TYPE_CHECKING
+    if __name__ == .__main__.:
+    \.\.\.
+
+[html]
+directory = htmlcov

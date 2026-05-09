@@ -19,6 +19,12 @@ node_modules/
 .bun/
 bun.lockb.bak
 
+# Frontend build artifacts
+frontend/dist/
+frontend/storybook-static/
+frontend/test-results/
+frontend/playwright-report/
+
 # Django
 *.log
 *.sqlite3

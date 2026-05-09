@@ -1,6 +1,6 @@
 # Vaeren — Compliance-Autopilot
 
-> Schema-per-Tenant SaaS. Stand Sprint 6: Compliance-Cockpit (Dashboard mit Score-Donut), Notification-Engine (In-App + Email), Sidebar-Layout, AuditLog-Viewer mit CSV-Export, Tenant-Settings.
+> Schema-per-Tenant SaaS. Stand Sprint 7: Test-Hardening — pytest-cov mit 86 %+ Coverage und CI-Gate (`--cov-fail-under=80`), Storybook 10 für Premium-UI-Komponenten (Score-Donut, KPI-Card, NotificationBell, EmptyState), Playwright-E2E mit 8 kritischen User-Journeys (nur main).
 > Architektur-Spec: `docs/superpowers/specs/2026-04-24-mvp-architecture-design.md`.
 
 ## Lokales Dev-Setup
@@ -41,7 +41,8 @@ curl http://dev.app.vaeren.local:8000/api/health/
 
 ```bash
 cd backend
-uv run pytest -v                     # alle (182)
+uv run pytest -v                     # alle (187)
+uv run pytest --cov                  # Coverage-Report (Ziel: ≥ 80 %)
 uv run pytest -m tenant_isolation -v # nur kritischer CI-Gate
 uv run ruff check . && uv run ruff format --check .
 ```
@@ -58,7 +59,10 @@ bun install
 bun run dev     # http://localhost:5173
 bun test        # 16 smoke tests
 bun run typecheck
-bun run build   # Production-Build
+bun run build           # Production-Build
+bun run storybook       # Storybook dev-server (Port 6006)
+bun run storybook:build # statischer Build, von CI verifiziert
+bun run e2e             # Playwright lokal (Backend + Frontend muss laufen)
 
 # 3. OpenAPI-Type-Sync (nach jedem Backend-Schema-Change)
 ./backend/scripts/export-openapi.sh
@@ -96,4 +100,5 @@ Tiefer: `CLAUDE.md` (Kurz-Referenz) und `docs/superpowers/specs/` (Specs).
 | 4 | ✅ Pflichtunterweisung: Kurs/Modul/Frage/Welle-Models, Schulungs-Wizard (4-Step) + Token-basierte Public-Quiz-Routen, LLM-Personalisierung mit RDG-Layer-2-Validator + Static-Fallback, Mailjet mit Console-Backend-Fallback, WeasyPrint-Zertifikate (HTML-Fallback), 35 neue Backend-Tests |
 | 5 | ✅ HinSchG-Hinweisgeberportal: Per-Tenant-Fernet-Encryption (`core.fields.EncryptedTextField`), Meldung/Bearbeitungsschritt-Models mit verschlüsselten Inhalten, automatische 7d/3m-Pflicht-Tasks (§17), Public-Form `/hinweise` (anonyme Submission) + Status-Page `/hinweise/status/<token>`, Bearbeiter-Dashboard `/meldungen`, sanitized Status-API (keine Bearbeiter-Identität nach außen), 30 neue Backend-Tests inkl. Cross-Tenant-Decrypt-Isolation |
 | 6 | ✅ Compliance-Cockpit + Notification-Engine + Audit-Viewer: Sidebar-Shell (Linear/Notion-Style) statt Top-Nav, Dashboard `/` mit Score-Donut (0–100, Modul-Aufschlüsselung, transparente Formel) + KPI-Karten + „Diese Woche zu erledigen"-Liste + Activity-Feed, In-App-Notification-Bell mit unread-Badge, Frist-Reminder + Overdue-Notifications via `dispatch_notifications`-Mgmt-Command, AuditLog-Viewer `/audit` (Stripe-Style, Filter, CSV-Export, GF+IT-Leiter), Tenant-Settings `/settings` (3 Tabs Allgemein/Sicherheit/Datenschutz), Empty-States als Onboarding, Sonner-Toasts, 29 neue Backend-Tests |
-| 7+ | siehe Spec §12 |
+| 7 | ✅ Test-Hardening: pytest-cov + `.coveragerc` + CI-Gate `--cov-fail-under=80` (Baseline 86 %+); Storybook 10 mit Stories für ScoreDonut/KpiCard/EmptyState/NotificationBell + Storybook-Build-CI-Job; Playwright + 8 kritische E2E-Specs (auth/mitarbeiter/schulungen/public-quiz/hinschg-public/hinschg-intern/audit/settings) — nur main-Branch + dedicated `seed_e2e_tenant`-Mgmt-Command; CI um 5. `playwright-e2e` + 6. `storybook-build` Jobs erweitert; KpiCard + EmptyState als wiederverwendbare Komponenten ausgelagert |
+| 8+ | siehe Spec §12 |

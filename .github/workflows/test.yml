@@ -7,7 +7,7 @@ on:
 
 jobs:
   backend-tests:
-    name: Backend tests + multi-tenant isolation gate
+    name: Backend tests + coverage gate + multi-tenant isolation gate
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -73,14 +73,21 @@ jobs:
       - name: Django check
         run: uv run python manage.py check
 
-      - name: Run all backend tests
-        run: uv run pytest -v
+      - name: Run all backend tests with coverage
+        run: uv run pytest --cov --cov-config=.coveragerc --cov-report=term --cov-report=xml --cov-fail-under=80
 
       - name: Critical multi-tenant isolation gate
         run: uv run pytest -v -m tenant_isolation --strict-markers
 
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: backend/coverage.xml
+
   frontend-tests:
-    name: Frontend typecheck + bun test
+    name: Frontend typecheck + bun test + biome lint
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -101,6 +108,28 @@ jobs:
 
       - name: Bun tests
         run: bun test
+
+  storybook-build:
+    name: Storybook build smoke
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Build Storybook (static)
+        run: bun run storybook:build
+      - name: Upload Storybook artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: frontend/storybook-static
+          retention-days: 7
 
   openapi-sync:
     name: OpenAPI schema sync (backend → frontend types)
@@ -170,3 +199,99 @@ jobs:
             echo "OpenAPI schema drift detected. Re-run scripts locally and commit." >&2
             exit 1
           fi
+
+  playwright-e2e:
+    name: Playwright E2E (main only)
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: vaeren
+          POSTGRES_USER: vaeren
+          POSTGRES_PASSWORD: vaeren_ci_only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U vaeren"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      POSTGRES_DB: vaeren
+      POSTGRES_USER: vaeren
+      POSTGRES_PASSWORD: vaeren_ci_only
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: 5432
+      DJANGO_SECRET_KEY: ci-only-not-secret
+      DJANGO_DEBUG: "0"
+      DJANGO_ALLOWED_HOSTS: "*,e2e.app.vaeren.local,localhost,127.0.0.1"
+      DJANGO_SETTINGS_MODULE: config.settings.test
+      PLAYWRIGHT_BASE_URL: http://e2e.app.vaeren.local:5173
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.11.x"
+      - run: uv python install 3.12
+      - name: Install backend deps
+        working-directory: backend
+        run: uv sync --frozen --all-extras
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install frontend deps
+        working-directory: frontend
+        run: bun install --frozen-lockfile
+
+      - name: Migrate + seed E2E tenant
+        working-directory: backend
+        run: |
+          uv run python manage.py migrate_schemas --shared
+          uv run python manage.py seed_e2e_tenant
+
+      - name: Add e2e host
+        run: |
+          echo "127.0.0.1 e2e.app.vaeren.local" | sudo tee -a /etc/hosts
+
+      - name: Start Django backend
+        working-directory: backend
+        run: |
+          nohup uv run python manage.py runserver 0.0.0.0:8000 > /tmp/django.log 2>&1 &
+          for i in {1..20}; do
+            curl -sf -H "Host: e2e.app.vaeren.local" http://127.0.0.1:8000/api/health/ && break
+            sleep 1
+          done
+
+      - name: Start Vite dev server
+        working-directory: frontend
+        env:
+          VITE_E2E: "1"
+        run: |
+          nohup bun run dev -- --host 0.0.0.0 > /tmp/vite.log 2>&1 &
+          for i in {1..30}; do
+            curl -sf http://127.0.0.1:5173/ && break
+            sleep 1
+          done
+
+      - name: Install Playwright browsers
+        working-directory: frontend
+        run: bun x playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        working-directory: frontend
+        run: bun run e2e
+
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: frontend/test-results

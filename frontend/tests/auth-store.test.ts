@@ -16,7 +16,11 @@ describe("auth-store", () => {
     useAuthStore.getState().setMfaChallenge("EPH");
     useAuthStore
       .getState()
-      .setUser({ pk: 1, email: "konrad@vaeren.de", tenant_role: "geschaeftsfuehrer" });
+      .setUser({
+        pk: 1,
+        email: "konrad@vaeren.de",
+        tenant_role: "geschaeftsfuehrer",
+      });
     const s = useAuthStore.getState();
     expect(s.user?.email).toBe("konrad@vaeren.de");
     expect(s.ephemeralToken).toBeNull();
