@@ -5,14 +5,13 @@ on:
   pull_request:
     branches: [main]
 
-defaults:
-  run:
-    working-directory: backend
-
 jobs:
   backend-tests:
     name: Backend tests + multi-tenant isolation gate
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
 
     services:
       postgres:
@@ -79,3 +78,95 @@ jobs:
 
       - name: Critical multi-tenant isolation gate
         run: uv run pytest -v -m tenant_isolation --strict-markers
+
+  frontend-tests:
+    name: Frontend typecheck + bun test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Type check
+        run: bun run typecheck
+
+      - name: Bun tests
+        run: bun test
+
+  openapi-sync:
+    name: OpenAPI schema sync (backend → frontend types)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: vaeren
+          POSTGRES_USER: vaeren
+          POSTGRES_PASSWORD: vaeren_ci_only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U vaeren"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      POSTGRES_DB: vaeren
+      POSTGRES_USER: vaeren
+      POSTGRES_PASSWORD: vaeren_ci_only
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: 5432
+      DJANGO_SECRET_KEY: ci-only-not-secret
+      DJANGO_DEBUG: "0"
+      DJANGO_ALLOWED_HOSTS: "*"
+      DJANGO_SETTINGS_MODULE: config.settings.test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.11.x"
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install backend deps
+        working-directory: backend
+        run: uv sync --frozen --all-extras
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install frontend deps
+        working-directory: frontend
+        run: bun install --frozen-lockfile
+
+      - name: Export OpenAPI schema
+        working-directory: backend
+        run: ./scripts/export-openapi.sh
+
+      - name: Sync TypeScript types
+        working-directory: frontend
+        run: bash scripts/sync-openapi.sh
+
+      - name: Verify no drift in frontend api types
+        run: |
+          if ! git diff --exit-code -- frontend/src/lib/api/openapi.json frontend/src/lib/api/types.gen.ts; then
+            echo "OpenAPI schema drift detected. Re-run scripts locally and commit." >&2
+            exit 1
+          fi
