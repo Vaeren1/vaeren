@@ -40,9 +40,9 @@ class MitarbeiterAnzahl(models.TextChoices):
     """Größenkategorien aus dem Demo-Form (KMU-Range)."""
 
     UNDER_50 = "<50", "unter 50"
-    R_50_120 = "50-120", "50–120"
-    R_121_250 = "121-250", "121–250"
-    R_251_500 = "251-500", "251–500"
+    R_50_120 = "50-120", "50-120"
+    R_121_250 = "121-250", "121-250"
+    R_251_500 = "251-500", "251-500"
     OVER_500 = ">500", "über 500"
 
 
@@ -68,7 +68,7 @@ class DemoRequest(models.Model):
     bearbeitet = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ["-erstellt_am"]
+        ordering = ("-erstellt_am",)
         verbose_name = "Demo-Anfrage"
         verbose_name_plural = "Demo-Anfragen"
 

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -28,8 +30,8 @@ class DemoRequestCreateView(APIView):
     - Mailjet-Versand kommt in Sprint 4 (Notification-Modul)
     """
 
-    permission_classes = [AllowAny]
-    throttle_classes = [DemoRequestThrottle]
+    permission_classes: ClassVar = [AllowAny]
+    throttle_classes: ClassVar = [DemoRequestThrottle]
     serializer_class = DemoRequestSerializer
 
     def post(self, request, *args, **kwargs):

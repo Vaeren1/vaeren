@@ -175,9 +175,7 @@ def test_mfa_totp_verify_with_correct_code_activates_mfa(tenant_setup, settings)
         # Authenticator-Eintrag existiert
         from allauth.mfa.models import Authenticator
 
-        assert Authenticator.objects.filter(
-            user=u, type=Authenticator.Type.TOTP
-        ).exists()
+        assert Authenticator.objects.filter(user=u, type=Authenticator.Type.TOTP).exists()
 
 
 def test_mfa_totp_verify_with_wrong_code_returns_400(tenant_setup, settings):

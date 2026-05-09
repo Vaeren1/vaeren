@@ -22,8 +22,18 @@ def test_export_openapi_script_produces_valid_json(tmp_path):
     assert SCRIPT.exists(), f"Script fehlt: {SCRIPT}"
     out = tmp_path / "openapi.json"
     result = subprocess.run(
-        ["uv", "run", "python", "manage.py", "spectacular", "--file", str(out), "--format",
-         "openapi-json", "--validate"],
+        [
+            "uv",
+            "run",
+            "python",
+            "manage.py",
+            "spectacular",
+            "--file",
+            str(out),
+            "--format",
+            "openapi-json",
+            "--validate",
+        ],
         cwd=REPO_ROOT / "backend",
         capture_output=True,
         text=True,

@@ -21,13 +21,13 @@ from tenants.models import DemoRequest
 @pytest.fixture
 def public_domain(db):
     """Stellt sicher, dass es einen public-Tenant + Domain gibt."""
-    Tenant = get_tenant_model()
-    Domain = get_tenant_domain_model()
-    public_tenant, _ = Tenant.objects.get_or_create(
+    tenant_model = get_tenant_model()
+    domain_model = get_tenant_domain_model()
+    public_tenant, _ = tenant_model.objects.get_or_create(
         schema_name="public",
         defaults={"firma_name": "Vaeren (Public)"},
     )
-    domain, _ = Domain.objects.get_or_create(
+    domain, _ = domain_model.objects.get_or_create(
         domain="vaeren.local",
         defaults={"tenant": public_tenant, "is_primary": True},
     )
