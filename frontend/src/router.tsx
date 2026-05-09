@@ -7,11 +7,16 @@ import { MfaChallengePage } from "@/routes/mfa-challenge";
 import { MfaSetupPage } from "@/routes/mfa-setup";
 import { MitarbeiterFormPage } from "@/routes/mitarbeiter-form";
 import { MitarbeiterListPage } from "@/routes/mitarbeiter";
+import { PublicSchulungPage } from "@/routes/public-schulung";
+import { SchulungenListPage } from "@/routes/schulungen";
+import { SchulungenWizardPage } from "@/routes/schulungen-wizard";
+import { WelleDetailPage } from "@/routes/welle-detail";
 
 export const router = createBrowserRouter([
   { path: "/login", element: <LoginPage /> },
   { path: "/mfa-challenge", element: <MfaChallengePage /> },
   { path: "/demo", element: <DemoPage /> },
+  { path: "/schulung/:token", element: <PublicSchulungPage /> },
   {
     element: (
       <ProtectedRoute>
@@ -26,6 +31,9 @@ export const router = createBrowserRouter([
         path: "/mitarbeiter/:id/bearbeiten",
         element: <MitarbeiterFormPage />,
       },
+      { path: "/schulungen", element: <SchulungenListPage /> },
+      { path: "/schulungen/neu", element: <SchulungenWizardPage /> },
+      { path: "/schulungen/:id", element: <WelleDetailPage /> },
       { path: "/mfa-setup", element: <MfaSetupPage /> },
     ],
   },

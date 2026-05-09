@@ -21,6 +21,12 @@ export function AppShell() {
               Mitarbeiter
             </Link>
             <Link
+              to="/schulungen"
+              className="text-sm font-medium hover:underline"
+            >
+              Schulungen
+            </Link>
+            <Link
               to="/mfa-setup"
               className="text-sm font-medium hover:underline"
             >

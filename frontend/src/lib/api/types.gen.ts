@@ -4,6 +4,38 @@
  */
 
 export interface paths {
+    "/api/antwort-optionen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["antwort_optionen_list"];
+        put?: never;
+        post: operations["antwort_optionen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/antwort-optionen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["antwort_optionen_retrieve"];
+        put: operations["antwort_optionen_update"];
+        post?: never;
+        delete: operations["antwort_optionen_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["antwort_optionen_partial_update"];
+        trace?: never;
+    };
     "/api/auth/csrf/": {
         parameters: {
             query?: never;
@@ -292,6 +324,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/fragen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["fragen_list"];
+        put?: never;
+        post: operations["fragen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["fragen_retrieve"];
+        put: operations["fragen_update"];
+        post?: never;
+        delete: operations["fragen_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["fragen_partial_update"];
+        trace?: never;
+    };
     "/api/health/": {
         parameters: {
             query?: never;
@@ -307,6 +371,70 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/kurs-module/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["kurs_module_list"];
+        put?: never;
+        post: operations["kurs_module_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/kurs-module/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["kurs_module_retrieve"];
+        put: operations["kurs_module_update"];
+        post?: never;
+        delete: operations["kurs_module_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["kurs_module_partial_update"];
+        trace?: never;
+    };
+    "/api/kurse/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["kurse_list"];
+        put?: never;
+        post: operations["kurse_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/kurse/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["kurse_retrieve"];
+        put: operations["kurse_update"];
+        post?: never;
+        delete: operations["kurse_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["kurse_partial_update"];
         trace?: never;
     };
     "/api/mitarbeiter/": {
@@ -347,10 +475,188 @@ export interface paths {
         patch: operations["mitarbeiter_partial_update"];
         trace?: never;
     };
+    "/api/public/schulung/{token}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Resolves Token -> Task + Kurs + Module + Fragen (ohne ist_korrekt). */
+        get: operations["public_schulung_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/public/schulung/{token}/abschliessen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["public_schulung_abschliessen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/public/schulung/{token}/antwort/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Body: {frage_id, option_id}. Idempotent — überschreibt vorherige Antwort. */
+        post: operations["public_schulung_antwort_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/public/schulung/{token}/start/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["public_schulung_start_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/public/schulung/{token}/zertifikat/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description PDF-Download (oder HTML-Fallback wenn WeasyPrint fehlt). */
+        get: operations["public_schulung_zertifikat_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/schulungswellen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["schulungswellen_list"];
+        put?: never;
+        post: operations["schulungswellen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/schulungswellen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["schulungswellen_retrieve"];
+        put: operations["schulungswellen_update"];
+        post?: never;
+        delete: operations["schulungswellen_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["schulungswellen_partial_update"];
+        trace?: never;
+    };
+    "/api/schulungswellen/{id}/personalisieren/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description LLM-Vorschlag für Einleitungstext (HITL: User akzeptiert in nächstem PATCH).
+         *
+         *     Speichert NICHT direkt — gibt nur Vorschlag zurück. Frontend zeigt
+         *     ihn an, User klickt „Akzeptieren" und PATCH-t welle.einleitungs_text.
+         */
+        post: operations["schulungswellen_personalisieren_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/schulungswellen/{id}/versenden/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description DRAFT -> SENT, sendet E-Mail-Einladung an alle zugewiesenen Mitarbeiter. */
+        post: operations["schulungswellen_versenden_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/schulungswellen/{id}/zuweisen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Body: {mitarbeiter_ids: [1,2,3]}. Nur erlaubt wenn Welle DRAFT. */
+        post: operations["schulungswellen_zuweisen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AntwortOption: {
+            readonly id: number;
+            frage: number;
+            text: string;
+            ist_korrekt?: boolean;
+            reihenfolge?: number;
+        };
         ComplianceTask: {
             readonly id: number;
             /** @description Wert wird in Sprint 4+ relevant, wenn Subklassen existieren. */
@@ -363,18 +669,58 @@ export interface components {
             readonly frist: string;
             readonly verantwortlicher: number | null;
             readonly betroffene: number[];
-            readonly status: components["schemas"]["StatusEnum"];
+            readonly status: components["schemas"]["ComplianceTaskStatusEnum"];
             /** Format: date-time */
             readonly created_at: string;
             /** Format: date-time */
             readonly updated_at: string;
         };
+        /**
+         * @description * `offen` - Offen
+         *     * `in_bearbeitung` - In Bearbeitung
+         *     * `erledigt` - Erledigt
+         *     * `ueberfaellig` - Überfällig
+         * @enum {string}
+         */
+        ComplianceTaskStatusEnum: "offen" | "in_bearbeitung" | "erledigt" | "ueberfaellig";
         CsrfTokenResponse: {
             csrf_token: string;
+        };
+        Frage: {
+            readonly id: number;
+            kurs: number;
+            text: string;
+            /** @description Erklärung nach Beantwortung */
+            erklaerung?: string;
+            reihenfolge?: number;
+            readonly optionen: components["schemas"]["AntwortOption"][];
         };
         HealthResponse: {
             status: string;
             schema: string;
+        };
+        Kurs: {
+            readonly id: number;
+            titel: string;
+            beschreibung?: string;
+            /** @description Wie lange ist das Zertifikat gültig? */
+            gueltigkeit_monate?: number;
+            /** @description Bestehensschwelle (Prozent richtig) */
+            min_richtig_prozent?: number;
+            aktiv?: boolean;
+            /** Format: date-time */
+            readonly erstellt_am: string;
+            readonly module: components["schemas"]["KursModul"][];
+            readonly fragen_anzahl: number;
+        };
+        KursModul: {
+            readonly id: number;
+            kurs: number;
+            titel: string;
+            /** @description Lerninhalt als Markdown */
+            inhalt_md: string;
+            /** @default 0 */
+            reihenfolge: number;
         };
         Login: {
             username?: string;
@@ -422,6 +768,45 @@ export interface components {
             uid: string;
             token: string;
         };
+        PatchedAntwortOption: {
+            readonly id?: number;
+            frage?: number;
+            text?: string;
+            ist_korrekt?: boolean;
+            reihenfolge?: number;
+        };
+        PatchedFrage: {
+            readonly id?: number;
+            kurs?: number;
+            text?: string;
+            /** @description Erklärung nach Beantwortung */
+            erklaerung?: string;
+            reihenfolge?: number;
+            readonly optionen?: components["schemas"]["AntwortOption"][];
+        };
+        PatchedKurs: {
+            readonly id?: number;
+            titel?: string;
+            beschreibung?: string;
+            /** @description Wie lange ist das Zertifikat gültig? */
+            gueltigkeit_monate?: number;
+            /** @description Bestehensschwelle (Prozent richtig) */
+            min_richtig_prozent?: number;
+            aktiv?: boolean;
+            /** Format: date-time */
+            readonly erstellt_am?: string;
+            readonly module?: components["schemas"]["KursModul"][];
+            readonly fragen_anzahl?: number;
+        };
+        PatchedKursModul: {
+            readonly id?: number;
+            kurs?: number;
+            titel?: string;
+            /** @description Lerninhalt als Markdown */
+            inhalt_md?: string;
+            /** @default 0 */
+            reihenfolge: number;
+        };
         PatchedMitarbeiter: {
             readonly id?: number;
             vorname?: string;
@@ -442,6 +827,24 @@ export interface components {
             /** Format: date-time */
             readonly updated_at?: string;
         };
+        PatchedSchulungsWelle: {
+            readonly id?: number;
+            kurs?: number;
+            readonly kurs_titel?: string;
+            titel?: string;
+            readonly status?: components["schemas"]["SchulungsWelleStatusEnum"];
+            /** Format: date */
+            deadline?: string;
+            /** @description Optionaler personalisierter Einleitungstext (LLM-Vorschlag, HITL-bestätigt) */
+            einleitungs_text?: string;
+            readonly erstellt_von?: number;
+            readonly erstellt_von_email?: string;
+            /** Format: date-time */
+            readonly erstellt_am?: string;
+            /** Format: date-time */
+            readonly versendet_am?: string | null;
+            readonly tasks?: components["schemas"]["SchulungsTaskSummary"][];
+        };
         /** @description User model w/o password */
         PatchedUserDetails: {
             /** ID */
@@ -453,17 +856,67 @@ export interface components {
             /** Nachname */
             last_name?: string;
         };
+        PublicSchulungAbschliessenResponse: {
+            bestanden: boolean;
+            richtig_prozent: number;
+            zertifikat_id: string | null;
+            ablauf_datum: string | null;
+        };
+        PublicSchulungAntwortRequest: {
+            frage_id: number;
+            option_id: number;
+        };
+        PublicSchulungAntwortResponse: {
+            war_korrekt: boolean;
+        };
+        PublicSchulungResolveResponse: {
+            task_id: number;
+            status: string;
+            kurs_titel?: string;
+        };
+        PublicSchulungStartResponse: {
+            status: string;
+        };
         RestAuthDetail: {
             readonly detail: string;
         };
+        SchulungsTaskSummary: {
+            readonly id: number;
+            mitarbeiter: number;
+            readonly mitarbeiter_name: string;
+            /** Format: date-time */
+            abgeschlossen_am?: string | null;
+            richtig_prozent?: number | null;
+            bestanden?: boolean | null;
+            /** Format: date */
+            ablauf_datum?: string | null;
+        };
+        SchulungsWelle: {
+            readonly id: number;
+            kurs: number;
+            readonly kurs_titel: string;
+            titel: string;
+            readonly status: components["schemas"]["SchulungsWelleStatusEnum"];
+            /** Format: date */
+            deadline: string;
+            /** @description Optionaler personalisierter Einleitungstext (LLM-Vorschlag, HITL-bestätigt) */
+            einleitungs_text?: string;
+            readonly erstellt_von: number;
+            readonly erstellt_von_email: string;
+            /** Format: date-time */
+            readonly erstellt_am: string;
+            /** Format: date-time */
+            readonly versendet_am: string | null;
+            readonly tasks: components["schemas"]["SchulungsTaskSummary"][];
+        };
         /**
-         * @description * `offen` - Offen
-         *     * `in_bearbeitung` - In Bearbeitung
-         *     * `erledigt` - Erledigt
-         *     * `ueberfaellig` - Überfällig
+         * @description * `draft` - Entwurf
+         *     * `sent` - Versendet
+         *     * `in_progress` - In Bearbeitung
+         *     * `completed` - Abgeschlossen
          * @enum {string}
          */
-        StatusEnum: "offen" | "in_bearbeitung" | "erledigt" | "ueberfaellig";
+        SchulungsWelleStatusEnum: "draft" | "sent" | "in_progress" | "completed";
         TotpSetupResponse: {
             secret: string;
             qr_url: string;
@@ -491,6 +944,149 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    antwort_optionen_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AntwortOption"][];
+                };
+            };
+        };
+    };
+    antwort_optionen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AntwortOption"];
+                "application/x-www-form-urlencoded": components["schemas"]["AntwortOption"];
+                "multipart/form-data": components["schemas"]["AntwortOption"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AntwortOption"];
+                };
+            };
+        };
+    };
+    antwort_optionen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Antwort-Option identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AntwortOption"];
+                };
+            };
+        };
+    };
+    antwort_optionen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Antwort-Option identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AntwortOption"];
+                "application/x-www-form-urlencoded": components["schemas"]["AntwortOption"];
+                "multipart/form-data": components["schemas"]["AntwortOption"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AntwortOption"];
+                };
+            };
+        };
+    };
+    antwort_optionen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Antwort-Option identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    antwort_optionen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Antwort-Option identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAntwortOption"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAntwortOption"];
+                "multipart/form-data": components["schemas"]["PatchedAntwortOption"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AntwortOption"];
+                };
+            };
+        };
+    };
     auth_csrf_retrieve: {
         parameters: {
             query?: never;
@@ -833,6 +1429,149 @@ export interface operations {
             };
         };
     };
+    fragen_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Frage"][];
+                };
+            };
+        };
+    };
+    fragen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Frage"];
+                "application/x-www-form-urlencoded": components["schemas"]["Frage"];
+                "multipart/form-data": components["schemas"]["Frage"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Frage"];
+                };
+            };
+        };
+    };
+    fragen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Frage identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Frage"];
+                };
+            };
+        };
+    };
+    fragen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Frage identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Frage"];
+                "application/x-www-form-urlencoded": components["schemas"]["Frage"];
+                "multipart/form-data": components["schemas"]["Frage"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Frage"];
+                };
+            };
+        };
+    };
+    fragen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Frage identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    fragen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Frage identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedFrage"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedFrage"];
+                "multipart/form-data": components["schemas"]["PatchedFrage"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Frage"];
+                };
+            };
+        };
+    };
     health_retrieve: {
         parameters: {
             query?: never;
@@ -848,6 +1587,292 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthResponse"];
+                };
+            };
+        };
+    };
+    kurs_module_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KursModul"][];
+                };
+            };
+        };
+    };
+    kurs_module_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KursModul"];
+                "application/x-www-form-urlencoded": components["schemas"]["KursModul"];
+                "multipart/form-data": components["schemas"]["KursModul"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KursModul"];
+                };
+            };
+        };
+    };
+    kurs_module_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Kurs-Modul identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KursModul"];
+                };
+            };
+        };
+    };
+    kurs_module_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Kurs-Modul identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KursModul"];
+                "application/x-www-form-urlencoded": components["schemas"]["KursModul"];
+                "multipart/form-data": components["schemas"]["KursModul"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KursModul"];
+                };
+            };
+        };
+    };
+    kurs_module_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Kurs-Modul identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    kurs_module_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Kurs-Modul identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedKursModul"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedKursModul"];
+                "multipart/form-data": components["schemas"]["PatchedKursModul"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KursModul"];
+                };
+            };
+        };
+    };
+    kurse_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Kurs"][];
+                };
+            };
+        };
+    };
+    kurse_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Kurs"];
+                "application/x-www-form-urlencoded": components["schemas"]["Kurs"];
+                "multipart/form-data": components["schemas"]["Kurs"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Kurs"];
+                };
+            };
+        };
+    };
+    kurse_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Kurs identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Kurs"];
+                };
+            };
+        };
+    };
+    kurse_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Kurs identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Kurs"];
+                "application/x-www-form-urlencoded": components["schemas"]["Kurs"];
+                "multipart/form-data": components["schemas"]["Kurs"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Kurs"];
+                };
+            };
+        };
+    };
+    kurse_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Kurs identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    kurse_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Kurs identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedKurs"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedKurs"];
+                "multipart/form-data": components["schemas"]["PatchedKurs"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Kurs"];
                 };
             };
         };
@@ -991,6 +2016,357 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Mitarbeiter"];
+                };
+            };
+        };
+    };
+    public_schulung_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicSchulungResolveResponse"];
+                };
+            };
+        };
+    };
+    public_schulung_abschliessen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicSchulungAbschliessenResponse"];
+                };
+            };
+        };
+    };
+    public_schulung_antwort_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PublicSchulungAntwortRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PublicSchulungAntwortRequest"];
+                "multipart/form-data": components["schemas"]["PublicSchulungAntwortRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicSchulungAntwortResponse"];
+                };
+            };
+        };
+    };
+    public_schulung_start_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicSchulungStartResponse"];
+                };
+            };
+        };
+    };
+    public_schulung_zertifikat_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description PDF oder HTML-Fallback */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Schulung nicht bestanden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Token ungültig */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    schulungswellen_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchulungsWelle"][];
+                };
+            };
+        };
+    };
+    schulungswellen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SchulungsWelle"];
+                "application/x-www-form-urlencoded": components["schemas"]["SchulungsWelle"];
+                "multipart/form-data": components["schemas"]["SchulungsWelle"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchulungsWelle"];
+                };
+            };
+        };
+    };
+    schulungswellen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchulungsWelle"];
+                };
+            };
+        };
+    };
+    schulungswellen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SchulungsWelle"];
+                "application/x-www-form-urlencoded": components["schemas"]["SchulungsWelle"];
+                "multipart/form-data": components["schemas"]["SchulungsWelle"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchulungsWelle"];
+                };
+            };
+        };
+    };
+    schulungswellen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    schulungswellen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedSchulungsWelle"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedSchulungsWelle"];
+                "multipart/form-data": components["schemas"]["PatchedSchulungsWelle"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchulungsWelle"];
+                };
+            };
+        };
+    };
+    schulungswellen_personalisieren_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SchulungsWelle"];
+                "application/x-www-form-urlencoded": components["schemas"]["SchulungsWelle"];
+                "multipart/form-data": components["schemas"]["SchulungsWelle"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchulungsWelle"];
+                };
+            };
+        };
+    };
+    schulungswellen_versenden_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SchulungsWelle"];
+                "application/x-www-form-urlencoded": components["schemas"]["SchulungsWelle"];
+                "multipart/form-data": components["schemas"]["SchulungsWelle"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchulungsWelle"];
+                };
+            };
+        };
+    };
+    schulungswellen_zuweisen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SchulungsWelle"];
+                "application/x-www-form-urlencoded": components["schemas"]["SchulungsWelle"];
+                "multipart/form-data": components["schemas"]["SchulungsWelle"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SchulungsWelle"];
                 };
             };
         };

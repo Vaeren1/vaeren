@@ -6,6 +6,247 @@
         "description": "Compliance-Autopilot Backend-API"
     },
     "paths": {
+        "/api/antwort-optionen/": {
+            "get": {
+                "operationId": "antwort_optionen_list",
+                "tags": [
+                    "antwort-optionen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AntwortOption"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "antwort_optionen_create",
+                "tags": [
+                    "antwort-optionen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AntwortOption"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AntwortOption"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AntwortOption"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AntwortOption"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/antwort-optionen/{id}/": {
+            "get": {
+                "operationId": "antwort_optionen_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Antwort-Option identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "antwort-optionen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AntwortOption"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "antwort_optionen_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Antwort-Option identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "antwort-optionen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AntwortOption"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AntwortOption"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AntwortOption"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AntwortOption"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "antwort_optionen_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Antwort-Option identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "antwort-optionen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedAntwortOption"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedAntwortOption"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedAntwortOption"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AntwortOption"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "antwort_optionen_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Antwort-Option identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "antwort-optionen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
         "/api/auth/csrf/": {
             "get": {
                 "operationId": "auth_csrf_retrieve",
@@ -590,6 +831,247 @@
                 }
             }
         },
+        "/api/fragen/": {
+            "get": {
+                "operationId": "fragen_list",
+                "tags": [
+                    "fragen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Frage"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "fragen_create",
+                "tags": [
+                    "fragen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Frage"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Frage"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Frage"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Frage"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/fragen/{id}/": {
+            "get": {
+                "operationId": "fragen_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Frage identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Frage"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "fragen_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Frage identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Frage"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Frage"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Frage"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Frage"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "fragen_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Frage identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedFrage"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedFrage"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedFrage"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Frage"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "fragen_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Frage identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
         "/api/health/": {
             "get": {
                 "operationId": "health_retrieve",
@@ -613,6 +1095,488 @@
                             }
                         },
                         "description": ""
+                    }
+                }
+            }
+        },
+        "/api/kurs-module/": {
+            "get": {
+                "operationId": "kurs_module_list",
+                "tags": [
+                    "kurs-module"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/KursModul"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "kurs_module_create",
+                "tags": [
+                    "kurs-module"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KursModul"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KursModul"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KursModul"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KursModul"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/kurs-module/{id}/": {
+            "get": {
+                "operationId": "kurs_module_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Kurs-Modul identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "kurs-module"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KursModul"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "kurs_module_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Kurs-Modul identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "kurs-module"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KursModul"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KursModul"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KursModul"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KursModul"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "kurs_module_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Kurs-Modul identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "kurs-module"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedKursModul"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedKursModul"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedKursModul"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KursModul"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "kurs_module_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Kurs-Modul identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "kurs-module"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/kurse/": {
+            "get": {
+                "operationId": "kurse_list",
+                "tags": [
+                    "kurse"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Kurs"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "kurse_create",
+                "tags": [
+                    "kurse"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Kurs"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Kurs"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Kurs"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Kurs"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/kurse/{id}/": {
+            "get": {
+                "operationId": "kurse_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Kurs identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "kurse"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Kurs"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "kurse_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Kurs identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "kurse"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Kurs"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Kurs"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Kurs"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Kurs"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "kurse_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Kurs identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "kurse"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedKurs"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedKurs"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedKurs"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Kurs"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "kurse_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Kurs identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "kurse"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
                     }
                 }
             }
@@ -863,10 +1827,653 @@
                     }
                 }
             }
+        },
+        "/api/public/schulung/{token}/": {
+            "get": {
+                "operationId": "public_schulung_retrieve",
+                "description": "Resolves Token -> Task + Kurs + Module + Fragen (ohne ist_korrekt).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "token",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "public"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicSchulungResolveResponse"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/public/schulung/{token}/abschliessen/": {
+            "post": {
+                "operationId": "public_schulung_abschliessen_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "token",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "public"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicSchulungAbschliessenResponse"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/public/schulung/{token}/antwort/": {
+            "post": {
+                "operationId": "public_schulung_antwort_create",
+                "description": "Body: {frage_id, option_id}. Idempotent — überschreibt vorherige Antwort.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "token",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "public"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PublicSchulungAntwortRequest"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PublicSchulungAntwortRequest"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PublicSchulungAntwortRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicSchulungAntwortResponse"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/public/schulung/{token}/start/": {
+            "post": {
+                "operationId": "public_schulung_start_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "token",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "public"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicSchulungStartResponse"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/public/schulung/{token}/zertifikat/": {
+            "get": {
+                "operationId": "public_schulung_zertifikat_retrieve",
+                "description": "PDF-Download (oder HTML-Fallback wenn WeasyPrint fehlt).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "token",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "public"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "description": "PDF oder HTML-Fallback"
+                    },
+                    "403": {
+                        "description": "Schulung nicht bestanden"
+                    },
+                    "404": {
+                        "description": "Token ungültig"
+                    }
+                }
+            }
+        },
+        "/api/schulungswellen/": {
+            "get": {
+                "operationId": "schulungswellen_list",
+                "tags": [
+                    "schulungswellen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SchulungsWelle"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "schulungswellen_create",
+                "tags": [
+                    "schulungswellen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SchulungsWelle"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/schulungswellen/{id}/": {
+            "get": {
+                "operationId": "schulungswellen_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "schulungswellen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SchulungsWelle"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "schulungswellen_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "schulungswellen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SchulungsWelle"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "schulungswellen_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "schulungswellen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedSchulungsWelle"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedSchulungsWelle"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedSchulungsWelle"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SchulungsWelle"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "schulungswellen_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "schulungswellen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/schulungswellen/{id}/personalisieren/": {
+            "post": {
+                "operationId": "schulungswellen_personalisieren_create",
+                "description": "LLM-Vorschlag für Einleitungstext (HITL: User akzeptiert in nächstem PATCH).\n\nSpeichert NICHT direkt — gibt nur Vorschlag zurück. Frontend zeigt\nihn an, User klickt „Akzeptieren\" und PATCH-t welle.einleitungs_text.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "schulungswellen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SchulungsWelle"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/schulungswellen/{id}/versenden/": {
+            "post": {
+                "operationId": "schulungswellen_versenden_create",
+                "description": "DRAFT -> SENT, sendet E-Mail-Einladung an alle zugewiesenen Mitarbeiter.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "schulungswellen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SchulungsWelle"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/schulungswellen/{id}/zuweisen/": {
+            "post": {
+                "operationId": "schulungswellen_zuweisen_create",
+                "description": "Body: {mitarbeiter_ids: [1,2,3]}. Nur erlaubt wenn Welle DRAFT.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Schulungs-Welle identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "schulungswellen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SchulungsWelle"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SchulungsWelle"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
         }
     },
     "components": {
         "schemas": {
+            "AntwortOption": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "frage": {
+                        "type": "integer"
+                    },
+                    "text": {
+                        "type": "string",
+                        "maxLength": 300
+                    },
+                    "ist_korrekt": {
+                        "type": "boolean"
+                    },
+                    "reihenfolge": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0
+                    }
+                },
+                "required": [
+                    "frage",
+                    "id",
+                    "text"
+                ]
+            },
             "ComplianceTask": {
                 "type": "object",
                 "properties": {
@@ -912,7 +2519,7 @@
                     "status": {
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/StatusEnum"
+                                "$ref": "#/components/schemas/ComplianceTaskStatusEnum"
                             }
                         ],
                         "readOnly": true
@@ -942,6 +2549,16 @@
                     "verantwortlicher"
                 ]
             },
+            "ComplianceTaskStatusEnum": {
+                "enum": [
+                    "offen",
+                    "in_bearbeitung",
+                    "erledigt",
+                    "ueberfaellig"
+                ],
+                "type": "string",
+                "description": "* `offen` - Offen\n* `in_bearbeitung` - In Bearbeitung\n* `erledigt` - Erledigt\n* `ueberfaellig` - Überfällig"
+            },
             "CsrfTokenResponse": {
                 "type": "object",
                 "properties": {
@@ -951,6 +2568,43 @@
                 },
                 "required": [
                     "csrf_token"
+                ]
+            },
+            "Frage": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "kurs": {
+                        "type": "integer"
+                    },
+                    "text": {
+                        "type": "string"
+                    },
+                    "erklaerung": {
+                        "type": "string",
+                        "description": "Erklärung nach Beantwortung"
+                    },
+                    "reihenfolge": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0
+                    },
+                    "optionen": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AntwortOption"
+                        },
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "id",
+                    "kurs",
+                    "optionen",
+                    "text"
                 ]
             },
             "HealthResponse": {
@@ -966,6 +2620,92 @@
                 "required": [
                     "schema",
                     "status"
+                ]
+            },
+            "Kurs": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "titel": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "beschreibung": {
+                        "type": "string"
+                    },
+                    "gueltigkeit_monate": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0,
+                        "description": "Wie lange ist das Zertifikat gültig?"
+                    },
+                    "min_richtig_prozent": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0,
+                        "description": "Bestehensschwelle (Prozent richtig)"
+                    },
+                    "aktiv": {
+                        "type": "boolean"
+                    },
+                    "erstellt_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "module": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/KursModul"
+                        },
+                        "readOnly": true
+                    },
+                    "fragen_anzahl": {
+                        "type": "integer",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "erstellt_am",
+                    "fragen_anzahl",
+                    "id",
+                    "module",
+                    "titel"
+                ]
+            },
+            "KursModul": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "kurs": {
+                        "type": "integer"
+                    },
+                    "titel": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "inhalt_md": {
+                        "type": "string",
+                        "description": "Lerninhalt als Markdown"
+                    },
+                    "reihenfolge": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0,
+                        "default": 0
+                    }
+                },
+                "required": [
+                    "id",
+                    "inhalt_md",
+                    "kurs",
+                    "titel"
                 ]
             },
             "Login": {
@@ -1124,6 +2864,134 @@
                     "uid"
                 ]
             },
+            "PatchedAntwortOption": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "frage": {
+                        "type": "integer"
+                    },
+                    "text": {
+                        "type": "string",
+                        "maxLength": 300
+                    },
+                    "ist_korrekt": {
+                        "type": "boolean"
+                    },
+                    "reihenfolge": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0
+                    }
+                }
+            },
+            "PatchedFrage": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "kurs": {
+                        "type": "integer"
+                    },
+                    "text": {
+                        "type": "string"
+                    },
+                    "erklaerung": {
+                        "type": "string",
+                        "description": "Erklärung nach Beantwortung"
+                    },
+                    "reihenfolge": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0
+                    },
+                    "optionen": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AntwortOption"
+                        },
+                        "readOnly": true
+                    }
+                }
+            },
+            "PatchedKurs": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "titel": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "beschreibung": {
+                        "type": "string"
+                    },
+                    "gueltigkeit_monate": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0,
+                        "description": "Wie lange ist das Zertifikat gültig?"
+                    },
+                    "min_richtig_prozent": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0,
+                        "description": "Bestehensschwelle (Prozent richtig)"
+                    },
+                    "aktiv": {
+                        "type": "boolean"
+                    },
+                    "erstellt_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "module": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/KursModul"
+                        },
+                        "readOnly": true
+                    },
+                    "fragen_anzahl": {
+                        "type": "integer",
+                        "readOnly": true
+                    }
+                }
+            },
+            "PatchedKursModul": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "kurs": {
+                        "type": "integer"
+                    },
+                    "titel": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "inhalt_md": {
+                        "type": "string",
+                        "description": "Lerninhalt als Markdown"
+                    },
+                    "reihenfolge": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0,
+                        "default": 0
+                    }
+                }
+            },
             "PatchedMitarbeiter": {
                 "type": "object",
                 "properties": {
@@ -1179,6 +3047,68 @@
                     }
                 }
             },
+            "PatchedSchulungsWelle": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "kurs": {
+                        "type": "integer"
+                    },
+                    "kurs_titel": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "titel": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SchulungsWelleStatusEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "deadline": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "einleitungs_text": {
+                        "type": "string",
+                        "description": "Optionaler personalisierter Einleitungstext (LLM-Vorschlag, HITL-bestätigt)"
+                    },
+                    "erstellt_von": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "erstellt_von_email": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "erstellt_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "versendet_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "tasks": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SchulungsTaskSummary"
+                        },
+                        "readOnly": true
+                    }
+                }
+            },
             "PatchedUserDetails": {
                 "type": "object",
                 "description": "User model w/o password",
@@ -1205,6 +3135,86 @@
                     }
                 }
             },
+            "PublicSchulungAbschliessenResponse": {
+                "type": "object",
+                "properties": {
+                    "bestanden": {
+                        "type": "boolean"
+                    },
+                    "richtig_prozent": {
+                        "type": "integer"
+                    },
+                    "zertifikat_id": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "ablauf_datum": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "ablauf_datum",
+                    "bestanden",
+                    "richtig_prozent",
+                    "zertifikat_id"
+                ]
+            },
+            "PublicSchulungAntwortRequest": {
+                "type": "object",
+                "properties": {
+                    "frage_id": {
+                        "type": "integer"
+                    },
+                    "option_id": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "frage_id",
+                    "option_id"
+                ]
+            },
+            "PublicSchulungAntwortResponse": {
+                "type": "object",
+                "properties": {
+                    "war_korrekt": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "war_korrekt"
+                ]
+            },
+            "PublicSchulungResolveResponse": {
+                "type": "object",
+                "properties": {
+                    "task_id": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "kurs_titel": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "status",
+                    "task_id"
+                ]
+            },
+            "PublicSchulungStartResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "status"
+                ]
+            },
             "RestAuthDetail": {
                 "type": "object",
                 "properties": {
@@ -1217,15 +3227,131 @@
                     "detail"
                 ]
             },
-            "StatusEnum": {
+            "SchulungsTaskSummary": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "mitarbeiter": {
+                        "type": "integer"
+                    },
+                    "mitarbeiter_name": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "abgeschlossen_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "richtig_prozent": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0,
+                        "nullable": true
+                    },
+                    "bestanden": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "ablauf_datum": {
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "id",
+                    "mitarbeiter",
+                    "mitarbeiter_name"
+                ]
+            },
+            "SchulungsWelle": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "kurs": {
+                        "type": "integer"
+                    },
+                    "kurs_titel": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "titel": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SchulungsWelleStatusEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "deadline": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "einleitungs_text": {
+                        "type": "string",
+                        "description": "Optionaler personalisierter Einleitungstext (LLM-Vorschlag, HITL-bestätigt)"
+                    },
+                    "erstellt_von": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "erstellt_von_email": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "erstellt_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "versendet_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "tasks": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SchulungsTaskSummary"
+                        },
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "deadline",
+                    "erstellt_am",
+                    "erstellt_von",
+                    "erstellt_von_email",
+                    "id",
+                    "kurs",
+                    "kurs_titel",
+                    "status",
+                    "tasks",
+                    "titel",
+                    "versendet_am"
+                ]
+            },
+            "SchulungsWelleStatusEnum": {
                 "enum": [
-                    "offen",
-                    "in_bearbeitung",
-                    "erledigt",
-                    "ueberfaellig"
+                    "draft",
+                    "sent",
+                    "in_progress",
+                    "completed"
                 ],
                 "type": "string",
-                "description": "* `offen` - Offen\n* `in_bearbeitung` - In Bearbeitung\n* `erledigt` - Erledigt\n* `ueberfaellig` - Überfällig"
+                "description": "* `draft` - Entwurf\n* `sent` - Versendet\n* `in_progress` - In Bearbeitung\n* `completed` - Abgeschlossen"
             },
             "TotpSetupResponse": {
                 "type": "object",
