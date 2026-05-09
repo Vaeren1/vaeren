@@ -1,0 +1,32 @@
+# Build context für docker compose -f docker-compose.prod.yml.
+# Hält das Context-Tarball klein.
+
+.git
+.github
+node_modules
+__pycache__
+*.pyc
+*.pyo
+.venv
+.pytest_cache
+.ruff_cache
+htmlcov
+.coverage
+coverage.xml
+docker-compose.dev.yml
+.env
+.env.local
+.env.production
+.env.dev
+docs
+*.md
+!README.md
+frontend/dist
+frontend/storybook-static
+frontend/test-results
+frontend/playwright-report
+
+# Dev-Dateien
+backend/.venv
+backend/staticfiles
+backend/media

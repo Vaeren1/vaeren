@@ -1,0 +1,82 @@
+# Vaeren Production Caddyfile (Sprint 8).
+#
+# Lebt auf dem Server unter `/etc/caddy/Caddyfile`.
+# Caddy läuft als systemd-Service (`caddy.service`), nicht als Container.
+# Caddy bekommt Zugriff auf beide Docker-Networks via `caddy network connect`.
+#
+# Domains:
+#   sponty.fun, www.sponty.fun, api.sponty.fun  → sponty-backend:8000
+#   app.vaeren.de                                 → vaeren-django:8000 (API)
+#                                                    + vaeren-frontend:80 (SPA)
+#   hinweise.app.vaeren.de                        → vaeren-django:8000 (Public-Form)
+#                                                    + vaeren-frontend:80 (SPA)
+#
+# Auto-SSL via Let's Encrypt (HTTP-01-Challenge).
+# Kein Wildcard-Cert im MVP (braucht Hetzner-DNS-API-Token, fehlt).
+
+{
+    email konradbizer@web.de
+    # On-demand-TLS aus, weil wir nur fixe Domains haben (sicherer).
+    # Auto-HTTPS-Redirect ist Default-on.
+}
+
+# --- Sponty ---------------------------------------------------------------
+sponty.fun, www.sponty.fun, api.sponty.fun {
+    encode gzip zstd
+
+    # API + Admin auf Sponty-Backend
+    reverse_proxy sponty-backend:8000 {
+        header_up X-Forwarded-Proto https
+        header_up X-Real-IP {remote_host}
+    }
+
+    # Sponty-Static (Landing-Page) wird vom Backend selbst geliefert (siehe Sponty-Compose).
+}
+
+
+# --- Vaeren App-Frontend --------------------------------------------------
+app.vaeren.de {
+    encode gzip zstd
+
+    # API-Routen → Backend (ASGI/Daphne)
+    @api {
+        path /api/* /accounts/*
+    }
+    reverse_proxy @api vaeren-django:8000 {
+        header_up X-Forwarded-Proto https
+        header_up X-Real-IP {remote_host}
+        header_up Host {host}
+    }
+
+    # Static (Django collectstatic) → Backend
+    @django_static {
+        path /static/* /media/*
+    }
+    reverse_proxy @django_static vaeren-django:8000
+
+    # SPA (alles andere) → Frontend-Container (nginx-alpine)
+    reverse_proxy vaeren-frontend:80 {
+        header_up X-Forwarded-Proto https
+    }
+}
+
+
+# --- Vaeren Public-Hinweisgeber-Portal ------------------------------------
+hinweise.app.vaeren.de {
+    encode gzip zstd
+
+    # Public-API für Meldung-Submit + Status
+    @api {
+        path /api/*
+    }
+    reverse_proxy @api vaeren-django:8000 {
+        header_up X-Forwarded-Proto https
+        header_up X-Real-IP {remote_host}
+        header_up Host {host}
+    }
+
+    # Public-Routes /hinweise + /hinweise/status/<token> → Frontend-SPA
+    reverse_proxy vaeren-frontend:80 {
+        header_up X-Forwarded-Proto https
+    }
+}

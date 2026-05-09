@@ -1,0 +1,28 @@
+# Caddy systemd-unit (Sprint 8).
+#
+# Wird beim Server-Setup nach `/etc/systemd/system/caddy.service` kopiert.
+# Caddy-Binary muss vorher via `apt install caddy` installiert sein.
+#
+# Nutzt das Default-Caddyfile unter `/etc/caddy/Caddyfile` und schreibt
+# Zertifikate nach `/var/lib/caddy/.local/share/caddy/`.
+
+[Unit]
+Description=Caddy reverse proxy (sponty + vaeren)
+Documentation=https://caddyserver.com/docs/
+After=network.target docker.service
+Wants=network-online.target docker.service
+
+[Service]
+Type=notify
+User=caddy
+Group=caddy
+ExecStart=/usr/bin/caddy run --environ --config /etc/caddy/Caddyfile
+ExecReload=/usr/bin/caddy reload --config /etc/caddy/Caddyfile --force
+TimeoutStopSec=5s
+LimitNOFILE=1048576
+PrivateTmp=true
+ProtectSystem=full
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+
+[Install]
+WantedBy=multi-user.target

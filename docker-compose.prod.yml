@@ -1,0 +1,141 @@
+# Vaeren Production-Stack (Sprint 8).
+#
+# Co-located mit Sponty auf Hetzner CAX31 ARM64 Helsinki.
+# Container-Prefix `vaeren-*` (Sponty nutzt `sponty-*`).
+# Caddy auf dem HOST routet 80/443 → vaeren-django (intern :8000) bzw.
+# vaeren-frontend (intern :80). Container exposen NICHT auf Host-Ports.
+#
+# Build erfolgt server-seitig nativ ARM64 (kein Cross-Compile).
+
+x-django-env: &django-env
+  DJANGO_SETTINGS_MODULE: config.settings.prod
+  DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?required}
+  DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:?required}
+  DJANGO_CSRF_TRUSTED_ORIGINS: ${DJANGO_CSRF_TRUSTED_ORIGINS:-https://app.vaeren.de,https://hinweise.app.vaeren.de}
+  POSTGRES_DB: ${POSTGRES_DB:-vaeren}
+  POSTGRES_USER: ${POSTGRES_USER:-vaeren}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?required}
+  POSTGRES_HOST: postgres
+  POSTGRES_PORT: 5432
+  REDIS_URL: redis://redis:6379/0
+  CELERY_BROKER_URL: redis://redis:6379/1
+  CELERY_RESULT_BACKEND: redis://redis:6379/2
+  MAILJET_API_KEY: ${MAILJET_API_KEY:-}
+  MAILJET_SECRET_KEY: ${MAILJET_SECRET_KEY:-}
+  VAEREN_FROM_EMAIL: ${VAEREN_FROM_EMAIL:-noreply@vaeren.de}
+  OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+  SENTRY_DSN: ${SENTRY_DSN:-}
+  SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT:-production}
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: vaeren-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-vaeren}
+      POSTGRES_USER: ${POSTGRES_USER:-vaeren}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?required}
+    volumes:
+      - vaeren-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-vaeren}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: vaeren-redis
+    restart: unless-stopped
+    volumes:
+      - vaeren-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  django:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    image: vaeren-django:latest
+    container_name: vaeren-django
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      <<: *django-env
+    volumes:
+      - vaeren-media:/app/media
+      - vaeren-static:/app/staticfiles
+    healthcheck:
+      # Daphne listening = healthy. Kein HTTP-Health, weil django-tenants Host-
+      # basiert routet und localhost keinem Tenant-Domain entspricht (Caddy
+      # forwarded Host stattdessen).
+      test: ["CMD-SHELL", "/app/.venv/bin/python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('localhost', 8000))\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    expose:
+      - "8000"
+
+  celery-worker:
+    image: vaeren-django:latest
+    container_name: vaeren-celery-worker
+    restart: unless-stopped
+    depends_on:
+      django:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    environment:
+      <<: *django-env
+    entrypoint: ["/usr/bin/tini", "--"]
+    command: ["celery", "-A", "config.celery", "worker", "--loglevel=INFO"]
+    volumes:
+      - vaeren-media:/app/media
+
+  celery-beat:
+    image: vaeren-django:latest
+    container_name: vaeren-celery-beat
+    restart: unless-stopped
+    depends_on:
+      django:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    environment:
+      <<: *django-env
+    entrypoint: ["/usr/bin/tini", "--"]
+    command: ["celery", "-A", "config.celery", "beat", "--loglevel=INFO"]
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    image: vaeren-frontend:latest
+    container_name: vaeren-frontend
+    restart: unless-stopped
+    expose:
+      - "80"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://localhost/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  vaeren-postgres-data:
+  vaeren-redis-data:
+  vaeren-media:
+  vaeren-static:
+
+networks:
+  default:
+    name: vaeren-net
