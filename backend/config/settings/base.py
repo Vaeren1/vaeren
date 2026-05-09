@@ -36,6 +36,7 @@ TENANT_APPS: list[str] = [
     "rules",
     "allauth",
     "allauth.account",
+    "allauth.mfa",
     "dj_rest_auth",
     "core",
     "rest_framework",
@@ -146,3 +147,6 @@ REST_AUTH = {
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# allauth.mfa — TOTP-Issuer wird in der QR-URL angezeigt
+MFA_TOTP_ISSUER = "Vaeren"

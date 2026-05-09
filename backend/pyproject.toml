@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Vaeren Compliance-Autopilot — Django-Backend"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "cryptography>=48.0.0",
     "dj-rest-auth>=6.0",
     "django>=5.0,<5.1",
     "django-allauth>=64",
@@ -39,6 +40,7 @@ quote-style = "double"
 [dependency-groups]
 dev = [
     "factory-boy>=3.3",
+    "pyotp>=2.9.0",
     "pytest>=8",
     "pytest-django>=4.8",
     "responses>=0.25",

@@ -3,7 +3,9 @@
 from typing import ClassVar
 
 from django.db import connection
-from rest_framework import viewsets
+from django.middleware.csrf import get_token
+from drf_spectacular.utils import extend_schema, inline_serializer
+from rest_framework import serializers, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -14,11 +16,34 @@ from core.permissions import ComplianceTaskPermission, MitarbeiterPermission
 from core.serializers import ComplianceTaskSerializer, MitarbeiterSerializer
 
 
+@extend_schema(
+    responses=inline_serializer(
+        name="HealthResponse",
+        fields={"status": serializers.CharField(), "schema": serializers.CharField()},
+    )
+)
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def health(_request) -> Response:
     """Liveness-Check inkl. aktivem Schema (verifiziert Tenant-Routing)."""
     return Response({"status": "ok", "schema": connection.schema_name})
+
+
+@extend_schema(
+    responses=inline_serializer(
+        name="CsrfTokenResponse",
+        fields={"csrf_token": serializers.CharField()},
+    )
+)
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def csrf_token_view(request) -> Response:
+    """Liefert CSRF-Token + setzt csrftoken-Cookie.
+
+    Frontend ruft diesen Endpoint einmal beim App-Start, liest den Cookie
+    aus und setzt für unsichere Methoden den `X-CSRFToken`-Header.
+    """
+    return Response({"csrf_token": get_token(request)})
 
 
 class MitarbeiterViewSet(AuditLogMixin, viewsets.ModelViewSet):
