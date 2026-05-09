@@ -32,3 +32,13 @@ class MitarbeiterPermission(RulesPermission):
 class ComplianceTaskPermission(RulesPermission):
     view_rule = "can_view_compliance_task"
     edit_rule = "can_edit_compliance_task"
+
+
+class KursPermission(RulesPermission):
+    view_rule = "can_view_kurs"
+    edit_rule = "can_edit_kurs"
+
+
+class SchulungsWellePermission(RulesPermission):
+    view_rule = "can_manage_schulungswelle"
+    edit_rule = "can_manage_schulungswelle"

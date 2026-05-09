@@ -69,3 +69,14 @@ rules.add_rule(
     "can_edit_compliance_task",
     is_geschaeftsfuehrer | is_qm_leiter | is_compliance_beauftragter,
 )
+
+# --- Sprint 4: pflichtunterweisung -----------------------------------
+rules.add_rule("can_view_kurs", is_any_authenticated_role | is_view_only)
+rules.add_rule(
+    "can_edit_kurs",
+    is_geschaeftsfuehrer | is_qm_leiter | is_compliance_beauftragter,
+)
+rules.add_rule(
+    "can_manage_schulungswelle",
+    is_geschaeftsfuehrer | is_qm_leiter | is_compliance_beauftragter,
+)

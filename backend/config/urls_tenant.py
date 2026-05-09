@@ -7,6 +7,7 @@ from core.auth_views import MfaAwareLoginView
 
 urlpatterns = [
     path("api/", include("core.urls")),
+    path("api/", include("pflichtunterweisung.urls")),
     # MFA-aware Login MUSS vor dj_rest_auth.urls stehen, sonst gewinnt der Default.
     path("api/auth/login/", MfaAwareLoginView.as_view(), name="rest_login"),
     path("api/auth/", include("dj_rest_auth.urls")),

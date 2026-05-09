@@ -157,9 +157,7 @@ class SchulungsWelleFactory(factory.django.DjangoModelFactory):
 
     kurs = factory.SubFactory(KursFactory)
     titel = factory.Sequence(lambda n: f"Welle {n}")
-    deadline = factory.LazyAttribute(
-        lambda _o: datetime.date.today() + datetime.timedelta(days=30)
-    )
+    deadline = factory.LazyAttribute(lambda _o: datetime.date.today() + datetime.timedelta(days=30))
     erstellt_von = factory.SubFactory(UserFactory)
 
 

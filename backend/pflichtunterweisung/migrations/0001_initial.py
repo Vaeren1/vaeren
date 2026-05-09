@@ -6,134 +6,268 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('core', '0006_auditlog'),
+        ("core", "0006_auditlog"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Frage',
+            name="Frage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.TextField()),
-                ('erklaerung', models.TextField(blank=True, help_text='Erklärung nach Beantwortung')),
-                ('reihenfolge', models.PositiveSmallIntegerField(default=0)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("text", models.TextField()),
+                (
+                    "erklaerung",
+                    models.TextField(blank=True, help_text="Erklärung nach Beantwortung"),
+                ),
+                ("reihenfolge", models.PositiveSmallIntegerField(default=0)),
             ],
             options={
-                'verbose_name': 'Frage',
-                'verbose_name_plural': 'Fragen',
-                'ordering': ('reihenfolge', 'id'),
+                "verbose_name": "Frage",
+                "verbose_name_plural": "Fragen",
+                "ordering": ("reihenfolge", "id"),
             },
         ),
         migrations.CreateModel(
-            name='Kurs',
+            name="Kurs",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('titel', models.CharField(max_length=200)),
-                ('beschreibung', models.TextField(blank=True)),
-                ('gueltigkeit_monate', models.PositiveSmallIntegerField(default=12, help_text='Wie lange ist das Zertifikat gültig?')),
-                ('min_richtig_prozent', models.PositiveSmallIntegerField(default=80, help_text='Bestehensschwelle (Prozent richtig)')),
-                ('aktiv', models.BooleanField(default=True)),
-                ('erstellt_am', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("titel", models.CharField(max_length=200)),
+                ("beschreibung", models.TextField(blank=True)),
+                (
+                    "gueltigkeit_monate",
+                    models.PositiveSmallIntegerField(
+                        default=12, help_text="Wie lange ist das Zertifikat gültig?"
+                    ),
+                ),
+                (
+                    "min_richtig_prozent",
+                    models.PositiveSmallIntegerField(
+                        default=80, help_text="Bestehensschwelle (Prozent richtig)"
+                    ),
+                ),
+                ("aktiv", models.BooleanField(default=True)),
+                ("erstellt_am", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'verbose_name': 'Kurs',
-                'verbose_name_plural': 'Kurse',
-                'ordering': ('-erstellt_am',),
+                "verbose_name": "Kurs",
+                "verbose_name_plural": "Kurse",
+                "ordering": ("-erstellt_am",),
             },
         ),
         migrations.CreateModel(
-            name='AntwortOption',
+            name="AntwortOption",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.CharField(max_length=300)),
-                ('ist_korrekt', models.BooleanField(default=False)),
-                ('reihenfolge', models.PositiveSmallIntegerField(default=0)),
-                ('frage', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='optionen', to='pflichtunterweisung.frage')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("text", models.CharField(max_length=300)),
+                ("ist_korrekt", models.BooleanField(default=False)),
+                ("reihenfolge", models.PositiveSmallIntegerField(default=0)),
+                (
+                    "frage",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="optionen",
+                        to="pflichtunterweisung.frage",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Antwort-Option',
-                'verbose_name_plural': 'Antwort-Optionen',
-                'ordering': ('reihenfolge', 'id'),
+                "verbose_name": "Antwort-Option",
+                "verbose_name_plural": "Antwort-Optionen",
+                "ordering": ("reihenfolge", "id"),
             },
         ),
         migrations.AddField(
-            model_name='frage',
-            name='kurs',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='fragen', to='pflichtunterweisung.kurs'),
+            model_name="frage",
+            name="kurs",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="fragen",
+                to="pflichtunterweisung.kurs",
+            ),
         ),
         migrations.CreateModel(
-            name='SchulungsWelle',
+            name="SchulungsWelle",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('titel', models.CharField(max_length=200)),
-                ('status', models.CharField(choices=[('draft', 'Entwurf'), ('sent', 'Versendet'), ('in_progress', 'In Bearbeitung'), ('completed', 'Abgeschlossen')], default='draft', max_length=20)),
-                ('deadline', models.DateField()),
-                ('einleitungs_text', models.TextField(blank=True, help_text='Optionaler personalisierter Einleitungstext (LLM-Vorschlag, HITL-bestätigt)')),
-                ('erstellt_am', models.DateTimeField(auto_now_add=True)),
-                ('versendet_am', models.DateTimeField(blank=True, null=True)),
-                ('erstellt_von', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='erstellte_wellen', to=settings.AUTH_USER_MODEL)),
-                ('kurs', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='wellen', to='pflichtunterweisung.kurs')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("titel", models.CharField(max_length=200)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("draft", "Entwurf"),
+                            ("sent", "Versendet"),
+                            ("in_progress", "In Bearbeitung"),
+                            ("completed", "Abgeschlossen"),
+                        ],
+                        default="draft",
+                        max_length=20,
+                    ),
+                ),
+                ("deadline", models.DateField()),
+                (
+                    "einleitungs_text",
+                    models.TextField(
+                        blank=True,
+                        help_text="Optionaler personalisierter Einleitungstext (LLM-Vorschlag, HITL-bestätigt)",
+                    ),
+                ),
+                ("erstellt_am", models.DateTimeField(auto_now_add=True)),
+                ("versendet_am", models.DateTimeField(blank=True, null=True)),
+                (
+                    "erstellt_von",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="erstellte_wellen",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "kurs",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="wellen",
+                        to="pflichtunterweisung.kurs",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Schulungs-Welle',
-                'verbose_name_plural': 'Schulungs-Wellen',
-                'ordering': ('-erstellt_am',),
+                "verbose_name": "Schulungs-Welle",
+                "verbose_name_plural": "Schulungs-Wellen",
+                "ordering": ("-erstellt_am",),
             },
         ),
         migrations.CreateModel(
-            name='SchulungsTask',
+            name="SchulungsTask",
             fields=[
-                ('compliancetask_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='core.compliancetask')),
-                ('abgeschlossen_am', models.DateTimeField(blank=True, null=True)),
-                ('richtig_prozent', models.PositiveSmallIntegerField(blank=True, null=True)),
-                ('bestanden', models.BooleanField(null=True)),
-                ('zertifikat_id', models.CharField(blank=True, db_index=True, max_length=64)),
-                ('ablauf_datum', models.DateField(blank=True, null=True)),
-                ('mitarbeiter', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='schulungs_tasks', to='core.mitarbeiter')),
-                ('welle', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='tasks', to='pflichtunterweisung.schulungswelle')),
+                (
+                    "compliancetask_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="core.compliancetask",
+                    ),
+                ),
+                ("abgeschlossen_am", models.DateTimeField(blank=True, null=True)),
+                ("richtig_prozent", models.PositiveSmallIntegerField(blank=True, null=True)),
+                ("bestanden", models.BooleanField(null=True)),
+                ("zertifikat_id", models.CharField(blank=True, db_index=True, max_length=64)),
+                ("ablauf_datum", models.DateField(blank=True, null=True)),
+                (
+                    "mitarbeiter",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="schulungs_tasks",
+                        to="core.mitarbeiter",
+                    ),
+                ),
+                (
+                    "welle",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="tasks",
+                        to="pflichtunterweisung.schulungswelle",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Schulungs-Task',
-                'verbose_name_plural': 'Schulungs-Tasks',
-                'unique_together': {('welle', 'mitarbeiter')},
+                "verbose_name": "Schulungs-Task",
+                "verbose_name_plural": "Schulungs-Tasks",
+                "unique_together": {("welle", "mitarbeiter")},
             },
-            bases=('core.compliancetask',),
+            bases=("core.compliancetask",),
         ),
         migrations.CreateModel(
-            name='KursModul',
+            name="KursModul",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('titel', models.CharField(max_length=200)),
-                ('inhalt_md', models.TextField(help_text='Lerninhalt als Markdown')),
-                ('reihenfolge', models.PositiveSmallIntegerField(default=0)),
-                ('kurs', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='module', to='pflichtunterweisung.kurs')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("titel", models.CharField(max_length=200)),
+                ("inhalt_md", models.TextField(help_text="Lerninhalt als Markdown")),
+                ("reihenfolge", models.PositiveSmallIntegerField(default=0)),
+                (
+                    "kurs",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="module",
+                        to="pflichtunterweisung.kurs",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Kurs-Modul',
-                'verbose_name_plural': 'Kurs-Module',
-                'ordering': ('reihenfolge', 'id'),
-                'unique_together': {('kurs', 'reihenfolge')},
+                "verbose_name": "Kurs-Modul",
+                "verbose_name_plural": "Kurs-Module",
+                "ordering": ("reihenfolge", "id"),
+                "unique_together": {("kurs", "reihenfolge")},
             },
         ),
         migrations.CreateModel(
-            name='QuizAntwort',
+            name="QuizAntwort",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('war_korrekt', models.BooleanField()),
-                ('beantwortet_am', models.DateTimeField(auto_now_add=True)),
-                ('frage', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='pflichtunterweisung.frage')),
-                ('gewaehlte_option', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='pflichtunterweisung.antwortoption')),
-                ('task', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='antworten', to='pflichtunterweisung.schulungstask')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("war_korrekt", models.BooleanField()),
+                ("beantwortet_am", models.DateTimeField(auto_now_add=True)),
+                (
+                    "frage",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT, to="pflichtunterweisung.frage"
+                    ),
+                ),
+                (
+                    "gewaehlte_option",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="pflichtunterweisung.antwortoption",
+                    ),
+                ),
+                (
+                    "task",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="antworten",
+                        to="pflichtunterweisung.schulungstask",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Quiz-Antwort',
-                'verbose_name_plural': 'Quiz-Antworten',
-                'unique_together': {('task', 'frage')},
+                "verbose_name": "Quiz-Antwort",
+                "verbose_name_plural": "Quiz-Antworten",
+                "unique_together": {("task", "frage")},
             },
         ),
     ]

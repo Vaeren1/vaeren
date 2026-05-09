@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Schulungsnachweis — {{ kurs.titel }}</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 2cm;
+      }
+      body {
+        font-family: "Helvetica", "Arial", sans-serif;
+        color: #1a1a1a;
+      }
+      .header {
+        text-align: center;
+        border-bottom: 2px solid #1a1a1a;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 28pt;
+        letter-spacing: 0.05em;
+      }
+      .header p {
+        margin: 0.3rem 0 0;
+        color: #555;
+      }
+      .body {
+        margin-top: 3rem;
+      }
+      .body p {
+        line-height: 1.7;
+        font-size: 12pt;
+      }
+      .name {
+        font-size: 22pt;
+        font-weight: bold;
+        text-align: center;
+        margin: 2rem 0;
+      }
+      .kurs {
+        font-size: 16pt;
+        font-weight: bold;
+        text-align: center;
+        margin: 1rem 0 2rem;
+      }
+      .meta {
+        margin-top: 4rem;
+        font-size: 10pt;
+        color: #555;
+      }
+      .meta table {
+        width: 100%;
+      }
+      .meta td {
+        padding: 0.2rem 0;
+      }
+      .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        font-size: 8pt;
+        text-align: center;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>SCHULUNGSNACHWEIS</h1>
+      <p>{{ tenant_firma }}</p>
+    </div>
+
+    <div class="body">
+      <p>Hiermit wird bescheinigt, dass</p>
+      <div class="name">{{ mitarbeiter.vorname }} {{ mitarbeiter.nachname }}</div>
+      <p style="text-align: center">die Pflichtunterweisung</p>
+      <div class="kurs">{{ kurs.titel }}</div>
+      <p style="text-align: center">
+        am {{ abgeschlossen_am|date:"d.m.Y" }} mit
+        <strong>{{ richtig_prozent }} % richtigen Antworten</strong>
+        erfolgreich absolviert hat.
+      </p>
+    </div>
+
+    <div class="meta">
+      <table>
+        <tr><td>Zertifikat-ID:</td><td><code>{{ zertifikat_id }}</code></td></tr>
+        <tr><td>Bestandschwelle:</td><td>{{ kurs.min_richtig_prozent }} %</td></tr>
+        <tr><td>Gültig bis:</td><td>{{ ablauf_datum|date:"d.m.Y" }}</td></tr>
+        <tr><td>Ausgestellt am:</td><td>{{ ausgestellt_am|date:"d.m.Y H:i" }}</td></tr>
+      </table>
+    </div>
+
+    <div class="footer">
+      Vaeren Compliance-Autopilot — Maschinell erstellt, kein Unterschriftserfordernis
+    </div>
+  </body>
+</html>

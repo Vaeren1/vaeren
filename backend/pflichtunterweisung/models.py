@@ -2,7 +2,7 @@
 
 Datenmodell pro Spec §5 + Sprint-4-Plan §2:
 - Kurs (Vorlage), KursModul (Lerninhalt), Frage + AntwortOption (Single-Choice-Quiz)
-- SchulungsWelle (Roll-Out an n Mitarbeiter), SchulungsTask (= ein Mitarbeiter × eine Welle, polymorph aus ComplianceTask)
+- SchulungsWelle (Roll-Out an n Mitarbeiter), SchulungsTask (= ein Mitarbeiter x eine Welle, polymorph aus ComplianceTask)
 - QuizAntwort (eine Antwort pro Frage je Task)
 """
 
@@ -132,9 +132,7 @@ class SchulungsWelle(models.Model):
     def mark_sent(self) -> None:
         """State-Transition DRAFT -> SENT."""
         if self.status != SchulungsWelleStatus.DRAFT:
-            raise ValueError(
-                f"Welle {self.pk} ist nicht im Status DRAFT (aktuell: {self.status})"
-            )
+            raise ValueError(f"Welle {self.pk} ist nicht im Status DRAFT (aktuell: {self.status})")
         self.status = SchulungsWelleStatus.SENT
         self.versendet_am = timezone.now()
         self.save(update_fields=("status", "versendet_am"))
@@ -146,9 +144,7 @@ class SchulungsTask(ComplianceTask):
     Erbt `betroffene` (M2M), `created_at`, `due_date` etc. aus ComplianceTask.
     """
 
-    welle = models.ForeignKey(
-        SchulungsWelle, on_delete=models.CASCADE, related_name="tasks"
-    )
+    welle = models.ForeignKey(SchulungsWelle, on_delete=models.CASCADE, related_name="tasks")
     mitarbeiter = models.ForeignKey(
         Mitarbeiter, on_delete=models.CASCADE, related_name="schulungs_tasks"
     )
@@ -170,9 +166,7 @@ class SchulungsTask(ComplianceTask):
 class QuizAntwort(models.Model):
     """Eine konkrete Antwort eines Mitarbeiters auf eine Frage in einem Task."""
 
-    task = models.ForeignKey(
-        SchulungsTask, on_delete=models.CASCADE, related_name="antworten"
-    )
+    task = models.ForeignKey(SchulungsTask, on_delete=models.CASCADE, related_name="antworten")
     frage = models.ForeignKey(Frage, on_delete=models.PROTECT)
     gewaehlte_option = models.ForeignKey(AntwortOption, on_delete=models.PROTECT)
     war_korrekt = models.BooleanField()

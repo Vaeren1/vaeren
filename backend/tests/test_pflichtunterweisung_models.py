@@ -7,12 +7,8 @@ from django.db import IntegrityError
 from django_tenants.utils import schema_context
 
 from pflichtunterweisung.models import (
-    AntwortOption,
-    Kurs,
-    KursModul,
     QuizAntwort,
     SchulungsTask,
-    SchulungsWelle,
     SchulungsWelleStatus,
 )
 from tests.factories import (
@@ -31,10 +27,15 @@ from tests.factories import (
 
 @pytest.fixture
 def tenant_setup(db):
-    schema = "pflicht_t1"
+    import uuid
+
+    from django.db import connection
+
+    schema = f"pflichtm_{uuid.uuid4().hex[:8]}"
     tenant = TenantFactory(schema_name=schema, firma_name="Pflicht GmbH")
     TenantDomainFactory(tenant=tenant, domain=f"{schema.replace('_', '-')}.app.vaeren.local")
-    return tenant
+    yield tenant
+    connection.set_schema_to_public()
 
 
 def test_kurs_creates_with_defaults(tenant_setup):
