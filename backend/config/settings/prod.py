@@ -39,12 +39,17 @@ CSRF_TRUSTED_ORIGINS = [
     if o.strip()
 ]
 
-# --- Mailjet (Anymail) ----------------------------------------------------
-# Wenn API-Keys da → Mailjet; sonst Console-Backend (Logfile).
+# --- E-Mail-Provider (Anymail) -------------------------------------------
+# Priorität: Brevo > Mailjet > Console-Backend.
+# Beide Provider via django-anymail — Switch ohne Code-Change.
+_BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "")
 _MAILJET_API_KEY = os.environ.get("MAILJET_API_KEY", "")
 _MAILJET_SECRET_KEY = os.environ.get("MAILJET_SECRET_KEY", "")
 
-if _MAILJET_API_KEY and _MAILJET_SECRET_KEY:
+if _BREVO_API_KEY:
+    EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
+    ANYMAIL = {"BREVO_API_KEY": _BREVO_API_KEY}
+elif _MAILJET_API_KEY and _MAILJET_SECRET_KEY:
     EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"
     ANYMAIL = {
         "MAILJET_API_KEY": _MAILJET_API_KEY,

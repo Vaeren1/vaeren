@@ -34,6 +34,15 @@ sponty.fun, www.sponty.fun, api.sponty.fun {
 }
 
 
+# --- Vaeren Apex + www → app-Subdomain --------------------------------
+# Hauptmarke ist `vaeren.de`, App lebt auf `app.vaeren.de` (Multi-Tenant-Subdomain-
+# Strategie laut Spec §3). Apex + www werden permanent auf die App-Subdomain
+# redirected. Phase 2: Marketing-Landing-Page direkt auf vaeren.de.
+vaeren.de, www.vaeren.de {
+    redir https://app.vaeren.de{uri} permanent
+}
+
+
 # --- Vaeren App-Frontend --------------------------------------------------
 app.vaeren.de {
     encode gzip zstd

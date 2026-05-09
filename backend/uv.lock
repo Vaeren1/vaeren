@@ -1416,7 +1416,7 @@ requires-dist = [
     { name = "dj-rest-auth", specifier = ">=6.0" },
     { name = "django", specifier = ">=5.0,<5.1" },
     { name = "django-allauth", specifier = ">=64" },
-    { name = "django-anymail", extras = ["mailjet"], specifier = ">=12.0" },
+    { name = "django-anymail", extras = ["brevo", "mailjet"], specifier = ">=12.0" },
     { name = "django-environ", specifier = ">=0.11" },
     { name = "django-otp", specifier = ">=1.2" },
     { name = "django-polymorphic", specifier = ">=3.1" },
