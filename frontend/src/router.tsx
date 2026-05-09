@@ -1,5 +1,7 @@
 import { ProtectedRoute } from "@/components/auth/protected-route";
-import { AppShell } from "@/components/layout/app-shell";
+import { SidebarShell } from "@/components/layout/sidebar-shell";
+import { AuditLogPage } from "@/routes/audit-log";
+import { DashboardPage } from "@/routes/dashboard";
 import { DemoPage } from "@/routes/demo";
 import { LoginPage } from "@/routes/login";
 import { MeldungDetailPage } from "@/routes/meldung-detail";
@@ -13,8 +15,9 @@ import { PublicHinweiseStatusPage } from "@/routes/public-hinweise-status";
 import { PublicSchulungPage } from "@/routes/public-schulung";
 import { SchulungenListPage } from "@/routes/schulungen";
 import { SchulungenWizardPage } from "@/routes/schulungen-wizard";
+import { SettingsPage } from "@/routes/settings";
 import { WelleDetailPage } from "@/routes/welle-detail";
-import { Navigate, createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
   { path: "/login", element: <LoginPage /> },
@@ -26,11 +29,11 @@ export const router = createBrowserRouter([
   {
     element: (
       <ProtectedRoute>
-        <AppShell />
+        <SidebarShell />
       </ProtectedRoute>
     ),
     children: [
-      { path: "/", element: <Navigate to="/mitarbeiter" replace /> },
+      { path: "/", element: <DashboardPage /> },
       { path: "/mitarbeiter", element: <MitarbeiterListPage /> },
       { path: "/mitarbeiter/neu", element: <MitarbeiterFormPage /> },
       {
@@ -42,6 +45,8 @@ export const router = createBrowserRouter([
       { path: "/schulungen/:id", element: <WelleDetailPage /> },
       { path: "/meldungen", element: <MeldungenListPage /> },
       { path: "/meldungen/:id", element: <MeldungDetailPage /> },
+      { path: "/audit", element: <AuditLogPage /> },
+      { path: "/settings", element: <SettingsPage /> },
       { path: "/mfa-setup", element: <MfaSetupPage /> },
     ],
   },

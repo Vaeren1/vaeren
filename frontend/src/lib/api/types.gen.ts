@@ -36,6 +36,54 @@ export interface paths {
         patch: operations["antwort_optionen_partial_update"];
         trace?: never;
     };
+    "/api/audit/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["audit_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["audit_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit/export.csv/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["audit_export.csv_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/auth/csrf/": {
         parameters: {
             query?: never;
@@ -324,6 +372,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/dashboard/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Aggregat für Startseite: Score, ToDo-Liste, Activity-Feed. */
+        get: operations["dashboard_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/fragen/": {
         parameters: {
             query?: never;
@@ -562,6 +627,116 @@ export interface paths {
         patch: operations["mitarbeiter_partial_update"];
         trace?: never;
     };
+    "/api/notifications/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description In-App-Notifications für den eingeloggten User.
+         *
+         *     Nur eigene + nur In-App-Channel (E-Mail-Notifications werden separat
+         *     versendet, gehören aber nicht in den Bell-Dropdown).
+         */
+        get: operations["notifications_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notifications/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description In-App-Notifications für den eingeloggten User.
+         *
+         *     Nur eigene + nur In-App-Channel (E-Mail-Notifications werden separat
+         *     versendet, gehören aber nicht in den Bell-Dropdown).
+         */
+        get: operations["notifications_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notifications/{id}/read/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description In-App-Notifications für den eingeloggten User.
+         *
+         *     Nur eigene + nur In-App-Channel (E-Mail-Notifications werden separat
+         *     versendet, gehören aber nicht in den Bell-Dropdown).
+         */
+        post: operations["notifications_read_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notifications/mark-all-read/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description In-App-Notifications für den eingeloggten User.
+         *
+         *     Nur eigene + nur In-App-Channel (E-Mail-Notifications werden separat
+         *     versendet, gehören aber nicht in den Bell-Dropdown).
+         */
+        post: operations["notifications_mark_all_read_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notifications/unread-count/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description In-App-Notifications für den eingeloggten User.
+         *
+         *     Nur eigene + nur In-App-Channel (E-Mail-Notifications werden separat
+         *     versendet, gehören aber nicht in den Bell-Dropdown).
+         */
+        get: operations["notifications_unread_count_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/public/hinschg/meldung/": {
         parameters: {
             query?: never;
@@ -784,16 +959,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/tenant/settings/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["tenant_settings_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["tenant_settings_partial_update"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * @description * `create` - Erstellt
+         *     * `update` - Aktualisiert
+         *     * `delete` - Gelöscht
+         *     * `login` - Login
+         *     * `logout` - Logout
+         *     * `export` - Exportiert
+         * @enum {string}
+         */
+        AktionEnum: "create" | "update" | "delete" | "login" | "logout" | "export";
         AntwortOption: {
             readonly id: number;
             frage: number;
             text: string;
             ist_korrekt?: boolean;
             reihenfolge?: number;
+        };
+        AuditLog: {
+            readonly id: number;
+            readonly actor: number | null;
+            readonly actor_email: string;
+            readonly aktion: components["schemas"]["AktionEnum"];
+            readonly target_type: string;
+            readonly target_object_id: number | null;
+            readonly aenderung_diff: unknown;
+            readonly ip_address: string | null;
+            /** Format: date-time */
+            readonly timestamp: string;
         };
         BearbeitungsschrittIntern: {
             readonly id: number;
@@ -808,6 +1021,13 @@ export interface components {
         };
         /** @enum {unknown} */
         BlankEnum: "";
+        /**
+         * @description * `email` - E-Mail
+         *     * `in_app` - In-App
+         *     * `sms` - SMS
+         * @enum {string}
+         */
+        ChannelEnum: "email" | "in_app" | "sms";
         ComplianceTask: {
             readonly id: number;
             /** @description Wert wird in Sprint 4+ relevant, wenn Subklassen existieren. */
@@ -828,6 +1048,13 @@ export interface components {
         };
         CsrfTokenResponse: {
             csrf_token: string;
+        };
+        DashboardResponse: {
+            score: unknown;
+            this_week_tasks: unknown;
+            overdue_tasks: unknown;
+            recent_activity: unknown;
+            module_summary: unknown;
         };
         /**
          * @description * `web_anonym` - Web (anonym)
@@ -999,6 +1226,30 @@ export interface components {
             /** Format: date-time */
             readonly updated_at: string;
         };
+        Notification: {
+            readonly id: number;
+            readonly channel: components["schemas"]["ChannelEnum"];
+            readonly template: string;
+            readonly template_kontext: unknown;
+            readonly status: components["schemas"]["NotificationStatusEnum"];
+            /** Format: date-time */
+            readonly geplant_fuer: string | null;
+            /** Format: date-time */
+            readonly versandt_am: string | null;
+            /** Format: date-time */
+            readonly geoeffnet_am: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+        };
+        /**
+         * @description * `geplant` - Geplant
+         *     * `versandt` - Versandt
+         *     * `geoeffnet` - Geöffnet
+         *     * `bounced` - Bounced
+         *     * `failed` - Failed
+         * @enum {string}
+         */
+        NotificationStatusEnum: "geplant" | "versandt" | "geoeffnet" | "bounced" | "failed";
         PasswordChange: {
             new_password1: string;
             new_password2: string;
@@ -1098,6 +1349,14 @@ export interface components {
             /** Format: date-time */
             readonly versendet_am?: string | null;
             readonly tasks?: components["schemas"]["SchulungsTaskSummary"][];
+        };
+        PatchedTenantSettings: {
+            readonly schema_name?: string;
+            firma_name?: string;
+            locale?: string;
+            readonly plan?: string;
+            readonly pilot?: boolean;
+            mfa_required?: boolean;
         };
         /** @description User model w/o password */
         PatchedUserDetails: {
@@ -1204,12 +1463,23 @@ export interface components {
          * @enum {string}
          */
         StatusB1fEnum: "offen" | "in_bearbeitung" | "erledigt" | "ueberfaellig";
+        TenantSettings: {
+            readonly schema_name: string;
+            firma_name: string;
+            locale: string;
+            readonly plan: string;
+            readonly pilot: boolean;
+            mfa_required: boolean;
+        };
         TotpSetupResponse: {
             secret: string;
             qr_url: string;
         };
         TotpVerifyRequest: {
             code: string;
+        };
+        UnreadCountResponse: {
+            unread: number;
         };
         /** @description User model w/o password */
         UserDetails: {
@@ -1371,6 +1641,72 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["AntwortOption"];
                 };
+            };
+        };
+    };
+    audit_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditLog"][];
+                };
+            };
+        };
+    };
+    audit_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der audit log identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditLog"];
+                };
+            };
+        };
+    };
+    "audit_export.csv_retrieve": {
+        parameters: {
+            query?: {
+                actor?: number;
+                aktion?: string;
+                /** @description ISO-Date */
+                from?: string;
+                target_type?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -1712,6 +2048,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ComplianceTask"];
+                };
+            };
+        };
+    };
+    dashboard_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DashboardResponse"];
                 };
             };
         };
@@ -2473,6 +2828,119 @@ export interface operations {
             };
         };
     };
+    notifications_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Notification"][];
+                };
+            };
+        };
+    };
+    notifications_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der notification identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Notification"];
+                };
+            };
+        };
+    };
+    notifications_read_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der notification identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["Notification"];
+                "application/x-www-form-urlencoded": components["schemas"]["Notification"];
+                "multipart/form-data": components["schemas"]["Notification"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Notification"];
+                };
+            };
+        };
+    };
+    notifications_mark_all_read_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["Notification"];
+                "application/x-www-form-urlencoded": components["schemas"]["Notification"];
+                "multipart/form-data": components["schemas"]["Notification"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Notification"];
+                };
+            };
+        };
+    };
+    notifications_unread_count_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnreadCountResponse"];
+                };
+            };
+        };
+    };
     public_hinschg_meldung_create: {
         parameters: {
             query?: never;
@@ -2899,6 +3367,50 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SchulungsWelle"];
+                };
+            };
+        };
+    };
+    tenant_settings_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TenantSettings"];
+                };
+            };
+        };
+    };
+    tenant_settings_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedTenantSettings"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedTenantSettings"];
+                "multipart/form-data": components["schemas"]["PatchedTenantSettings"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TenantSettings"];
                 };
             };
         };

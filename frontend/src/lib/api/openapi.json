@@ -247,6 +247,126 @@
                 }
             }
         },
+        "/api/audit/": {
+            "get": {
+                "operationId": "audit_list",
+                "tags": [
+                    "audit"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AuditLog"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/audit/{id}/": {
+            "get": {
+                "operationId": "audit_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der audit log identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "audit"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuditLog"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/audit/export.csv/": {
+            "get": {
+                "operationId": "audit_export.csv_retrieve",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "actor",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "aktion",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "from",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ISO-Date"
+                    },
+                    {
+                        "in": "query",
+                        "name": "target_type",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "to",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "audit"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
         "/api/auth/csrf/": {
             "get": {
                 "operationId": "auth_csrf_retrieve",
@@ -823,6 +943,32 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ComplianceTask"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/dashboard/": {
+            "get": {
+                "operationId": "dashboard_retrieve",
+                "description": "Aggregat für Startseite: Score, ToDo-Liste, Activity-Feed.",
+                "tags": [
+                    "dashboard"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DashboardResponse"
                                 }
                             }
                         },
@@ -2122,6 +2268,199 @@
                 }
             }
         },
+        "/api/notifications/": {
+            "get": {
+                "operationId": "notifications_list",
+                "description": "In-App-Notifications für den eingeloggten User.\n\nNur eigene + nur In-App-Channel (E-Mail-Notifications werden separat\nversendet, gehören aber nicht in den Bell-Dropdown).",
+                "tags": [
+                    "notifications"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Notification"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/notifications/{id}/": {
+            "get": {
+                "operationId": "notifications_retrieve",
+                "description": "In-App-Notifications für den eingeloggten User.\n\nNur eigene + nur In-App-Channel (E-Mail-Notifications werden separat\nversendet, gehören aber nicht in den Bell-Dropdown).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der notification identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "notifications"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Notification"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/notifications/{id}/read/": {
+            "post": {
+                "operationId": "notifications_read_create",
+                "description": "In-App-Notifications für den eingeloggten User.\n\nNur eigene + nur In-App-Channel (E-Mail-Notifications werden separat\nversendet, gehören aber nicht in den Bell-Dropdown).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der notification identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "notifications"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Notification"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Notification"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Notification"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Notification"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/notifications/mark-all-read/": {
+            "post": {
+                "operationId": "notifications_mark_all_read_create",
+                "description": "In-App-Notifications für den eingeloggten User.\n\nNur eigene + nur In-App-Channel (E-Mail-Notifications werden separat\nversendet, gehören aber nicht in den Bell-Dropdown).",
+                "tags": [
+                    "notifications"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Notification"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Notification"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Notification"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Notification"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/notifications/unread-count/": {
+            "get": {
+                "operationId": "notifications_unread_count_retrieve",
+                "description": "In-App-Notifications für den eingeloggten User.\n\nNur eigene + nur In-App-Channel (E-Mail-Notifications werden separat\nversendet, gehören aber nicht in den Bell-Dropdown).",
+                "tags": [
+                    "notifications"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnreadCountResponse"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/api/public/hinschg/meldung/": {
             "post": {
                 "operationId": "public_hinschg_meldung_create",
@@ -2872,10 +3211,89 @@
                     }
                 }
             }
+        },
+        "/api/tenant/settings/": {
+            "get": {
+                "operationId": "tenant_settings_retrieve",
+                "tags": [
+                    "tenant"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TenantSettings"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "tenant_settings_partial_update",
+                "tags": [
+                    "tenant"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedTenantSettings"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedTenantSettings"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedTenantSettings"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TenantSettings"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
         }
     },
     "components": {
         "schemas": {
+            "AktionEnum": {
+                "enum": [
+                    "create",
+                    "update",
+                    "delete",
+                    "login",
+                    "logout",
+                    "export"
+                ],
+                "type": "string",
+                "description": "* `create` - Erstellt\n* `update` - Aktualisiert\n* `delete` - Gelöscht\n* `login` - Login\n* `logout` - Logout\n* `export` - Exportiert"
+            },
             "AntwortOption": {
                 "type": "object",
                 "properties": {
@@ -2903,6 +3321,65 @@
                     "frage",
                     "id",
                     "text"
+                ]
+            },
+            "AuditLog": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "actor": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "actor_email": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "aktion": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AktionEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "target_type": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "target_object_id": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "aenderung_diff": {
+                        "readOnly": true
+                    },
+                    "ip_address": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "actor",
+                    "actor_email",
+                    "aenderung_diff",
+                    "aktion",
+                    "id",
+                    "ip_address",
+                    "target_object_id",
+                    "target_type",
+                    "timestamp"
                 ]
             },
             "BearbeitungsschrittIntern": {
@@ -2949,6 +3426,15 @@
                 "enum": [
                     ""
                 ]
+            },
+            "ChannelEnum": {
+                "enum": [
+                    "email",
+                    "in_app",
+                    "sms"
+                ],
+                "type": "string",
+                "description": "* `email` - E-Mail\n* `in_app` - In-App\n* `sms` - SMS"
             },
             "ComplianceTask": {
                 "type": "object",
@@ -3034,6 +3520,23 @@
                 },
                 "required": [
                     "csrf_token"
+                ]
+            },
+            "DashboardResponse": {
+                "type": "object",
+                "properties": {
+                    "score": {},
+                    "this_week_tasks": {},
+                    "overdue_tasks": {},
+                    "recent_activity": {},
+                    "module_summary": {}
+                },
+                "required": [
+                    "module_summary",
+                    "overdue_tasks",
+                    "recent_activity",
+                    "score",
+                    "this_week_tasks"
                 ]
             },
             "EingangsKanalEnum": {
@@ -3642,6 +4145,83 @@
                     "vorname"
                 ]
             },
+            "Notification": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "channel": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ChannelEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "template": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "template_kontext": {
+                        "readOnly": true
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/NotificationStatusEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "geplant_fuer": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "versandt_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "geoeffnet_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "channel",
+                    "created_at",
+                    "geoeffnet_am",
+                    "geplant_fuer",
+                    "id",
+                    "status",
+                    "template",
+                    "template_kontext",
+                    "versandt_am"
+                ]
+            },
+            "NotificationStatusEnum": {
+                "enum": [
+                    "geplant",
+                    "versandt",
+                    "geoeffnet",
+                    "bounced",
+                    "failed"
+                ],
+                "type": "string",
+                "description": "* `geplant` - Geplant\n* `versandt` - Versandt\n* `geoeffnet` - Geöffnet\n* `bounced` - Bounced\n* `failed` - Failed"
+            },
             "PasswordChange": {
                 "type": "object",
                 "properties": {
@@ -3967,6 +4547,34 @@
                     }
                 }
             },
+            "PatchedTenantSettings": {
+                "type": "object",
+                "properties": {
+                    "schema_name": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "firma_name": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "locale": {
+                        "type": "string",
+                        "maxLength": 10
+                    },
+                    "plan": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "pilot": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "mfa_required": {
+                        "type": "boolean"
+                    }
+                }
+            },
             "PatchedUserDetails": {
                 "type": "object",
                 "description": "User model w/o password",
@@ -4252,6 +4860,42 @@
                 "type": "string",
                 "description": "* `offen` - Offen\n* `in_bearbeitung` - In Bearbeitung\n* `erledigt` - Erledigt\n* `ueberfaellig` - Überfällig"
             },
+            "TenantSettings": {
+                "type": "object",
+                "properties": {
+                    "schema_name": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "firma_name": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "locale": {
+                        "type": "string",
+                        "maxLength": 10
+                    },
+                    "plan": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "pilot": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "mfa_required": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "firma_name",
+                    "locale",
+                    "mfa_required",
+                    "pilot",
+                    "plan",
+                    "schema_name"
+                ]
+            },
             "TotpSetupResponse": {
                 "type": "object",
                 "properties": {
@@ -4278,6 +4922,17 @@
                 },
                 "required": [
                     "code"
+                ]
+            },
+            "UnreadCountResponse": {
+                "type": "object",
+                "properties": {
+                    "unread": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "unread"
                 ]
             },
             "UserDetails": {
