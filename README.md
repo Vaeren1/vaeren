@@ -52,6 +52,9 @@ uv run ruff check . && uv run ruff format --check .
 - **Auth:** `django-allauth` + `dj-rest-auth` + `django-otp` (Session-Cookie, TOTP-MFA)
 - **DB:** Postgres 16, Redis 7
 - **Code-Layout:** `backend/tenants/` (public-Schema), `backend/core/` (tenant-Schema-Baseline mit User)
+- **Datenmodell (Sprint 2):** Mitarbeiter, ComplianceTask (polymorph via django-polymorphic), Evidence (immutable, SHA-256), Notification, AuditLog (immutable, GenericFK target).
+- **Permissions:** `django-rules`-Predicates (siehe `backend/core/rules.py`). DRF-Adapter in `permissions.py`.
+- **AuditLog-Auto-Population:** Signals (catch-all für ORM-Saves) + DRF-Mixin (Request-Kontext: User, IP).
 
 Tiefer: `CLAUDE.md` (Kurz-Referenz) und `docs/superpowers/specs/` (Specs).
 
@@ -60,5 +63,6 @@ Tiefer: `CLAUDE.md` (Kurz-Referenz) und `docs/superpowers/specs/` (Specs).
 | Sprint | Status |
 |---|---|
 | 1 | ✅ Foundation (Repo, Django, Multi-Tenancy, Auth, Test-Tenant) |
-| 2 | ⬜ Shared Core Models + DRF API + AuditLog |
-| 3+ | siehe Spec §12 |
+| 2 | ✅ Shared Core (Mitarbeiter, ComplianceTask, Evidence, Notification, AuditLog) + Mitarbeiter/ComplianceTask-API + django-rules-Permissions + AuditLog-Auto-Population |
+| 3 | ⬜ Frontend-Foundation: React + Login + MFA + Mitarbeiter-CRUD-UI |
+| 4+ | siehe Spec §12 |
