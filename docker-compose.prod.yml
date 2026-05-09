@@ -125,8 +125,9 @@ services:
     expose:
       - "80"
     healthcheck:
-      # nginx-alpine hat BusyBox-wget — `-q -O /dev/null` ist die portable Form.
-      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost/healthz"]
+      # nginx-alpine: BusyBox-wget portable Form + 127.0.0.1 weil localhost
+      # sonst auf IPv6 (::1) resolvt und nginx nur IPv4 listened.
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/healthz"]
       interval: 30s
       timeout: 5s
       retries: 3
