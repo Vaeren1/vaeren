@@ -1,5 +1,6 @@
 """Public-Schema-Modelle. Spec §5."""
 
+from cryptography.fernet import Fernet
 from django.db import models
 from django_tenants.models import DomainMixin, TenantMixin
 
@@ -20,11 +21,24 @@ class Tenant(TenantMixin):
     contract_start = models.DateField(null=True, blank=True)
     contract_end = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    encryption_key = models.BinaryField(
+        editable=False,
+        default=b"",
+        help_text=(
+            "Fernet-Schlüssel für HinSchG-Meldungen (Sprint 5). Auto-generiert in save()."
+            " NIEMALS rotieren ohne Re-Encrypt-Migration — Datenverlust."
+        ),
+    )
 
     auto_create_schema = True
     # PROD-Risiko: löscht das gesamte Postgres-Schema bei Tenant.delete().
     # Vor Production-Start durch Soft-Delete + manuelles Schema-Drop ersetzen.
     auto_drop_schema = True
+
+    def save(self, *args, **kwargs):
+        if not self.encryption_key:
+            self.encryption_key = Fernet.generate_key()
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return f"{self.firma_name} ({self.schema_name})"

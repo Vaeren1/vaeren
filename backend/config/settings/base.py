@@ -40,6 +40,7 @@ TENANT_APPS: list[str] = [
     "dj_rest_auth",
     "core",
     "pflichtunterweisung",
+    "hinschg",
     "rest_framework",
     "drf_spectacular",
 ]

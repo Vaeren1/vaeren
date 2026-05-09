@@ -1,6 +1,6 @@
+import { type AuthUser, useAuthStore } from "@/lib/stores/auth-store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { type AuthUser, useAuthStore } from "@/lib/stores/auth-store";
 import { ApiError, api } from "./client";
 
 export interface LoginPayload {
@@ -54,7 +54,10 @@ export function useLogin() {
         if (err instanceof ApiError && err.status === 401) {
           const body = err.body as Partial<LoginMfaRequiredResponse>;
           if (body && body.detail === "mfa_required" && body.ephemeral_token) {
-            return { detail: "mfa_required", ephemeral_token: body.ephemeral_token };
+            return {
+              detail: "mfa_required",
+              ephemeral_token: body.ephemeral_token,
+            };
           }
         }
         throw err;

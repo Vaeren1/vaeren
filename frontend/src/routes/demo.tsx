@@ -1,8 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,6 +15,11 @@ import {
   type MitarbeiterAnzahl,
   useSubmitDemoRequest,
 } from "@/lib/api/demo";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const sizeOptions: ReadonlyArray<{ value: MitarbeiterAnzahl; label: string }> =
   [
@@ -118,7 +118,9 @@ export function DemoPage() {
                 <Label htmlFor="firma">Firma</Label>
                 <Input id="firma" {...register("firma")} />
                 {errors.firma && (
-                  <p className="text-xs text-destructive">{errors.firma.message}</p>
+                  <p className="text-xs text-destructive">
+                    {errors.firma.message}
+                  </p>
                 )}
               </div>
               <div className="space-y-2">
@@ -142,14 +144,18 @@ export function DemoPage() {
                 <Label htmlFor="vorname">Vorname</Label>
                 <Input id="vorname" {...register("vorname")} />
                 {errors.vorname && (
-                  <p className="text-xs text-destructive">{errors.vorname.message}</p>
+                  <p className="text-xs text-destructive">
+                    {errors.vorname.message}
+                  </p>
                 )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="nachname">Nachname</Label>
                 <Input id="nachname" {...register("nachname")} />
                 {errors.nachname && (
-                  <p className="text-xs text-destructive">{errors.nachname.message}</p>
+                  <p className="text-xs text-destructive">
+                    {errors.nachname.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -158,7 +164,9 @@ export function DemoPage() {
                 <Label htmlFor="email">E-Mail</Label>
                 <Input id="email" type="email" {...register("email")} />
                 {errors.email && (
-                  <p className="text-xs text-destructive">{errors.email.message}</p>
+                  <p className="text-xs text-destructive">
+                    {errors.email.message}
+                  </p>
                 )}
               </div>
               <div className="space-y-2">
@@ -170,7 +178,9 @@ export function DemoPage() {
               <Label htmlFor="nachricht">Nachricht (optional)</Label>
               <Textarea id="nachricht" rows={4} {...register("nachricht")} />
               {errors.nachricht && (
-                <p className="text-xs text-destructive">{errors.nachricht.message}</p>
+                <p className="text-xs text-destructive">
+                  {errors.nachricht.message}
+                </p>
               )}
             </div>
             {/* Honeypot — versteckt vor menschlichen Usern */}
@@ -189,7 +199,11 @@ export function DemoPage() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" disabled={submit.isPending} className="w-full">
+            <Button
+              type="submit"
+              disabled={submit.isPending}
+              className="w-full"
+            >
               {submit.isPending ? "Wird gesendet …" : "Demo anfragen"}
             </Button>
           </CardFooter>

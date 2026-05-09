@@ -172,3 +172,54 @@ class SchulungsTaskFactory(factory.django.DjangoModelFactory):
     kategorie = "schulung"
     frist = factory.LazyAttribute(lambda o: o.welle.deadline)
     status = ComplianceTaskStatus.OFFEN
+
+
+# --- Sprint 5: hinschg -------------------------------------------------
+
+from hinschg.models import (  # noqa: E402
+    Bearbeitungsschritt,
+    EingangsKanal,
+    Meldung,
+    MeldungsTaskTyp,
+)
+
+
+class MeldungFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Meldung
+
+    eingangs_kanal = EingangsKanal.WEB_ANONYM
+    anonym = True
+    titel_verschluesselt = factory.Sequence(lambda n: f"Hinweis Nr. {n}")
+    beschreibung_verschluesselt = (
+        "Verdacht auf Compliance-Verstoss. Beobachtung am 2026-05-08 um 14:30 in Halle 3."
+    )
+    melder_kontakt_verschluesselt = ""
+
+
+class BearbeitungsschrittFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Bearbeitungsschritt
+
+    meldung = factory.SubFactory(MeldungFactory)
+    aktion = "klassifizierung"
+    notiz_verschluesselt = "Erstklassifizierung durch QM."
+
+
+__all__ = [
+    "AntwortOptionFactory",
+    "BearbeitungsschrittFactory",
+    "ComplianceTaskFactory",
+    "EvidenceFactory",
+    "FrageFactory",
+    "KursFactory",
+    "KursModulFactory",
+    "MeldungFactory",
+    "MeldungsTaskTyp",
+    "MitarbeiterFactory",
+    "SchulungsTaskFactory",
+    "SchulungsWelleFactory",
+    "TenantDomainFactory",
+    "TenantFactory",
+    "UserFactory",
+]

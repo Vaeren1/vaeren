@@ -1099,6 +1099,300 @@
                 }
             }
         },
+        "/api/hinschg/meldungen/": {
+            "get": {
+                "operationId": "hinschg_meldungen_list",
+                "description": "Bearbeiter-API. Permission per `HinSchGMeldungPermission`.",
+                "tags": [
+                    "hinschg"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/MeldungList"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "hinschg_meldungen_create",
+                "description": "Bearbeiter-API. Permission per `HinSchGMeldungPermission`.",
+                "tags": [
+                    "hinschg"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MeldungIntern"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MeldungIntern"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MeldungIntern"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeldungIntern"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/hinschg/meldungen/{id}/": {
+            "get": {
+                "operationId": "hinschg_meldungen_retrieve",
+                "description": "Bearbeiter-API. Permission per `HinSchGMeldungPermission`.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der HinSchG-Meldung identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "hinschg"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeldungIntern"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "hinschg_meldungen_partial_update",
+                "description": "Bearbeiter-API. Permission per `HinSchGMeldungPermission`.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der HinSchG-Meldung identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "hinschg"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedMeldungPatch"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedMeldungPatch"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedMeldungPatch"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeldungPatch"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/hinschg/meldungen/{id}/abschliessen/": {
+            "post": {
+                "operationId": "hinschg_meldungen_abschliessen_create",
+                "description": "Setzt Status=ABGESCHLOSSEN + archiv_loeschdatum (3 J.) + schließt offene Tasks.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der HinSchG-Meldung identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "hinschg"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeldungIntern"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/hinschg/meldungen/{id}/bearbeitungsschritte/": {
+            "post": {
+                "operationId": "hinschg_meldungen_bearbeitungsschritte_create",
+                "description": "Bearbeiter-API. Permission per `HinSchGMeldungPermission`.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der HinSchG-Meldung identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "hinschg"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BearbeitungsschrittIntern"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BearbeitungsschrittIntern"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BearbeitungsschrittIntern"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BearbeitungsschrittIntern"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/hinschg/meldungen/{id}/bestaetigen/": {
+            "post": {
+                "operationId": "hinschg_meldungen_bestaetigen_create",
+                "description": "Markiert Eingangsbestätigung als versandt → schließt 7-Tage-Pflicht-Task.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der HinSchG-Meldung identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "hinschg"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeldungIntern"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/api/kurs-module/": {
             "get": {
                 "operationId": "kurs_module_list",
@@ -1828,6 +2122,143 @@
                 }
             }
         },
+        "/api/public/hinschg/meldung/": {
+            "post": {
+                "operationId": "public_hinschg_meldung_create",
+                "description": "Anonyme oder pseudonyme Meldung-Einreichung. HinSchG §16/§17.",
+                "tags": [
+                    "public"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MeldungSubmit"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MeldungSubmit"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MeldungSubmit"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeldungSubmitResponse"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/public/hinschg/status/{token}/": {
+            "get": {
+                "operationId": "public_hinschg_status_retrieve",
+                "description": "Status-Snapshot für Hinweisgeber. Sanitized.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "token",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "public"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeldungPublicStatus"
+                                }
+                            }
+                        },
+                        "description": ""
+                    },
+                    "404": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/public/hinschg/status/{token}/nachricht/": {
+            "post": {
+                "operationId": "public_hinschg_status_nachricht_create",
+                "description": "Hinweisgeber liefert nachträglich Info. Wird verschlüsselt geloggt.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "token",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "public"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HinweisgeberNachricht"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HinweisgeberNachricht"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HinweisgeberNachricht"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Nachricht angenommen."
+                    }
+                }
+            }
+        },
         "/api/public/schulung/{token}/": {
             "get": {
                 "operationId": "public_schulung_retrieve",
@@ -2474,6 +2905,51 @@
                     "text"
                 ]
             },
+            "BearbeitungsschrittIntern": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "aktion": {
+                        "type": "string",
+                        "description": "z. B. 'klassifizierung', 'rueckmeldung', 'hinweisgeber_nachricht'.",
+                        "maxLength": 50
+                    },
+                    "notiz_verschluesselt": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "bearbeiter": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "NULL = Hinweisgeber-Nachricht (anonym, über Status-API)."
+                    },
+                    "bearbeiter_email": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "aktion",
+                    "bearbeiter",
+                    "bearbeiter_email",
+                    "id",
+                    "notiz_verschluesselt",
+                    "timestamp"
+                ]
+            },
+            "BlankEnum": {
+                "enum": [
+                    ""
+                ]
+            },
             "ComplianceTask": {
                 "type": "object",
                 "properties": {
@@ -2519,7 +2995,7 @@
                     "status": {
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/ComplianceTaskStatusEnum"
+                                "$ref": "#/components/schemas/StatusB1fEnum"
                             }
                         ],
                         "readOnly": true
@@ -2549,16 +3025,6 @@
                     "verantwortlicher"
                 ]
             },
-            "ComplianceTaskStatusEnum": {
-                "enum": [
-                    "offen",
-                    "in_bearbeitung",
-                    "erledigt",
-                    "ueberfaellig"
-                ],
-                "type": "string",
-                "description": "* `offen` - Offen\n* `in_bearbeitung` - In Bearbeitung\n* `erledigt` - Erledigt\n* `ueberfaellig` - Überfällig"
-            },
             "CsrfTokenResponse": {
                 "type": "object",
                 "properties": {
@@ -2569,6 +3035,17 @@
                 "required": [
                     "csrf_token"
                 ]
+            },
+            "EingangsKanalEnum": {
+                "enum": [
+                    "web_anonym",
+                    "web_persoenlich",
+                    "email",
+                    "telefon",
+                    "persoenlich"
+                ],
+                "type": "string",
+                "description": "* `web_anonym` - Web (anonym)\n* `web_persoenlich` - Web (mit Kontakt)\n* `email` - E-Mail\n* `telefon` - Telefon\n* `persoenlich` - Persönlich"
             },
             "Frage": {
                 "type": "object",
@@ -2620,6 +3097,18 @@
                 "required": [
                     "schema",
                     "status"
+                ]
+            },
+            "HinweisgeberNachricht": {
+                "type": "object",
+                "properties": {
+                    "nachricht": {
+                        "type": "string",
+                        "maxLength": 10000
+                    }
+                },
+                "required": [
+                    "nachricht"
                 ]
             },
             "Kurs": {
@@ -2724,6 +3213,351 @@
                 },
                 "required": [
                     "password"
+                ]
+            },
+            "MeldungIntern": {
+                "type": "object",
+                "description": "Vollsicht für Bearbeiter — entschlüsselte Inhalte (server-side decrypted).",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "eingangs_token": {
+                        "type": "string",
+                        "readOnly": true,
+                        "description": "256-bit Token. Identifier des Hinweisgebers für Status-Abfrage."
+                    },
+                    "eingangs_kanal": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/EingangsKanalEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "eingangs_kanal_display": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "anonym": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "titel_verschluesselt": {
+                        "type": "string",
+                        "readOnly": true,
+                        "description": "Kurztitel der Meldung (Klartext). Encryption automatisch."
+                    },
+                    "beschreibung_verschluesselt": {
+                        "type": "string",
+                        "readOnly": true,
+                        "description": "Volltext der Meldung. Encryption automatisch."
+                    },
+                    "melder_kontakt_verschluesselt": {
+                        "type": "string",
+                        "readOnly": true,
+                        "description": "Optionale Kontakt-Info des Hinweisgebers (nur wenn anonym=False)."
+                    },
+                    "kategorie": {
+                        "type": "string",
+                        "description": "Vom Bearbeiter klassifiziert (z. B. 'korruption', 'arbeitssicherheit').",
+                        "maxLength": 50
+                    },
+                    "schweregrad": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/SchweregradEnum"
+                            },
+                            {
+                                "$ref": "#/components/schemas/BlankEnum"
+                            }
+                        ]
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/Status697Enum"
+                    },
+                    "status_display": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "eingegangen_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "bestaetigung_versandt_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "rueckmeldung_faellig_bis": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "abgeschlossen_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "archiv_loeschdatum": {
+                        "type": "string",
+                        "format": "date",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "3 Jahre nach Abschluss (HinSchG §11). Auto-Lösch-Job in Phase 2."
+                    },
+                    "tasks": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MeldungsTaskIntern"
+                        },
+                        "readOnly": true
+                    },
+                    "bearbeitungsschritte": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BearbeitungsschrittIntern"
+                        },
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "abgeschlossen_am",
+                    "anonym",
+                    "archiv_loeschdatum",
+                    "bearbeitungsschritte",
+                    "beschreibung_verschluesselt",
+                    "bestaetigung_versandt_am",
+                    "eingangs_kanal",
+                    "eingangs_kanal_display",
+                    "eingangs_token",
+                    "eingegangen_am",
+                    "id",
+                    "melder_kontakt_verschluesselt",
+                    "status_display",
+                    "tasks",
+                    "titel_verschluesselt"
+                ]
+            },
+            "MeldungList": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "eingangs_token": {
+                        "type": "string",
+                        "readOnly": true,
+                        "description": "256-bit Token. Identifier des Hinweisgebers für Status-Abfrage."
+                    },
+                    "anonym": {
+                        "type": "boolean"
+                    },
+                    "titel": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "kategorie": {
+                        "type": "string",
+                        "description": "Vom Bearbeiter klassifiziert (z. B. 'korruption', 'arbeitssicherheit').",
+                        "maxLength": 50
+                    },
+                    "schweregrad": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/SchweregradEnum"
+                            },
+                            {
+                                "$ref": "#/components/schemas/BlankEnum"
+                            }
+                        ]
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/Status697Enum"
+                    },
+                    "status_display": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "eingegangen_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "rueckmeldung_faellig_bis": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                },
+                "required": [
+                    "eingangs_token",
+                    "eingegangen_am",
+                    "id",
+                    "status_display",
+                    "titel"
+                ]
+            },
+            "MeldungPatch": {
+                "type": "object",
+                "description": "Bearbeiter-Update: nur Klassifizierungsfelder + Status.",
+                "properties": {
+                    "kategorie": {
+                        "type": "string",
+                        "description": "Vom Bearbeiter klassifiziert (z. B. 'korruption', 'arbeitssicherheit').",
+                        "maxLength": 50
+                    },
+                    "schweregrad": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/SchweregradEnum"
+                            },
+                            {
+                                "$ref": "#/components/schemas/BlankEnum"
+                            }
+                        ]
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/Status697Enum"
+                    }
+                }
+            },
+            "MeldungPublicStatus": {
+                "type": "object",
+                "description": "Sanitized Status — keine Bearbeiter-Infos, keine entschlüsselten Notizen.",
+                "properties": {
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Status697Enum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "eingegangen_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "bestaetigung_versandt_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "rueckmeldung_faellig_bis": {
+                        "type": "string",
+                        "format": "date",
+                        "readOnly": true
+                    },
+                    "abgeschlossen_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "bearbeitungsschritte": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "abgeschlossen_am",
+                    "bearbeitungsschritte",
+                    "bestaetigung_versandt_am",
+                    "eingegangen_am",
+                    "rueckmeldung_faellig_bis",
+                    "status"
+                ]
+            },
+            "MeldungSubmit": {
+                "type": "object",
+                "properties": {
+                    "titel": {
+                        "type": "string",
+                        "writeOnly": true,
+                        "maxLength": 200
+                    },
+                    "beschreibung": {
+                        "type": "string",
+                        "writeOnly": true
+                    },
+                    "melder_kontakt": {
+                        "type": "string",
+                        "writeOnly": true,
+                        "default": ""
+                    },
+                    "anonym": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "beschreibung",
+                    "titel"
+                ]
+            },
+            "MeldungSubmitResponse": {
+                "type": "object",
+                "properties": {
+                    "eingangs_token": {
+                        "type": "string"
+                    },
+                    "status_url": {
+                        "type": "string"
+                    },
+                    "rueckmeldung_faellig_bis": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                },
+                "required": [
+                    "eingangs_token",
+                    "rueckmeldung_faellig_bis",
+                    "status_url"
+                ]
+            },
+            "MeldungsTaskIntern": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "pflicht_typ": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PflichtTypEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "pflicht_typ_display": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "frist": {
+                        "type": "string",
+                        "format": "date",
+                        "readOnly": true
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusB1fEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "frist",
+                    "id",
+                    "pflicht_typ",
+                    "pflicht_typ_display",
+                    "status"
                 ]
             },
             "MfaLoginRequest": {
@@ -2992,6 +3826,30 @@
                     }
                 }
             },
+            "PatchedMeldungPatch": {
+                "type": "object",
+                "description": "Bearbeiter-Update: nur Klassifizierungsfelder + Status.",
+                "properties": {
+                    "kategorie": {
+                        "type": "string",
+                        "description": "Vom Bearbeiter klassifiziert (z. B. 'korruption', 'arbeitssicherheit').",
+                        "maxLength": 50
+                    },
+                    "schweregrad": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/SchweregradEnum"
+                            },
+                            {
+                                "$ref": "#/components/schemas/BlankEnum"
+                            }
+                        ]
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/Status697Enum"
+                    }
+                }
+            },
             "PatchedMitarbeiter": {
                 "type": "object",
                 "properties": {
@@ -3134,6 +3992,15 @@
                         "maxLength": 150
                     }
                 }
+            },
+            "PflichtTypEnum": {
+                "enum": [
+                    "bestaetigung_7d",
+                    "rueckmeldung_3m",
+                    "abschluss"
+                ],
+                "type": "string",
+                "description": "* `bestaetigung_7d` - Eingangsbestätigung (7 Tage HinSchG §17 Abs. 2)\n* `rueckmeldung_3m` - Rückmeldung (3 Monate HinSchG §17 Abs. 4)\n* `abschluss` - Abschluss-Mitteilung an Hinweisgeber"
             },
             "PublicSchulungAbschliessenResponse": {
                 "type": "object",
@@ -3352,6 +4219,38 @@
                 ],
                 "type": "string",
                 "description": "* `draft` - Entwurf\n* `sent` - Versendet\n* `in_progress` - In Bearbeitung\n* `completed` - Abgeschlossen"
+            },
+            "SchweregradEnum": {
+                "enum": [
+                    "niedrig",
+                    "mittel",
+                    "hoch",
+                    "kritisch"
+                ],
+                "type": "string",
+                "description": "* `niedrig` - Niedrig\n* `mittel` - Mittel\n* `hoch` - Hoch\n* `kritisch` - Kritisch"
+            },
+            "Status697Enum": {
+                "enum": [
+                    "eingegangen",
+                    "bestaetigt",
+                    "in_pruefung",
+                    "massnahme",
+                    "abgeschlossen",
+                    "abgewiesen"
+                ],
+                "type": "string",
+                "description": "* `eingegangen` - Eingegangen\n* `bestaetigt` - Eingangsbestätigung versandt\n* `in_pruefung` - In Prüfung\n* `massnahme` - Maßnahme eingeleitet\n* `abgeschlossen` - Abgeschlossen\n* `abgewiesen` - Abgewiesen (kein HinSchG-Verstoß)"
+            },
+            "StatusB1fEnum": {
+                "enum": [
+                    "offen",
+                    "in_bearbeitung",
+                    "erledigt",
+                    "ueberfaellig"
+                ],
+                "type": "string",
+                "description": "* `offen` - Offen\n* `in_bearbeitung` - In Bearbeitung\n* `erledigt` - Erledigt\n* `ueberfaellig` - Überfällig"
             },
             "TotpSetupResponse": {
                 "type": "object",

@@ -167,7 +167,10 @@ export function useVersenden(id: number) {
     void
   >({
     mutationFn: () =>
-      api(`/api/schulungswellen/${id}/versenden/`, { method: "POST", json: {} }),
+      api(`/api/schulungswellen/${id}/versenden/`, {
+        method: "POST",
+        json: {},
+      }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["schulungswellen"] });
       qc.invalidateQueries({ queryKey: ["schulungswellen", id] });
@@ -198,7 +201,12 @@ export interface PublicSchulungActive {
   deadline: string;
   einleitungs_text: string;
   min_richtig_prozent: number;
-  module: { id: number; titel: string; inhalt_md: string; reihenfolge: number }[];
+  module: {
+    id: number;
+    titel: string;
+    inhalt_md: string;
+    reihenfolge: number;
+  }[];
   fragen: PublicFrage[];
 }
 
@@ -212,7 +220,9 @@ export interface PublicSchulungAbgeschlossen {
 
 export type PublicSchulung = PublicSchulungActive | PublicSchulungAbgeschlossen;
 
-export function isAbgeschlossen(p: PublicSchulung): p is PublicSchulungAbgeschlossen {
+export function isAbgeschlossen(
+  p: PublicSchulung,
+): p is PublicSchulungAbgeschlossen {
   return p.status === "abgeschlossen";
 }
 
@@ -239,7 +249,10 @@ export function usePublicAntwort(token: string) {
     { frage_id: number; option_id: number }
   >({
     mutationFn: (payload) =>
-      api(`/api/public/schulung/${token}/antwort/`, { method: "POST", json: payload }),
+      api(`/api/public/schulung/${token}/antwort/`, {
+        method: "POST",
+        json: payload,
+      }),
   });
 }
 
@@ -255,6 +268,9 @@ export function usePublicAbschliessen(token: string) {
     void
   >({
     mutationFn: () =>
-      api(`/api/public/schulung/${token}/abschliessen/`, { method: "POST", json: {} }),
+      api(`/api/public/schulung/${token}/abschliessen/`, {
+        method: "POST",
+        json: {},
+      }),
   });
 }

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { ApiError, api } from "./client";
+import { type ApiError, api } from "./client";
 
 export type MitarbeiterAnzahl =
   | "<50"

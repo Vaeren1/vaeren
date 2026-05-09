@@ -1,7 +1,7 @@
-import { Link, Outlet } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useLogout } from "@/lib/api/auth";
 import { useAuthStore } from "@/lib/stores/auth-store";
+import { Link, Outlet } from "react-router-dom";
 
 export function AppShell() {
   const user = useAuthStore((s) => s.user);
@@ -25,6 +25,12 @@ export function AppShell() {
               className="text-sm font-medium hover:underline"
             >
               Schulungen
+            </Link>
+            <Link
+              to="/meldungen"
+              className="text-sm font-medium hover:underline"
+            >
+              HinSchG
             </Link>
             <Link
               to="/mfa-setup"

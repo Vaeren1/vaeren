@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -15,6 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useWelle } from "@/lib/api/schulungen";
+import { useParams } from "react-router-dom";
 
 const STATUS_LABEL: Record<string, string> = {
   draft: "Entwurf",
@@ -53,9 +53,7 @@ export function WelleDetailPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>
-            Mitarbeiter ({data.tasks.length})
-          </CardTitle>
+          <CardTitle>Mitarbeiter ({data.tasks.length})</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
@@ -74,7 +72,9 @@ export function WelleDetailPage() {
                   <TableCell>{t.mitarbeiter_name}</TableCell>
                   <TableCell>{t.abgeschlossen_am ?? "—"}</TableCell>
                   <TableCell>
-                    {t.richtig_prozent !== null ? `${t.richtig_prozent} %` : "—"}
+                    {t.richtig_prozent !== null
+                      ? `${t.richtig_prozent} %`
+                      : "—"}
                   </TableCell>
                   <TableCell>
                     {t.bestanden === null ? "—" : t.bestanden ? "ja" : "nein"}

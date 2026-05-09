@@ -373,6 +373,93 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/hinschg/meldungen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Bearbeiter-API. Permission per `HinSchGMeldungPermission`. */
+        get: operations["hinschg_meldungen_list"];
+        put?: never;
+        /** @description Bearbeiter-API. Permission per `HinSchGMeldungPermission`. */
+        post: operations["hinschg_meldungen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/hinschg/meldungen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Bearbeiter-API. Permission per `HinSchGMeldungPermission`. */
+        get: operations["hinschg_meldungen_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** @description Bearbeiter-API. Permission per `HinSchGMeldungPermission`. */
+        patch: operations["hinschg_meldungen_partial_update"];
+        trace?: never;
+    };
+    "/api/hinschg/meldungen/{id}/abschliessen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Setzt Status=ABGESCHLOSSEN + archiv_loeschdatum (3 J.) + schließt offene Tasks. */
+        post: operations["hinschg_meldungen_abschliessen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/hinschg/meldungen/{id}/bearbeitungsschritte/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Bearbeiter-API. Permission per `HinSchGMeldungPermission`. */
+        post: operations["hinschg_meldungen_bearbeitungsschritte_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/hinschg/meldungen/{id}/bestaetigen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Markiert Eingangsbestätigung als versandt → schließt 7-Tage-Pflicht-Task. */
+        post: operations["hinschg_meldungen_bestaetigen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/kurs-module/": {
         parameters: {
             query?: never;
@@ -473,6 +560,57 @@ export interface paths {
         head?: never;
         /** @description CRUD für Mitarbeiter. */
         patch: operations["mitarbeiter_partial_update"];
+        trace?: never;
+    };
+    "/api/public/hinschg/meldung/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Anonyme oder pseudonyme Meldung-Einreichung. HinSchG §16/§17. */
+        post: operations["public_hinschg_meldung_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/public/hinschg/status/{token}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Status-Snapshot für Hinweisgeber. Sanitized. */
+        get: operations["public_hinschg_status_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/public/hinschg/status/{token}/nachricht/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Hinweisgeber liefert nachträglich Info. Wird verschlüsselt geloggt. */
+        post: operations["public_hinschg_status_nachricht_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/public/schulung/{token}/": {
@@ -657,6 +795,19 @@ export interface components {
             ist_korrekt?: boolean;
             reihenfolge?: number;
         };
+        BearbeitungsschrittIntern: {
+            readonly id: number;
+            /** @description z. B. 'klassifizierung', 'rueckmeldung', 'hinweisgeber_nachricht'. */
+            aktion: string;
+            notiz_verschluesselt: string;
+            /** Format: date-time */
+            readonly timestamp: string;
+            /** @description NULL = Hinweisgeber-Nachricht (anonym, über Status-API). */
+            readonly bearbeiter: number | null;
+            readonly bearbeiter_email: string;
+        };
+        /** @enum {unknown} */
+        BlankEnum: "";
         ComplianceTask: {
             readonly id: number;
             /** @description Wert wird in Sprint 4+ relevant, wenn Subklassen existieren. */
@@ -669,23 +820,24 @@ export interface components {
             readonly frist: string;
             readonly verantwortlicher: number | null;
             readonly betroffene: number[];
-            readonly status: components["schemas"]["ComplianceTaskStatusEnum"];
+            readonly status: components["schemas"]["StatusB1fEnum"];
             /** Format: date-time */
             readonly created_at: string;
             /** Format: date-time */
             readonly updated_at: string;
         };
-        /**
-         * @description * `offen` - Offen
-         *     * `in_bearbeitung` - In Bearbeitung
-         *     * `erledigt` - Erledigt
-         *     * `ueberfaellig` - Überfällig
-         * @enum {string}
-         */
-        ComplianceTaskStatusEnum: "offen" | "in_bearbeitung" | "erledigt" | "ueberfaellig";
         CsrfTokenResponse: {
             csrf_token: string;
         };
+        /**
+         * @description * `web_anonym` - Web (anonym)
+         *     * `web_persoenlich` - Web (mit Kontakt)
+         *     * `email` - E-Mail
+         *     * `telefon` - Telefon
+         *     * `persoenlich` - Persönlich
+         * @enum {string}
+         */
+        EingangsKanalEnum: "web_anonym" | "web_persoenlich" | "email" | "telefon" | "persoenlich";
         Frage: {
             readonly id: number;
             kurs: number;
@@ -698,6 +850,9 @@ export interface components {
         HealthResponse: {
             status: string;
             schema: string;
+        };
+        HinweisgeberNachricht: {
+            nachricht: string;
         };
         Kurs: {
             readonly id: number;
@@ -727,6 +882,98 @@ export interface components {
             /** Format: email */
             email?: string;
             password: string;
+        };
+        /** @description Vollsicht für Bearbeiter — entschlüsselte Inhalte (server-side decrypted). */
+        MeldungIntern: {
+            readonly id: number;
+            /** @description 256-bit Token. Identifier des Hinweisgebers für Status-Abfrage. */
+            readonly eingangs_token: string;
+            readonly eingangs_kanal: components["schemas"]["EingangsKanalEnum"];
+            readonly eingangs_kanal_display: string;
+            readonly anonym: boolean;
+            /** @description Kurztitel der Meldung (Klartext). Encryption automatisch. */
+            readonly titel_verschluesselt: string;
+            /** @description Volltext der Meldung. Encryption automatisch. */
+            readonly beschreibung_verschluesselt: string;
+            /** @description Optionale Kontakt-Info des Hinweisgebers (nur wenn anonym=False). */
+            readonly melder_kontakt_verschluesselt: string;
+            /** @description Vom Bearbeiter klassifiziert (z. B. 'korruption', 'arbeitssicherheit'). */
+            kategorie?: string;
+            schweregrad?: components["schemas"]["SchweregradEnum"] | components["schemas"]["BlankEnum"];
+            status?: components["schemas"]["Status697Enum"];
+            readonly status_display: string;
+            /** Format: date-time */
+            readonly eingegangen_am: string;
+            /** Format: date-time */
+            readonly bestaetigung_versandt_am: string | null;
+            /** Format: date */
+            rueckmeldung_faellig_bis?: string;
+            /** Format: date-time */
+            readonly abgeschlossen_am: string | null;
+            /**
+             * Format: date
+             * @description 3 Jahre nach Abschluss (HinSchG §11). Auto-Lösch-Job in Phase 2.
+             */
+            readonly archiv_loeschdatum: string | null;
+            readonly tasks: components["schemas"]["MeldungsTaskIntern"][];
+            readonly bearbeitungsschritte: components["schemas"]["BearbeitungsschrittIntern"][];
+        };
+        MeldungList: {
+            readonly id: number;
+            /** @description 256-bit Token. Identifier des Hinweisgebers für Status-Abfrage. */
+            readonly eingangs_token: string;
+            anonym?: boolean;
+            readonly titel: string;
+            /** @description Vom Bearbeiter klassifiziert (z. B. 'korruption', 'arbeitssicherheit'). */
+            kategorie?: string;
+            schweregrad?: components["schemas"]["SchweregradEnum"] | components["schemas"]["BlankEnum"];
+            status?: components["schemas"]["Status697Enum"];
+            readonly status_display: string;
+            /** Format: date-time */
+            readonly eingegangen_am: string;
+            /** Format: date */
+            rueckmeldung_faellig_bis?: string;
+        };
+        /** @description Bearbeiter-Update: nur Klassifizierungsfelder + Status. */
+        MeldungPatch: {
+            /** @description Vom Bearbeiter klassifiziert (z. B. 'korruption', 'arbeitssicherheit'). */
+            kategorie?: string;
+            schweregrad?: components["schemas"]["SchweregradEnum"] | components["schemas"]["BlankEnum"];
+            status?: components["schemas"]["Status697Enum"];
+        };
+        /** @description Sanitized Status — keine Bearbeiter-Infos, keine entschlüsselten Notizen. */
+        MeldungPublicStatus: {
+            readonly status: components["schemas"]["Status697Enum"];
+            /** Format: date-time */
+            readonly eingegangen_am: string;
+            /** Format: date-time */
+            readonly bestaetigung_versandt_am: string | null;
+            /** Format: date */
+            readonly rueckmeldung_faellig_bis: string;
+            /** Format: date-time */
+            readonly abgeschlossen_am: string | null;
+            readonly bearbeitungsschritte: string;
+        };
+        MeldungSubmit: {
+            titel: string;
+            beschreibung: string;
+            /** @default  */
+            melder_kontakt: string;
+            anonym?: boolean;
+        };
+        MeldungSubmitResponse: {
+            eingangs_token: string;
+            status_url: string;
+            /** Format: date */
+            rueckmeldung_faellig_bis: string;
+        };
+        MeldungsTaskIntern: {
+            readonly id: number;
+            readonly pflicht_typ: components["schemas"]["PflichtTypEnum"];
+            readonly pflicht_typ_display: string;
+            /** Format: date */
+            readonly frist: string;
+            readonly status: components["schemas"]["StatusB1fEnum"];
         };
         MfaLoginRequest: {
             ephemeral_token: string;
@@ -807,6 +1054,13 @@ export interface components {
             /** @default 0 */
             reihenfolge: number;
         };
+        /** @description Bearbeiter-Update: nur Klassifizierungsfelder + Status. */
+        PatchedMeldungPatch: {
+            /** @description Vom Bearbeiter klassifiziert (z. B. 'korruption', 'arbeitssicherheit'). */
+            kategorie?: string;
+            schweregrad?: components["schemas"]["SchweregradEnum"] | components["schemas"]["BlankEnum"];
+            status?: components["schemas"]["Status697Enum"];
+        };
         PatchedMitarbeiter: {
             readonly id?: number;
             vorname?: string;
@@ -856,6 +1110,13 @@ export interface components {
             /** Nachname */
             last_name?: string;
         };
+        /**
+         * @description * `bestaetigung_7d` - Eingangsbestätigung (7 Tage HinSchG §17 Abs. 2)
+         *     * `rueckmeldung_3m` - Rückmeldung (3 Monate HinSchG §17 Abs. 4)
+         *     * `abschluss` - Abschluss-Mitteilung an Hinweisgeber
+         * @enum {string}
+         */
+        PflichtTypEnum: "bestaetigung_7d" | "rueckmeldung_3m" | "abschluss";
         PublicSchulungAbschliessenResponse: {
             bestanden: boolean;
             richtig_prozent: number;
@@ -917,6 +1178,32 @@ export interface components {
          * @enum {string}
          */
         SchulungsWelleStatusEnum: "draft" | "sent" | "in_progress" | "completed";
+        /**
+         * @description * `niedrig` - Niedrig
+         *     * `mittel` - Mittel
+         *     * `hoch` - Hoch
+         *     * `kritisch` - Kritisch
+         * @enum {string}
+         */
+        SchweregradEnum: "niedrig" | "mittel" | "hoch" | "kritisch";
+        /**
+         * @description * `eingegangen` - Eingegangen
+         *     * `bestaetigt` - Eingangsbestätigung versandt
+         *     * `in_pruefung` - In Prüfung
+         *     * `massnahme` - Maßnahme eingeleitet
+         *     * `abgeschlossen` - Abgeschlossen
+         *     * `abgewiesen` - Abgewiesen (kein HinSchG-Verstoß)
+         * @enum {string}
+         */
+        Status697Enum: "eingegangen" | "bestaetigt" | "in_pruefung" | "massnahme" | "abgeschlossen" | "abgewiesen";
+        /**
+         * @description * `offen` - Offen
+         *     * `in_bearbeitung` - In Bearbeitung
+         *     * `erledigt` - Erledigt
+         *     * `ueberfaellig` - Überfällig
+         * @enum {string}
+         */
+        StatusB1fEnum: "offen" | "in_bearbeitung" | "erledigt" | "ueberfaellig";
         TotpSetupResponse: {
             secret: string;
             qr_url: string;
@@ -1591,6 +1878,172 @@ export interface operations {
             };
         };
     };
+    hinschg_meldungen_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeldungList"][];
+                };
+            };
+        };
+    };
+    hinschg_meldungen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["MeldungIntern"];
+                "application/x-www-form-urlencoded": components["schemas"]["MeldungIntern"];
+                "multipart/form-data": components["schemas"]["MeldungIntern"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeldungIntern"];
+                };
+            };
+        };
+    };
+    hinschg_meldungen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der HinSchG-Meldung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeldungIntern"];
+                };
+            };
+        };
+    };
+    hinschg_meldungen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der HinSchG-Meldung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedMeldungPatch"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedMeldungPatch"];
+                "multipart/form-data": components["schemas"]["PatchedMeldungPatch"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeldungPatch"];
+                };
+            };
+        };
+    };
+    hinschg_meldungen_abschliessen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der HinSchG-Meldung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeldungIntern"];
+                };
+            };
+        };
+    };
+    hinschg_meldungen_bearbeitungsschritte_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der HinSchG-Meldung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BearbeitungsschrittIntern"];
+                "application/x-www-form-urlencoded": components["schemas"]["BearbeitungsschrittIntern"];
+                "multipart/form-data": components["schemas"]["BearbeitungsschrittIntern"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BearbeitungsschrittIntern"];
+                };
+            };
+        };
+    };
+    hinschg_meldungen_bestaetigen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der HinSchG-Meldung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeldungIntern"];
+                };
+            };
+        };
+    };
     kurs_module_list: {
         parameters: {
             query?: never;
@@ -2017,6 +2470,85 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["Mitarbeiter"];
                 };
+            };
+        };
+    };
+    public_hinschg_meldung_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MeldungSubmit"];
+                "application/x-www-form-urlencoded": components["schemas"]["MeldungSubmit"];
+                "multipart/form-data": components["schemas"]["MeldungSubmit"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeldungSubmitResponse"];
+                };
+            };
+        };
+    };
+    public_hinschg_status_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeldungPublicStatus"];
+                };
+            };
+            /** @description No response body */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    public_hinschg_status_nachricht_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HinweisgeberNachricht"];
+                "application/x-www-form-urlencoded": components["schemas"]["HinweisgeberNachricht"];
+                "multipart/form-data": components["schemas"]["HinweisgeberNachricht"];
+            };
+        };
+        responses: {
+            /** @description Nachricht angenommen. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

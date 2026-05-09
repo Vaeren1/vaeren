@@ -1,6 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,13 +8,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  isAbgeschlossen,
   type PublicFrage,
+  isAbgeschlossen,
   usePublicAbschliessen,
   usePublicAntwort,
   usePublicSchulung,
   usePublicStart,
 } from "@/lib/api/schulungen";
+import { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 type Phase = "loading" | "intro" | "lesen" | "quiz" | "ergebnis" | "fehler";
 
@@ -74,7 +74,8 @@ export function PublicSchulungPage() {
     );
   };
 
-  const allAnswered = fragen.length > 0 && fragen.every((f) => answers[f.id] !== undefined);
+  const allAnswered =
+    fragen.length > 0 && fragen.every((f) => answers[f.id] !== undefined);
 
   const handleSubmit = () => {
     abschliessen.mutate(undefined, {
@@ -82,7 +83,7 @@ export function PublicSchulungPage() {
         setErgebnis({
           bestanden: res.bestanden,
           richtig_prozent: res.richtig_prozent,
-          zertifikat_token: res.zertifikat_id ? token ?? null : null,
+          zertifikat_token: res.zertifikat_id ? (token ?? null) : null,
         });
         setPhase("ergebnis");
       },
@@ -261,7 +262,9 @@ function ErgebnisCard({
     <Centered>
       <Card className="max-w-md">
         <CardHeader>
-          <CardTitle>{ergebnis.bestanden ? "Bestanden!" : "Nicht bestanden"}</CardTitle>
+          <CardTitle>
+            {ergebnis.bestanden ? "Bestanden!" : "Nicht bestanden"}
+          </CardTitle>
           <CardDescription>
             Ergebnis: {ergebnis.richtig_prozent} % richtig
           </CardDescription>

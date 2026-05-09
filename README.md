@@ -1,6 +1,6 @@
 # Vaeren — Compliance-Autopilot
 
-> Schema-per-Tenant SaaS. Stand Sprint 3: Frontend-Foundation komplett (React + MFA + Mitarbeiter-CRUD + Demo-Form).
+> Schema-per-Tenant SaaS. Stand Sprint 5: HinSchG-Hinweisgeberportal mit per-Tenant-Encryption (Fernet), anonymem Submission-Form + Bearbeiter-Dashboard + automatischem Frist-Tracking (HinSchG §17).
 > Architektur-Spec: `docs/superpowers/specs/2026-04-24-mvp-architecture-design.md`.
 
 ## Lokales Dev-Setup
@@ -41,7 +41,7 @@ curl http://dev.app.vaeren.local:8000/api/health/
 
 ```bash
 cd backend
-uv run pytest -v                     # alle (76)
+uv run pytest -v                     # alle (153)
 uv run pytest -m tenant_isolation -v # nur kritischer CI-Gate
 uv run ruff check . && uv run ruff format --check .
 ```
@@ -94,4 +94,5 @@ Tiefer: `CLAUDE.md` (Kurz-Referenz) und `docs/superpowers/specs/` (Specs).
 | 2 | ✅ Shared Core (Mitarbeiter, ComplianceTask, Evidence, Notification, AuditLog) + Mitarbeiter/ComplianceTask-API + django-rules-Permissions + AuditLog-Auto-Population |
 | 3 | ✅ Frontend-Foundation: Vite + React + TS + Tailwind + shadcn/ui, Login + MFA-Setup/Challenge + Mitarbeiter-CRUD + Demo-Form, openapi-typescript-Pipeline, 16 bun-Tests, CI 3-Job (backend/frontend/openapi-sync) |
 | 4 | ✅ Pflichtunterweisung: Kurs/Modul/Frage/Welle-Models, Schulungs-Wizard (4-Step) + Token-basierte Public-Quiz-Routen, LLM-Personalisierung mit RDG-Layer-2-Validator + Static-Fallback, Mailjet mit Console-Backend-Fallback, WeasyPrint-Zertifikate (HTML-Fallback), 35 neue Backend-Tests |
-| 5+ | siehe Spec §12 |
+| 5 | ✅ HinSchG-Hinweisgeberportal: Per-Tenant-Fernet-Encryption (`core.fields.EncryptedTextField`), Meldung/Bearbeitungsschritt-Models mit verschlüsselten Inhalten, automatische 7d/3m-Pflicht-Tasks (§17), Public-Form `/hinweise` (anonyme Submission) + Status-Page `/hinweise/status/<token>`, Bearbeiter-Dashboard `/meldungen`, sanitized Status-API (keine Bearbeiter-Identität nach außen), 30 neue Backend-Tests inkl. Cross-Tenant-Decrypt-Isolation |
+| 6+ | siehe Spec §12 |

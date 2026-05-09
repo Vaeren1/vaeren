@@ -1,6 +1,3 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,6 +18,9 @@ import {
   useVersenden,
   useZuweisen,
 } from "@/lib/api/schulungen";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -82,7 +82,9 @@ export function SchulungenWizardPage() {
       onSuccess: (res) => {
         setEinleitungsText(res.vorschlag);
         toast.success(
-          res.quelle === "llm" ? "LLM-Vorschlag geladen." : "Static-Fallback verwendet.",
+          res.quelle === "llm"
+            ? "LLM-Vorschlag geladen."
+            : "Static-Fallback verwendet.",
         );
       },
       onError: () => toast.error("Vorschlag fehlgeschlagen."),
@@ -120,9 +122,7 @@ export function SchulungenWizardPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          Schulungs-Welle anlegen — Schritt {step} / 4
-        </CardTitle>
+        <CardTitle>Schulungs-Welle anlegen — Schritt {step} / 4</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {step === 1 && (
@@ -201,7 +201,9 @@ export function SchulungenWizardPage() {
         {step === 3 && (
           <>
             <div className="space-y-2">
-              <Label htmlFor="kontext">Kontext für LLM-Vorschlag (optional)</Label>
+              <Label htmlFor="kontext">
+                Kontext für LLM-Vorschlag (optional)
+              </Label>
               <Input
                 id="kontext"
                 value={llmKontext}
@@ -228,8 +230,8 @@ export function SchulungenWizardPage() {
                 placeholder="Optional. Wird in jede Einladungs-E-Mail eingefügt."
               />
               <p className="text-xs text-muted-foreground">
-                Wenn leer: Standard-Begrüßung wird verwendet. LLM-Vorschläge sind
-                immer Vorschlag — bitte vor Versand prüfen (RDG).
+                Wenn leer: Standard-Begrüßung wird verwendet. LLM-Vorschläge
+                sind immer Vorschlag — bitte vor Versand prüfen (RDG).
               </p>
             </div>
           </>
@@ -243,8 +245,8 @@ export function SchulungenWizardPage() {
               Backend-Log).
             </p>
             <p className="text-sm text-muted-foreground">
-              Nach Versand wechselt die Welle in den Status „Versendet" und
-              kann nicht mehr bearbeitet werden.
+              Nach Versand wechselt die Welle in den Status „Versendet" und kann
+              nicht mehr bearbeitet werden.
             </p>
           </div>
         )}
@@ -268,22 +270,38 @@ export function SchulungenWizardPage() {
             </Button>
           )}
           {step === 1 && (
-            <Button type="button" onClick={onStep1Next} disabled={createWelle.isPending}>
+            <Button
+              type="button"
+              onClick={onStep1Next}
+              disabled={createWelle.isPending}
+            >
               {createWelle.isPending ? "Speichere …" : "Weiter"}
             </Button>
           )}
           {step === 2 && (
-            <Button type="button" onClick={onStep2Next} disabled={zuweisen.isPending}>
+            <Button
+              type="button"
+              onClick={onStep2Next}
+              disabled={zuweisen.isPending}
+            >
               {zuweisen.isPending ? "Weise zu …" : "Weiter"}
             </Button>
           )}
           {step === 3 && (
-            <Button type="button" onClick={onStep3Next} disabled={updateWelle.isPending}>
+            <Button
+              type="button"
+              onClick={onStep3Next}
+              disabled={updateWelle.isPending}
+            >
               {updateWelle.isPending ? "Speichere …" : "Weiter"}
             </Button>
           )}
           {step === 4 && (
-            <Button type="button" onClick={onSend} disabled={versenden.isPending}>
+            <Button
+              type="button"
+              onClick={onSend}
+              disabled={versenden.isPending}
+            >
               {versenden.isPending ? "Versende …" : "Jetzt versenden"}
             </Button>
           )}

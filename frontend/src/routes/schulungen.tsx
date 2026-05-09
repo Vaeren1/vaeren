@@ -1,11 +1,5 @@
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -15,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useWelleList } from "@/lib/api/schulungen";
+import { Link } from "react-router-dom";
 
 const STATUS_LABEL: Record<string, string> = {
   draft: "Entwurf",
@@ -51,7 +46,9 @@ export function SchulungenListPage() {
             <TableBody>
               {data.results.map((w) => {
                 const total = w.tasks.length;
-                const bestanden = w.tasks.filter((t) => t.bestanden === true).length;
+                const bestanden = w.tasks.filter(
+                  (t) => t.bestanden === true,
+                ).length;
                 return (
                   <TableRow key={w.id}>
                     <TableCell>

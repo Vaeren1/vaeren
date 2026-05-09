@@ -1,12 +1,5 @@
-import { Link } from "react-router-dom";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -21,6 +14,8 @@ import {
   useMitarbeiterList,
 } from "@/lib/api/mitarbeiter";
 import { useAuthStore } from "@/lib/stores/auth-store";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export function MitarbeiterListPage() {
   const role = useAuthStore((s) => s.user?.tenant_role);
@@ -81,7 +76,8 @@ export function MitarbeiterListPage() {
                               return;
                             del.mutate(m.id, {
                               onSuccess: () => toast.success("Gelöscht."),
-                              onError: () => toast.error("Löschen fehlgeschlagen."),
+                              onError: () =>
+                                toast.error("Löschen fehlgeschlagen."),
                             });
                           }}
                         >

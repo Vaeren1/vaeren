@@ -42,3 +42,10 @@ class KursPermission(RulesPermission):
 class SchulungsWellePermission(RulesPermission):
     view_rule = "can_manage_schulungswelle"
     edit_rule = "can_manage_schulungswelle"
+
+
+class HinSchGMeldungPermission(RulesPermission):
+    """Spec §6: Lesen = GF + Compliance-Beauftr.; Bearbeiten = nur Compliance-Beauftr."""
+
+    view_rule = "can_view_hinschg_meldung"
+    edit_rule = "can_edit_hinschg_meldung"

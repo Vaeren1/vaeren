@@ -1,9 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "sonner";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,13 +8,19 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ApiError } from "@/lib/api/client";
+import type { ApiError } from "@/lib/api/client";
 import {
   type MitarbeiterInput,
   useCreateMitarbeiter,
   useMitarbeiter,
   useUpdateMitarbeiter,
 } from "@/lib/api/mitarbeiter";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export const mitarbeiterSchema = z.object({
   vorname: z.string().min(1, "Pflichtfeld"),
@@ -120,7 +120,9 @@ export function MitarbeiterFormPage() {
     <Card>
       <CardHeader>
         <CardTitle>
-          {numericId !== undefined ? "Mitarbeiter bearbeiten" : "Neuer Mitarbeiter"}
+          {numericId !== undefined
+            ? "Mitarbeiter bearbeiten"
+            : "Neuer Mitarbeiter"}
         </CardTitle>
       </CardHeader>
       <form onSubmit={onSubmit}>
@@ -130,14 +132,18 @@ export function MitarbeiterFormPage() {
               <Label htmlFor="vorname">Vorname</Label>
               <Input id="vorname" {...register("vorname")} />
               {errors.vorname && (
-                <p className="text-xs text-destructive">{errors.vorname.message}</p>
+                <p className="text-xs text-destructive">
+                  {errors.vorname.message}
+                </p>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="nachname">Nachname</Label>
               <Input id="nachname" {...register("nachname")} />
               {errors.nachname && (
-                <p className="text-xs text-destructive">{errors.nachname.message}</p>
+                <p className="text-xs text-destructive">
+                  {errors.nachname.message}
+                </p>
               )}
             </div>
           </div>
@@ -152,7 +158,9 @@ export function MitarbeiterFormPage() {
             <Label htmlFor="abteilung">Abteilung</Label>
             <Input id="abteilung" {...register("abteilung")} />
             {errors.abteilung && (
-              <p className="text-xs text-destructive">{errors.abteilung.message}</p>
+              <p className="text-xs text-destructive">
+                {errors.abteilung.message}
+              </p>
             )}
           </div>
           <div className="space-y-2">

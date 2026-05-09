@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +10,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useMfaSetup, useMfaVerify } from "@/lib/api/auth";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface FormValues {
   code: string;
@@ -51,8 +51,8 @@ export function MfaSetupPage() {
         <CardHeader>
           <CardTitle>Recovery-Codes</CardTitle>
           <CardDescription>
-            Bitte ausdrucken oder im Passwort-Manager speichern. Jeder Code
-            ist nur einmal verwendbar und ersetzt einen Authenticator-Code.
+            Bitte ausdrucken oder im Passwort-Manager speichern. Jeder Code ist
+            nur einmal verwendbar und ersetzt einen Authenticator-Code.
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -1,9 +1,5 @@
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { ApiError, api } from "./client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { type ApiError, api } from "./client";
 
 export interface Mitarbeiter {
   id: number;
