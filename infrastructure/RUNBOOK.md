@@ -286,27 +286,65 @@ In diesem Setup funktionieren die Hostnames im Caddyfile direkt
 
 ## H. Backup aktivieren (sobald Hetzner-Storage-Box vorhanden)
 
+Stand 2026-05-09 erfolgreich auf u591277.your-storagebox.de durchgeführt.
+Wichtige Lessons learned:
+
+1. **Storage-Box-Bestellung**: SSH-Support + Äußere Erreichbarkeit aktivieren
+   (sonst kein Port 23, kein restic). Public-Key beim Bestellen einsetzen.
+2. **Hetzner Storage Box hört auf Port 23, nicht 22** (Port 22 ist SFTP-only).
+3. **Pfad relativ zum SFTP-Home**, NICHT absolut (`vaeren-restic` statt `/vaeren-restic`).
+4. **SSH-Config statt RESTIC_SFTP_COMMAND** — restic ignoriert die env-Variable;
+   stattdessen Host-Eintrag in `/root/.ssh/config_vaeren_backup` (siehe unten).
+
 ```bash
-# Auf Server:
 ssh hel1
-mkdir -p /etc/vaeren
+mkdir -p /etc/vaeren && chmod 700 /etc/vaeren
+
+# Dedizierter Backup-Key
+ssh-keygen -t ed25519 -N "" -f /etc/vaeren/backup_id_ed25519 \
+    -C "vaeren-backup@$(hostname)-$(date +%Y%m%d)"
+chmod 600 /etc/vaeren/backup_id_ed25519
+# Public-Key in Hetzner-Console pro-Box einsetzen (NICHT nur Account-weit!)
+cat /etc/vaeren/backup_id_ed25519.pub
+
+# SSH-Config für Storage-Box-Host (Port 23 + Key)
+cat > /root/.ssh/config_vaeren_backup <<'EOF'
+Host uXXXXXX.your-storagebox.de
+    User uXXXXXX
+    Port 23
+    IdentityFile /etc/vaeren/backup_id_ed25519
+    IdentitiesOnly yes
+    StrictHostKeyChecking accept-new
+EOF
+chmod 600 /root/.ssh/config_vaeren_backup
+grep -q config_vaeren_backup /root/.ssh/config 2>/dev/null || \
+    echo "Include /root/.ssh/config_vaeren_backup" >> /root/.ssh/config
+
+# restic-Passwort + env (relativer Pfad!)
+python3 -c "import secrets; print(secrets.token_urlsafe(40))" > /etc/vaeren/restic.passwd
+chmod 600 /etc/vaeren/restic.passwd
 cat > /etc/vaeren/restic.env <<EOF
-export RESTIC_REPOSITORY="sftp:u123456@u123456.your-storagebox.de:/vaeren-restic"
+export RESTIC_REPOSITORY="sftp:uXXXXXX@uXXXXXX.your-storagebox.de:vaeren-restic"
 export RESTIC_PASSWORD_FILE="/etc/vaeren/restic.passwd"
 EOF
-echo "<starkes-restic-passwort>" > /etc/vaeren/restic.passwd
-chmod 600 /etc/vaeren/restic.passwd
+chmod 600 /etc/vaeren/restic.env
 
-source /etc/vaeren/restic.env
 apt-get install -y restic
-restic init
+source /etc/vaeren/restic.env
+restic init    # → "created restic repository ... at sftp:..."
 
-# Test-Lauf
+# Erster Backup-Lauf
 /opt/ai-act/infrastructure/restic-backup.sh
 
-# Cron einrichten
-echo '0 3 * * * /opt/ai-act/infrastructure/restic-backup.sh > /var/log/vaeren-restic.log 2>&1' \
-    | crontab -
+# Restore-Verify (sollte Tenant-Encryption-Key in pg_dump enthalten)
+mkdir -p /tmp/restore-probe
+restic restore latest --target /tmp/restore-probe
+zcat /tmp/restore-probe/var/lib/vaeren-restic/*.sql.gz | grep encryption_key
+
+# Cron 03:00 täglich
+( crontab -l 2>/dev/null | grep -v vaeren-restic; \
+  echo '0 3 * * * /opt/ai-act/infrastructure/restic-backup.sh > /var/log/vaeren-restic.log 2>&1' \
+) | crontab -
 ```
 
 ---
@@ -315,10 +353,12 @@ echo '0 3 * * * /opt/ai-act/infrastructure/restic-backup.sh > /var/log/vaeren-re
 
 | Account | Aufwand | Status |
 |---|---|---|
-| Mailjet (mit `vaeren.de` SPF/DKIM/DMARC) | ~30 min + 24 h Propagation | offen |
-| OpenRouter API-Key | ~10 min | offen |
+| Mailjet (mit `vaeren.de` SPF/DKIM/DMARC) | ~30 min + 24 h Propagation | ❌ tot (Anti-Abuse-Block bei fresh-account) — durch Brevo ersetzt |
+| Brevo (Mail-Provider, 300/Tag free, EU) | ~30 min | ✅ aktiv 2026-05-09 |
+| OpenRouter API-Key | ~10 min | ✅ aktiv 2026-05-10 |
+| Hetzner Storage Box (restic) | ~15 min | ✅ aktiv 2026-05-09, daily 03:00 |
 | Sentry-EU Project | ~10 min | offen |
-| Hetzner Storage Box | ~15 min | offen |
+| DPMA-Wortmarken-Anmeldung | Anwalt, ~6 Mo | offen (vor Pilot-Vertrag) |
 
-Ohne diese ist Vaeren trotzdem **demo-fähig** (Module-Fallbacks: Console-Mail, Static-LLM,
-Console-Logging, kein Backup).
+Auch ohne offene Punkte ist Vaeren **demo-fähig** dank Module-Fallbacks
+(Console-Mail, Static-LLM, Console-Logging) — siehe Sprint 4/5/6/8 by-design.
