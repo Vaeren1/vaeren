@@ -20,6 +20,7 @@ x-django-env: &django-env
   REDIS_URL: redis://redis:6379/0
   CELERY_BROKER_URL: redis://redis:6379/1
   CELERY_RESULT_BACKEND: redis://redis:6379/2
+  BREVO_API_KEY: ${BREVO_API_KEY:-}
   MAILJET_API_KEY: ${MAILJET_API_KEY:-}
   MAILJET_SECRET_KEY: ${MAILJET_SECRET_KEY:-}
   VAEREN_FROM_EMAIL: ${VAEREN_FROM_EMAIL:-noreply@vaeren.de}
