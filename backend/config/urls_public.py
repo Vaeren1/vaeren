@@ -1,5 +1,7 @@
-"""URLs für das public-Schema (Tenant-Onboarding, globales Admin — Sprint 1.5+)."""
+"""URLs für das public-Schema (Demo-Lead-Capture + späteres Marketing/Admin)."""
+
+from django.urls import include, path
 
 urlpatterns: list = [
-    # path("admin/", admin.site.urls),  # wird in Sprint 2 ergänzt
+    path("api/", include("tenants.urls")),
 ]

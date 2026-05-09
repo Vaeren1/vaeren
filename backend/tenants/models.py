@@ -34,3 +34,43 @@ class TenantDomain(DomainMixin):
     """Subdomain → Tenant-Mapping. `acme.app.vaeren.de` → Tenant `acme_gmbh`."""
 
     pass
+
+
+class MitarbeiterAnzahl(models.TextChoices):
+    """Größenkategorien aus dem Demo-Form (KMU-Range)."""
+
+    UNDER_50 = "<50", "unter 50"
+    R_50_120 = "50-120", "50–120"
+    R_121_250 = "121-250", "121–250"
+    R_251_500 = "251-500", "251–500"
+    OVER_500 = ">500", "über 500"
+
+
+class DemoRequest(models.Model):
+    """Lead-Capture vom öffentlichen Demo-Form (`/demo`).
+
+    Liegt im public-Schema, weil der Lead vor jedem Tenant-Anlage entsteht.
+    Mailjet-Versand wird in Sprint 4 ergänzt.
+    """
+
+    firma = models.CharField(max_length=200)
+    vorname = models.CharField(max_length=80)
+    nachname = models.CharField(max_length=80)
+    email = models.EmailField()
+    telefon = models.CharField(max_length=40, blank=True)
+    mitarbeiter_anzahl = models.CharField(
+        max_length=10, choices=MitarbeiterAnzahl.choices, blank=True
+    )
+    nachricht = models.TextField(blank=True)
+    erstellt_am = models.DateTimeField(auto_now_add=True)
+    ip_adresse = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.CharField(max_length=500, blank=True)
+    bearbeitet = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["-erstellt_am"]
+        verbose_name = "Demo-Anfrage"
+        verbose_name_plural = "Demo-Anfragen"
+
+    def __str__(self) -> str:
+        return f"{self.firma} ({self.email}) — {self.erstellt_am:%Y-%m-%d}"
