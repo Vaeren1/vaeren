@@ -1,0 +1,1297 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Vaeren API",
+        "version": "0.1.0",
+        "description": "Compliance-Autopilot Backend-API"
+    },
+    "paths": {
+        "/api/auth/csrf/": {
+            "get": {
+                "operationId": "auth_csrf_retrieve",
+                "description": "Liefert CSRF-Token + setzt csrftoken-Cookie.\n\nFrontend ruft diesen Endpoint einmal beim App-Start, liest den Cookie\naus und setzt für unsichere Methoden den `X-CSRFToken`-Header.",
+                "tags": [
+                    "auth"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CsrfTokenResponse"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/login/": {
+            "post": {
+                "operationId": "auth_login_create",
+                "description": "Login mit MFA-Bewusstsein.\n\nAuth-Logik kommt vom `LoginSerializer` (validated_data[\"user\"]). Wir\nhaben dort den User; bevor `django_login` läuft, checken wir das\n`mfa_enabled`-Flag und unterbrechen den Flow falls nötig.",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Login"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/logout/": {
+            "post": {
+                "operationId": "auth_logout_create",
+                "description": "Calls Django logout method and delete the Token object\nassigned to the current User object.\n\nAccepts/Returns nothing.",
+                "tags": [
+                    "auth"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RestAuthDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/mfa/login/": {
+            "post": {
+                "operationId": "auth_mfa_login_create",
+                "description": "Zweite Stufe des MFA-Logins: ephemeraler Token + TOTP-Code → Session.",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MfaLoginRequest"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MfaLoginRequest"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MfaLoginRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MfaLoginRequest"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/mfa/totp/setup/": {
+            "post": {
+                "operationId": "auth_mfa_totp_setup_create",
+                "description": "Erstellt einen TOTP-Secret + QR-URL für authentifizierten User.\n\nAktiviert MFA noch NICHT — das passiert erst nach erfolgreichem Verify.\nSecret wird in der Session zwischengelagert (allauth-Pattern).",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TotpSetupResponse"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TotpSetupResponse"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TotpSetupResponse"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TotpSetupResponse"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/mfa/totp/verify/": {
+            "post": {
+                "operationId": "auth_mfa_totp_verify_create",
+                "description": "Verifiziert TOTP-Code gegen Session-Secret + aktiviert MFA dauerhaft.",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TotpVerifyRequest"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TotpVerifyRequest"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TotpVerifyRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TotpVerifyRequest"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/password/change/": {
+            "post": {
+                "operationId": "auth_password_change_create",
+                "description": "Calls Django Auth SetPasswordForm save method.\n\nAccepts the following POST parameters: new_password1, new_password2\nReturns the success/fail message.",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PasswordChange"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PasswordChange"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PasswordChange"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RestAuthDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/password/reset/": {
+            "post": {
+                "operationId": "auth_password_reset_create",
+                "description": "Calls Django Auth PasswordResetForm save method.\n\nAccepts the following POST parameters: email\nReturns the success/fail message.",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PasswordReset"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PasswordReset"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PasswordReset"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RestAuthDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/password/reset/confirm/": {
+            "post": {
+                "operationId": "auth_password_reset_confirm_create",
+                "description": "Password reset e-mail link is confirmed, therefore\nthis resets the user's password.\n\nAccepts the following POST parameters: token, uid,\n    new_password1, new_password2\nReturns the success/fail message.",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PasswordResetConfirm"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PasswordResetConfirm"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PasswordResetConfirm"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RestAuthDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/user/": {
+            "get": {
+                "operationId": "auth_user_retrieve",
+                "description": "Reads and updates UserModel fields\nAccepts GET, PUT, PATCH methods.\n\nDefault accepted fields: username, first_name, last_name\nDefault display fields: pk, username, email, first_name, last_name\nRead-only fields: pk, email\n\nReturns UserModel fields.",
+                "tags": [
+                    "auth"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDetails"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "auth_user_update",
+                "description": "Reads and updates UserModel fields\nAccepts GET, PUT, PATCH methods.\n\nDefault accepted fields: username, first_name, last_name\nDefault display fields: pk, username, email, first_name, last_name\nRead-only fields: pk, email\n\nReturns UserModel fields.",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserDetails"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserDetails"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserDetails"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDetails"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "auth_user_partial_update",
+                "description": "Reads and updates UserModel fields\nAccepts GET, PUT, PATCH methods.\n\nDefault accepted fields: username, first_name, last_name\nDefault display fields: pk, username, email, first_name, last_name\nRead-only fields: pk, email\n\nReturns UserModel fields.",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedUserDetails"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedUserDetails"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedUserDetails"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDetails"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/compliance-tasks/": {
+            "get": {
+                "operationId": "compliance_tasks_list",
+                "description": "Read-only API für ComplianceTask. CRUD kommt sprintweise pro Subtype.",
+                "tags": [
+                    "compliance-tasks"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ComplianceTask"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/compliance-tasks/{id}/": {
+            "get": {
+                "operationId": "compliance_tasks_retrieve",
+                "description": "Read-only API für ComplianceTask. CRUD kommt sprintweise pro Subtype.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der compliance task identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "compliance-tasks"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ComplianceTask"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/compliance-tasks/overdue/": {
+            "get": {
+                "operationId": "compliance_tasks_overdue_retrieve",
+                "description": "Read-only API für ComplianceTask. CRUD kommt sprintweise pro Subtype.",
+                "tags": [
+                    "compliance-tasks"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ComplianceTask"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/health/": {
+            "get": {
+                "operationId": "health_retrieve",
+                "description": "Liveness-Check inkl. aktivem Schema (verifiziert Tenant-Routing).",
+                "tags": [
+                    "health"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HealthResponse"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/mitarbeiter/": {
+            "get": {
+                "operationId": "mitarbeiter_list",
+                "description": "CRUD für Mitarbeiter.",
+                "tags": [
+                    "mitarbeiter"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Mitarbeiter"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "mitarbeiter_create",
+                "description": "CRUD für Mitarbeiter.",
+                "tags": [
+                    "mitarbeiter"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Mitarbeiter"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Mitarbeiter"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Mitarbeiter"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Mitarbeiter"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/mitarbeiter/{id}/": {
+            "get": {
+                "operationId": "mitarbeiter_retrieve",
+                "description": "CRUD für Mitarbeiter.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der mitarbeiter identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "mitarbeiter"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Mitarbeiter"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "mitarbeiter_update",
+                "description": "CRUD für Mitarbeiter.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der mitarbeiter identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "mitarbeiter"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Mitarbeiter"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Mitarbeiter"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Mitarbeiter"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Mitarbeiter"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "mitarbeiter_partial_update",
+                "description": "CRUD für Mitarbeiter.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der mitarbeiter identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "mitarbeiter"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedMitarbeiter"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedMitarbeiter"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedMitarbeiter"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Mitarbeiter"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "mitarbeiter_destroy",
+                "description": "CRUD für Mitarbeiter.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der mitarbeiter identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "mitarbeiter"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ComplianceTask": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "polymorphic_ctype": {
+                        "type": "string",
+                        "description": "Wert wird in Sprint 4+ relevant, wenn Subklassen existieren.",
+                        "readOnly": true
+                    },
+                    "titel": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "modul": {
+                        "type": "string",
+                        "readOnly": true,
+                        "description": "Modul-Identifier (z. B. 'pflichtunterweisung', 'hinschg')"
+                    },
+                    "kategorie": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "frist": {
+                        "type": "string",
+                        "format": "date",
+                        "readOnly": true
+                    },
+                    "verantwortlicher": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "betroffene": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "readOnly": true
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "betroffene",
+                    "created_at",
+                    "frist",
+                    "id",
+                    "kategorie",
+                    "modul",
+                    "polymorphic_ctype",
+                    "status",
+                    "titel",
+                    "updated_at",
+                    "verantwortlicher"
+                ]
+            },
+            "CsrfTokenResponse": {
+                "type": "object",
+                "properties": {
+                    "csrf_token": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "csrf_token"
+                ]
+            },
+            "HealthResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "schema",
+                    "status"
+                ]
+            },
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "password"
+                ]
+            },
+            "MfaLoginRequest": {
+                "type": "object",
+                "properties": {
+                    "ephemeral_token": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string",
+                        "maxLength": 8,
+                        "minLength": 6
+                    }
+                },
+                "required": [
+                    "code",
+                    "ephemeral_token"
+                ]
+            },
+            "Mitarbeiter": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "vorname": {
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "nachname": {
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 254
+                    },
+                    "abteilung": {
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "rolle": {
+                        "type": "string",
+                        "description": "Tätigkeit/Position",
+                        "maxLength": 100
+                    },
+                    "eintritt": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "austritt": {
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "external_id": {
+                        "type": "string",
+                        "description": "ERP-Sync-ID (Phase 2)",
+                        "maxLength": 64
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "abteilung",
+                    "created_at",
+                    "eintritt",
+                    "id",
+                    "nachname",
+                    "rolle",
+                    "updated_at",
+                    "vorname"
+                ]
+            },
+            "PasswordChange": {
+                "type": "object",
+                "properties": {
+                    "new_password1": {
+                        "type": "string",
+                        "maxLength": 128
+                    },
+                    "new_password2": {
+                        "type": "string",
+                        "maxLength": 128
+                    }
+                },
+                "required": [
+                    "new_password1",
+                    "new_password2"
+                ]
+            },
+            "PasswordReset": {
+                "type": "object",
+                "description": "Serializer for requesting a password reset e-mail.",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    }
+                },
+                "required": [
+                    "email"
+                ]
+            },
+            "PasswordResetConfirm": {
+                "type": "object",
+                "description": "Serializer for confirming a password reset attempt.",
+                "properties": {
+                    "new_password1": {
+                        "type": "string",
+                        "maxLength": 128
+                    },
+                    "new_password2": {
+                        "type": "string",
+                        "maxLength": 128
+                    },
+                    "uid": {
+                        "type": "string"
+                    },
+                    "token": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "new_password1",
+                    "new_password2",
+                    "token",
+                    "uid"
+                ]
+            },
+            "PatchedMitarbeiter": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "vorname": {
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "nachname": {
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 254
+                    },
+                    "abteilung": {
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "rolle": {
+                        "type": "string",
+                        "description": "Tätigkeit/Position",
+                        "maxLength": 100
+                    },
+                    "eintritt": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "austritt": {
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "external_id": {
+                        "type": "string",
+                        "description": "ERP-Sync-ID (Phase 2)",
+                        "maxLength": 64
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                }
+            },
+            "PatchedUserDetails": {
+                "type": "object",
+                "description": "User model w/o password",
+                "properties": {
+                    "pk": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "title": "ID"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "readOnly": true
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "title": "Vorname",
+                        "maxLength": 150
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "title": "Nachname",
+                        "maxLength": 150
+                    }
+                }
+            },
+            "RestAuthDetail": {
+                "type": "object",
+                "properties": {
+                    "detail": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "detail"
+                ]
+            },
+            "StatusEnum": {
+                "enum": [
+                    "offen",
+                    "in_bearbeitung",
+                    "erledigt",
+                    "ueberfaellig"
+                ],
+                "type": "string",
+                "description": "* `offen` - Offen\n* `in_bearbeitung` - In Bearbeitung\n* `erledigt` - Erledigt\n* `ueberfaellig` - Überfällig"
+            },
+            "TotpSetupResponse": {
+                "type": "object",
+                "properties": {
+                    "secret": {
+                        "type": "string"
+                    },
+                    "qr_url": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "qr_url",
+                    "secret"
+                ]
+            },
+            "TotpVerifyRequest": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "maxLength": 8,
+                        "minLength": 6
+                    }
+                },
+                "required": [
+                    "code"
+                ]
+            },
+            "UserDetails": {
+                "type": "object",
+                "description": "User model w/o password",
+                "properties": {
+                    "pk": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "title": "ID"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "readOnly": true
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "title": "Vorname",
+                        "maxLength": 150
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "title": "Nachname",
+                        "maxLength": 150
+                    }
+                },
+                "required": [
+                    "email",
+                    "pk"
+                ]
+            }
+        },
+        "securitySchemes": {
+            "cookieAuth": {
+                "type": "apiKey",
+                "in": "cookie",
+                "name": "sessionid"
+            }
+        }
+    }
+}
