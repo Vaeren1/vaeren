@@ -39,6 +39,7 @@ TENANT_APPS: list[str] = [
     "allauth.mfa",
     "dj_rest_auth",
     "core",
+    "pflichtunterweisung",
     "rest_framework",
     "drf_spectacular",
 ]

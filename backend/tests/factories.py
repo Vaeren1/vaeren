@@ -97,3 +97,80 @@ class EvidenceFactory(factory.django.DjangoModelFactory):
     sha256 = factory.Sequence(lambda n: hashlib.sha256(f"x-{n}".encode()).hexdigest())
     mime_type = "application/pdf"
     groesse_bytes = 1024
+
+
+# --- Sprint 4: pflichtunterweisung -------------------------------------
+
+from pflichtunterweisung.models import (  # noqa: E402
+    AntwortOption,
+    Frage,
+    Kurs,
+    KursModul,
+    SchulungsTask,
+    SchulungsWelle,
+)
+
+
+class KursFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Kurs
+
+    titel = factory.Sequence(lambda n: f"Kurs {n}: AI-Act-Grundlagen")
+    beschreibung = "Pflicht-Schulung zu Vaeren-Compliance-Grundlagen."
+    gueltigkeit_monate = 12
+    min_richtig_prozent = 80
+
+
+class KursModulFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = KursModul
+
+    kurs = factory.SubFactory(KursFactory)
+    titel = factory.Sequence(lambda n: f"Modul {n}")
+    inhalt_md = "## Lernziel\n\nWichtige Inhalte stehen hier."
+    reihenfolge = factory.Sequence(lambda n: n)
+
+
+class FrageFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Frage
+
+    kurs = factory.SubFactory(KursFactory)
+    text = factory.Sequence(lambda n: f"Frage {n}: Was ist korrekt?")
+    erklaerung = "Erklärung zur richtigen Antwort."
+    reihenfolge = factory.Sequence(lambda n: n)
+
+
+class AntwortOptionFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = AntwortOption
+
+    frage = factory.SubFactory(FrageFactory)
+    text = factory.Sequence(lambda n: f"Antwort-Option {n}")
+    ist_korrekt = False
+    reihenfolge = factory.Sequence(lambda n: n)
+
+
+class SchulungsWelleFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = SchulungsWelle
+
+    kurs = factory.SubFactory(KursFactory)
+    titel = factory.Sequence(lambda n: f"Welle {n}")
+    deadline = factory.LazyAttribute(
+        lambda _o: datetime.date.today() + datetime.timedelta(days=30)
+    )
+    erstellt_von = factory.SubFactory(UserFactory)
+
+
+class SchulungsTaskFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = SchulungsTask
+
+    welle = factory.SubFactory(SchulungsWelleFactory)
+    mitarbeiter = factory.SubFactory(MitarbeiterFactory)
+    titel = factory.LazyAttribute(lambda o: f"Schulung: {o.welle.titel}")
+    modul = "pflichtunterweisung"
+    kategorie = "schulung"
+    frist = factory.LazyAttribute(lambda o: o.welle.deadline)
+    status = ComplianceTaskStatus.OFFEN
