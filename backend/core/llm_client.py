@@ -23,9 +23,13 @@ from .llm_validator import LLMValidationError, validate_output
 logger = logging.getLogger(__name__)
 
 OPENROUTER_BASE = "https://openrouter.ai/api/v1"
-DEFAULT_MODEL_FAST = os.environ.get("OPENROUTER_MODEL_FAST", "google/gemini-2.5-flash:free")
+# 2026-Lineup auf OpenRouter:
+# - Fast: Gemma 4 26B (Google AI Studio, gut bei deutschem Instruct-Following)
+# - Reasoning: Nemotron 3 Super 120B (NVIDIA, größer für komplexe Tasks)
+# Beide :free — kein Credit-Vorrat nötig. Override via env wenn Konrad will.
+DEFAULT_MODEL_FAST = os.environ.get("OPENROUTER_MODEL_FAST", "google/gemma-4-26b-a4b-it:free")
 DEFAULT_MODEL_REASONING = os.environ.get(
-    "OPENROUTER_MODEL_REASONING", "mistralai/mistral-small-3.2:free"
+    "OPENROUTER_MODEL_REASONING", "nvidia/nemotron-3-super-120b-a12b:free"
 )
 
 SYSTEM_PROMPT_VAEREN = (
