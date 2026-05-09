@@ -16,9 +16,11 @@ export interface LoginMfaRequiredResponse {
 export type LoginResponse = AuthUser | LoginMfaRequiredResponse;
 
 export function isMfaRequired(
-  resp: LoginResponse,
+  resp: LoginResponse | undefined,
 ): resp is LoginMfaRequiredResponse {
   return (
+    !!resp &&
+    typeof resp === "object" &&
     "detail" in resp &&
     resp.detail === "mfa_required" &&
     "ephemeral_token" in resp
@@ -63,16 +65,22 @@ export function useLogin() {
         throw err;
       }
     },
-    onSuccess: (data) => {
-      const resp = data as LoginResponse;
+    onSuccess: async (data) => {
+      const resp = data as LoginResponse | undefined;
       if (isMfaRequired(resp)) {
         setMfaChallenge(resp.ephemeral_token);
         navigate("/mfa-challenge");
         return;
       }
-      setUser(resp as AuthUser);
+      // Backend antwortet mit 204 (kein Body) → User über /api/auth/user/ holen.
+      try {
+        const me = await api<AuthUser>("/api/auth/user/");
+        setUser(me);
+      } catch {
+        // Fallthrough: ProtectedRoute holt den User selbst nach.
+      }
       queryClient.invalidateQueries({ queryKey: ["me"] });
-      navigate("/mitarbeiter");
+      navigate("/");
     },
   });
 }
