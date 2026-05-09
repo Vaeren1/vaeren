@@ -1,5 +1,7 @@
 """Tenant-Schema-Views."""
 
+from typing import ClassVar
+
 from django.db import connection
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view, permission_classes
@@ -8,6 +10,7 @@ from rest_framework.response import Response
 
 from core.mixins import AuditLogMixin
 from core.models import ComplianceTask, Mitarbeiter
+from core.permissions import ComplianceTaskPermission, MitarbeiterPermission
 from core.serializers import ComplianceTaskSerializer, MitarbeiterSerializer
 
 
@@ -19,10 +22,11 @@ def health(_request) -> Response:
 
 
 class MitarbeiterViewSet(AuditLogMixin, viewsets.ModelViewSet):
-    """CRUD für Mitarbeiter. Permissions kommen in Sprint 2 Task 11."""
+    """CRUD für Mitarbeiter."""
 
     queryset = Mitarbeiter.objects.all()
     serializer_class = MitarbeiterSerializer
+    permission_classes: ClassVar = [MitarbeiterPermission]
 
 
 class ComplianceTaskViewSet(viewsets.ReadOnlyModelViewSet):
@@ -30,6 +34,7 @@ class ComplianceTaskViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = ComplianceTask.objects.all()
     serializer_class = ComplianceTaskSerializer
+    permission_classes: ClassVar = [ComplianceTaskPermission]
 
     @action(detail=False, methods=["get"])
     def overdue(self, request):

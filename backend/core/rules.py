@@ -47,7 +47,7 @@ rules.add_rule(
     "can_edit_mitarbeiter",
     is_geschaeftsfuehrer | is_qm_leiter | is_compliance_beauftragter,
 )
-rules.add_rule("can_view_mitarbeiter", is_any_authenticated_role)
+rules.add_rule("can_view_mitarbeiter", is_any_authenticated_role | is_view_only)
 
 rules.add_rule(
     "can_create_kurs",
@@ -64,7 +64,7 @@ rules.add_rule("can_edit_hinschg_meldung", is_compliance_beauftragter)
 rules.add_rule("can_view_compliance_score", is_any_authenticated_role)
 rules.add_rule("can_edit_tenant_settings", is_geschaeftsfuehrer)
 
-rules.add_rule("can_view_compliance_task", is_any_authenticated_role)
+rules.add_rule("can_view_compliance_task", is_any_authenticated_role | is_view_only)
 rules.add_rule(
     "can_edit_compliance_task",
     is_geschaeftsfuehrer | is_qm_leiter | is_compliance_beauftragter,

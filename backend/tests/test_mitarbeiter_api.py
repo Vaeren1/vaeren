@@ -122,3 +122,81 @@ def test_unauthenticated_request_blocked(tenant_setup, settings):
     client = Client(HTTP_HOST=domain.domain)
     resp = client.get("/api/mitarbeiter/")
     assert resp.status_code in (401, 403)
+
+
+import uuid as _uuid_mod  # noqa: E402
+
+
+@pytest.fixture
+def viewonly_client(db, settings):
+    """Client als view-only-User."""
+    from django_tenants.utils import get_tenant_domain_model
+
+    settings.ALLOWED_HOSTS = ["*"]
+    schema = f"maview_{_uuid_mod.uuid4().hex[:12]}"
+    domain_str = f"{schema.replace('_', '-')}.app.vaeren.local"
+    tenant = TenantFactory(schema_name=schema, firma_name="MA-View")
+    tenant_domain_model = get_tenant_domain_model()
+    tenant_domain_model.objects.get_or_create(
+        domain=domain_str,
+        defaults={"tenant": tenant, "is_primary": True},
+    )
+    with schema_context(tenant.schema_name):
+        UserFactory(
+            email="view@x.de",
+            password="ProperPass123!",
+            tenant_role="mitarbeiter_view_only",
+            is_active=True,
+        )
+    client = Client(HTTP_HOST=domain_str)
+    with schema_context(tenant.schema_name):
+        assert client.login(username="view@x.de", password="ProperPass123!")
+    yield client, tenant
+    from django.db import connection
+
+    connection.set_schema_to_public()
+
+
+def test_view_only_can_list(viewonly_client):
+    client, tenant = viewonly_client
+    with schema_context(tenant.schema_name):
+        MitarbeiterFactory(vorname="X", nachname="Y")
+    resp = client.get("/api/mitarbeiter/")
+    assert resp.status_code == 200
+
+
+def test_view_only_cannot_create(viewonly_client):
+    client, _ = viewonly_client
+    resp = client.post(
+        "/api/mitarbeiter/",
+        data={
+            "vorname": "Try",
+            "nachname": "Create",
+            "email": "t@x.de",
+            "abteilung": "X",
+            "rolle": "X",
+            "eintritt": "2024-01-01",
+        },
+        content_type="application/json",
+    )
+    assert resp.status_code in (403, 401)
+
+
+def test_view_only_cannot_update(viewonly_client):
+    client, tenant = viewonly_client
+    with schema_context(tenant.schema_name):
+        ma = MitarbeiterFactory(vorname="V", nachname="V")
+    resp = client.patch(
+        f"/api/mitarbeiter/{ma.pk}/",
+        data={"abteilung": "Try-update"},
+        content_type="application/json",
+    )
+    assert resp.status_code in (403, 401)
+
+
+def test_view_only_cannot_destroy(viewonly_client):
+    client, tenant = viewonly_client
+    with schema_context(tenant.schema_name):
+        ma = MitarbeiterFactory(vorname="V", nachname="V")
+    resp = client.delete(f"/api/mitarbeiter/{ma.pk}/")
+    assert resp.status_code in (403, 401)
