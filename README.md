@@ -93,4 +93,5 @@ Tiefer: `CLAUDE.md` (Kurz-Referenz) und `docs/superpowers/specs/` (Specs).
 | 1 | ✅ Foundation (Repo, Django, Multi-Tenancy, Auth, Test-Tenant) |
 | 2 | ✅ Shared Core (Mitarbeiter, ComplianceTask, Evidence, Notification, AuditLog) + Mitarbeiter/ComplianceTask-API + django-rules-Permissions + AuditLog-Auto-Population |
 | 3 | ✅ Frontend-Foundation: Vite + React + TS + Tailwind + shadcn/ui, Login + MFA-Setup/Challenge + Mitarbeiter-CRUD + Demo-Form, openapi-typescript-Pipeline, 16 bun-Tests, CI 3-Job (backend/frontend/openapi-sync) |
-| 4+ | siehe Spec §12 |
+| 4 | ✅ Pflichtunterweisung: Kurs/Modul/Frage/Welle-Models, Schulungs-Wizard (4-Step) + Token-basierte Public-Quiz-Routen, LLM-Personalisierung mit RDG-Layer-2-Validator + Static-Fallback, Mailjet mit Console-Backend-Fallback, WeasyPrint-Zertifikate (HTML-Fallback), 35 neue Backend-Tests |
+| 5+ | siehe Spec §12 |
