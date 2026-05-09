@@ -307,14 +307,16 @@ def test_internal_meldungen_isolated_across_tenants(db, settings):
     client_a = Client(HTTP_HOST=a_dom.domain, enforce_csrf_checks=False)
     with schema_context(a.schema_name):
         assert client_a.login(email="a@compl.de", password="P@ssw0rd!12")
-    list_a = client_a.get("/api/hinschg/meldungen/").json()
+    body_a = client_a.get("/api/hinschg/meldungen/").json()
+    list_a = body_a["results"] if isinstance(body_a, dict) else body_a
     assert len(list_a) == 1
     assert list_a[0]["titel"] == "A-only"
 
     client_b = Client(HTTP_HOST=b_dom.domain, enforce_csrf_checks=False)
     with schema_context(b.schema_name):
         assert client_b.login(email="b@compl.de", password="P@ssw0rd!12")
-    list_b = client_b.get("/api/hinschg/meldungen/").json()
+    body_b = client_b.get("/api/hinschg/meldungen/").json()
+    list_b = body_b["results"] if isinstance(body_b, dict) else body_b
     assert len(list_b) == 1
     assert list_b[0]["titel"] == "B-only"
 

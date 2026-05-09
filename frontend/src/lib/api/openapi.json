@@ -9,6 +9,17 @@
         "/api/antwort-optionen/": {
             "get": {
                 "operationId": "antwort_optionen_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "tags": [
                     "antwort-optionen"
                 ],
@@ -22,10 +33,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/AntwortOption"
-                                    }
+                                    "$ref": "#/components/schemas/PaginatedAntwortOptionList"
                                 }
                             }
                         },
@@ -250,6 +258,17 @@
         "/api/audit/": {
             "get": {
                 "operationId": "audit_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "tags": [
                     "audit"
                 ],
@@ -263,10 +282,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/AuditLog"
-                                    }
+                                    "$ref": "#/components/schemas/PaginatedAuditLogList"
                                 }
                             }
                         },
@@ -863,6 +879,17 @@
             "get": {
                 "operationId": "compliance_tasks_list",
                 "description": "Read-only API für ComplianceTask. CRUD kommt sprintweise pro Subtype.",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "tags": [
                     "compliance-tasks"
                 ],
@@ -876,10 +903,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/ComplianceTask"
-                                    }
+                                    "$ref": "#/components/schemas/PaginatedComplianceTaskList"
                                 }
                             }
                         },
@@ -980,6 +1004,17 @@
         "/api/fragen/": {
             "get": {
                 "operationId": "fragen_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "tags": [
                     "fragen"
                 ],
@@ -993,10 +1028,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Frage"
-                                    }
+                                    "$ref": "#/components/schemas/PaginatedFrageList"
                                 }
                             }
                         },
@@ -1249,6 +1281,17 @@
             "get": {
                 "operationId": "hinschg_meldungen_list",
                 "description": "Bearbeiter-API. Permission per `HinSchGMeldungPermission`.",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "tags": [
                     "hinschg"
                 ],
@@ -1262,10 +1305,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/MeldungList"
-                                    }
+                                    "$ref": "#/components/schemas/PaginatedMeldungListList"
                                 }
                             }
                         },
@@ -1542,6 +1582,17 @@
         "/api/kurs-module/": {
             "get": {
                 "operationId": "kurs_module_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "tags": [
                     "kurs-module"
                 ],
@@ -1555,10 +1606,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/KursModul"
-                                    }
+                                    "$ref": "#/components/schemas/PaginatedKursModulList"
                                 }
                             }
                         },
@@ -1783,6 +1831,17 @@
         "/api/kurse/": {
             "get": {
                 "operationId": "kurse_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "tags": [
                     "kurse"
                 ],
@@ -1796,10 +1855,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Kurs"
-                                    }
+                                    "$ref": "#/components/schemas/PaginatedKursList"
                                 }
                             }
                         },
@@ -2025,6 +2081,17 @@
             "get": {
                 "operationId": "mitarbeiter_list",
                 "description": "CRUD für Mitarbeiter.",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "tags": [
                     "mitarbeiter"
                 ],
@@ -2038,10 +2105,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Mitarbeiter"
-                                    }
+                                    "$ref": "#/components/schemas/PaginatedMitarbeiterList"
                                 }
                             }
                         },
@@ -2272,6 +2336,17 @@
             "get": {
                 "operationId": "notifications_list",
                 "description": "In-App-Notifications für den eingeloggten User.\n\nNur eigene + nur In-App-Channel (E-Mail-Notifications werden separat\nversendet, gehören aber nicht in den Bell-Dropdown).",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "tags": [
                     "notifications"
                 ],
@@ -2285,10 +2360,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Notification"
-                                    }
+                                    "$ref": "#/components/schemas/PaginatedNotificationList"
                                 }
                             }
                         },
@@ -2803,6 +2875,17 @@
         "/api/schulungswellen/": {
             "get": {
                 "operationId": "schulungswellen_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "tags": [
                     "schulungswellen"
                 ],
@@ -2816,10 +2899,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/SchulungsWelle"
-                                    }
+                                    "$ref": "#/components/schemas/PaginatedSchulungsWelleList"
                                 }
                             }
                         },
@@ -4221,6 +4301,316 @@
                 ],
                 "type": "string",
                 "description": "* `geplant` - Geplant\n* `versandt` - Versandt\n* `geoeffnet` - Geöffnet\n* `bounced` - Bounced\n* `failed` - Failed"
+            },
+            "PaginatedAntwortOptionList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AntwortOption"
+                        }
+                    }
+                }
+            },
+            "PaginatedAuditLogList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AuditLog"
+                        }
+                    }
+                }
+            },
+            "PaginatedComplianceTaskList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ComplianceTask"
+                        }
+                    }
+                }
+            },
+            "PaginatedFrageList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Frage"
+                        }
+                    }
+                }
+            },
+            "PaginatedKursList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Kurs"
+                        }
+                    }
+                }
+            },
+            "PaginatedKursModulList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/KursModul"
+                        }
+                    }
+                }
+            },
+            "PaginatedMeldungListList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MeldungList"
+                        }
+                    }
+                }
+            },
+            "PaginatedMitarbeiterList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Mitarbeiter"
+                        }
+                    }
+                }
+            },
+            "PaginatedNotificationList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Notification"
+                        }
+                    }
+                }
+            },
+            "PaginatedSchulungsWelleList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SchulungsWelle"
+                        }
+                    }
+                }
             },
             "PasswordChange": {
                 "type": "object",

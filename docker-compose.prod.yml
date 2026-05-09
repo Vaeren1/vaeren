@@ -125,7 +125,8 @@ services:
     expose:
       - "80"
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--spider", "http://localhost/healthz"]
+      # nginx-alpine hat BusyBox-wget — `-q -O /dev/null` ist die portable Form.
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost/healthz"]
       interval: 30s
       timeout: 5s
       retries: 3

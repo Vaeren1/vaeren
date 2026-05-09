@@ -1250,6 +1250,156 @@ export interface components {
          * @enum {string}
          */
         NotificationStatusEnum: "geplant" | "versandt" | "geoeffnet" | "bounced" | "failed";
+        PaginatedAntwortOptionList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AntwortOption"][];
+        };
+        PaginatedAuditLogList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AuditLog"][];
+        };
+        PaginatedComplianceTaskList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ComplianceTask"][];
+        };
+        PaginatedFrageList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Frage"][];
+        };
+        PaginatedKursList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Kurs"][];
+        };
+        PaginatedKursModulList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["KursModul"][];
+        };
+        PaginatedMeldungListList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["MeldungList"][];
+        };
+        PaginatedMitarbeiterList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Mitarbeiter"][];
+        };
+        PaginatedNotificationList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Notification"][];
+        };
+        PaginatedSchulungsWelleList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["SchulungsWelle"][];
+        };
         PasswordChange: {
             new_password1: string;
             new_password2: string;
@@ -1503,7 +1653,10 @@ export type $defs = Record<string, never>;
 export interface operations {
     antwort_optionen_list: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1515,7 +1668,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AntwortOption"][];
+                    "application/json": components["schemas"]["PaginatedAntwortOptionList"];
                 };
             };
         };
@@ -1646,7 +1799,10 @@ export interface operations {
     };
     audit_list: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1658,7 +1814,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AuditLog"][];
+                    "application/json": components["schemas"]["PaginatedAuditLogList"];
                 };
             };
         };
@@ -1994,7 +2150,10 @@ export interface operations {
     };
     compliance_tasks_list: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2006,7 +2165,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ComplianceTask"][];
+                    "application/json": components["schemas"]["PaginatedComplianceTaskList"];
                 };
             };
         };
@@ -2073,7 +2232,10 @@ export interface operations {
     };
     fragen_list: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2085,7 +2247,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Frage"][];
+                    "application/json": components["schemas"]["PaginatedFrageList"];
                 };
             };
         };
@@ -2235,7 +2397,10 @@ export interface operations {
     };
     hinschg_meldungen_list: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2247,7 +2412,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MeldungList"][];
+                    "application/json": components["schemas"]["PaginatedMeldungListList"];
                 };
             };
         };
@@ -2401,7 +2566,10 @@ export interface operations {
     };
     kurs_module_list: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2413,7 +2581,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["KursModul"][];
+                    "application/json": components["schemas"]["PaginatedKursModulList"];
                 };
             };
         };
@@ -2544,7 +2712,10 @@ export interface operations {
     };
     kurse_list: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2556,7 +2727,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Kurs"][];
+                    "application/json": components["schemas"]["PaginatedKursList"];
                 };
             };
         };
@@ -2687,7 +2858,10 @@ export interface operations {
     };
     mitarbeiter_list: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2699,7 +2873,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Mitarbeiter"][];
+                    "application/json": components["schemas"]["PaginatedMitarbeiterList"];
                 };
             };
         };
@@ -2830,7 +3004,10 @@ export interface operations {
     };
     notifications_list: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2842,7 +3019,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Notification"][];
+                    "application/json": components["schemas"]["PaginatedNotificationList"];
                 };
             };
         };
@@ -3146,7 +3323,10 @@ export interface operations {
     };
     schulungswellen_list: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -3158,7 +3338,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SchulungsWelle"][];
+                    "application/json": components["schemas"]["PaginatedSchulungsWelleList"];
                 };
             };
         };

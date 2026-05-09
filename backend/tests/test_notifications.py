@@ -159,7 +159,8 @@ def test_in_app_list_only_own_notifications(tenant_setup):
             status=NotificationStatus.GEPLANT,
         )
     body = client.get("/api/notifications/").json()
-    assert len(body) == 1
+    rows = body["results"] if isinstance(body, dict) else body
+    assert len(rows) == 1
 
 
 def test_unread_count(tenant_setup):

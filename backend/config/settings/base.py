@@ -110,6 +110,10 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    # Sprint 8 hotfix: paginiert alle ViewSet-Lists einheitlich.
+    # Frontend-Code in Sprint 3 erwartet bereits {count, next, previous, results}.
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 50,
 }
 
 SPECTACULAR_SETTINGS = {

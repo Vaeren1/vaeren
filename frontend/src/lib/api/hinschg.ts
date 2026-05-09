@@ -133,7 +133,12 @@ export interface MeldungIntern {
 export function useMeldungList() {
   return useQuery<MeldungListItem[], ApiError>({
     queryKey: ["hinschg-meldungen"],
-    queryFn: () => api<MeldungListItem[]>("/api/hinschg/meldungen/"),
+    queryFn: async () => {
+      const res = await api<MeldungListItem[] | { results: MeldungListItem[] }>(
+        "/api/hinschg/meldungen/",
+      );
+      return Array.isArray(res) ? res : res.results;
+    },
   });
 }
 
