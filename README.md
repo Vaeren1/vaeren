@@ -1,7 +1,17 @@
 # Vaeren — Compliance-Autopilot
 
-> Schema-per-Tenant SaaS. Stand Sprint 8: **Production-ready** — Multi-stage Dockerfiles (ARM64-native), `docker-compose.prod.yml` mit 6 Services (Postgres + Redis + Daphne + Celery-Worker + Celery-Beat + Frontend-nginx), `deploy.sh` analog Sponty, Caddyfile + Runbook für Caddy-Switch, restic-Backup-Skript, prod-Settings (HSTS, Sentry-optional, Mailjet-Anymail mit Console-Fallback). Lokaler Dry-Run grün (HinSchG-Submission via prod-Stack: 201).
-> Architektur-Spec: `docs/superpowers/specs/2026-04-24-mvp-architecture-design.md`.
+> **Stand 2026-05-10: live in Production.** Alle 8 MVP-Sprints abgeschlossen, deployed auf Hetzner CAX31 (Helsinki). 5 Live-Domains, alle Module funktional, Brevo + OpenRouter + restic-Backup + GlitchTip-Monitoring aktiv. Demo-Tenant mit Demo-Daten bereit für Pilot-Kunden-Termine.
+> Architektur-Spec: `docs/superpowers/specs/2026-04-24-mvp-architecture-design.md` · Production-Runbook: `infrastructure/RUNBOOK.md`
+
+## Live-URLs
+
+| Domain | Zweck |
+|---|---|
+| https://app.vaeren.de | Vaeren-App (Login, Compliance-Cockpit, Module) |
+| https://hinweise.app.vaeren.de | HinSchG-Hinweisgeber-Form (anonym, kein Login) |
+| https://errors.app.vaeren.de | GlitchTip Error-Tracking (self-hosted Sentry-API) |
+| https://vaeren.de · https://www.vaeren.de | 301 → app.vaeren.de |
+| https://sponty.fun | Sponty (parallel auf demselben Server) |
 
 ## Lokales Dev-Setup
 
@@ -101,5 +111,27 @@ Tiefer: `CLAUDE.md` (Kurz-Referenz) und `docs/superpowers/specs/` (Specs).
 | 5 | ✅ HinSchG-Hinweisgeberportal: Per-Tenant-Fernet-Encryption (`core.fields.EncryptedTextField`), Meldung/Bearbeitungsschritt-Models mit verschlüsselten Inhalten, automatische 7d/3m-Pflicht-Tasks (§17), Public-Form `/hinweise` (anonyme Submission) + Status-Page `/hinweise/status/<token>`, Bearbeiter-Dashboard `/meldungen`, sanitized Status-API (keine Bearbeiter-Identität nach außen), 30 neue Backend-Tests inkl. Cross-Tenant-Decrypt-Isolation |
 | 6 | ✅ Compliance-Cockpit + Notification-Engine + Audit-Viewer: Sidebar-Shell (Linear/Notion-Style) statt Top-Nav, Dashboard `/` mit Score-Donut (0–100, Modul-Aufschlüsselung, transparente Formel) + KPI-Karten + „Diese Woche zu erledigen"-Liste + Activity-Feed, In-App-Notification-Bell mit unread-Badge, Frist-Reminder + Overdue-Notifications via `dispatch_notifications`-Mgmt-Command, AuditLog-Viewer `/audit` (Stripe-Style, Filter, CSV-Export, GF+IT-Leiter), Tenant-Settings `/settings` (3 Tabs Allgemein/Sicherheit/Datenschutz), Empty-States als Onboarding, Sonner-Toasts, 29 neue Backend-Tests |
 | 7 | ✅ Test-Hardening: pytest-cov + `.coveragerc` + CI-Gate `--cov-fail-under=80` (Baseline 86 %+); Storybook 10 mit Stories für ScoreDonut/KpiCard/EmptyState/NotificationBell + Storybook-Build-CI-Job; Playwright + 8 kritische E2E-Specs (auth/mitarbeiter/schulungen/public-quiz/hinschg-public/hinschg-intern/audit/settings) — nur main-Branch + dedicated `seed_e2e_tenant`-Mgmt-Command; CI um 5. `playwright-e2e` + 6. `storybook-build` Jobs erweitert; KpiCard + EmptyState als wiederverwendbare Komponenten ausgelagert |
-| 8 | ✅ Production-Build (Deploy noch ausstehend, manuell): Multi-stage Dockerfiles (Backend ARM64-native mit WeasyPrint-System-Libs; Frontend bun-Build → nginx-static); `docker-compose.prod.yml` mit 6 Services (Postgres, Redis, Daphne-ASGI, Celery-Worker, Celery-Beat, Frontend); `deploy.sh` analog Sponty (rsync + scp + ssh up); Caddyfile mit Sponty + Vaeren Routes (HTTP-01-Cert-Challenge); `caddy.service` systemd-Unit; `infrastructure/restic-backup.sh` für Hetzner Storage Box (DB-Dump + Media-Volume, retention 7d/4w/12m); `infrastructure/RUNBOOK.md` Schritt-für-Schritt mit Rollback-Plan; prod-Settings (HSTS, Secure-Cookies, Sentry-Init optional, Mailjet-Anymail mit Console-Fallback); Celery-App + Beat-Schedule für `dispatch_notifications --all-tenants` 1×/h; `.dockerignore` + lokal Dry-Run gegen prod-Compose verifiziert (HinSchG-Submission 201, OpenAPI-Schema 200) |
-| 9+ | Live-Deploy + Pilot-Onboarding (siehe `infrastructure/RUNBOOK.md`) |
+| 8 | ✅ Production-Deploy + go-live: Multi-stage Dockerfiles (Backend ARM64-native, Frontend bun→nginx); `docker-compose.prod.yml` 6 Services; `deploy.sh` rsync+scp+up; Caddy als Container in `/opt/caddy/` (ersetzt Sponty-nginx) mit Sponty+Vaeren+GlitchTip Routes; `infrastructure/restic-backup.sh` läuft daily 03:00 auf Hetzner Storage Box BX11 (Falkenstein); prod-Settings mit HSTS, Secure-Cookies; Brevo (Mail), OpenRouter (LLM), GlitchTip (Sentry-API self-hosted) alle live; Celery-Beat für `dispatch_notifications --all-tenants` 1×/h; **Live-Smoke nach Caddy-Switch: alle 5 Domains 200, HinSchG-Submission end-to-end funktional, Storage-Box-Restore-verifiziert** |
+
+## Pilot-Demo-Setup (Tenant `demo`)
+
+Für Pilot-Kunden-Termine bereit:
+
+- **GF-Login:** `konrad@vaeren.de` (Compliance-Cockpit + alle Module)
+- **CB-Login:** `lisa.brand@vaeren.de` (HinSchG-Bearbeitung mit verschlüsselten Inhalten)
+- **3 Mitarbeiter** in der DSGVO-Welle Q2 2026 (1 fertig 100 %, 1 in Arbeit, 1 offen)
+- **2 HinSchG-Meldungen** (1 in Prüfung mit Bearbeitungsschritten, 1 frisch)
+- **Compliance-Index:** 89/100 (gelb — guter Demo-Wert, narrativ etwas zu tun)
+- **71 AuditLog-Einträge** für Activity-Feed
+
+Komplette Demo-Storyline-Anleitung mit Verkaufs-Argumenten siehe Konrads-internen Runbook (Memory: `vaeren_production_state.md`).
+
+## Aktive Integrationen (Stand 2026-05-10)
+
+| Integration | Status | Anbieter / Provider |
+|---|---|---|
+| E-Mail-Versand | ✅ live | Brevo (300/Tag forever-free, EU-Hosting, vaeren.de DKIM+DMARC verifiziert) |
+| LLM-Personalisierung | ✅ live | OpenRouter (Default `google/gemma-4-26b-a4b-it:free`, override via env) |
+| Off-site-Backup | ✅ live | Hetzner Storage Box BX11 (3,81 €/Mo, restic daily, 7d/4w/12m retention, restore-verifiziert) |
+| Error-Monitoring | ✅ live | GlitchTip self-hosted (Sentry-API, Daten EU-side, kein Quota) |
+| Markenrechts-Schutz | ⚠️ offen | DPMA-Anmeldung postponed (User-Entscheidung 2026-05-10) — vor Pilot-Vertrag mit Anwalt prüfen |

@@ -2,6 +2,21 @@
 
 > **Für künftige Claude-Sessions:** Diese Datei enthält die wichtigsten Architektur- und Konventions-Entscheidungen für das ai-act-Projekt. Sie ist die schnelle Referenz; die tiefe Wahrheit liegt in den Specs unter `docs/superpowers/specs/`.
 
+## Stand 2026-05-10 — Vaeren ist live in Production
+
+8 Sprints abgeschlossen, MVP deployed auf Hetzner CAX31, 5 Live-Domains:
+
+- `https://app.vaeren.de` — Vaeren-App-Login + Compliance-Cockpit
+- `https://hinweise.app.vaeren.de` — anonymes HinSchG-Hinweisgeber-Form
+- `https://errors.app.vaeren.de` — GlitchTip Error-Tracking (self-hosted)
+- `https://vaeren.de` + `www.vaeren.de` — Apex-Redirect zu app
+
+Demo-Tenant `demo` mit GF + CB + 3 Mitarbeiter + 1 SchulungsWelle SENT (1 erfolgreich) + 2 HinSchG-Meldungen (1 in Prüfung). Compliance-Index aktuell `89/100 yellow`.
+
+**Aktive Integrationen:** Brevo (Mail), OpenRouter (LLM mit Gemma-4 26B), Hetzner Storage Box (restic daily), GlitchTip (Sentry-API self-hosted). Mailjet wurde versucht, schlug fehl (Anti-Abuse-Block bei fresh Account), Code-Pfad bleibt als Fallback. Vollständige Live-Konfiguration in `~/.claude/projects/-home-konrad-ai-act/memory/vaeren_production_state.md`.
+
+**DPMA-Markenanmeldung:** vom User auf 2026-05-10 explizit postponed. Vor Pilot-Vertrag mit Anwalt prüfen.
+
 ## Projekt-Kurzbeschreibung
 
 **ai-act** = SaaS „Compliance-Autopilot für den Industrie-Mittelstand".
@@ -27,18 +42,18 @@ Bei Unsicherheit immer zuerst hier nachsehen:
 - **Auth:** django-allauth + dj-rest-auth + django-otp (TOTP-MFA aus dem MVP — `django-allauth-2fa` ist abandoned + inkompatibel mit allauth>=64, deshalb der Substitution), Session-Cookies KEIN JWT
 - **Package-Manager:** `uv` (Python), `bun` (JS) — beide schneller als pip/npm, deterministische Lockfiles
 - **Linting:** Ruff (Python), Biome oder ESLint (JS)
-- **LLM:** OpenRouter als Provider-Aggregator (gleich wie Sponty), MVP-Defaults: `google/gemini-2.5-flash:free` (Fast) + `mistralai/mistral-small-3.2:free` (Reasoning). Migrations-Pfad zu Anthropic Claude in Phase 2.
-- **Mail:** Mailjet via django-anymail
-- **Storage:** Lokales Docker-Volume `ai-act-media` (NICHT S3 im MVP), Migrationspfad zu S3 dokumentiert
-- **Hosting:** Hetzner CAX31 ARM64 Helsinki, co-located mit Sponty unter `/opt/ai-act/`. Caddy als zentraler Reverse-Proxy
-- **Backup:** restic zu Hetzner Storage Box, daily, retention 7d/4w/12m
-- **Monitoring:** Sentry EU-Region
+- **LLM:** OpenRouter als Provider-Aggregator. **2026-Defaults (Stand 2026-05-10):** `google/gemma-4-26b-a4b-it:free` (Fast) + `nvidia/nemotron-3-super-120b-a12b:free` (Reasoning) — die ursprünglichen Spec-Modelle (`gemini-2.5-flash:free`, `mistral-small-3.2:free`) existieren nicht mehr im OpenRouter-Lineup. Override via env `OPENROUTER_MODEL_FAST` / `_REASONING`. Migrations-Pfad zu Anthropic Claude in Phase 2.
+- **Mail:** **Brevo** via `django-anymail[brevo]` (300/Tag forever-free, EU-Hosting). Provider-Priorität in `prod.py`: Brevo > Mailjet > Console-Fallback. Mailjet ist code-mäßig vorhanden aber ein Anti-Abuse-Block des Free-Accounts beim ersten API-Call hat den Provider blockiert — durch Brevo ersetzt am 2026-05-09.
+- **Storage:** Lokales Docker-Volume `vaeren-media` (NICHT S3 im MVP), Migrationspfad zu S3 dokumentiert
+- **Hosting:** Hetzner CAX31 ARM64 Helsinki, co-located mit Sponty unter `/opt/ai-act/`. Caddy als zentraler Reverse-Proxy als **Container** in `/opt/caddy/` (NICHT Host-Service — anders als ursprünglich Spec, weil Container-DNS einfacher als systemd-resolver-Trick).
+- **Backup:** **restic auf Hetzner Storage Box BX11** (`u591277.your-storagebox.de`, Falkenstein FSN1, 3,81 €/Mo). Daily 03:00 cron, retention 7d/4w/12m. Restore-verifiziert. **Wichtig:** Storage Box hört auf Port 23 (nicht 22), Pfad muss relativ sein (`vaeren-restic`, kein `/`-Prefix), SSH-Config (`/root/.ssh/config_vaeren_backup`) übernimmt Key+Port.
+- **Monitoring:** **GlitchTip self-hosted** (Sentry-API-kompatibel) auf `errors.app.vaeren.de`, eigener Compose-Stack in `/opt/glitchtip/` mit eigenem Postgres+Redis. Vorteil ggü. Sentry-SaaS: Daten EU-side, kein Quota, kein Vendor-Lock.
 
 ## Nicht-verhandelbare Architektur-Regeln
 
 1. **RDG-Schutz (3 Layer):** Jeder LLM-Output, der rechtliche Bewertung enthält, durchläuft (a) System-Prompt mit Vorschlags-Sprache-Erzwingung, (b) Output-Validator gegen verbotene Formeln, (c) Human-in-the-Loop-Gate vor jeder Wirkung. **Keine LLM-Klassifizierung wird je ohne Mensch-Bestätigung produktiv.** Verstoß → existenzielles Risiko für die Firma.
 2. **Multi-Tenant-Isolation:** Jede HTTP-Anfrage MUSS via `django-tenants`-Middleware ein konkretes Schema setzen. Cross-Tenant-Queries sind verboten. Multi-Tenant-Isolation-Test ist kritischer CI-Gate — Build failed sonst.
-3. **HinSchG-Verschlüsselung:** Inhalt von Whistleblower-Meldungen MUSS via `django-cryptography` AES-256-at-Rest verschlüsselt werden. Klartext nur via Application-Layer mit Tenant-Schlüssel sichtbar.
+3. **HinSchG-Verschlüsselung:** Inhalt von Whistleblower-Meldungen MUSS at-rest verschlüsselt werden. Implementierung: `core/fields.py::EncryptedTextField` mit `cryptography.fernet.Fernet` (AES-128-CBC + HMAC-SHA256), per-Tenant-Key aus `Tenant.encryption_key` (auto-generiert in `Tenant.save()`). **Spec sagt `django-cryptography`, das Paket ist aber abandoned** — eigene 80-Zeilen-Implementation auf `cryptography`-Lib stattdessen. Cross-Tenant-Decrypt ist mathematisch unmöglich + CI-Test-verifiziert.
 4. **Niemals API-Keys im Repo:** `.env*`-Files sind in `.gitignore`. Production-Secrets via `.env.production` lokal + `scp` aufs Deployment.
 5. **Niemals echte LLM/Mail-Calls in Tests:** Mocking ist Pflicht (responses-lib für HTTP, mock für SDK).
 6. **Audit-Log-Immutability:** `Evidence.immutable=True` und `AuditLog`-Einträge dürfen niemals nachträglich verändert werden. Manipulationsschutz via SHA-256 + Append-Only-Pattern.
@@ -69,7 +84,7 @@ Bei Unsicherheit immer zuerst hier nachsehen:
 - **Build:** server-side ARM64-native (kein Cross-Compile)
 - **Trigger:** **manuell** durch `./deploy.sh` von Konrads Laptop. **Kein Auto-Deploy in CI** (bewusste Entscheidung — weniger Risiko, weniger Secrets in CI)
 - **Migrations:** `migrate_schemas --noinput` im Container-CMD vor Daphne-Start. Migrations müssen rückwärtskompatibel sein
-- **Reverse-Proxy:** Caddy 2 als Host-Service (NICHT Container), belegt Port 80/443, routet sponty-Domains und ai-act-Domains
+- **Reverse-Proxy:** Caddy 2 als **Container** in `/opt/caddy/`, belegt Port 80/443, routet sponty-Domains + vaeren-Domains + glitchtip. Caddy hängt im `caddy-net`-Docker-Bridge mit allen Backends, daher direkt via Container-Name reachable. Spec sagte „Host-Service" — Container ist sauberer (Konfig in einem File pro Stack, kein systemd-DNS-Trick nötig).
 
 ## LLM-Strategy für Code-Generierung (Konrad-Workflow)
 
@@ -79,9 +94,22 @@ Bei Unsicherheit immer zuerst hier nachsehen:
 
 ## Sprint-Plan & Aktueller Stand
 
-8-Wochen-MVP-Plan in `docs/superpowers/specs/2026-04-24-mvp-architecture-design.md` §12.
+8-Wochen-MVP-Plan in `docs/superpowers/specs/2026-04-24-mvp-architecture-design.md` §12 — alle 8 Sprints abgeschlossen 2026-04-23 bis 2026-05-10.
 
-Aktueller Stand (Stand 2026-04-24): **Planungs-Phase abgeschlossen.** Pre-Sprint-1 Prerequisites laufen (Naming-Session, Account-Setups). Code-Start nach Naming-Entscheidung.
+| Sprint | Stand | Hauptergebnis |
+|---|---|---|
+| 1 | ✅ | Foundation: Repo + Django + Multi-Tenancy + Auth + Test-Tenant |
+| 2 | ✅ | Shared Core (Mitarbeiter, ComplianceTask, Evidence, Notification, AuditLog) + DRF-API + django-rules + AuditLog-Auto-Population |
+| 3 | ✅ | Frontend-Foundation (React + Login + MFA + Mitarbeiter-CRUD + Demo-Form, openapi-typescript-Pipeline, CI 3-Job) |
+| 4 | ✅ | Pflichtunterweisung-Modul (Kurs/Welle/Wizard/Public-Quiz, LLM-Personalisierung mit RDG-Layer-2-Validator, WeasyPrint-Zertifikate) |
+| 5 | ✅ | HinSchG (Per-Tenant-Fernet-Encryption, Meldung/Bearbeitungsschritt, 7d/3m-Auto-Pflichten, Public-Form, Bearbeiter-Dashboard) |
+| 6 | ✅ | Compliance-Cockpit (Sidebar-Layout, Score-Donut + KPIs + ToDo-Liste + Activity-Feed, Notification-Bell, AuditLog-Viewer, Settings) |
+| 7 | ✅ | Test-Hardening (pytest-cov 86 %+ Baseline, CI-Gate `--cov-fail-under=80`, Storybook 10, Playwright 8 E2E-Specs nur main) |
+| 8 | ✅ | Production-Deploy (Multi-stage Dockerfiles ARM64, prod-Compose, Caddy-Switch, Brevo + OpenRouter + restic-Backup + GlitchTip live) |
+
+**Phase-1.5+** (nicht im MVP-Scope): Self-Service-Tenant-Onboarding, KI-Inventar-Modul (AI Act), Datenpannen-Register (Art. 33 DSGVO), Transparenzregister-Sync, Hetzner-DNS-API-Wildcard-Cert.
+
+Detail-Sprint-Plans liegen pro Sprint unter `docs/superpowers/plans/2026-05-08*` bis `2026-05-09-sprint-8*`.
 
 ## Wichtige Quervernetzungen mit anderen Projekten
 
@@ -102,8 +130,9 @@ Aktueller Stand (Stand 2026-04-24): **Planungs-Phase abgeschlossen.** Pre-Sprint
 - Schreibung Marketing/Logo: **Vaeren** (Initial-Capital)
 - Schreibung Code/Domain: `vaeren` (alles klein)
 - Hauptdomain: `vaeren.de` (registriert bei Hetzner, 4,90 €/Jahr Auto-Renewal)
-- DNS: Hetzner DNS Console (`dns.hetzner.com`)
-- DNS-Records gesetzt: `@`, `app`, `*.app`, `hinweise`, `www` → 204.168.159.236
+- DNS: Hetzner DNS Console (`dns.hetzner.com`, Migration zu `console.hetzner.com` läuft Mai 2026)
+- DNS-Records aktiv: `@`, `app`, `*.app` (Wildcard deckt `errors.app` etc.), `hinweise`, `www` → 204.168.159.236
+- TXT-Records aktiv: `mailjet._domainkey` (legacy, kann weg), `brevo1._domainkey` + `brevo2._domainkey` (CNAME, DKIM), `@` mit `brevo-code:...`, `_dmarc`
 - `.com` bewusst NICHT im MVP-Scope (Squatter; Phase-3-Ziel)
 
-**Markenrechts-TODO vor Pilot-Kunden-Vertrag:** anwaltliche DPMA-Recherche + DPMA-Wortmarken-Anmeldung Klassen 9, 35, 42 (~290 € + Anwaltsgebühr).
+**Markenrechts-Status (2026-05-10):** vom User explizit auf später verschoben. Vor Pilot-Vertrag mit Anwalt prüfen lassen (DPMA-Recherche + Anmeldung Klassen 9/35/42, ~290 € + Anwaltsgebühr). Risiko: Konkurrent meldet zwischenzeitlich an, Konrad muss umbenennen.

@@ -1,7 +1,7 @@
 # Infrastructure & Deployment
 
-> **Stand:** 2026-04-27
-> **Status:** Geplant für Co-Location mit Sponty auf bestehendem Hetzner-Server.
+> **Stand:** 2026-05-10
+> **Status:** ✅ Live in Production. Vaeren MVP deployed, alle 8 Sprints abgeschlossen, 5 Domains aktiv. Detail-Runbook in `RUNBOOK.md` (Schritt-für-Schritt-Wiederherstellung + Caddy-Switch + restic-Backup).
 
 ## Server
 
@@ -38,35 +38,35 @@ Dann reicht: `ssh hel1`.
 
 ## Co-Location-Architektur
 
-Auf dem Server laufen zwei unabhängige Apps parallel als Docker-Compose-Stacks:
+Auf dem Server laufen drei unabhängige Stacks parallel als Docker-Compose:
 
 ```
-/opt/sponty/        — bestehender Sponty-Stack (läuft seit Wochen stabil)
+/opt/sponty/        — Sponty-Stack (Django+Postgres+Redis+Meilisearch+Backend+Celery)
                      Container-Prefix: sponty-*
-                     Ports: 80, 443 via sponty-nginx
-                     Eigenes Postgres, Redis, Meilisearch, Backend, Celery
+                     Domains: sponty.fun, www.sponty.fun, api.sponty.fun
+                     Eigenes Postgres + Redis (DB-Volume seit Monaten persistent)
 
-/opt/ai-act/        — neue ai-act-Stack (ai-act/ wird hier deployt)
-                     Container-Prefix: ai-act-*
-                     Ports: hochnummerierte (8080?) hinter zentralem Reverse-Proxy
-                     Eigenes Postgres, Redis, Backend, Celery, Frontend
+/opt/ai-act/        — Vaeren-Stack (Django+Postgres+Redis+Daphne+Celery+Frontend-nginx)
+                     Container-Prefix: vaeren-*
+                     Domains: app.vaeren.de, hinweise.app.vaeren.de, vaeren.de(redir)
+                     Eigenes Postgres + Redis (Tenant-Daten, HinSchG-encrypted)
+
+/opt/glitchtip/     — GlitchTip self-hosted (Sentry-API für Production-Error-Tracking)
+                     Container-Prefix: glitchtip-*
+                     Domain: errors.app.vaeren.de
+                     Eigenes Postgres + Redis (Issue-History, getrennt von Vaeren)
+
+/opt/caddy/         — Reverse-Proxy-Container (Port 80/443) — ersetzt seit 2026-05-09
+                     den ursprünglichen sponty-nginx. Routet nach Hostname auf
+                     Sponty-Backend / Vaeren-Stack / GlitchTip / Apex-Redirect.
+                     Auto-SSL via Let's Encrypt, alle Stacks im `caddy-net`.
 ```
 
-### Wichtig: Port- & Domain-Trennung
+### Reverse-Proxy: Caddy als Container im `caddy-net`
 
-Beide Stacks brauchen Port 80/443 für ihre Domains. Lösungsoptionen:
+Spec §3 hatte ursprünglich Caddy als Host-Service vorgesehen. **Stand 2026-05-09:** Caddy läuft als Container — sauberer, weil DNS-Resolution via Docker-Bridge (`vaeren-django:8000`, `sponty-backend:8000`, `glitchtip-web:8000`) ohne systemd-resolver-Tricks funktioniert. Alle drei Stacks plus Caddy hängen im gemeinsamen `caddy-net`-Bridge-Netzwerk; bei Container-Recreate muss Caddy ggf. neu connected werden.
 
-**Variante A (empfohlen): Zentraler Reverse-Proxy**
-- Aktuell: `sponty-nginx` belegt Port 80/443 und routet nur sponty-Domains
-- Umbau: separater **Caddy-Container auf dem Host** (oder als eigener Compose-Stack), der Port 80/443 belegt und nach Domain auf Sponty-Backend bzw. ai-act-Backend routet
-- Vorteil: Auto-SSL via Let's Encrypt, beide Apps profitieren, einfache Domain-Anlage
-
-**Variante B: Sponty-Nginx erweitern**
-- nginx-ssl.conf von Sponty bekommt zusätzliche `server { listen 443; server_name app.ai-act.de; ... }` Blöcke
-- Vorteil: Weniger Container
-- Nachteil: Config-Coupling beider Apps, Sponty-Deploy könnte ai-act stören
-
-→ **Entscheidung in der MVP-Architektur-Spec festlegen.** Aktuelle Empfehlung: A.
+Caddyfile-Quelle: `/home/konrad/ai-act/infrastructure/Caddyfile` → wird per `scp` nach `/opt/caddy/Caddyfile` deployt + `docker exec caddy caddy reload --config /etc/caddy/Caddyfile` (zero-downtime).
 
 ## Deployment-Pattern (analog zu Sponty)
 
@@ -100,34 +100,59 @@ Helsinki (Finnland) ist EU-Mitglied, DSGVO gilt voll, **AVV-konform**. Aber:
 
 **Skalierungs-Trigger:** Wenn ai-act 20+ Tenants oder Sponty-Last steigt, separaten Server provisionieren (CAX21 für ai-act allein = 8 €/Monat).
 
-## Backups
+## Backups (Stand 2026-05-09 live)
 
-Sponty nutzt Hetzner-Snapshots + manuelle DB-Dumps (siehe `/home/konrad/sponty/docs/`). ai-act sollte das gleiche Pattern nutzen + zusätzlich:
-- Tägliche pg_dump pro Tenant-Schema (oder Cluster-weite Dumps)
-- Off-site Backup zu Hetzner Storage Box (verschlüsselt mit `restic`)
+**Vaeren:** restic auf Hetzner Storage Box BX11 (Falkenstein, 3,81 €/Mo, 1 TB).
+- Cron daily 03:00 Server-Zeit
+- Inhalt: pg_dump (alle Tenant-Schemas inkl. encrypted HinSchG-Daten + Tenant-`encryption_key`s im public-Schema) + `vaeren-media`-Volume
+- Retention: 7 daily, 4 weekly, 12 monthly snapshots
+- **Restore-Verifikation 2026-05-09 erfolgreich** — Tenant-Encryption-Keys im Dump enthalten, HinSchG-Inhalte nach Restore wieder entschlüsselbar
+- Keys in `/etc/vaeren/restic.passwd` (chmod 600, root-only)
+- SSH-Backup-Key: `/etc/vaeren/backup_id_ed25519`
 
-→ Detail-Spec in der MVP-Architektur-Spec.
+**Sponty:** unverändert — Hetzner-Snapshots + manuelle DB-Dumps. **Nicht auf restic migriert** (separater Job, hier nicht in scope).
 
-## Monitoring (gemeinsam mit Sponty?)
+**GlitchTip:** kein automatisches Backup. Wenn Issue-History-Verlust akzeptabel ist (neuer Setup = leerer Tracker, weiterhin funktional) → keine Aktion. Bei Bedarf zweites restic-Repo auf gleicher Storage-Box anlegen.
 
-Sponty hat aktuell kein dediziertes Monitoring. Vorschlag für ai-act:
-- **Sentry (EU-Region)** für Error-Tracking — beide Apps können denselben Sentry-Account nutzen, separate Projekte
-- **Plausible Analytics** für Website-Analytics (DSGVO-konform, EU-hosted)
-- **Uptime-Monitoring** via UptimeRobot oder Hetzner-Notifications
+## Monitoring
 
-## Test-Verbindung — bestätigt 2026-04-27
+**Production-Error-Tracking:** GlitchTip self-hosted unter `https://errors.app.vaeren.de`. Drop-in Sentry-API-kompatibel, Vaeren-Backend nutzt `sentry-sdk[django]` mit DSN-Switch in `.env.production`. Vorteil ggü. Sentry-SaaS: Daten EU-side (DSGVO), kein Quota, kein Vendor-Lock-in.
+
+**Uptime + Performance:** noch nicht aufgesetzt. Optionen für später:
+- UptimeRobot (extern, kostenlos, prüft alle 5 Min)
+- Plausible Analytics für Website-Traffic (DSGVO-konform)
+- Hetzner-Notifications via API für Server-Events
+
+## Live-Container-Stand (2026-05-10)
 
 ```bash
-$ ssh root@204.168.159.236 'hostname && uname -m && docker ps --format "{{.Names}}"'
-ubuntu-16gb-hel1-3
-aarch64
-sponty-backend
-sponty-celery-worker
-sponty-celery-beat
-sponty-nginx
-sponty-postgres
-sponty-meilisearch
-sponty-redis
+$ ssh root@204.168.159.236 'docker ps --format "{{.Names}}: {{.Status}}"'
+
+# Caddy (Reverse-Proxy, Port 80/443)
+caddy: Up
+
+# Vaeren-Stack
+vaeren-django: Up (healthy)
+vaeren-celery-worker: Up
+vaeren-celery-beat: Up
+vaeren-postgres: Up (healthy)
+vaeren-redis: Up (healthy)
+vaeren-frontend: Up (healthy)
+
+# GlitchTip-Stack
+glitchtip-web: Up
+glitchtip-worker: Up
+glitchtip-postgres: Up (healthy)
+glitchtip-redis: Up (healthy)
+
+# Sponty-Stack (parallel weiter live)
+sponty-backend: Up (Wochen)
+sponty-celery-worker: Up
+sponty-celery-beat: Up
+sponty-postgres: Up (healthy)
+sponty-redis: Up (healthy)
+sponty-meilisearch: Up (healthy)
+# sponty-nginx + sponty-certbot: gestoppt seit Caddy-Switch
 ```
 
-Alle Sponty-Container laufen healthy. Server hat genug Reserve für Co-Location.
+13 aktive Container. Sponty unverändert + Vaeren live + GlitchTip live + zentraler Caddy.

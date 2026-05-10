@@ -623,20 +623,29 @@ def test_tenant_isolation_strikt(acme_tenant, meier_tenant, db):
 
 **Geschätzter Aufwand:** ~3–5 Std verteilt auf 1 Woche (vor Sprint 1).
 
-## 12. Sprint-Plan MVP (8 Wochen)
+## 12. Sprint-Plan MVP (8 Wochen) — ✅ abgeschlossen 2026-05-10
 
-| Sprint | Woche | Hauptziel |
+| Sprint | Status | Hauptziel |
 |---|---|---|
-| 1 | 1 | Foundation: Repo + Django + Multi-Tenancy + Auth + Test-Tenant |
-| 2 | 2 | Shared Core Models + DRF API + AuditLog + Multi-Tenant-Tests |
-| 3 | 3 | Frontend-Foundation: React + Login + MFA + Mitarbeiter-CRUD + Demo-Form |
-| 4 | 4 | Pflichtunterweisungs-Modul: Kurs + Schulungs-Wizard + Mailjet + LLM-Personalisierung + Quiz + Zertifikat-PDF |
-| 5 | 5 | HinSchG-Modul: Verschlüsselte Meldungen + Bearbeiter-Dashboard + Frist-Tracking |
-| 6 | 6 | Dashboard + Notifications + AuditLog-Viewer + Settings + UX-Politur |
-| 7 | 7 | Tests: 90% Coverage + Storybook + Playwright + OpenAPI-Sync in CI |
-| 8 | 8 | Production-Deploy: Caddy-Migration + DNS + Backup + Erste Demo gegen Production-URL |
+| 1 | ✅ | Foundation: Repo + Django + Multi-Tenancy + Auth + Test-Tenant |
+| 2 | ✅ | Shared Core Models + DRF API + AuditLog + Multi-Tenant-Tests |
+| 3 | ✅ | Frontend-Foundation: React + Login + MFA + Mitarbeiter-CRUD + Demo-Form |
+| 4 | ✅ | Pflichtunterweisungs-Modul: Kurs + Schulungs-Wizard + Mail + LLM-Personalisierung + Quiz + Zertifikat-PDF |
+| 5 | ✅ | HinSchG-Modul: Verschlüsselte Meldungen (Fernet, custom EncryptedTextField) + Bearbeiter-Dashboard + Frist-Tracking |
+| 6 | ✅ | Cockpit: Score-Donut + KPI-Karten + ToDo-Liste + Activity-Feed + Notification-Bell + AuditLog-Viewer + Settings (Sidebar-Layout) |
+| 7 | ✅ | Tests: pytest-cov 86 %+ Baseline + CI-Gate `--cov-fail-under=80` + Storybook + Playwright (8 E2E-Specs nur main) |
+| 8 | ✅ | Production-Deploy: Caddy-Container statt Host-Service + Brevo statt Mailjet (Anti-Abuse-Block) + restic-Backup + GlitchTip statt Sentry-SaaS |
 
-**Gesamt-Aufwand:** ~80 Std (10h × 8 Wochen). Bei realistischer Solo-Bootstrap-Schwankung: Plan auf 10–12 Wochen strecken statt Scope erweitern.
+**Tatsächlicher Aufwand:** ~80 h verteilt auf ~3 Wochen real-time (statt 8 Wochen nominell). Spec-Schätzung war konservativ — alle Sprints unter time-cap durch.
+
+**Live seit 2026-05-10** auf 5 Domains (`app.vaeren.de`, `hinweise.app.vaeren.de`, `errors.app.vaeren.de`, `vaeren.de`+`www.vaeren.de`-Apex-Redirect). Sponty parallel unverändert.
+
+**Abweichungen von der Original-Spec** (alle dokumentiert in CLAUDE.md):
+- LLM-Modelle (Sprint 4): Spec sagte `gemini-2.5-flash:free` + `mistral-small-3.2:free` — beide existieren nicht mehr im OpenRouter-Lineup, ersetzt durch `gemma-4-26b-a4b-it:free` + `nemotron-3-super-120b-a12b:free`
+- Encryption (Sprint 5): Spec sagte `django-cryptography` — Paket ist abandoned, eigener `EncryptedTextField` auf `cryptography.fernet` stattdessen
+- Mail-Provider (Sprint 8): Spec sagte Mailjet — Mailjet-Free-Account wurde durch Anti-Abuse beim ersten API-Call gesperrt, durch Brevo (300/Tag, EU-Hosting) ersetzt
+- Reverse-Proxy (Sprint 8): Spec sagte Caddy als Host-Service — Container-Variante gewählt für saubere Docker-DNS
+- Monitoring (Sprint 8): Spec sagte Sentry-EU-SaaS — GlitchTip self-hosted gewählt für DSGVO + kein Vendor-Lock
 
 ## 13. Pricing & Vertragskonditionen (aus Vorgänger-Spec)
 
