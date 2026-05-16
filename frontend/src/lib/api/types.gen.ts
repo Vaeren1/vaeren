@@ -871,6 +871,167 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/redaktion/korrekturen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description CRUD für Korrekturen. Nur Superuser/Staff. */
+        get: operations["redaktion_korrekturen_list"];
+        put?: never;
+        /** @description CRUD für Korrekturen. Nur Superuser/Staff. */
+        post: operations["redaktion_korrekturen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/redaktion/korrekturen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description CRUD für Korrekturen. Nur Superuser/Staff. */
+        get: operations["redaktion_korrekturen_retrieve"];
+        /** @description CRUD für Korrekturen. Nur Superuser/Staff. */
+        put: operations["redaktion_korrekturen_update"];
+        post?: never;
+        /** @description CRUD für Korrekturen. Nur Superuser/Staff. */
+        delete: operations["redaktion_korrekturen_destroy"];
+        options?: never;
+        head?: never;
+        /** @description CRUD für Korrekturen. Nur Superuser/Staff. */
+        patch: operations["redaktion_korrekturen_partial_update"];
+        trace?: never;
+    };
+    "/api/redaktion/newsposts/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description CRUD für NewsPosts. Nur Superuser/Staff. */
+        get: operations["redaktion_newsposts_list"];
+        put?: never;
+        /** @description CRUD für NewsPosts. Nur Superuser/Staff. */
+        post: operations["redaktion_newsposts_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/redaktion/newsposts/{slug}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description CRUD für NewsPosts. Nur Superuser/Staff. */
+        get: operations["redaktion_newsposts_retrieve"];
+        /** @description CRUD für NewsPosts. Nur Superuser/Staff. */
+        put: operations["redaktion_newsposts_update"];
+        post?: never;
+        /** @description CRUD für NewsPosts. Nur Superuser/Staff. */
+        delete: operations["redaktion_newsposts_destroy"];
+        options?: never;
+        head?: never;
+        /** @description CRUD für NewsPosts. Nur Superuser/Staff. */
+        patch: operations["redaktion_newsposts_partial_update"];
+        trace?: never;
+    };
+    "/api/redaktion/newsposts/{slug}/publish/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Publiziert den Beitrag (status=published, expires_at gesetzt). */
+        post: operations["redaktion_newsposts_publish_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/redaktion/newsposts/{slug}/toggle_pin/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Toggle pinned-Flag. */
+        post: operations["redaktion_newsposts_toggle_pin_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/redaktion/newsposts/{slug}/unpublish/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Zieht den Beitrag zurück (status=unpublished). */
+        post: operations["redaktion_newsposts_unpublish_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/redaktion/runs/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Telemetrie der letzten Pipeline-Läufe. */
+        get: operations["redaktion_runs_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/redaktion/runs/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Telemetrie der letzten Pipeline-Läufe. */
+        get: operations["redaktion_runs_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/schulungswellen/": {
         parameters: {
             query?: never;
@@ -1049,6 +1210,26 @@ export interface components {
         CsrfTokenResponse: {
             csrf_token: string;
         };
+        /**
+         * @description Erweitert dj_rest_auth's Default um unser Custom-Field `tenant_role`.
+         *
+         *     Ohne diesen Subclass liefert `/api/auth/user/` nur pk/email/first_name/
+         *     last_name. Das Frontend braucht aber `tenant_role` für die Rollen-
+         *     abhängige UI (z. B. HinSchG: nur Compliance-Beauftragte:r darf
+         *     Klassifizierung ändern oder Meldungen abschließen).
+         */
+        CustomUserDetails: {
+            /** ID */
+            readonly pk: number;
+            /** Format: email */
+            readonly email: string;
+            /** Vorname */
+            first_name?: string;
+            /** Nachname */
+            last_name?: string;
+            readonly tenant_role: components["schemas"]["TenantRoleEnum"];
+            readonly mfa_enabled: boolean;
+        };
         DashboardResponse: {
             score: unknown;
             this_week_tasks: unknown;
@@ -1074,12 +1255,39 @@ export interface components {
             reihenfolge?: number;
             readonly optionen: components["schemas"]["AntwortOption"][];
         };
+        /**
+         * @description * `EU` - EU
+         *     * `DE` - DE
+         *     * `EU_DE` - EU→DE-Umsetzung
+         * @enum {string}
+         */
+        GeoEnum: "EU" | "DE" | "EU_DE";
         HealthResponse: {
             status: string;
             schema: string;
         };
         HinweisgeberNachricht: {
             nachricht: string;
+        };
+        /**
+         * @description * `ai_act` - AI Act
+         *     * `datenschutz` - Datenschutz
+         *     * `hinschg` - HinSchG
+         *     * `lieferkette` - Lieferkette
+         *     * `arbeitsrecht` - Arbeitsrecht
+         *     * `geldwaesche_finanzen` - Geldwäsche/Finanzen
+         *     * `it_sicherheit` - IT-Sicherheit
+         *     * `esg_nachhaltigkeit` - ESG/Nachhaltigkeit
+         * @enum {string}
+         */
+        KategorieEnum: "ai_act" | "datenschutz" | "hinschg" | "lieferkette" | "arbeitsrecht" | "geldwaesche_finanzen" | "it_sicherheit" | "esg_nachhaltigkeit";
+        KorrekturInternal: {
+            readonly id: number;
+            post: number;
+            /** Format: date-time */
+            readonly korrigiert_am: string;
+            was_geaendert: string;
+            grund: string;
         };
         Kurs: {
             readonly id: number;
@@ -1089,11 +1297,71 @@ export interface components {
             gueltigkeit_monate?: number;
             /** @description Bestehensschwelle (Prozent richtig) */
             min_richtig_prozent?: number;
+            /** @description Anzahl Fragen pro Quiz-Durchlauf, zufällig aus fragen-Pool gezogen und pro SchulungsTask persistiert. Muss <= fragen.count() sein. */
+            fragen_pro_quiz?: number;
+            /**
+             * @description Bestimmt, was der Mitarbeiter im Player macht.
+             *
+             *     * `quiz` - Quiz
+             *     * `kenntnisnahme` - Kenntnisnahme
+             *     * `kenntnisnahme_lesezeit` - Kenntnisnahme + Min-Lesezeit
+             */
+            quiz_modus?: components["schemas"]["QuizModusEnum"];
+            /** @description Sekunden pro Modul, ab denen 'Kenntnisnahme' aktivierbar ist. Nur ausgewertet bei quiz_modus=kenntnisnahme_lesezeit. */
+            mindest_lesezeit_s?: number;
+            /** @description Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert. */
+            zertifikat_aktiv?: boolean;
+            /** @description Schema-Name des Tenants, der den Kurs erstellt hat. Leer = Vaeren-Standardkatalog (read-only für Tenants). */
+            readonly eigentuemer_tenant: string;
+            readonly ist_standardkatalog: boolean;
+            readonly erstellt_von: number | null;
+            readonly erstellt_von_email: string;
             aktiv?: boolean;
             /** Format: date-time */
             readonly erstellt_am: string;
             readonly module: components["schemas"]["KursModul"][];
-            readonly fragen_anzahl: number;
+            readonly fragen_pool_groesse: number;
+        };
+        /**
+         * @description Wie KursSerializer, plus nested fragen + optionen INKLUSIVE ist_korrekt.
+         *
+         *     Nur für interne Bearbeiter-Sicht (Kurs-Bibliothek im Cockpit) — die
+         *     Public-Variante für Mitarbeiter beim Quiz nutzt FragePublicSerializer
+         *     ohne `ist_korrekt`.
+         */
+        KursDetail: {
+            readonly id: number;
+            titel: string;
+            beschreibung?: string;
+            /** @description Wie lange ist das Zertifikat gültig? */
+            gueltigkeit_monate?: number;
+            /** @description Bestehensschwelle (Prozent richtig) */
+            min_richtig_prozent?: number;
+            /** @description Anzahl Fragen pro Quiz-Durchlauf, zufällig aus fragen-Pool gezogen und pro SchulungsTask persistiert. Muss <= fragen.count() sein. */
+            fragen_pro_quiz?: number;
+            /**
+             * @description Bestimmt, was der Mitarbeiter im Player macht.
+             *
+             *     * `quiz` - Quiz
+             *     * `kenntnisnahme` - Kenntnisnahme
+             *     * `kenntnisnahme_lesezeit` - Kenntnisnahme + Min-Lesezeit
+             */
+            quiz_modus?: components["schemas"]["QuizModusEnum"];
+            /** @description Sekunden pro Modul, ab denen 'Kenntnisnahme' aktivierbar ist. Nur ausgewertet bei quiz_modus=kenntnisnahme_lesezeit. */
+            mindest_lesezeit_s?: number;
+            /** @description Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert. */
+            zertifikat_aktiv?: boolean;
+            /** @description Schema-Name des Tenants, der den Kurs erstellt hat. Leer = Vaeren-Standardkatalog (read-only für Tenants). */
+            readonly eigentuemer_tenant: string;
+            readonly ist_standardkatalog: boolean;
+            readonly erstellt_von: number | null;
+            readonly erstellt_von_email: string;
+            aktiv?: boolean;
+            /** Format: date-time */
+            readonly erstellt_am: string;
+            readonly module: components["schemas"]["KursModul"][];
+            readonly fragen_pool_groesse: number;
+            readonly fragen: components["schemas"]["Frage"][];
         };
         KursModul: {
             readonly id: number;
@@ -1226,6 +1494,43 @@ export interface components {
             /** Format: date-time */
             readonly updated_at: string;
         };
+        NewsPostInternal: {
+            readonly id: number;
+            slug: string;
+            titel: string;
+            lead: string;
+            body_html: string;
+            kategorie: components["schemas"]["KategorieEnum"];
+            geo: components["schemas"]["GeoEnum"];
+            type: components["schemas"]["TypeEnum"];
+            relevanz: components["schemas"]["RelevanzEnum"];
+            /** @description Liste [{titel: str, url: str}] */
+            source_links?: unknown;
+            status?: components["schemas"]["NewsPostInternalStatusEnum"];
+            /** Format: double */
+            readonly verifier_confidence: number | null;
+            readonly verifier_issues: unknown;
+            pinned?: boolean;
+            /** Format: date-time */
+            published_at?: string | null;
+            /** Format: date-time */
+            expires_at?: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+            readonly candidate_titel: string | null;
+            readonly candidate_quelle: string | null;
+            readonly notbremse_url: string;
+        };
+        /**
+         * @description * `pending_verify` - Wartet auf Verifier
+         *     * `hold` - Manuelle Sichtung erforderlich
+         *     * `published` - Live
+         *     * `unpublished` - Zurückgezogen
+         * @enum {string}
+         */
+        NewsPostInternalStatusEnum: "pending_verify" | "hold" | "published" | "unpublished";
         Notification: {
             readonly id: number;
             readonly channel: components["schemas"]["ChannelEnum"];
@@ -1310,6 +1615,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["Frage"][];
         };
+        PaginatedKorrekturInternalList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["KorrekturInternal"][];
+        };
         PaginatedKursList: {
             /** @example 123 */
             count: number;
@@ -1370,6 +1690,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["Mitarbeiter"][];
         };
+        PaginatedNewsPostInternalList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["NewsPostInternal"][];
+        };
         PaginatedNotificationList: {
             /** @example 123 */
             count: number;
@@ -1384,6 +1719,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["Notification"][];
+        };
+        PaginatedRedaktionRunList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["RedaktionRun"][];
         };
         PaginatedSchulungsWelleList: {
             /** @example 123 */
@@ -1423,6 +1773,26 @@ export interface components {
             ist_korrekt?: boolean;
             reihenfolge?: number;
         };
+        /**
+         * @description Erweitert dj_rest_auth's Default um unser Custom-Field `tenant_role`.
+         *
+         *     Ohne diesen Subclass liefert `/api/auth/user/` nur pk/email/first_name/
+         *     last_name. Das Frontend braucht aber `tenant_role` für die Rollen-
+         *     abhängige UI (z. B. HinSchG: nur Compliance-Beauftragte:r darf
+         *     Klassifizierung ändern oder Meldungen abschließen).
+         */
+        PatchedCustomUserDetails: {
+            /** ID */
+            readonly pk?: number;
+            /** Format: email */
+            readonly email?: string;
+            /** Vorname */
+            first_name?: string;
+            /** Nachname */
+            last_name?: string;
+            readonly tenant_role?: components["schemas"]["TenantRoleEnum"];
+            readonly mfa_enabled?: boolean;
+        };
         PatchedFrage: {
             readonly id?: number;
             kurs?: number;
@@ -1432,6 +1802,14 @@ export interface components {
             reihenfolge?: number;
             readonly optionen?: components["schemas"]["AntwortOption"][];
         };
+        PatchedKorrekturInternal: {
+            readonly id?: number;
+            post?: number;
+            /** Format: date-time */
+            readonly korrigiert_am?: string;
+            was_geaendert?: string;
+            grund?: string;
+        };
         PatchedKurs: {
             readonly id?: number;
             titel?: string;
@@ -1440,11 +1818,30 @@ export interface components {
             gueltigkeit_monate?: number;
             /** @description Bestehensschwelle (Prozent richtig) */
             min_richtig_prozent?: number;
+            /** @description Anzahl Fragen pro Quiz-Durchlauf, zufällig aus fragen-Pool gezogen und pro SchulungsTask persistiert. Muss <= fragen.count() sein. */
+            fragen_pro_quiz?: number;
+            /**
+             * @description Bestimmt, was der Mitarbeiter im Player macht.
+             *
+             *     * `quiz` - Quiz
+             *     * `kenntnisnahme` - Kenntnisnahme
+             *     * `kenntnisnahme_lesezeit` - Kenntnisnahme + Min-Lesezeit
+             */
+            quiz_modus?: components["schemas"]["QuizModusEnum"];
+            /** @description Sekunden pro Modul, ab denen 'Kenntnisnahme' aktivierbar ist. Nur ausgewertet bei quiz_modus=kenntnisnahme_lesezeit. */
+            mindest_lesezeit_s?: number;
+            /** @description Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert. */
+            zertifikat_aktiv?: boolean;
+            /** @description Schema-Name des Tenants, der den Kurs erstellt hat. Leer = Vaeren-Standardkatalog (read-only für Tenants). */
+            readonly eigentuemer_tenant?: string;
+            readonly ist_standardkatalog?: boolean;
+            readonly erstellt_von?: number | null;
+            readonly erstellt_von_email?: string;
             aktiv?: boolean;
             /** Format: date-time */
             readonly erstellt_am?: string;
             readonly module?: components["schemas"]["KursModul"][];
-            readonly fragen_anzahl?: number;
+            readonly fragen_pool_groesse?: number;
         };
         PatchedKursModul: {
             readonly id?: number;
@@ -1482,6 +1879,35 @@ export interface components {
             /** Format: date-time */
             readonly updated_at?: string;
         };
+        PatchedNewsPostInternal: {
+            readonly id?: number;
+            slug?: string;
+            titel?: string;
+            lead?: string;
+            body_html?: string;
+            kategorie?: components["schemas"]["KategorieEnum"];
+            geo?: components["schemas"]["GeoEnum"];
+            type?: components["schemas"]["TypeEnum"];
+            relevanz?: components["schemas"]["RelevanzEnum"];
+            /** @description Liste [{titel: str, url: str}] */
+            source_links?: unknown;
+            status?: components["schemas"]["NewsPostInternalStatusEnum"];
+            /** Format: double */
+            readonly verifier_confidence?: number | null;
+            readonly verifier_issues?: unknown;
+            pinned?: boolean;
+            /** Format: date-time */
+            published_at?: string | null;
+            /** Format: date-time */
+            expires_at?: string | null;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+            readonly candidate_titel?: string | null;
+            readonly candidate_quelle?: string | null;
+            readonly notbremse_url?: string;
+        };
         PatchedSchulungsWelle: {
             readonly id?: number;
             kurs?: number;
@@ -1507,17 +1933,6 @@ export interface components {
             readonly plan?: string;
             readonly pilot?: boolean;
             mfa_required?: boolean;
-        };
-        /** @description User model w/o password */
-        PatchedUserDetails: {
-            /** ID */
-            readonly pk?: number;
-            /** Format: email */
-            readonly email?: string;
-            /** Vorname */
-            first_name?: string;
-            /** Nachname */
-            last_name?: string;
         };
         /**
          * @description * `bestaetigung_7d` - Eingangsbestätigung (7 Tage HinSchG §17 Abs. 2)
@@ -1547,6 +1962,36 @@ export interface components {
         PublicSchulungStartResponse: {
             status: string;
         };
+        /**
+         * @description * `quiz` - Quiz
+         *     * `kenntnisnahme` - Kenntnisnahme
+         *     * `kenntnisnahme_lesezeit` - Kenntnisnahme + Min-Lesezeit
+         * @enum {string}
+         */
+        QuizModusEnum: "quiz" | "kenntnisnahme" | "kenntnisnahme_lesezeit";
+        RedaktionRun: {
+            readonly id: number;
+            /** Format: date-time */
+            readonly started_at: string;
+            /** Format: date-time */
+            finished_at?: string | null;
+            crawler_items_in?: number;
+            curator_items_out?: number;
+            writer_runs?: number;
+            verifier_runs?: number;
+            published?: number;
+            held?: number;
+            /** Format: decimal */
+            cost_eur?: string;
+            notes?: string;
+        };
+        /**
+         * @description * `hoch` - Hoch
+         *     * `mittel` - Mittel
+         *     * `niedrig` - Niedrig
+         * @enum {string}
+         */
+        RelevanzEnum: "hoch" | "mittel" | "niedrig";
         RestAuthDetail: {
             readonly detail: string;
         };
@@ -1613,6 +2058,15 @@ export interface components {
          * @enum {string}
          */
         StatusB1fEnum: "offen" | "in_bearbeitung" | "erledigt" | "ueberfaellig";
+        /**
+         * @description * `geschaeftsfuehrer` - Geschäftsführer:in
+         *     * `qm_leiter` - QM-Leiter:in
+         *     * `it_leiter` - IT-Leiter:in
+         *     * `compliance_beauftragter` - Compliance-Beauftragte:r
+         *     * `mitarbeiter_view_only` - Mitarbeitende (nur Ansicht)
+         * @enum {string}
+         */
+        TenantRoleEnum: "geschaeftsfuehrer" | "qm_leiter" | "it_leiter" | "compliance_beauftragter" | "mitarbeiter_view_only";
         TenantSettings: {
             readonly schema_name: string;
             firma_name: string;
@@ -1628,19 +2082,17 @@ export interface components {
         TotpVerifyRequest: {
             code: string;
         };
+        /**
+         * @description * `gesetzgebung` - Gesetzgebung
+         *     * `urteil` - Urteil
+         *     * `leitlinie` - Leitlinie/FAQ
+         *     * `konsultation` - Konsultation
+         *     * `frist` - Frist
+         * @enum {string}
+         */
+        TypeEnum: "gesetzgebung" | "urteil" | "leitlinie" | "konsultation" | "frist";
         UnreadCountResponse: {
             unread: number;
-        };
-        /** @description User model w/o password */
-        UserDetails: {
-            /** ID */
-            readonly pk: number;
-            /** Format: email */
-            readonly email: string;
-            /** Vorname */
-            first_name?: string;
-            /** Nachname */
-            last_name?: string;
         };
     };
     responses: never;
@@ -2101,7 +2553,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UserDetails"];
+                    "application/json": components["schemas"]["CustomUserDetails"];
                 };
             };
         };
@@ -2115,9 +2567,9 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": components["schemas"]["UserDetails"];
-                "application/x-www-form-urlencoded": components["schemas"]["UserDetails"];
-                "multipart/form-data": components["schemas"]["UserDetails"];
+                "application/json": components["schemas"]["CustomUserDetails"];
+                "application/x-www-form-urlencoded": components["schemas"]["CustomUserDetails"];
+                "multipart/form-data": components["schemas"]["CustomUserDetails"];
             };
         };
         responses: {
@@ -2126,7 +2578,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UserDetails"];
+                    "application/json": components["schemas"]["CustomUserDetails"];
                 };
             };
         };
@@ -2140,9 +2592,9 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": components["schemas"]["PatchedUserDetails"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedUserDetails"];
-                "multipart/form-data": components["schemas"]["PatchedUserDetails"];
+                "application/json": components["schemas"]["PatchedCustomUserDetails"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedCustomUserDetails"];
+                "multipart/form-data": components["schemas"]["PatchedCustomUserDetails"];
             };
         };
         responses: {
@@ -2151,7 +2603,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UserDetails"];
+                    "application/json": components["schemas"]["CustomUserDetails"];
                 };
             };
         };
@@ -2802,7 +3254,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Kurs"];
+                    "application/json": components["schemas"]["KursDetail"];
                 };
             };
         };
@@ -3354,6 +3806,470 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    redaktion_korrekturen_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedKorrekturInternalList"];
+                };
+            };
+        };
+    };
+    redaktion_korrekturen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KorrekturInternal"];
+                "application/x-www-form-urlencoded": components["schemas"]["KorrekturInternal"];
+                "multipart/form-data": components["schemas"]["KorrekturInternal"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KorrekturInternal"];
+                };
+            };
+        };
+    };
+    redaktion_korrekturen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Korrektur identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KorrekturInternal"];
+                };
+            };
+        };
+    };
+    redaktion_korrekturen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Korrektur identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KorrekturInternal"];
+                "application/x-www-form-urlencoded": components["schemas"]["KorrekturInternal"];
+                "multipart/form-data": components["schemas"]["KorrekturInternal"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KorrekturInternal"];
+                };
+            };
+        };
+    };
+    redaktion_korrekturen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Korrektur identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    redaktion_korrekturen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Korrektur identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedKorrekturInternal"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedKorrekturInternal"];
+                "multipart/form-data": components["schemas"]["PatchedKorrekturInternal"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KorrekturInternal"];
+                };
+            };
+        };
+    };
+    redaktion_newsposts_list: {
+        parameters: {
+            query?: {
+                /**
+                 * @description * `EU` - EU
+                 *     * `DE` - DE
+                 *     * `EU_DE` - EU→DE-Umsetzung
+                 */
+                geo?: "DE" | "EU" | "EU_DE";
+                /**
+                 * @description * `ai_act` - AI Act
+                 *     * `datenschutz` - Datenschutz
+                 *     * `hinschg` - HinSchG
+                 *     * `lieferkette` - Lieferkette
+                 *     * `arbeitsrecht` - Arbeitsrecht
+                 *     * `geldwaesche_finanzen` - Geldwäsche/Finanzen
+                 *     * `it_sicherheit` - IT-Sicherheit
+                 *     * `esg_nachhaltigkeit` - ESG/Nachhaltigkeit
+                 */
+                kategorie?: "ai_act" | "arbeitsrecht" | "datenschutz" | "esg_nachhaltigkeit" | "geldwaesche_finanzen" | "hinschg" | "it_sicherheit" | "lieferkette";
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                pinned?: boolean;
+                /**
+                 * @description * `hoch` - Hoch
+                 *     * `mittel` - Mittel
+                 *     * `niedrig` - Niedrig
+                 */
+                relevanz?: "hoch" | "mittel" | "niedrig";
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `pending_verify` - Wartet auf Verifier
+                 *     * `hold` - Manuelle Sichtung erforderlich
+                 *     * `published` - Live
+                 *     * `unpublished` - Zurückgezogen
+                 */
+                status?: "hold" | "pending_verify" | "published" | "unpublished";
+                /**
+                 * @description * `gesetzgebung` - Gesetzgebung
+                 *     * `urteil` - Urteil
+                 *     * `leitlinie` - Leitlinie/FAQ
+                 *     * `konsultation` - Konsultation
+                 *     * `frist` - Frist
+                 */
+                type?: "frist" | "gesetzgebung" | "konsultation" | "leitlinie" | "urteil";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedNewsPostInternalList"];
+                };
+            };
+        };
+    };
+    redaktion_newsposts_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NewsPostInternal"];
+                "application/x-www-form-urlencoded": components["schemas"]["NewsPostInternal"];
+                "multipart/form-data": components["schemas"]["NewsPostInternal"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NewsPostInternal"];
+                };
+            };
+        };
+    };
+    redaktion_newsposts_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NewsPostInternal"];
+                };
+            };
+        };
+    };
+    redaktion_newsposts_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NewsPostInternal"];
+                "application/x-www-form-urlencoded": components["schemas"]["NewsPostInternal"];
+                "multipart/form-data": components["schemas"]["NewsPostInternal"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NewsPostInternal"];
+                };
+            };
+        };
+    };
+    redaktion_newsposts_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    redaktion_newsposts_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedNewsPostInternal"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedNewsPostInternal"];
+                "multipart/form-data": components["schemas"]["PatchedNewsPostInternal"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NewsPostInternal"];
+                };
+            };
+        };
+    };
+    redaktion_newsposts_publish_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NewsPostInternal"];
+                "application/x-www-form-urlencoded": components["schemas"]["NewsPostInternal"];
+                "multipart/form-data": components["schemas"]["NewsPostInternal"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NewsPostInternal"];
+                };
+            };
+        };
+    };
+    redaktion_newsposts_toggle_pin_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NewsPostInternal"];
+                "application/x-www-form-urlencoded": components["schemas"]["NewsPostInternal"];
+                "multipart/form-data": components["schemas"]["NewsPostInternal"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NewsPostInternal"];
+                };
+            };
+        };
+    };
+    redaktion_newsposts_unpublish_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NewsPostInternal"];
+                "application/x-www-form-urlencoded": components["schemas"]["NewsPostInternal"];
+                "multipart/form-data": components["schemas"]["NewsPostInternal"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NewsPostInternal"];
+                };
+            };
+        };
+    };
+    redaktion_runs_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedRedaktionRunList"];
+                };
+            };
+        };
+    };
+    redaktion_runs_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Redaktions-Lauf identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RedaktionRun"];
+                };
             };
         };
     };

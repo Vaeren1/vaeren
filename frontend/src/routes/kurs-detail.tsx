@@ -16,6 +16,12 @@ import { useKurs } from "@/lib/api/schulungen";
 import { Check, X } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 
+const MODUS_LABEL: Record<string, string> = {
+  quiz: "Quiz",
+  kenntnisnahme: "Kenntnisnahme",
+  kenntnisnahme_lesezeit: "Kenntnisn. + Zeit",
+};
+
 export function KursDetailPage() {
   const { id } = useParams<{ id: string }>();
   const numericId = id ? Number.parseInt(id, 10) : undefined;
@@ -40,10 +46,26 @@ export function KursDetailPage() {
               <CardDescription className="mt-1">
                 {data.beschreibung}
               </CardDescription>
+              {data.ist_standardkatalog ? (
+                <p className="mt-2 inline-block rounded bg-slate-100 px-2 py-0.5 text-xs">
+                  Vaeren-Standard (read-only)
+                </p>
+              ) : (
+                <p className="mt-2 inline-block rounded bg-emerald-50 px-2 py-0.5 text-xs text-emerald-900">
+                  Eigener Kurs
+                </p>
+              )}
             </div>
-            <Button asChild variant="outline" size="sm">
-              <Link to="/kurse">← Bibliothek</Link>
-            </Button>
+            <div className="flex gap-2">
+              {!data.ist_standardkatalog && (
+                <Button asChild variant="outline" size="sm">
+                  <Link to={`/kurse/${data.id}/bearbeiten`}>Bearbeiten</Link>
+                </Button>
+              )}
+              <Button asChild variant="outline" size="sm">
+                <Link to="/kurse">← Bibliothek</Link>
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
@@ -51,8 +73,24 @@ export function KursDetailPage() {
           <Metric label="Fragen" value={data.fragen.length} />
           <Metric label="Gültigkeit" value={`${data.gueltigkeit_monate} Mo.`} />
           <Metric
-            label="Bestehensschwelle"
-            value={`${data.min_richtig_prozent} %`}
+            label="Modus"
+            value={MODUS_LABEL[data.quiz_modus] ?? data.quiz_modus}
+          />
+          {data.quiz_modus === "quiz" && (
+            <Metric
+              label="Bestehensschwelle"
+              value={`${data.min_richtig_prozent} %`}
+            />
+          )}
+          {data.quiz_modus === "kenntnisnahme_lesezeit" && (
+            <Metric
+              label="Min. Lesezeit"
+              value={`${data.mindest_lesezeit_s} s/Modul`}
+            />
+          )}
+          <Metric
+            label="Zertifikat"
+            value={data.zertifikat_aktiv ? "ja" : "nein"}
           />
         </CardContent>
       </Card>

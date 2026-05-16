@@ -816,7 +816,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/UserDetails"
+                                    "$ref": "#/components/schemas/CustomUserDetails"
                                 }
                             }
                         },
@@ -834,17 +834,17 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/UserDetails"
+                                "$ref": "#/components/schemas/CustomUserDetails"
                             }
                         },
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/UserDetails"
+                                "$ref": "#/components/schemas/CustomUserDetails"
                             }
                         },
                         "multipart/form-data": {
                             "schema": {
-                                "$ref": "#/components/schemas/UserDetails"
+                                "$ref": "#/components/schemas/CustomUserDetails"
                             }
                         }
                     }
@@ -859,7 +859,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/UserDetails"
+                                    "$ref": "#/components/schemas/CustomUserDetails"
                                 }
                             }
                         },
@@ -877,17 +877,17 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/PatchedUserDetails"
+                                "$ref": "#/components/schemas/PatchedCustomUserDetails"
                             }
                         },
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/PatchedUserDetails"
+                                "$ref": "#/components/schemas/PatchedCustomUserDetails"
                             }
                         },
                         "multipart/form-data": {
                             "schema": {
-                                "$ref": "#/components/schemas/PatchedUserDetails"
+                                "$ref": "#/components/schemas/PatchedCustomUserDetails"
                             }
                         }
                     }
@@ -902,7 +902,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/UserDetails"
+                                    "$ref": "#/components/schemas/CustomUserDetails"
                                 }
                             }
                         },
@@ -2060,7 +2060,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Kurs"
+                                    "$ref": "#/components/schemas/KursDetail"
                                 }
                             }
                         },
@@ -3034,6 +3034,888 @@
                 }
             }
         },
+        "/api/redaktion/korrekturen/": {
+            "get": {
+                "operationId": "redaktion_korrekturen_list",
+                "description": "CRUD für Korrekturen. Nur Superuser/Staff.",
+                "parameters": [
+                    {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedKorrekturInternalList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "redaktion_korrekturen_create",
+                "description": "CRUD für Korrekturen. Nur Superuser/Staff.",
+                "tags": [
+                    "redaktion"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KorrekturInternal"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KorrekturInternal"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KorrekturInternal"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KorrekturInternal"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/redaktion/korrekturen/{id}/": {
+            "get": {
+                "operationId": "redaktion_korrekturen_retrieve",
+                "description": "CRUD für Korrekturen. Nur Superuser/Staff.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Korrektur identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KorrekturInternal"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "redaktion_korrekturen_update",
+                "description": "CRUD für Korrekturen. Nur Superuser/Staff.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Korrektur identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KorrekturInternal"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KorrekturInternal"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KorrekturInternal"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KorrekturInternal"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "redaktion_korrekturen_partial_update",
+                "description": "CRUD für Korrekturen. Nur Superuser/Staff.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Korrektur identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedKorrekturInternal"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedKorrekturInternal"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedKorrekturInternal"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KorrekturInternal"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "redaktion_korrekturen_destroy",
+                "description": "CRUD für Korrekturen. Nur Superuser/Staff.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Korrektur identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/redaktion/newsposts/": {
+            "get": {
+                "operationId": "redaktion_newsposts_list",
+                "description": "CRUD für NewsPosts. Nur Superuser/Staff.",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "geo",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "DE",
+                                "EU",
+                                "EU_DE"
+                            ]
+                        },
+                        "description": "* `EU` - EU\n* `DE` - DE\n* `EU_DE` - EU→DE-Umsetzung"
+                    },
+                    {
+                        "in": "query",
+                        "name": "kategorie",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ai_act",
+                                "arbeitsrecht",
+                                "datenschutz",
+                                "esg_nachhaltigkeit",
+                                "geldwaesche_finanzen",
+                                "hinschg",
+                                "it_sicherheit",
+                                "lieferkette"
+                            ]
+                        },
+                        "description": "* `ai_act` - AI Act\n* `datenschutz` - Datenschutz\n* `hinschg` - HinSchG\n* `lieferkette` - Lieferkette\n* `arbeitsrecht` - Arbeitsrecht\n* `geldwaesche_finanzen` - Geldwäsche/Finanzen\n* `it_sicherheit` - IT-Sicherheit\n* `esg_nachhaltigkeit` - ESG/Nachhaltigkeit"
+                    },
+                    {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "pinned",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "relevanz",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "hoch",
+                                "mittel",
+                                "niedrig"
+                            ]
+                        },
+                        "description": "* `hoch` - Hoch\n* `mittel` - Mittel\n* `niedrig` - Niedrig"
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "status",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "hold",
+                                "pending_verify",
+                                "published",
+                                "unpublished"
+                            ]
+                        },
+                        "description": "* `pending_verify` - Wartet auf Verifier\n* `hold` - Manuelle Sichtung erforderlich\n* `published` - Live\n* `unpublished` - Zurückgezogen"
+                    },
+                    {
+                        "in": "query",
+                        "name": "type",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "frist",
+                                "gesetzgebung",
+                                "konsultation",
+                                "leitlinie",
+                                "urteil"
+                            ]
+                        },
+                        "description": "* `gesetzgebung` - Gesetzgebung\n* `urteil` - Urteil\n* `leitlinie` - Leitlinie/FAQ\n* `konsultation` - Konsultation\n* `frist` - Frist"
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedNewsPostInternalList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "redaktion_newsposts_create",
+                "description": "CRUD für NewsPosts. Nur Superuser/Staff.",
+                "tags": [
+                    "redaktion"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NewsPostInternal"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/redaktion/newsposts/{slug}/": {
+            "get": {
+                "operationId": "redaktion_newsposts_retrieve",
+                "description": "CRUD für NewsPosts. Nur Superuser/Staff.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NewsPostInternal"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "redaktion_newsposts_update",
+                "description": "CRUD für NewsPosts. Nur Superuser/Staff.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NewsPostInternal"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "redaktion_newsposts_partial_update",
+                "description": "CRUD für NewsPosts. Nur Superuser/Staff.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedNewsPostInternal"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedNewsPostInternal"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedNewsPostInternal"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NewsPostInternal"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "redaktion_newsposts_destroy",
+                "description": "CRUD für NewsPosts. Nur Superuser/Staff.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/redaktion/newsposts/{slug}/publish/": {
+            "post": {
+                "operationId": "redaktion_newsposts_publish_create",
+                "description": "Publiziert den Beitrag (status=published, expires_at gesetzt).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NewsPostInternal"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/redaktion/newsposts/{slug}/toggle_pin/": {
+            "post": {
+                "operationId": "redaktion_newsposts_toggle_pin_create",
+                "description": "Toggle pinned-Flag.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NewsPostInternal"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/redaktion/newsposts/{slug}/unpublish/": {
+            "post": {
+                "operationId": "redaktion_newsposts_unpublish_create",
+                "description": "Zieht den Beitrag zurück (status=unpublished).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewsPostInternal"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NewsPostInternal"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/redaktion/runs/": {
+            "get": {
+                "operationId": "redaktion_runs_list",
+                "description": "Telemetrie der letzten Pipeline-Läufe.",
+                "parameters": [
+                    {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedRedaktionRunList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/redaktion/runs/{id}/": {
+            "get": {
+                "operationId": "redaktion_runs_retrieve",
+                "description": "Telemetrie der letzten Pipeline-Läufe.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Redaktions-Lauf identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "redaktion"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RedaktionRun"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/api/schulungswellen/": {
             "get": {
                 "operationId": "schulungswellen_list",
@@ -3782,6 +4664,50 @@
                     "csrf_token"
                 ]
             },
+            "CustomUserDetails": {
+                "type": "object",
+                "description": "Erweitert dj_rest_auth's Default um unser Custom-Field `tenant_role`.\n\nOhne diesen Subclass liefert `/api/auth/user/` nur pk/email/first_name/\nlast_name. Das Frontend braucht aber `tenant_role` für die Rollen-\nabhängige UI (z. B. HinSchG: nur Compliance-Beauftragte:r darf\nKlassifizierung ändern oder Meldungen abschließen).",
+                "properties": {
+                    "pk": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "title": "ID"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "readOnly": true
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "title": "Vorname",
+                        "maxLength": 150
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "title": "Nachname",
+                        "maxLength": 150
+                    },
+                    "tenant_role": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/TenantRoleEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "mfa_enabled": {
+                        "type": "boolean",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "email",
+                    "mfa_enabled",
+                    "pk",
+                    "tenant_role"
+                ]
+            },
             "DashboardResponse": {
                 "type": "object",
                 "properties": {
@@ -3847,6 +4773,15 @@
                     "text"
                 ]
             },
+            "GeoEnum": {
+                "enum": [
+                    "EU",
+                    "DE",
+                    "EU_DE"
+                ],
+                "type": "string",
+                "description": "* `EU` - EU\n* `DE` - DE\n* `EU_DE` - EU→DE-Umsetzung"
+            },
             "HealthResponse": {
                 "type": "object",
                 "properties": {
@@ -3872,6 +4807,50 @@
                 },
                 "required": [
                     "nachricht"
+                ]
+            },
+            "KategorieEnum": {
+                "enum": [
+                    "ai_act",
+                    "datenschutz",
+                    "hinschg",
+                    "lieferkette",
+                    "arbeitsrecht",
+                    "geldwaesche_finanzen",
+                    "it_sicherheit",
+                    "esg_nachhaltigkeit"
+                ],
+                "type": "string",
+                "description": "* `ai_act` - AI Act\n* `datenschutz` - Datenschutz\n* `hinschg` - HinSchG\n* `lieferkette` - Lieferkette\n* `arbeitsrecht` - Arbeitsrecht\n* `geldwaesche_finanzen` - Geldwäsche/Finanzen\n* `it_sicherheit` - IT-Sicherheit\n* `esg_nachhaltigkeit` - ESG/Nachhaltigkeit"
+            },
+            "KorrekturInternal": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "post": {
+                        "type": "integer"
+                    },
+                    "korrigiert_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "was_geaendert": {
+                        "type": "string"
+                    },
+                    "grund": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "grund",
+                    "id",
+                    "korrigiert_am",
+                    "post",
+                    "was_geaendert"
                 ]
             },
             "Kurs": {
@@ -3900,6 +4879,48 @@
                         "minimum": 0,
                         "description": "Bestehensschwelle (Prozent richtig)"
                     },
+                    "fragen_pro_quiz": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0,
+                        "description": "Anzahl Fragen pro Quiz-Durchlauf, zufällig aus fragen-Pool gezogen und pro SchulungsTask persistiert. Muss <= fragen.count() sein."
+                    },
+                    "quiz_modus": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/QuizModusEnum"
+                            }
+                        ],
+                        "description": "Bestimmt, was der Mitarbeiter im Player macht.\n\n* `quiz` - Quiz\n* `kenntnisnahme` - Kenntnisnahme\n* `kenntnisnahme_lesezeit` - Kenntnisnahme + Min-Lesezeit"
+                    },
+                    "mindest_lesezeit_s": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": 0,
+                        "description": "Sekunden pro Modul, ab denen 'Kenntnisnahme' aktivierbar ist. Nur ausgewertet bei quiz_modus=kenntnisnahme_lesezeit."
+                    },
+                    "zertifikat_aktiv": {
+                        "type": "boolean",
+                        "description": "Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert."
+                    },
+                    "eigentuemer_tenant": {
+                        "type": "string",
+                        "readOnly": true,
+                        "description": "Schema-Name des Tenants, der den Kurs erstellt hat. Leer = Vaeren-Standardkatalog (read-only für Tenants)."
+                    },
+                    "ist_standardkatalog": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "erstellt_von": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "erstellt_von_email": {
+                        "type": "string",
+                        "readOnly": true
+                    },
                     "aktiv": {
                         "type": "boolean"
                     },
@@ -3915,15 +4936,128 @@
                         },
                         "readOnly": true
                     },
-                    "fragen_anzahl": {
+                    "fragen_pool_groesse": {
                         "type": "integer",
                         "readOnly": true
                     }
                 },
                 "required": [
+                    "eigentuemer_tenant",
                     "erstellt_am",
-                    "fragen_anzahl",
+                    "erstellt_von",
+                    "erstellt_von_email",
+                    "fragen_pool_groesse",
                     "id",
+                    "ist_standardkatalog",
+                    "module",
+                    "titel"
+                ]
+            },
+            "KursDetail": {
+                "type": "object",
+                "description": "Wie KursSerializer, plus nested fragen + optionen INKLUSIVE ist_korrekt.\n\nNur für interne Bearbeiter-Sicht (Kurs-Bibliothek im Cockpit) — die\nPublic-Variante für Mitarbeiter beim Quiz nutzt FragePublicSerializer\nohne `ist_korrekt`.",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "titel": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "beschreibung": {
+                        "type": "string"
+                    },
+                    "gueltigkeit_monate": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0,
+                        "description": "Wie lange ist das Zertifikat gültig?"
+                    },
+                    "min_richtig_prozent": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0,
+                        "description": "Bestehensschwelle (Prozent richtig)"
+                    },
+                    "fragen_pro_quiz": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0,
+                        "description": "Anzahl Fragen pro Quiz-Durchlauf, zufällig aus fragen-Pool gezogen und pro SchulungsTask persistiert. Muss <= fragen.count() sein."
+                    },
+                    "quiz_modus": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/QuizModusEnum"
+                            }
+                        ],
+                        "description": "Bestimmt, was der Mitarbeiter im Player macht.\n\n* `quiz` - Quiz\n* `kenntnisnahme` - Kenntnisnahme\n* `kenntnisnahme_lesezeit` - Kenntnisnahme + Min-Lesezeit"
+                    },
+                    "mindest_lesezeit_s": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": 0,
+                        "description": "Sekunden pro Modul, ab denen 'Kenntnisnahme' aktivierbar ist. Nur ausgewertet bei quiz_modus=kenntnisnahme_lesezeit."
+                    },
+                    "zertifikat_aktiv": {
+                        "type": "boolean",
+                        "description": "Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert."
+                    },
+                    "eigentuemer_tenant": {
+                        "type": "string",
+                        "readOnly": true,
+                        "description": "Schema-Name des Tenants, der den Kurs erstellt hat. Leer = Vaeren-Standardkatalog (read-only für Tenants)."
+                    },
+                    "ist_standardkatalog": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "erstellt_von": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "erstellt_von_email": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "aktiv": {
+                        "type": "boolean"
+                    },
+                    "erstellt_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "module": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/KursModul"
+                        },
+                        "readOnly": true
+                    },
+                    "fragen_pool_groesse": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "fragen": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Frage"
+                        },
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "eigentuemer_tenant",
+                    "erstellt_am",
+                    "erstellt_von",
+                    "erstellt_von_email",
+                    "fragen",
+                    "fragen_pool_groesse",
+                    "id",
+                    "ist_standardkatalog",
                     "module",
                     "titel"
                 ]
@@ -4405,6 +5539,122 @@
                     "vorname"
                 ]
             },
+            "NewsPostInternal": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "slug": {
+                        "type": "string",
+                        "maxLength": 200,
+                        "pattern": "^[-a-zA-Z0-9_]+$"
+                    },
+                    "titel": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "lead": {
+                        "type": "string"
+                    },
+                    "body_html": {
+                        "type": "string"
+                    },
+                    "kategorie": {
+                        "$ref": "#/components/schemas/KategorieEnum"
+                    },
+                    "geo": {
+                        "$ref": "#/components/schemas/GeoEnum"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/TypeEnum"
+                    },
+                    "relevanz": {
+                        "$ref": "#/components/schemas/RelevanzEnum"
+                    },
+                    "source_links": {
+                        "description": "Liste [{titel: str, url: str}]"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/NewsPostInternalStatusEnum"
+                    },
+                    "verifier_confidence": {
+                        "type": "number",
+                        "format": "double",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "verifier_issues": {
+                        "readOnly": true
+                    },
+                    "pinned": {
+                        "type": "boolean"
+                    },
+                    "published_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "candidate_titel": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "candidate_quelle": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "notbremse_url": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "body_html",
+                    "candidate_quelle",
+                    "candidate_titel",
+                    "created_at",
+                    "geo",
+                    "id",
+                    "kategorie",
+                    "lead",
+                    "notbremse_url",
+                    "relevanz",
+                    "slug",
+                    "titel",
+                    "type",
+                    "updated_at",
+                    "verifier_confidence",
+                    "verifier_issues"
+                ]
+            },
+            "NewsPostInternalStatusEnum": {
+                "enum": [
+                    "pending_verify",
+                    "hold",
+                    "published",
+                    "unpublished"
+                ],
+                "type": "string",
+                "description": "* `pending_verify` - Wartet auf Verifier\n* `hold` - Manuelle Sichtung erforderlich\n* `published` - Live\n* `unpublished` - Zurückgezogen"
+            },
             "Notification": {
                 "type": "object",
                 "properties": {
@@ -4606,6 +5856,37 @@
                     }
                 }
             },
+            "PaginatedKorrekturInternalList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/KorrekturInternal"
+                        }
+                    }
+                }
+            },
             "PaginatedKursList": {
                 "type": "object",
                 "required": [
@@ -4730,6 +6011,37 @@
                     }
                 }
             },
+            "PaginatedNewsPostInternalList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/NewsPostInternal"
+                        }
+                    }
+                }
+            },
             "PaginatedNotificationList": {
                 "type": "object",
                 "required": [
@@ -4757,6 +6069,37 @@
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/Notification"
+                        }
+                    }
+                }
+            },
+            "PaginatedRedaktionRunList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RedaktionRun"
                         }
                     }
                 }
@@ -4872,6 +6215,44 @@
                     }
                 }
             },
+            "PatchedCustomUserDetails": {
+                "type": "object",
+                "description": "Erweitert dj_rest_auth's Default um unser Custom-Field `tenant_role`.\n\nOhne diesen Subclass liefert `/api/auth/user/` nur pk/email/first_name/\nlast_name. Das Frontend braucht aber `tenant_role` für die Rollen-\nabhängige UI (z. B. HinSchG: nur Compliance-Beauftragte:r darf\nKlassifizierung ändern oder Meldungen abschließen).",
+                "properties": {
+                    "pk": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "title": "ID"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "readOnly": true
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "title": "Vorname",
+                        "maxLength": 150
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "title": "Nachname",
+                        "maxLength": 150
+                    },
+                    "tenant_role": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/TenantRoleEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "mfa_enabled": {
+                        "type": "boolean",
+                        "readOnly": true
+                    }
+                }
+            },
             "PatchedFrage": {
                 "type": "object",
                 "properties": {
@@ -4903,6 +6284,29 @@
                     }
                 }
             },
+            "PatchedKorrekturInternal": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "post": {
+                        "type": "integer"
+                    },
+                    "korrigiert_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "was_geaendert": {
+                        "type": "string"
+                    },
+                    "grund": {
+                        "type": "string"
+                    }
+                }
+            },
             "PatchedKurs": {
                 "type": "object",
                 "properties": {
@@ -4929,6 +6333,48 @@
                         "minimum": 0,
                         "description": "Bestehensschwelle (Prozent richtig)"
                     },
+                    "fragen_pro_quiz": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0,
+                        "description": "Anzahl Fragen pro Quiz-Durchlauf, zufällig aus fragen-Pool gezogen und pro SchulungsTask persistiert. Muss <= fragen.count() sein."
+                    },
+                    "quiz_modus": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/QuizModusEnum"
+                            }
+                        ],
+                        "description": "Bestimmt, was der Mitarbeiter im Player macht.\n\n* `quiz` - Quiz\n* `kenntnisnahme` - Kenntnisnahme\n* `kenntnisnahme_lesezeit` - Kenntnisnahme + Min-Lesezeit"
+                    },
+                    "mindest_lesezeit_s": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": 0,
+                        "description": "Sekunden pro Modul, ab denen 'Kenntnisnahme' aktivierbar ist. Nur ausgewertet bei quiz_modus=kenntnisnahme_lesezeit."
+                    },
+                    "zertifikat_aktiv": {
+                        "type": "boolean",
+                        "description": "Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert."
+                    },
+                    "eigentuemer_tenant": {
+                        "type": "string",
+                        "readOnly": true,
+                        "description": "Schema-Name des Tenants, der den Kurs erstellt hat. Leer = Vaeren-Standardkatalog (read-only für Tenants)."
+                    },
+                    "ist_standardkatalog": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "erstellt_von": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "erstellt_von_email": {
+                        "type": "string",
+                        "readOnly": true
+                    },
                     "aktiv": {
                         "type": "boolean"
                     },
@@ -4944,7 +6390,7 @@
                         },
                         "readOnly": true
                     },
-                    "fragen_anzahl": {
+                    "fragen_pool_groesse": {
                         "type": "integer",
                         "readOnly": true
                     }
@@ -5055,6 +6501,94 @@
                     }
                 }
             },
+            "PatchedNewsPostInternal": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "slug": {
+                        "type": "string",
+                        "maxLength": 200,
+                        "pattern": "^[-a-zA-Z0-9_]+$"
+                    },
+                    "titel": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "lead": {
+                        "type": "string"
+                    },
+                    "body_html": {
+                        "type": "string"
+                    },
+                    "kategorie": {
+                        "$ref": "#/components/schemas/KategorieEnum"
+                    },
+                    "geo": {
+                        "$ref": "#/components/schemas/GeoEnum"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/TypeEnum"
+                    },
+                    "relevanz": {
+                        "$ref": "#/components/schemas/RelevanzEnum"
+                    },
+                    "source_links": {
+                        "description": "Liste [{titel: str, url: str}]"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/NewsPostInternalStatusEnum"
+                    },
+                    "verifier_confidence": {
+                        "type": "number",
+                        "format": "double",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "verifier_issues": {
+                        "readOnly": true
+                    },
+                    "pinned": {
+                        "type": "boolean"
+                    },
+                    "published_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "candidate_titel": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "candidate_quelle": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "notbremse_url": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                }
+            },
             "PatchedSchulungsWelle": {
                 "type": "object",
                 "properties": {
@@ -5142,32 +6676,6 @@
                     },
                     "mfa_required": {
                         "type": "boolean"
-                    }
-                }
-            },
-            "PatchedUserDetails": {
-                "type": "object",
-                "description": "User model w/o password",
-                "properties": {
-                    "pk": {
-                        "type": "integer",
-                        "readOnly": true,
-                        "title": "ID"
-                    },
-                    "email": {
-                        "type": "string",
-                        "format": "email",
-                        "readOnly": true
-                    },
-                    "first_name": {
-                        "type": "string",
-                        "title": "Vorname",
-                        "maxLength": 150
-                    },
-                    "last_name": {
-                        "type": "string",
-                        "title": "Nachname",
-                        "maxLength": 150
                     }
                 }
             },
@@ -5259,6 +6767,85 @@
                 "required": [
                     "status"
                 ]
+            },
+            "QuizModusEnum": {
+                "enum": [
+                    "quiz",
+                    "kenntnisnahme",
+                    "kenntnisnahme_lesezeit"
+                ],
+                "type": "string",
+                "description": "* `quiz` - Quiz\n* `kenntnisnahme` - Kenntnisnahme\n* `kenntnisnahme_lesezeit` - Kenntnisnahme + Min-Lesezeit"
+            },
+            "RedaktionRun": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "started_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "finished_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "crawler_items_in": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": -2147483648
+                    },
+                    "curator_items_out": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": -2147483648
+                    },
+                    "writer_runs": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": -2147483648
+                    },
+                    "verifier_runs": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": -2147483648
+                    },
+                    "published": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": -2147483648
+                    },
+                    "held": {
+                        "type": "integer",
+                        "maximum": 2147483647,
+                        "minimum": -2147483648
+                    },
+                    "cost_eur": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,4}(?:\\.\\d{0,4})?$"
+                    },
+                    "notes": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "started_at"
+                ]
+            },
+            "RelevanzEnum": {
+                "enum": [
+                    "hoch",
+                    "mittel",
+                    "niedrig"
+                ],
+                "type": "string",
+                "description": "* `hoch` - Hoch\n* `mittel` - Mittel\n* `niedrig` - Niedrig"
             },
             "RestAuthDetail": {
                 "type": "object",
@@ -5430,6 +7017,17 @@
                 "type": "string",
                 "description": "* `offen` - Offen\n* `in_bearbeitung` - In Bearbeitung\n* `erledigt` - Erledigt\n* `ueberfaellig` - Überfällig"
             },
+            "TenantRoleEnum": {
+                "enum": [
+                    "geschaeftsfuehrer",
+                    "qm_leiter",
+                    "it_leiter",
+                    "compliance_beauftragter",
+                    "mitarbeiter_view_only"
+                ],
+                "type": "string",
+                "description": "* `geschaeftsfuehrer` - Geschäftsführer:in\n* `qm_leiter` - QM-Leiter:in\n* `it_leiter` - IT-Leiter:in\n* `compliance_beauftragter` - Compliance-Beauftragte:r\n* `mitarbeiter_view_only` - Mitarbeitende (nur Ansicht)"
+            },
             "TenantSettings": {
                 "type": "object",
                 "properties": {
@@ -5494,6 +7092,17 @@
                     "code"
                 ]
             },
+            "TypeEnum": {
+                "enum": [
+                    "gesetzgebung",
+                    "urteil",
+                    "leitlinie",
+                    "konsultation",
+                    "frist"
+                ],
+                "type": "string",
+                "description": "* `gesetzgebung` - Gesetzgebung\n* `urteil` - Urteil\n* `leitlinie` - Leitlinie/FAQ\n* `konsultation` - Konsultation\n* `frist` - Frist"
+            },
             "UnreadCountResponse": {
                 "type": "object",
                 "properties": {
@@ -5503,36 +7112,6 @@
                 },
                 "required": [
                     "unread"
-                ]
-            },
-            "UserDetails": {
-                "type": "object",
-                "description": "User model w/o password",
-                "properties": {
-                    "pk": {
-                        "type": "integer",
-                        "readOnly": true,
-                        "title": "ID"
-                    },
-                    "email": {
-                        "type": "string",
-                        "format": "email",
-                        "readOnly": true
-                    },
-                    "first_name": {
-                        "type": "string",
-                        "title": "Vorname",
-                        "maxLength": 150
-                    },
-                    "last_name": {
-                        "type": "string",
-                        "title": "Nachname",
-                        "maxLength": 150
-                    }
-                },
-                "required": [
-                    "email",
-                    "pk"
                 ]
             }
         },

@@ -3,6 +3,8 @@ import { type ApiError, api } from "./client";
 
 // --- Kurs ---------------------------------------------------------------
 
+export type QuizModus = "quiz" | "kenntnisnahme" | "kenntnisnahme_lesezeit";
+
 export interface KursModul {
   id: number;
   kurs: number;
@@ -18,10 +20,29 @@ export interface Kurs {
   gueltigkeit_monate: number;
   min_richtig_prozent: number;
   fragen_pro_quiz: number;
+  quiz_modus: QuizModus;
+  mindest_lesezeit_s: number;
+  zertifikat_aktiv: boolean;
+  eigentuemer_tenant: string;
+  ist_standardkatalog: boolean;
+  erstellt_von: number | null;
+  erstellt_von_email: string | null;
   aktiv: boolean;
   erstellt_am: string;
   module: KursModul[];
   fragen_pool_groesse: number;
+}
+
+export interface KursInput {
+  titel: string;
+  beschreibung: string;
+  gueltigkeit_monate: number;
+  min_richtig_prozent: number;
+  fragen_pro_quiz: number;
+  quiz_modus: QuizModus;
+  mindest_lesezeit_s: number;
+  zertifikat_aktiv: boolean;
+  aktiv: boolean;
 }
 
 export interface AntwortOption {
@@ -52,9 +73,11 @@ export interface KursPage {
   results: Kurs[];
 }
 
+const KURS_KEY = "kurse";
+
 export function useKursList() {
   return useQuery<KursPage, ApiError>({
-    queryKey: ["kurse"],
+    queryKey: [KURS_KEY],
     queryFn: () => api<KursPage>("/api/kurse/"),
   });
 }
@@ -64,6 +87,35 @@ export function useKurs(id: number | undefined) {
     queryKey: ["kurs", id],
     queryFn: () => api<KursDetail>(`/api/kurse/${id}/`),
     enabled: id !== undefined,
+  });
+}
+
+export function useCreateKurs() {
+  const qc = useQueryClient();
+  return useMutation<Kurs, ApiError, KursInput>({
+    mutationFn: (payload) =>
+      api<Kurs>("/api/kurse/", { method: "POST", json: payload }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: [KURS_KEY] }),
+  });
+}
+
+export function useUpdateKurs(id: number) {
+  const qc = useQueryClient();
+  return useMutation<Kurs, ApiError, Partial<KursInput>>({
+    mutationFn: (payload) =>
+      api<Kurs>(`/api/kurse/${id}/`, { method: "PATCH", json: payload }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [KURS_KEY] });
+      qc.invalidateQueries({ queryKey: ["kurs", id] });
+    },
+  });
+}
+
+export function useDeleteKurs() {
+  const qc = useQueryClient();
+  return useMutation<void, ApiError, number>({
+    mutationFn: (id) => api<void>(`/api/kurse/${id}/`, { method: "DELETE" }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: [KURS_KEY] }),
   });
 }
 

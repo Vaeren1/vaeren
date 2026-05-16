@@ -4,6 +4,7 @@ import { AuditLogPage } from "@/routes/audit-log";
 import { DashboardPage } from "@/routes/dashboard";
 import { DemoPage } from "@/routes/demo";
 import { KursDetailPage } from "@/routes/kurs-detail";
+import { KursFormPage } from "@/routes/kurs-form";
 import { KurseListPage } from "@/routes/kurse";
 import { LoginPage } from "@/routes/login";
 import { MeldungDetailPage } from "@/routes/meldung-detail";
@@ -47,7 +48,9 @@ export const router = createBrowserRouter([
       { path: "/schulungen/neu", element: <SchulungenWizardPage /> },
       { path: "/schulungen/:id", element: <WelleDetailPage /> },
       { path: "/kurse", element: <KurseListPage /> },
+      { path: "/kurse/neu", element: <KursFormPage /> },
       { path: "/kurse/:id", element: <KursDetailPage /> },
+      { path: "/kurse/:id/bearbeiten", element: <KursFormPage /> },
       { path: "/meldungen", element: <MeldungenListPage /> },
       { path: "/meldungen/:id", element: <MeldungDetailPage /> },
       { path: "/audit", element: <AuditLogPage /> },
