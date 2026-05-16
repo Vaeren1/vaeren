@@ -22,7 +22,7 @@ import {
   useMeldung,
   usePatchMeldung,
 } from "@/lib/api/hinschg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const STATUS_OPTIONS: Array<[MeldungStatusValue, string]> = [
@@ -47,6 +47,23 @@ export function MeldungDetailPage() {
 
   const [aktion, setAktion] = useState("klassifizierung");
   const [notiz, setNotiz] = useState("");
+
+  // Lokaler State für die Klassifizierungs-Felder. Hintergrund: der vorherige
+  // Code hatte ein controlled `<Input value={data.kategorie}>` mit einem
+  // No-Op-onChange — React rendert dann Tastatureingaben nicht. Lokaler
+  // State plus useEffect-Hydrierung löst das.
+  const [kategorie, setKategorie] = useState("");
+  const [schweregrad, setSchweregrad] = useState("");
+  const [statusValue, setStatusValue] =
+    useState<MeldungStatusValue>("eingegangen");
+
+  useEffect(() => {
+    if (data) {
+      setKategorie(data.kategorie ?? "");
+      setSchweregrad(data.schweregrad ?? "");
+      setStatusValue(data.status);
+    }
+  }, [data]);
 
   if (isLoading) return <p>Lade …</p>;
   if (isError || !data) {
@@ -101,12 +118,15 @@ export function MeldungDetailPage() {
               <Label htmlFor="kategorie">Kategorie</Label>
               <Input
                 id="kategorie"
-                value={data.kategorie}
+                value={kategorie}
                 disabled={isAbgeschlossen}
-                onBlur={(e) => patch.mutate({ kategorie: e.target.value })}
-                onChange={() => {
-                  /* commit on blur */
+                onChange={(e) => setKategorie(e.target.value)}
+                onBlur={(e) => {
+                  if (e.target.value !== (data.kategorie ?? "")) {
+                    patch.mutate({ kategorie: e.target.value });
+                  }
                 }}
+                placeholder="z. B. Korruption, Diskriminierung, Compliance"
               />
             </div>
             <div className="space-y-1">
@@ -114,8 +134,11 @@ export function MeldungDetailPage() {
               <select
                 id="schweregrad"
                 disabled={isAbgeschlossen}
-                value={data.schweregrad}
-                onChange={(e) => patch.mutate({ schweregrad: e.target.value })}
+                value={schweregrad}
+                onChange={(e) => {
+                  setSchweregrad(e.target.value);
+                  patch.mutate({ schweregrad: e.target.value });
+                }}
                 className="w-full rounded border bg-background px-2 py-2 text-sm"
               >
                 <option value="">— bitte wählen —</option>
@@ -131,12 +154,12 @@ export function MeldungDetailPage() {
               <select
                 id="status"
                 disabled={isAbgeschlossen}
-                value={data.status}
-                onChange={(e) =>
-                  patch.mutate({
-                    status: e.target.value as MeldungStatusValue,
-                  })
-                }
+                value={statusValue}
+                onChange={(e) => {
+                  const v = e.target.value as MeldungStatusValue;
+                  setStatusValue(v);
+                  patch.mutate({ status: v });
+                }}
                 className="w-full rounded border bg-background px-2 py-2 text-sm"
               >
                 {STATUS_OPTIONS.map(([v, l]) => (
