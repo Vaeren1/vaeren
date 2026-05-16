@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Markdown } from "@/components/ui/markdown";
 import { useKurs } from "@/lib/api/schulungen";
 import { Check, X } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
@@ -72,9 +73,7 @@ export function KursDetailPage() {
                 Modul {idx + 1} / {data.module.length}
               </div>
               <h3 className="mb-2 text-sm font-semibold">{m.titel}</h3>
-              <div className="prose prose-sm max-w-none whitespace-pre-wrap text-sm">
-                {m.inhalt_md}
-              </div>
+              <Markdown source={m.inhalt_md} />
             </div>
           ))}
         </CardContent>

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Markdown } from "@/components/ui/markdown";
 import {
   Card,
   CardContent,
@@ -168,9 +169,7 @@ export function PublicSchulungPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="prose prose-sm max-w-none whitespace-pre-wrap">
-              {m.inhalt_md}
-            </div>
+            <Markdown source={m.inhalt_md} />
           </CardContent>
           <CardFooter className="justify-end gap-2">
             {moduleIdx > 0 && (
