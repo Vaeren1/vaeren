@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 
 from redaktion.models import NewsCandidate
 
-from .llm import MODEL_REASONING, call_json
+from .llm import MODELS_REASONING, call_json_with_fallback
 from .prompts import render_curator_system
 
 logger = logging.getLogger(__name__)
@@ -49,10 +49,10 @@ def curate_pending() -> list[dict]:
         ensure_ascii=False,
     )
 
-    response = call_json(
+    response = call_json_with_fallback(
         system=render_curator_system(),
         user=f"Wähle aus dieser Kandidaten-Liste 5 bis 10 Items aus:\n\n{user_block}",
-        model=MODEL_REASONING,
+        models=MODELS_REASONING,
         max_tokens=2000,
         temperature=0.2,
     )

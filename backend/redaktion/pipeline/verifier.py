@@ -13,7 +13,7 @@ import httpx
 
 from redaktion.models import NewsPost
 
-from .llm import MODEL_REASONING, call_json
+from .llm import MODELS_REASONING, call_json_with_fallback
 from .prompts import VERIFIER_SYSTEM
 
 logger = logging.getLogger(__name__)
@@ -49,10 +49,10 @@ def verify_post(post: NewsPost) -> dict:
         },
         ensure_ascii=False,
     )
-    response = call_json(
+    response = call_json_with_fallback(
         system=VERIFIER_SYSTEM,
         user=user,
-        model=MODEL_REASONING,
+        models=MODELS_REASONING,
         max_tokens=600,
         temperature=0.1,
     )

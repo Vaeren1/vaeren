@@ -10,7 +10,7 @@ from django.utils.text import slugify
 
 from redaktion.models import NewsCandidate, NewsPost, NewsPostStatus
 
-from .llm import MODEL_FAST, call_json
+from .llm import MODELS_FAST, call_json_with_fallback
 from .prompts import WRITER_SYSTEM
 
 logger = logging.getLogger(__name__)
@@ -56,10 +56,10 @@ def write_post_from_candidate(candidate: NewsCandidate, meta: dict) -> NewsPost 
         },
         ensure_ascii=False,
     )
-    response = call_json(
+    response = call_json_with_fallback(
         system=WRITER_SYSTEM,
         user=user,
-        model=MODEL_FAST,
+        models=MODELS_FAST,
         max_tokens=1600,
         temperature=0.4,
     )
