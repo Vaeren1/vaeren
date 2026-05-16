@@ -153,7 +153,7 @@ REST_AUTH = {
     "USE_JWT": False,
     "SESSION_LOGIN": True,
     "TOKEN_MODEL": None,  # Wir nutzen Session-Auth, kein Token-Auth
-    "USER_DETAILS_SERIALIZER": "dj_rest_auth.serializers.UserDetailsSerializer",
+    "USER_DETAILS_SERIALIZER": "core.serializers.CustomUserDetailsSerializer",
     # drf-spectacular kann TokenSerializer(model=None) nicht introspektieren.
     # Da wir Session-Auth nutzen, ersetzen wir es durch einen leeren Serializer.
     "TOKEN_SERIALIZER": "core.serializers.SessionLoginResponseSerializer",

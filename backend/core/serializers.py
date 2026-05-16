@@ -1,8 +1,9 @@
 """Core-Serializers für dj-rest-auth und API-Schema."""
 
+from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
 
-from core.models import ComplianceTask, Mitarbeiter
+from core.models import ComplianceTask, Mitarbeiter, User
 
 
 class SessionLoginResponseSerializer(serializers.Serializer):
@@ -11,6 +12,21 @@ class SessionLoginResponseSerializer(serializers.Serializer):
     Wird in REST_AUTH["TOKEN_SERIALIZER"] gesetzt, damit drf-spectacular
     keine ModelSerializer-Introspektion auf TokenModel=None durchführt.
     """
+
+
+class CustomUserDetailsSerializer(UserDetailsSerializer):
+    """Erweitert dj_rest_auth's Default um unser Custom-Field `tenant_role`.
+
+    Ohne diesen Subclass liefert `/api/auth/user/` nur pk/email/first_name/
+    last_name. Das Frontend braucht aber `tenant_role` für die Rollen-
+    abhängige UI (z. B. HinSchG: nur Compliance-Beauftragte:r darf
+    Klassifizierung ändern oder Meldungen abschließen).
+    """
+
+    class Meta(UserDetailsSerializer.Meta):
+        model = User
+        fields = (*UserDetailsSerializer.Meta.fields, "tenant_role", "mfa_enabled")
+        read_only_fields = ("email", "tenant_role", "mfa_enabled")
 
 
 class MitarbeiterSerializer(serializers.ModelSerializer):
