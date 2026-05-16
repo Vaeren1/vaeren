@@ -560,3 +560,161 @@ def test_pool_independent_samples_per_task(tenant_setup):
         b2 = client.get(f"/api/public/schulung/{make_token(t2.pk)}/").json()
     assert [f["id"] for f in b1["fragen"]] == [f.pk for f in fragen[:3]]
     assert [f["id"] for f in b2["fragen"]] == [f.pk for f in fragen[-3:]]
+
+
+# --- Slice S1 (eigene Kurse): Serializer-Normalisierung + Ownership ---
+
+
+def test_serializer_normalizes_quiz_fields_for_kenntnisnahme(tenant_setup):
+    tenant, domain = tenant_setup
+    client, _ = _qm_client(tenant, domain)
+    resp = client.post(
+        "/api/kurse/",
+        {
+            "titel": "Lese-Kurs",
+            "beschreibung": "Nur lesen, kein Quiz",
+            "quiz_modus": "kenntnisnahme",
+            "fragen_pro_quiz": 99,
+            "min_richtig_prozent": 50,
+            "zertifikat_aktiv": True,
+            "gueltigkeit_monate": 24,
+        },
+        content_type="application/json",
+    )
+    assert resp.status_code == 201, resp.content
+    body = resp.json()
+    assert body["quiz_modus"] == "kenntnisnahme"
+    assert body["fragen_pro_quiz"] == 0
+    assert body["min_richtig_prozent"] == 0
+
+
+def test_serializer_rejects_lesezeit_without_seconds(tenant_setup):
+    tenant, domain = tenant_setup
+    client, _ = _qm_client(tenant, domain)
+    resp = client.post(
+        "/api/kurse/",
+        {
+            "titel": "Lese-Kurs",
+            "quiz_modus": "kenntnisnahme_lesezeit",
+            "mindest_lesezeit_s": 0,
+            "fragen_pro_quiz": 0,
+            "min_richtig_prozent": 0,
+        },
+        content_type="application/json",
+    )
+    assert resp.status_code == 400
+    assert "mindest_lesezeit_s" in resp.json()
+
+
+def test_create_kurs_marks_eigentuemer_tenant(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    resp = client.post(
+        "/api/kurse/",
+        {"titel": "Mein Kurs", "beschreibung": "..."},
+        content_type="application/json",
+    )
+    assert resp.status_code == 201, resp.content
+    body = resp.json()
+    assert body["eigentuemer_tenant"] == tenant.schema_name
+    assert body["ist_standardkatalog"] is False
+    assert body["erstellt_von_email"] == user.email
+
+
+def test_cannot_update_standardkatalog_kurs(tenant_setup):
+    tenant, domain = tenant_setup
+    client, _ = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(titel="Standard-DSGVO", eigentuemer_tenant="")
+    resp = client.patch(
+        f"/api/kurse/{kurs.pk}/",
+        {"titel": "Geaendert"},
+        content_type="application/json",
+    )
+    assert resp.status_code == 403, resp.content
+    assert "Standard-Katalog" in resp.json().get("detail", "")
+
+
+def test_cannot_delete_standardkatalog_kurs(tenant_setup):
+    tenant, domain = tenant_setup
+    client, _ = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(titel="Standard-Brandschutz", eigentuemer_tenant="")
+    resp = client.delete(f"/api/kurse/{kurs.pk}/")
+    assert resp.status_code == 403
+
+
+def test_can_update_eigenen_kurs(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(
+            titel="Eigener Kurs",
+            eigentuemer_tenant=tenant.schema_name,
+            erstellt_von=user,
+        )
+    resp = client.patch(
+        f"/api/kurse/{kurs.pk}/",
+        {"titel": "Editiert"},
+        content_type="application/json",
+    )
+    assert resp.status_code == 200, resp.content
+    assert resp.json()["titel"] == "Editiert"
+
+
+def test_delete_eigenen_kurs_blocked_when_welle_exists(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+        SchulungsWelleFactory(kurs=kurs)
+    resp = client.delete(f"/api/kurse/{kurs.pk}/")
+    assert resp.status_code == 400  # ValidationError
+    assert "Wellen" in str(resp.json())
+
+
+def test_delete_eigenen_kurs_without_welle(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+        pk = kurs.pk
+    resp = client.delete(f"/api/kurse/{pk}/")
+    assert resp.status_code == 204
+    with schema_context(tenant.schema_name):
+        from pflichtunterweisung.models import Kurs as KursModel
+        assert not KursModel.objects.filter(pk=pk).exists()
+
+
+def test_tenant_a_cannot_see_kurs_of_tenant_b(db, settings):
+    """Schema-Isolation: Tenant A's GET /api/kurse/ darf Tenant B's Kurse nicht enthalten."""
+    import uuid
+    from django.db import connection
+    settings.ALLOWED_HOSTS = ["*"]
+
+    schema_a = f"isoa_{uuid.uuid4().hex[:8]}"
+    schema_b = f"isob_{uuid.uuid4().hex[:8]}"
+    tenant_a = TenantFactory(schema_name=schema_a, firma_name="A GmbH")
+    domain_a = TenantDomainFactory(
+        tenant=tenant_a, domain=f"{schema_a.replace('_', '-')}.app.vaeren.local"
+    )
+    tenant_b = TenantFactory(schema_name=schema_b, firma_name="B GmbH")
+    TenantDomainFactory(
+        tenant=tenant_b, domain=f"{schema_b.replace('_', '-')}.app.vaeren.local"
+    )
+    connection.set_schema_to_public()
+
+    with schema_context(schema_b):
+        UserFactory(email="qm-b@x.de", tenant_role=TenantRole.QM_LEITER, password="x")
+        KursFactory(titel="GEHEIM-B", eigentuemer_tenant=schema_b)
+
+    with schema_context(schema_a):
+        UserFactory(email="qm-a@x.de", tenant_role=TenantRole.QM_LEITER, password="QmPass1234!")
+    client_a = Client(HTTP_HOST=domain_a.domain, enforce_csrf_checks=False)
+    with schema_context(schema_a):
+        assert client_a.login(email="qm-a@x.de", password="QmPass1234!")
+    resp = client_a.get("/api/kurse/")
+    assert resp.status_code == 200
+    titel = [k["titel"] for k in resp.json()["results"]]
+    assert "GEHEIM-B" not in titel
+    connection.set_schema_to_public()

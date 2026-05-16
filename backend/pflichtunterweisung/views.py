@@ -81,6 +81,39 @@ class KursViewSet(viewsets.ModelViewSet):
             return KursDetailSerializer
         return KursSerializer
 
+    def perform_create(self, serializer):
+        from django.db import connection
+
+        serializer.save(
+            eigentuemer_tenant=connection.schema_name,
+            erstellt_von=self.request.user,
+        )
+
+    def perform_update(self, serializer):
+        from rest_framework.exceptions import PermissionDenied
+
+        kurs = self.get_object()
+        if kurs.ist_standardkatalog:
+            raise PermissionDenied(
+                "Standard-Katalog-Kurse koennen nicht editiert werden. "
+                "Lege bei Bedarf einen eigenen Kurs an."
+            )
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        from rest_framework.exceptions import PermissionDenied, ValidationError
+
+        if instance.ist_standardkatalog:
+            raise PermissionDenied(
+                "Standard-Katalog-Kurse koennen nicht geloescht werden."
+            )
+        if instance.wellen.exists():
+            raise ValidationError(
+                "Kurs hat noch verknuepfte Wellen und kann nicht geloescht werden. "
+                "Setze ihn stattdessen auf 'inaktiv'."
+            )
+        instance.delete()
+
 
 class KursModulViewSet(viewsets.ModelViewSet):
     queryset = KursModul.objects.all()
