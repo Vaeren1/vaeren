@@ -1,11 +1,15 @@
 """URLs für tenant-Schemas (App-Funktionalität)."""
 
+from django.contrib import admin
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from core.auth_views import MfaAwareLoginView
 
 urlpatterns = [
+    # Django-Admin für tenant-spezifische Models (Mitarbeiter, Schulungen,
+    # HinSchG-Meldungen). Login mit demo-Tenant-Superuser.
+    path("admin/", admin.site.urls),
     path("api/", include("core.urls")),
     path("api/", include("pflichtunterweisung.urls")),
     path("api/", include("hinschg.urls")),

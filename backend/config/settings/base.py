@@ -26,6 +26,7 @@ SHARED_APPS: list[str] = [
     "redaktion",
 ]
 TENANT_APPS: list[str] = [
+    "django.contrib.admin",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",

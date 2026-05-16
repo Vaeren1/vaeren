@@ -88,9 +88,9 @@ api.vaeren.de {
 app.vaeren.de {
     encode gzip zstd
 
-    # API-Routen → Backend (ASGI/Daphne)
+    # API + Admin + Account-Flow → Backend (ASGI/Daphne)
     @api {
-        path /api/* /accounts/*
+        path /api/* /accounts/* /admin /admin/*
     }
     reverse_proxy @api vaeren-django:8000 {
         header_up X-Forwarded-Proto https
