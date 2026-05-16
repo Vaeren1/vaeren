@@ -39,6 +39,11 @@ Erlaubte Werte:
 - relevanz: einer aus {relevanz}
 - begruendung: 1-2 Sätze, deutsch, intern (Mensch sieht das beim Approval)
 
+WICHTIG — Duplikat-Vermeidung:
+Im User-Input findest du unter "recent_posts" eine Liste der Beiträge der letzten 14 Tage. Wähle KEINE Kandidaten aus, die dasselbe Thema wie ein recent_post behandeln, selbst wenn die Quelle anders ist oder die Formulierung leicht variiert. Beispiel: Wenn "EuGH stärkt Auskunftsanspruch nach Art. 15 DSGVO" bereits letzte Woche erschien, und jetzt taucht eine BMJ-Pressemitteilung zu demselben Urteil auf: NICHT auswählen.
+
+Ausnahme: Es gibt eine konkrete neue Entwicklung (z.B. nationale Umsetzung eines EU-Beschlusses, Bußgeld jetzt rechtskräftig statt nur angedroht, Vollzug). Dann auswählen und in der Begründung erklären, was die NEUE Information ist.
+
 Wähle 0-10 Items. Nicht-Compliance-Themen, Selbstdarstellungen oder reine Termin-Pressetexte ohne Konsequenz: nicht auswählen."""
 
 

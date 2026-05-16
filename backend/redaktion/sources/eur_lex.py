@@ -8,7 +8,7 @@ from ._rss import RssParser
 class EurLexParser(RssParser):
     # OJ Daily-Feed (alle veröffentlichten Akten im EU-Amtsblatt).
     # Wird täglich aktualisiert, deutsche Texte sind über lang=DE auswählbar.
-    feed_url = "https://eur-lex.europa.eu/oj/dir-eli-act.html"
+    feed_url = "https://eur-lex.europa.eu/EN/display-feed.rss?myRssId=1"
 
     def filter(self, entry) -> bool:
         # EUR-Lex liefert viele technische Tagesveröffentlichungen.
