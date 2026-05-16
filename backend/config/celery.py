@@ -21,6 +21,11 @@ app = Celery("vaeren")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
 
+# `config.celery_tasks` wird von autodiscover_tasks() nicht gefunden
+# (Datei heißt nicht tasks.py, config ist kein App-Modul). Explizit importieren,
+# sonst feuert Beat Task-Messages, die der Worker mit KeyError ablehnt.
+from config import celery_tasks  # noqa: E402, F401
+
 app.conf.beat_schedule = {
     "dispatch-notifications-hourly": {
         "task": "config.celery_tasks.dispatch_notifications_all_tenants",
