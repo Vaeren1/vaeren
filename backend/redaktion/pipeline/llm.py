@@ -138,8 +138,8 @@ def call_json_with_fallback(
     max_tokens: int = 1500,
     temperature: float = 0.3,
     rounds: int = 2,
-    delay_between_models: float = 2.0,
-    delay_between_rounds: float = 30.0,
+    delay_between_models: float = 5.0,
+    delay_between_rounds: float = 45.0,
 ) -> dict | None:
     """Versucht jedes Modell der Reihe nach. Bei 429/Fehler weiter zum nächsten.
 
