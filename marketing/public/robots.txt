@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /impressum
+Disallow: /impressum/
 
 Sitemap: https://vaeren.de/sitemap-index.xml
