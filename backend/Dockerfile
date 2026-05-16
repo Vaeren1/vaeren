@@ -54,7 +54,10 @@ RUN apt-get update && \
         libgdk-pixbuf-2.0-0 \
         libffi8 \
         fonts-dejavu \
-        tini && \
+        tini \
+        # Slice 2b/c/e: Smart-Compression fuer Kurs-Assets
+        ghostscript \
+        ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
 # venv + Code aus builder

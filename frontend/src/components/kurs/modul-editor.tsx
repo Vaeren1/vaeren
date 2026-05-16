@@ -3,11 +3,14 @@
  * Inline-Anlegen/Editieren. Slice 2a unterstuetzt nur typ=text — andere
  * Typen werden im Picker als „kommt bald" angezeigt.
  */
+import { AssetPreview } from "@/components/kurs/asset-preview";
+import { AssetUploader } from "@/components/kurs/asset-uploader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Markdown } from "@/components/ui/markdown";
 import {
+  type KursAsset,
   type KursModul,
   MODUL_TYP_LABEL,
   type ModulTyp,
@@ -37,7 +40,35 @@ import { Eye, GripVertical, Pencil, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-const SUPPORTED_TYPES_S2A: ModulTyp[] = ["text"];
+// Schrittweise nach Sub-Slice freischalten. S2a: text. S2b: + pdf. S2c: + bild.
+// S2d: + office. S2e: + video_upload + video_youtube.
+const SUPPORTED_TYPES: ModulTyp[] = ["text", "pdf"];
+
+const ASSET_TYPE_CONFIG: Partial<
+  Record<ModulTyp, { accept: string; maxBytes: number; hint: string }>
+> = {
+  pdf: {
+    accept: "application/pdf",
+    maxBytes: 50 * 1024 * 1024,
+    hint: "PDF bis 50 MB. Große Dateien werden automatisch komprimiert.",
+  },
+  bild: {
+    accept: "image/png,image/jpeg",
+    maxBytes: 10 * 1024 * 1024,
+    hint: "PNG oder JPG bis 10 MB. Werden auf 2048 px / JPEG q=85 komprimiert.",
+  },
+  office: {
+    accept:
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    maxBytes: 50 * 1024 * 1024,
+    hint: "DOCX oder PPTX bis 50 MB. Werden serverseitig zu PDF konvertiert.",
+  },
+  video_upload: {
+    accept: "video/mp4",
+    maxBytes: 500 * 1024 * 1024,
+    hint: "MP4 bis 500 MB. Werden auf 1080p / CRF 23 transkodiert.",
+  },
+};
 
 export function ModulEditor({
   kursId,
@@ -205,6 +236,18 @@ function SortableModulCard({
               <Markdown source={modul.inhalt_md.slice(0, 280)} />
             </div>
           )}
+          {modul.typ !== "text" &&
+            modul.typ !== "video_youtube" &&
+            modul.asset && (
+              <div className="mt-2 text-xs text-muted-foreground">
+                Asset #{modul.asset} verknüpft.
+              </div>
+            )}
+          {modul.typ === "video_youtube" && modul.youtube_url && (
+            <div className="mt-2 line-clamp-1 text-xs text-muted-foreground">
+              {modul.youtube_url}
+            </div>
+          )}
         </div>
         <div className="flex gap-1">
           <Button
@@ -240,11 +283,9 @@ function ModulPreview({ modul, index }: { modul: KursModul; index: number }) {
       {modul.typ === "video_youtube" && modul.youtube_url && (
         <YouTubeEmbed url={modul.youtube_url} />
       )}
-      {modul.typ !== "text" && modul.typ !== "video_youtube" && (
-        <p className="text-sm text-muted-foreground">
-          Asset-Vorschau folgt (Slice 2b/c/d/e).
-        </p>
-      )}
+      {modul.asset != null &&
+        modul.typ !== "text" &&
+        modul.typ !== "video_youtube" && <AssetPreview assetId={modul.asset} />}
     </div>
   );
 }
@@ -296,8 +337,12 @@ function ModulFormCard({
   const [typ, setTyp] = useState<ModulTyp>(existing?.typ ?? "text");
   const [titel, setTitel] = useState(existing?.titel ?? "");
   const [inhalt, setInhalt] = useState(existing?.inhalt_md ?? "");
+  const [youtubeUrl, setYoutubeUrl] = useState(existing?.youtube_url ?? "");
+  const [assetId, setAssetId] = useState<number | null>(existing?.asset ?? null);
   const create = useCreateModul();
   const update = useUpdateModul();
+
+  const handleAssetUploaded = (a: KursAsset) => setAssetId(a.id);
 
   const save = () => {
     if (!titel.trim()) {
@@ -308,11 +353,26 @@ function ModulFormCard({
       toast.error("Inhalt ist bei Text-Modulen Pflicht.");
       return;
     }
+    if (typ === "video_youtube" && !youtubeUrl.trim()) {
+      toast.error("YouTube-URL ist Pflicht.");
+      return;
+    }
+    if (
+      typ !== "text" &&
+      typ !== "video_youtube" &&
+      assetId == null
+    ) {
+      toast.error("Bitte zuerst eine Datei hochladen.");
+      return;
+    }
     const payload = {
       kurs: kursId,
       titel: titel.trim(),
       typ,
       inhalt_md: typ === "text" ? inhalt : "",
+      youtube_url: typ === "video_youtube" ? youtubeUrl.trim() : "",
+      asset:
+        typ === "text" || typ === "video_youtube" ? null : assetId,
       reihenfolge: existing?.reihenfolge ?? newOrder ?? 0,
     };
     if (existing) {
@@ -345,7 +405,7 @@ function ModulFormCard({
           {(
             Object.entries(MODUL_TYP_LABEL) as [ModulTyp, string][]
           ).map(([value, label]) => {
-            const enabled = SUPPORTED_TYPES_S2A.includes(value);
+            const enabled = SUPPORTED_TYPES.includes(value);
             return (
               <button
                 key={value}
@@ -377,6 +437,32 @@ function ModulFormCard({
           placeholder="z.B. Grundbegriffe"
         />
       </div>
+
+      {typ !== "text" && typ !== "video_youtube" && ASSET_TYPE_CONFIG[typ] && (
+        <div>
+          <Label>Datei *</Label>
+          <AssetUploader
+            kursId={kursId}
+            accept={ASSET_TYPE_CONFIG[typ]!.accept}
+            maxBytes={ASSET_TYPE_CONFIG[typ]!.maxBytes}
+            currentAssetId={assetId}
+            onUploaded={handleAssetUploaded}
+            hint={ASSET_TYPE_CONFIG[typ]!.hint}
+          />
+        </div>
+      )}
+
+      {typ === "video_youtube" && (
+        <div>
+          <Label htmlFor="yt-url">YouTube-URL *</Label>
+          <Input
+            id="yt-url"
+            value={youtubeUrl}
+            onChange={(e) => setYoutubeUrl(e.target.value)}
+            placeholder="https://www.youtube.com/watch?v=…"
+          />
+        </div>
+      )}
 
       {typ === "text" && (
         <div>

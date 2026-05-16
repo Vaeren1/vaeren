@@ -26,6 +26,7 @@ from django.utils import timezone
 from drf_spectacular.utils import OpenApiResponse, extend_schema, inline_serializer
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
@@ -40,6 +41,7 @@ from .models import (
     AntwortOption,
     Frage,
     Kurs,
+    KursAsset,
     KursModul,
     QuizAntwort,
     SchulungsTask,
@@ -49,9 +51,11 @@ from .models import (
 )
 from .pdf import render_zertifikat_html, render_zertifikat_pdf
 from .serializers import (
+    ASSET_MIME_MAX_BYTES,
     AntwortOptionSerializer,
     FragePublicSerializer,
     FrageSerializer,
+    KursAssetSerializer,
     KursDetailSerializer,
     KursModulSerializer,
     KursSerializer,
@@ -167,6 +171,73 @@ class KursModulViewSet(viewsets.ModelViewSet):
             for i, mid in enumerate(ids):
                 KursModul.objects.filter(pk=mid).update(reihenfolge=i)
         return Response({"reordered": len(ids)})
+
+
+class KursAssetViewSet(viewsets.ReadOnlyModelViewSet):
+    """Read + Upload via custom action. Update/Delete bewusst nicht erlaubt —
+    Assets sind immutable nach Upload (vereinfacht Snapshot-Logik in Slice 4).
+    """
+
+    queryset = KursAsset.objects.all().select_related("kurs")
+    serializer_class = KursAssetSerializer
+    permission_classes: ClassVar = [KursPermission]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        kurs_id = self.request.query_params.get("kurs")
+        if kurs_id:
+            qs = qs.filter(kurs_id=kurs_id)
+        return qs
+
+    @action(
+        detail=False, methods=["post"], url_path="upload",
+        parser_classes=[MultiPartParser, FormParser],
+    )
+    def upload(self, request):
+        """Multipart-Upload: form-fields `kurs` (id) + `file` (binary).
+
+        Validiert MIME-Whitelist + Size-Limit, persistiert Asset im 'pending'-
+        Compression-Status, dispatched Celery-Task. Antwort enthaelt Asset-ID,
+        Frontend polled GET /api/kurs-assets/<id>/ fuer Status.
+        """
+        from django.db import connection
+        from rest_framework.exceptions import PermissionDenied, ValidationError
+
+        from .tasks import compress_asset
+
+        kurs_id = request.data.get("kurs")
+        upload = request.FILES.get("file")
+        if not kurs_id or not upload:
+            raise ValidationError("Body benoetigt form-fields 'kurs' + 'file'.")
+        kurs = get_object_or_404(Kurs, pk=kurs_id)
+        if kurs.ist_standardkatalog:
+            raise PermissionDenied("Standard-Katalog erlaubt keinen Upload.")
+        mime = upload.content_type or "application/octet-stream"
+        if mime not in ASSET_MIME_MAX_BYTES:
+            raise ValidationError(
+                f"MIME '{mime}' nicht erlaubt. Erlaubt: {sorted(ASSET_MIME_MAX_BYTES)}"
+            )
+        if upload.size > ASSET_MIME_MAX_BYTES[mime]:
+            limit_mb = ASSET_MIME_MAX_BYTES[mime] // (1024 * 1024)
+            raise ValidationError(
+                f"Datei zu gross ({upload.size // 1024} KB). Limit fuer {mime}: {limit_mb} MB."
+            )
+        asset = KursAsset.objects.create(
+            kurs=kurs,
+            original_datei=upload,
+            original_mime=mime,
+            original_size_bytes=upload.size,
+            compression_status=KursAsset.CompressionStatus.PENDING,
+            hochgeladen_von=request.user,
+        )
+        # Async dispatch — bewusst .apply_async ohne wait. Frontend pollt Status.
+        try:
+            compress_asset.delay(connection.schema_name, asset.pk)
+        except Exception as exc:  # noqa: BLE001  # broker down etc.
+            # Asset bleibt PENDING, kann manuell re-triggered werden
+            import logging
+            logging.getLogger(__name__).warning("compress_asset dispatch failed: %s", exc)
+        return Response(KursAssetSerializer(asset).data, status=status.HTTP_201_CREATED)
 
 
 class FrageViewSet(viewsets.ModelViewSet):

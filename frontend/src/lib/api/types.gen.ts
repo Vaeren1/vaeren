@@ -525,6 +525,69 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/kurs-assets/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Read + Upload via custom action. Update/Delete bewusst nicht erlaubt —
+         *     Assets sind immutable nach Upload (vereinfacht Snapshot-Logik in Slice 4).
+         */
+        get: operations["kurs_assets_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/kurs-assets/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Read + Upload via custom action. Update/Delete bewusst nicht erlaubt —
+         *     Assets sind immutable nach Upload (vereinfacht Snapshot-Logik in Slice 4).
+         */
+        get: operations["kurs_assets_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/kurs-assets/upload/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Multipart-Upload: form-fields `kurs` (id) + `file` (binary).
+         *
+         *     Validiert MIME-Whitelist + Size-Limit, persistiert Asset im 'pending'-
+         *     Compression-Status, dispatched Celery-Task. Antwort enthaelt Asset-ID,
+         *     Frontend polled GET /api/kurs-assets/<id>/ fuer Status.
+         */
+        post: operations["kurs_assets_upload_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/kurs-module/": {
         parameters: {
             query?: never;
@@ -1224,6 +1287,15 @@ export interface components {
             /** Format: date-time */
             readonly updated_at: string;
         };
+        /**
+         * @description * `not_needed` - Nicht noetig
+         *     * `pending` - Pending
+         *     * `done` - Done
+         *     * `skipped` - Skipped (kein Gewinn)
+         *     * `failed` - Fehlgeschlagen
+         * @enum {string}
+         */
+        CompressionStatusEnum: "not_needed" | "pending" | "done" | "skipped" | "failed";
         CsrfTokenResponse: {
             csrf_token: string;
         };
@@ -1297,6 +1369,14 @@ export interface components {
          * @enum {string}
          */
         Kategorie0bfEnum: "arbeitsschutz" | "brandschutz" | "gefahrstoffe" | "datenschutz" | "compliance" | "umwelt" | "sonstiges";
+        /**
+         * @description * `not_needed` - Nicht noetig
+         *     * `pending` - Pending
+         *     * `done` - Done
+         *     * `failed` - Fehlgeschlagen
+         * @enum {string}
+         */
+        KonvertierungStatusEnum: "not_needed" | "pending" | "done" | "failed";
         KorrekturInternal: {
             readonly id: number;
             post: number;
@@ -1349,6 +1429,18 @@ export interface components {
             readonly erstellt_am: string;
             readonly module: components["schemas"]["KursModul"][];
             readonly fragen_pool_groesse: number;
+        };
+        KursAsset: {
+            readonly id: number;
+            readonly kurs: number;
+            readonly original_mime: string;
+            readonly original_size_bytes: number;
+            readonly compression_status: components["schemas"]["CompressionStatusEnum"];
+            readonly compressed_size_bytes: number | null;
+            readonly konvertierung_status: components["schemas"]["KonvertierungStatusEnum"];
+            /** Format: date-time */
+            readonly hochgeladen_am: string;
+            readonly download_url: string | null;
         };
         /**
          * @description Wie KursSerializer, plus nested fragen + optionen INKLUSIVE ist_korrekt.
@@ -1710,6 +1802,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["KorrekturInternal"][];
+        };
+        PaginatedKursAssetList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["KursAsset"][];
         };
         PaginatedKursList: {
             /** @example 123 */
@@ -3164,6 +3271,78 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MeldungIntern"];
+                };
+            };
+        };
+    };
+    kurs_assets_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedKursAssetList"];
+                };
+            };
+        };
+    };
+    kurs_assets_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Kurs-Asset identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KursAsset"];
+                };
+            };
+        };
+    };
+    kurs_assets_upload_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": components["schemas"]["KursAsset"];
+                "application/x-www-form-urlencoded": components["schemas"]["KursAsset"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KursAsset"];
                 };
             };
         };

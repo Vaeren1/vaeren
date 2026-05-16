@@ -63,6 +63,60 @@ export interface KursModul {
   asset: number | null;
 }
 
+export type AssetCompressionStatus =
+  | "not_needed"
+  | "pending"
+  | "done"
+  | "skipped"
+  | "failed";
+
+export interface KursAsset {
+  id: number;
+  kurs: number;
+  original_mime: string;
+  original_size_bytes: number;
+  compression_status: AssetCompressionStatus;
+  compressed_size_bytes: number | null;
+  konvertierung_status: "not_needed" | "pending" | "done" | "failed";
+  hochgeladen_am: string;
+  download_url: string | null;
+}
+
+export function useKursAsset(id: number | null | undefined) {
+  return useQuery<KursAsset, ApiError>({
+    queryKey: ["kurs-asset", id],
+    queryFn: () => api<KursAsset>(`/api/kurs-assets/${id}/`),
+    enabled: id != null,
+    refetchInterval: (query) => {
+      const status = query.state.data?.compression_status;
+      return status === "pending" ? 2000 : false;
+    },
+  });
+}
+
+export async function uploadAsset(
+  kursId: number,
+  file: File,
+): Promise<KursAsset> {
+  const form = new FormData();
+  form.append("kurs", String(kursId));
+  form.append("file", file);
+  // Direkt fetch (CSRF + Cookie wie api(), aber kein JSON-Content-Type)
+  const csrfRes = await fetch("/api/auth/csrf/", { credentials: "include" });
+  const { csrf_token } = (await csrfRes.json()) as { csrf_token: string };
+  const res = await fetch("/api/kurs-assets/upload/", {
+    method: "POST",
+    credentials: "include",
+    headers: { "X-CSRFToken": csrf_token },
+    body: form,
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(typeof body === "object" ? JSON.stringify(body) : String(body));
+  }
+  return (await res.json()) as KursAsset;
+}
+
 export interface ModulInput {
   kurs: number;
   titel: string;

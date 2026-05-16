@@ -8,6 +8,7 @@ from . import views
 router = DefaultRouter()
 router.register(r"kurse", views.KursViewSet, basename="kurs")
 router.register(r"kurs-module", views.KursModulViewSet, basename="kursmodul")
+router.register(r"kurs-assets", views.KursAssetViewSet, basename="kursasset")
 router.register(r"fragen", views.FrageViewSet, basename="frage")
 router.register(r"antwort-optionen", views.AntwortOptionViewSet, basename="antwortoption")
 router.register(r"schulungswellen", views.SchulungsWelleViewSet, basename="schulungswelle")

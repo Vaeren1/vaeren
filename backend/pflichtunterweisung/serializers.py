@@ -8,10 +8,46 @@ from .models import (
     AntwortOption,
     Frage,
     Kurs,
+    KursAsset,
     KursModul,
     SchulungsTask,
     SchulungsWelle,
 )
+
+
+# Upload-Limits pro Modul-Typ (siehe Spec §3.3).
+ASSET_MIME_MAX_BYTES: dict[str, int] = {
+    "application/pdf": 50 * 1024 * 1024,
+    "image/png": 10 * 1024 * 1024,
+    "image/jpeg": 10 * 1024 * 1024,
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": 50 * 1024 * 1024,
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation": 50 * 1024 * 1024,
+    "video/mp4": 500 * 1024 * 1024,
+}
+
+
+class KursAssetSerializer(serializers.ModelSerializer):
+    download_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = KursAsset
+        fields = (
+            "id", "kurs", "original_mime", "original_size_bytes",
+            "compression_status", "compressed_size_bytes",
+            "konvertierung_status",
+            "hochgeladen_am", "download_url",
+        )
+        read_only_fields = fields
+
+    def get_download_url(self, obj: KursAsset) -> str | None:
+        if not obj.original_datei:
+            return None
+        # Konvertierte PDF (Office) bevorzugen wenn vorhanden
+        f = obj.konvertierte_pdf if obj.konvertierte_pdf else obj.original_datei
+        try:
+            return f.url
+        except Exception:  # noqa: BLE001
+            return None
 
 
 class AntwortOptionSerializer(serializers.ModelSerializer):

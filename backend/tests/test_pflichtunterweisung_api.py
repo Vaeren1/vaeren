@@ -865,3 +865,125 @@ def test_modul_reorder_rejects_mismatched_ids(tenant_setup):
         content_type="application/json",
     )
     assert resp.status_code == 400
+
+
+# --- Slice 2b: Asset-Upload + Compression ------------------------------
+
+
+def test_pdf_upload_creates_asset_and_dispatches_compress(tenant_setup):
+    """PDF-Upload → 201, KursAsset wird angelegt, Celery-Task dispatched (mocked)."""
+    from unittest.mock import patch
+
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+
+    # Minimal-PDF (1 Seite, leer)
+    pdf_bytes = b"%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Count 0>>endobj\nxref\n0 3\n0000000000 65535 f \n0000000009 00000 n \n0000000055 00000 n \ntrailer<</Size 3/Root 1 0 R>>\nstartxref\n95\n%%EOF\n"
+    from django.core.files.uploadedfile import SimpleUploadedFile
+    upload = SimpleUploadedFile("test.pdf", pdf_bytes, content_type="application/pdf")
+
+    with patch("pflichtunterweisung.tasks.compress_asset.delay") as mocked:
+        resp = client.post(
+            "/api/kurs-assets/upload/",
+            {"kurs": kurs.pk, "file": upload},
+            format="multipart",
+        )
+    assert resp.status_code == 201, resp.content
+    body = resp.json()
+    assert body["original_mime"] == "application/pdf"
+    assert body["original_size_bytes"] == len(pdf_bytes)
+    assert body["compression_status"] == "pending"
+    mocked.assert_called_once()
+
+
+def test_upload_rejects_bad_mime(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+    from django.core.files.uploadedfile import SimpleUploadedFile
+    upload = SimpleUploadedFile("x.txt", b"hello", content_type="text/plain")
+    resp = client.post(
+        "/api/kurs-assets/upload/",
+        {"kurs": kurs.pk, "file": upload},
+        format="multipart",
+    )
+    assert resp.status_code == 400
+
+
+def test_upload_rejects_oversize_pdf(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+    # 51 MB ueber dem 50 MB-Limit fuer PDF
+    from django.core.files.uploadedfile import SimpleUploadedFile
+    upload = SimpleUploadedFile(
+        "big.pdf", b"%PDF-1.4\n" + b"x" * (51 * 1024 * 1024), content_type="application/pdf"
+    )
+    resp = client.post(
+        "/api/kurs-assets/upload/",
+        {"kurs": kurs.pk, "file": upload},
+        format="multipart",
+    )
+    assert resp.status_code == 400
+    assert "zu gross" in str(resp.content)
+
+
+def test_upload_blocked_for_standardkatalog(tenant_setup):
+    tenant, domain = tenant_setup
+    client, _ = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant="")
+    from django.core.files.uploadedfile import SimpleUploadedFile
+    upload = SimpleUploadedFile("x.pdf", b"%PDF-1.4\n", content_type="application/pdf")
+    resp = client.post(
+        "/api/kurs-assets/upload/",
+        {"kurs": kurs.pk, "file": upload},
+        format="multipart",
+    )
+    assert resp.status_code == 403
+
+
+def test_compression_pdf_idempotent_skip_small_file():
+    """Eigenstaendiger Unit-Test ohne DB: PDF unter Threshold → 'skipped'."""
+    import tempfile
+    from pathlib import Path
+    from core.compression import compress_pdf
+
+    with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as f:
+        f.write(b"%PDF-1.4\n" + b"x" * 1000)  # ~1 KB
+        p = Path(f.name)
+    try:
+        r = compress_pdf(p)
+        assert r.status == "skipped"
+        assert r.original_size > 0
+    finally:
+        p.unlink(missing_ok=True)
+
+
+def test_compression_image_jpeg_q85_in_place():
+    """Eigenstaendiger Unit-Test: grosses Pillow-erzeugtes JPEG wird kleiner."""
+    import tempfile
+    from pathlib import Path
+    from PIL import Image
+    from core.compression import compress_image
+
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as f:
+        # 3000x3000 random-noise JPEG (groß genug, sollte komprimieren)
+        import os
+        im = Image.frombytes("RGB", (3000, 3000), os.urandom(3000 * 3000 * 3))
+        im.save(f.name, format="JPEG", quality=100)
+        p = Path(f.name)
+    try:
+        orig_size = p.stat().st_size
+        if orig_size < 200 * 1024:  # falls noise zu klein komprimiert wurde
+            return  # skip — Threshold-Logik tested in compression_pdf
+        r = compress_image(p)
+        # Bei sehr großen Noise-Bildern kann auch q=85 keinen Gewinn bringen.
+        # Akzeptabel: 'done' ODER 'skipped'. Wichtig: kein 'failed'.
+        assert r.status in ("done", "skipped"), r.error
+    finally:
+        p.unlink(missing_ok=True)

@@ -1669,6 +1669,138 @@
                 }
             }
         },
+        "/api/kurs-assets/": {
+            "get": {
+                "operationId": "kurs_assets_list",
+                "description": "Read + Upload via custom action. Update/Delete bewusst nicht erlaubt —\nAssets sind immutable nach Upload (vereinfacht Snapshot-Logik in Slice 4).",
+                "parameters": [
+                    {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "kurs-assets"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedKursAssetList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/kurs-assets/{id}/": {
+            "get": {
+                "operationId": "kurs_assets_retrieve",
+                "description": "Read + Upload via custom action. Update/Delete bewusst nicht erlaubt —\nAssets sind immutable nach Upload (vereinfacht Snapshot-Logik in Slice 4).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Kurs-Asset identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "kurs-assets"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KursAsset"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/kurs-assets/upload/": {
+            "post": {
+                "operationId": "kurs_assets_upload_create",
+                "description": "Multipart-Upload: form-fields `kurs` (id) + `file` (binary).\n\nValidiert MIME-Whitelist + Size-Limit, persistiert Asset im 'pending'-\nCompression-Status, dispatched Celery-Task. Antwort enthaelt Asset-ID,\nFrontend polled GET /api/kurs-assets/<id>/ fuer Status.",
+                "tags": [
+                    "kurs-assets"
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KursAsset"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KursAsset"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KursAsset"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/api/kurs-module/": {
             "get": {
                 "operationId": "kurs_module_list",
@@ -4699,6 +4831,17 @@
                     "verantwortlicher"
                 ]
             },
+            "CompressionStatusEnum": {
+                "enum": [
+                    "not_needed",
+                    "pending",
+                    "done",
+                    "skipped",
+                    "failed"
+                ],
+                "type": "string",
+                "description": "* `not_needed` - Nicht noetig\n* `pending` - Pending\n* `done` - Done\n* `skipped` - Skipped (kein Gewinn)\n* `failed` - Fehlgeschlagen"
+            },
             "CsrfTokenResponse": {
                 "type": "object",
                 "properties": {
@@ -4868,6 +5011,16 @@
                 "type": "string",
                 "description": "* `arbeitsschutz` - Arbeitsschutz\n* `brandschutz` - Brand- & Erste Hilfe\n* `gefahrstoffe` - Gefahrstoffe & Maschinen\n* `datenschutz` - Datenschutz & IT\n* `compliance` - Compliance & Recht\n* `umwelt` - Umwelt & Qualität\n* `sonstiges` - Sonstiges"
             },
+            "KonvertierungStatusEnum": {
+                "enum": [
+                    "not_needed",
+                    "pending",
+                    "done",
+                    "failed"
+                ],
+                "type": "string",
+                "description": "* `not_needed` - Nicht noetig\n* `pending` - Pending\n* `done` - Done\n* `failed` - Fehlgeschlagen"
+            },
             "KorrekturInternal": {
                 "type": "object",
                 "properties": {
@@ -5004,6 +5157,69 @@
                     "ist_standardkatalog",
                     "module",
                     "titel"
+                ]
+            },
+            "KursAsset": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "kurs": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "original_mime": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "original_size_bytes": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "compression_status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/CompressionStatusEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "compressed_size_bytes": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "konvertierung_status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/KonvertierungStatusEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "hochgeladen_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "download_url": {
+                        "type": "string",
+                        "nullable": true,
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "compressed_size_bytes",
+                    "compression_status",
+                    "download_url",
+                    "hochgeladen_am",
+                    "id",
+                    "konvertierung_status",
+                    "kurs",
+                    "original_mime",
+                    "original_size_bytes"
                 ]
             },
             "KursDetail": {
@@ -6024,6 +6240,37 @@
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/KorrekturInternal"
+                        }
+                    }
+                }
+            },
+            "PaginatedKursAssetList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/KursAsset"
                         }
                     }
                 }
