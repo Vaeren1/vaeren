@@ -987,3 +987,65 @@ def test_compression_image_jpeg_q85_in_place():
         assert r.status in ("done", "skipped"), r.error
     finally:
         p.unlink(missing_ok=True)
+
+
+# --- Slice 2c: Bild-Upload ---------------------------------------------
+
+
+def test_image_upload_and_modul_link(tenant_setup):
+    """PNG-Upload + Modul mit typ=bild + asset → 201."""
+    from unittest.mock import patch
+    from io import BytesIO
+    from PIL import Image
+
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+
+    # 1000x1000 PNG
+    buf = BytesIO()
+    Image.new("RGB", (1000, 1000), color=(180, 50, 100)).save(buf, format="PNG")
+    buf.seek(0)
+    from django.core.files.uploadedfile import SimpleUploadedFile
+    upload = SimpleUploadedFile("schaubild.png", buf.read(), content_type="image/png")
+
+    with patch("pflichtunterweisung.tasks.compress_asset.delay"):
+        resp = client.post(
+            "/api/kurs-assets/upload/",
+            {"kurs": kurs.pk, "file": upload},
+            format="multipart",
+        )
+    assert resp.status_code == 201, resp.content
+    asset_id = resp.json()["id"]
+    assert resp.json()["original_mime"] == "image/png"
+
+    # Modul anlegen, das das Asset referenziert
+    resp2 = client.post(
+        "/api/kurs-module/",
+        {
+            "kurs": kurs.pk,
+            "titel": "Anlagenschema",
+            "typ": "bild",
+            "asset": asset_id,
+            "reihenfolge": 0,
+        },
+        content_type="application/json",
+    )
+    assert resp2.status_code == 201, resp2.content
+    assert resp2.json()["typ"] == "bild"
+    assert resp2.json()["asset"] == asset_id
+
+
+def test_bild_modul_ohne_asset_rejected(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+    resp = client.post(
+        "/api/kurs-module/",
+        {"kurs": kurs.pk, "titel": "X", "typ": "bild", "reihenfolge": 0},
+        content_type="application/json",
+    )
+    assert resp.status_code == 400
+    # asset.required oder analog
