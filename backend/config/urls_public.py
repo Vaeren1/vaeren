@@ -1,4 +1,4 @@
-"""URLs für das public-Schema (Demo-Lead-Capture + späteres Marketing/Admin)."""
+"""URLs für das public-Schema (Demo-Lead-Capture + Marketing-API + Admin)."""
 
 from django.urls import include, path
 
@@ -9,4 +9,5 @@ urlpatterns: list = [
     # bevor Tenant-Domain-Mapping greift.
     path("api/health/", health, name="health-public"),
     path("api/", include("tenants.urls")),
+    path("api/", include("redaktion.urls")),
 ]

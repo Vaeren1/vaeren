@@ -1654,8 +1654,12 @@ export interface operations {
     antwort_optionen_list: {
         parameters: {
             query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
                 /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
                 page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
             };
             header?: never;
             path?: never;
@@ -1800,8 +1804,12 @@ export interface operations {
     audit_list: {
         parameters: {
             query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
                 /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
                 page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
             };
             header?: never;
             path?: never;
@@ -2151,8 +2159,12 @@ export interface operations {
     compliance_tasks_list: {
         parameters: {
             query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
                 /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
                 page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
             };
             header?: never;
             path?: never;
@@ -2233,8 +2245,12 @@ export interface operations {
     fragen_list: {
         parameters: {
             query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
                 /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
                 page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
             };
             header?: never;
             path?: never;
@@ -2398,8 +2414,12 @@ export interface operations {
     hinschg_meldungen_list: {
         parameters: {
             query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
                 /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
                 page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
             };
             header?: never;
             path?: never;
@@ -2567,8 +2587,12 @@ export interface operations {
     kurs_module_list: {
         parameters: {
             query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
                 /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
                 page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
             };
             header?: never;
             path?: never;
@@ -2713,8 +2737,12 @@ export interface operations {
     kurse_list: {
         parameters: {
             query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
                 /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
                 page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
             };
             header?: never;
             path?: never;
@@ -2859,8 +2887,12 @@ export interface operations {
     mitarbeiter_list: {
         parameters: {
             query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
                 /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
                 page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
             };
             header?: never;
             path?: never;
@@ -3005,8 +3037,12 @@ export interface operations {
     notifications_list: {
         parameters: {
             query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
                 /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
                 page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
             };
             header?: never;
             path?: never;
@@ -3324,8 +3360,12 @@ export interface operations {
     schulungswellen_list: {
         parameters: {
             query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
                 /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
                 page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
             };
             header?: never;
             path?: never;

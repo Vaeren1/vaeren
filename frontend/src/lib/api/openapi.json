@@ -11,12 +11,30 @@
                 "operationId": "antwort_optionen_list",
                 "parameters": [
                     {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "page",
                         "required": false,
                         "in": "query",
                         "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -260,12 +278,30 @@
                 "operationId": "audit_list",
                 "parameters": [
                     {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "page",
                         "required": false,
                         "in": "query",
                         "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -881,12 +917,30 @@
                 "description": "Read-only API für ComplianceTask. CRUD kommt sprintweise pro Subtype.",
                 "parameters": [
                     {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "page",
                         "required": false,
                         "in": "query",
                         "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -1006,12 +1060,30 @@
                 "operationId": "fragen_list",
                 "parameters": [
                     {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "page",
                         "required": false,
                         "in": "query",
                         "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -1283,12 +1355,30 @@
                 "description": "Bearbeiter-API. Permission per `HinSchGMeldungPermission`.",
                 "parameters": [
                     {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "page",
                         "required": false,
                         "in": "query",
                         "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -1584,12 +1674,30 @@
                 "operationId": "kurs_module_list",
                 "parameters": [
                     {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "page",
                         "required": false,
                         "in": "query",
                         "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -1833,12 +1941,30 @@
                 "operationId": "kurse_list",
                 "parameters": [
                     {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "page",
                         "required": false,
                         "in": "query",
                         "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -2083,12 +2209,30 @@
                 "description": "CRUD für Mitarbeiter.",
                 "parameters": [
                     {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "page",
                         "required": false,
                         "in": "query",
                         "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -2338,12 +2482,30 @@
                 "description": "In-App-Notifications für den eingeloggten User.\n\nNur eigene + nur In-App-Channel (E-Mail-Notifications werden separat\nversendet, gehören aber nicht in den Bell-Dropdown).",
                 "parameters": [
                     {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "page",
                         "required": false,
                         "in": "query",
                         "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -2877,12 +3039,30 @@
                 "operationId": "schulungswellen_list",
                 "parameters": [
                     {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "page",
                         "required": false,
                         "in": "query",
                         "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],

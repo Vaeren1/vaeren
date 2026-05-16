@@ -1,0 +1,14 @@
+[
+  {"key": "eur_lex", "name": "EUR-Lex", "base_url": "https://eur-lex.europa.eu", "parser_key": "redaktion.sources.eur_lex.EurLexParser"},
+  {"key": "eu_commission", "name": "EU-Kommission Press", "base_url": "https://ec.europa.eu/commission/presscorner", "parser_key": "redaktion.sources.eu_commission.EuCommissionParser"},
+  {"key": "eu_parliament", "name": "EU-Parlament News", "base_url": "https://www.europarl.europa.eu/news", "parser_key": "redaktion.sources.eu_parliament.EuParliamentParser"},
+  {"key": "edpb", "name": "European Data Protection Board", "base_url": "https://edpb.europa.eu", "parser_key": "redaktion.sources.edpb.EdpbParser"},
+  {"key": "bmj", "name": "BMJ", "base_url": "https://www.bmj.de", "parser_key": "redaktion.sources.bmj.BmjParser"},
+  {"key": "bfdi", "name": "BfDI", "base_url": "https://www.bfdi.bund.de", "parser_key": "redaktion.sources.bfdi.BfdiParser"},
+  {"key": "bafin", "name": "BaFin", "base_url": "https://www.bafin.de", "parser_key": "redaktion.sources.bafin.BafinParser"},
+  {"key": "bafa", "name": "BAFA", "base_url": "https://www.bafa.de", "parser_key": "redaktion.sources.bafa.BafaParser"},
+  {"key": "curia", "name": "EuGH", "base_url": "https://curia.europa.eu", "parser_key": "redaktion.sources.curia.CuriaParser"},
+  {"key": "bverfg", "name": "Bundesverfassungsgericht", "base_url": "https://www.bundesverfassungsgericht.de", "parser_key": "redaktion.sources.bverfg.BverfgParser"},
+  {"key": "bgh", "name": "Bundesgerichtshof", "base_url": "https://www.bundesgerichtshof.de", "parser_key": "redaktion.sources.bgh.BghParser"},
+  {"key": "enisa", "name": "ENISA", "base_url": "https://www.enisa.europa.eu", "parser_key": "redaktion.sources.enisa.EnisaParser"}
+]
