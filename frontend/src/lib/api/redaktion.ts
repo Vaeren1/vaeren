@@ -52,8 +52,18 @@ export interface NewsPostAdmin {
   expires_at: string | null;
   created_at: string;
   updated_at: string;
+  // Candidate-Kontext (rohe Crawler-Daten + Curator-Begründung)
   candidate_titel: string | null;
+  candidate_excerpt: string | null;
   candidate_quelle: string | null;
+  candidate_quell_url: string | null;
+  candidate_fetched_at: string | null;
+  candidate_published_at_source: string | null;
+  curator_begruendung: string | null;
+  // Computed
+  lifetime_days: number | null;
+  days_until_expiry: number | null;
+  days_since_published: number | null;
   notbremse_url: string;
 }
 

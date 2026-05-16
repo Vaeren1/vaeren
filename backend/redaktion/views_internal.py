@@ -33,12 +33,34 @@ logger = logging.getLogger(__name__)
 
 
 class NewsPostInternalSerializer(serializers.ModelSerializer):
+    # --- Source-Candidate (rohe Crawler-Daten vor LLM-Verarbeitung) ----
     candidate_titel = serializers.CharField(
         source="candidate.titel_raw", read_only=True, allow_null=True
+    )
+    candidate_excerpt = serializers.CharField(
+        source="candidate.excerpt_raw", read_only=True, allow_null=True
     )
     candidate_quelle = serializers.CharField(
         source="candidate.source.name", read_only=True, allow_null=True
     )
+    candidate_quell_url = serializers.URLField(
+        source="candidate.quell_url", read_only=True, allow_null=True
+    )
+    candidate_fetched_at = serializers.DateTimeField(
+        source="candidate.fetched_at", read_only=True, allow_null=True
+    )
+    candidate_published_at_source = serializers.DateTimeField(
+        source="candidate.published_at_source", read_only=True, allow_null=True
+    )
+    curator_begruendung = serializers.CharField(
+        source="candidate.curator_begruendung", read_only=True, allow_null=True
+    )
+
+    # --- Computed: Standzeit + Lifetime in Tagen ----------------------
+    lifetime_days = serializers.SerializerMethodField()
+    days_until_expiry = serializers.SerializerMethodField()
+    days_since_published = serializers.SerializerMethodField()
+
     notbremse_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -62,8 +84,18 @@ class NewsPostInternalSerializer(serializers.ModelSerializer):
             "expires_at",
             "created_at",
             "updated_at",
+            # Candidate-Kontext
             "candidate_titel",
+            "candidate_excerpt",
             "candidate_quelle",
+            "candidate_quell_url",
+            "candidate_fetched_at",
+            "candidate_published_at_source",
+            "curator_begruendung",
+            # Computed
+            "lifetime_days",
+            "days_until_expiry",
+            "days_since_published",
             "notbremse_url",
         )
         read_only_fields = (
@@ -71,7 +103,15 @@ class NewsPostInternalSerializer(serializers.ModelSerializer):
             "verifier_confidence",
             "verifier_issues",
             "candidate_titel",
+            "candidate_excerpt",
             "candidate_quelle",
+            "candidate_quell_url",
+            "candidate_fetched_at",
+            "candidate_published_at_source",
+            "curator_begruendung",
+            "lifetime_days",
+            "days_until_expiry",
+            "days_since_published",
             "created_at",
             "updated_at",
             "notbremse_url",
@@ -79,6 +119,30 @@ class NewsPostInternalSerializer(serializers.ModelSerializer):
 
     def get_notbremse_url(self, obj):
         return f"/api/public/redaktion/unpublish/{obj.unpublish_token}/"
+
+    def get_lifetime_days(self, obj):
+        from redaktion.models import LIFETIME_DAYS_BY_RELEVANZ, NewsPostRelevanz
+
+        try:
+            return LIFETIME_DAYS_BY_RELEVANZ[NewsPostRelevanz(obj.relevanz)]
+        except (KeyError, ValueError):
+            return None
+
+    def get_days_until_expiry(self, obj):
+        if not obj.expires_at:
+            return None
+        from django.utils import timezone
+
+        delta = obj.expires_at - timezone.now()
+        return delta.days
+
+    def get_days_since_published(self, obj):
+        if not obj.published_at:
+            return None
+        from django.utils import timezone
+
+        delta = timezone.now() - obj.published_at
+        return delta.days
 
 
 class KorrekturInternalSerializer(serializers.ModelSerializer):

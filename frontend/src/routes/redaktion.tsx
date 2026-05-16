@@ -36,11 +36,14 @@ import {
 import { cn } from "@/lib/utils";
 import {
   AlertTriangle,
+  CheckCircle2,
   ExternalLink,
+  Gauge,
   Pin,
   PinOff,
   ScrollText,
   Search,
+  Sparkles,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -240,13 +243,12 @@ function PostRow({
               angepinnt
             </span>
           )}
-          {post.status === "hold" && (
-            <span className="text-[10px] uppercase tracking-wide text-amber-700 font-medium">
-              <AlertTriangle className="inline h-3 w-3 mr-0.5" />
-              Verifier: {post.verifier_issues?.length ?? 0} Issue(s)
-              {post.verifier_confidence != null &&
-                ` · conf ${post.verifier_confidence.toFixed(2)}`}
-            </span>
+          {post.verifier_confidence != null && (
+            <ConfidenceBadge
+              confidence={post.verifier_confidence}
+              issuesCount={post.verifier_issues?.length ?? 0}
+              status={post.status}
+            />
           )}
         </div>
         <h3 className="font-serif text-base font-medium leading-tight">
@@ -259,15 +261,22 @@ function PostRow({
           {post.candidate_quelle && (
             <span>Quelle: {post.candidate_quelle}</span>
           )}
-          {post.published_at && (
-            <span>
-              Live seit {new Date(post.published_at).toLocaleDateString("de-DE")}
+          {post.days_since_published != null && (
+            <span>Live seit {post.days_since_published} Tagen</span>
+          )}
+          {post.days_until_expiry != null && post.status === "published" && (
+            <span
+              className={cn(
+                post.days_until_expiry <= 7 && "text-amber-700 font-medium",
+              )}
+            >
+              {post.days_until_expiry > 0
+                ? `läuft in ${post.days_until_expiry} Tagen ab`
+                : "abgelaufen"}
             </span>
           )}
-          {post.expires_at && (
-            <span>
-              läuft ab {new Date(post.expires_at).toLocaleDateString("de-DE")}
-            </span>
+          {post.lifetime_days != null && (
+            <span>Standzeit: {post.lifetime_days} Tage</span>
           )}
         </div>
       </div>
@@ -396,20 +405,62 @@ function PostDetail({
         </Button>
       </CardHeader>
       <CardContent className="space-y-5">
+        {/* Pipeline-Analyse: alle Daten der LLM-Stufen + Crawler */}
+        <PipelineAnalyse post={post} />
+
         {post.verifier_issues && post.verifier_issues.length > 0 && (
           <div className="p-4 rounded-md bg-amber-50 border border-amber-200">
             <div className="flex items-center gap-2 text-amber-900 font-medium mb-2">
               <AlertTriangle className="h-4 w-4" />
-              Verifier-Befunde
+              Verifier-Befunde ({post.verifier_issues.length})
             </div>
             <ul className="text-sm text-amber-900 space-y-1.5">
               {post.verifier_issues.map((i, idx) => (
                 <li key={idx} className="flex gap-2">
-                  <span>•</span>
+                  <span className="text-amber-700 font-mono mt-0.5">{idx + 1}.</span>
                   <span>{i}</span>
                 </li>
               ))}
             </ul>
+          </div>
+        )}
+
+        {post.candidate_titel && (
+          <div className="p-4 rounded-md bg-slate-50 border border-slate-200">
+            <div className="text-xs uppercase tracking-widest text-slate-700 font-medium mb-2">
+              Roh-Quelle (vor LLM-Bearbeitung)
+            </div>
+            <div className="text-sm font-medium text-slate-900 mb-1">
+              {post.candidate_titel}
+            </div>
+            {post.candidate_excerpt && (
+              <p className="text-sm text-slate-600 leading-relaxed line-clamp-4">
+                {post.candidate_excerpt}
+              </p>
+            )}
+            {post.candidate_quell_url && (
+              <a
+                href={post.candidate_quell_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-2"
+              >
+                <ExternalLink className="h-3 w-3" />
+                Original im neuen Tab öffnen
+              </a>
+            )}
+          </div>
+        )}
+
+        {post.curator_begruendung && (
+          <div className="p-4 rounded-md bg-indigo-50 border border-indigo-200">
+            <div className="flex items-center gap-2 text-indigo-900 font-medium mb-2">
+              <Sparkles className="h-4 w-4" />
+              Curator-Begründung (warum wurde dieser Beitrag ausgewählt)
+            </div>
+            <p className="text-sm text-indigo-900 leading-relaxed">
+              {post.curator_begruendung}
+            </p>
           </div>
         )}
 
@@ -501,5 +552,191 @@ function PostDetail({
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+// --- ConfidenceBadge: visualisiert den Verifier-Score ----------------
+
+function ConfidenceBadge({
+  confidence,
+  issuesCount,
+  status,
+}: {
+  confidence: number;
+  issuesCount: number;
+  status: NewsPostStatus;
+}) {
+  const pct = Math.round(confidence * 100);
+  let toneClass = "bg-emerald-100 text-emerald-800 border-emerald-200";
+  let icon = <CheckCircle2 className="inline h-3 w-3 mr-0.5" />;
+  if (confidence < 0.7) {
+    toneClass = "bg-rose-100 text-rose-800 border-rose-200";
+    icon = <AlertTriangle className="inline h-3 w-3 mr-0.5" />;
+  } else if (confidence < 0.85) {
+    toneClass = "bg-amber-100 text-amber-800 border-amber-200";
+    icon = <AlertTriangle className="inline h-3 w-3 mr-0.5" />;
+  }
+  return (
+    <span
+      className={cn(
+        "px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wide font-medium border",
+        toneClass,
+      )}
+      title={`Verifier-Confidence ${pct} % · ${issuesCount} Issue(s) · Status: ${STATUS_LABEL[status]}`}
+    >
+      {icon}
+      {pct}% Konfidenz
+      {issuesCount > 0 && ` · ${issuesCount} Issue${issuesCount === 1 ? "" : "s"}`}
+    </span>
+  );
+}
+
+// --- PipelineAnalyse: kompakte Karte mit allen Pipeline-Daten --------
+
+function PipelineAnalyse({ post }: { post: NewsPostAdmin }) {
+  const conf = post.verifier_confidence;
+  const confPct = conf != null ? Math.round(conf * 100) : null;
+  let confColor = "bg-slate-200";
+  if (conf != null) {
+    if (conf >= 0.85) confColor = "bg-emerald-500";
+    else if (conf >= 0.7) confColor = "bg-amber-500";
+    else confColor = "bg-rose-500";
+  }
+  return (
+    <div className="rounded-md border border-slate-200 bg-slate-50/70 overflow-hidden">
+      <div className="px-4 py-2 border-b border-slate-200 bg-white">
+        <div className="flex items-center gap-2 text-slate-700 font-medium text-sm">
+          <Gauge className="h-4 w-4" />
+          Pipeline-Analyse
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 px-4 py-3 text-sm">
+        {/* Verifier-Score als Bar */}
+        <div className="md:col-span-2">
+          <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+            <span className="uppercase tracking-wide">Verifier-Konfidenz</span>
+            <span className="font-mono text-slate-900">
+              {confPct != null ? `${confPct} %` : "n/a"}
+              {confPct != null && (
+                <span className="text-muted-foreground">
+                  {" · Schwelle 85 %"}
+                </span>
+              )}
+            </span>
+          </div>
+          <div className="h-2 w-full rounded-full bg-slate-200 overflow-hidden">
+            <div
+              className={cn("h-full transition-all", confColor)}
+              style={{ width: `${confPct ?? 0}%` }}
+            />
+          </div>
+          <div className="mt-1.5 text-xs text-muted-foreground">
+            {conf == null
+              ? "Verifier wurde noch nicht ausgeführt (Post manuell angelegt oder vom seed-Command erstellt)."
+              : conf >= 0.85
+                ? "Über Schwelle: automatisch published."
+                : conf >= 0.7
+                  ? "Knapp unter Schwelle: in Hold zur manuellen Sichtung."
+                  : "Deutlich unter Schwelle: Verifier hat substantielle Issues gefunden."}
+          </div>
+        </div>
+
+        {/* Issues-Count */}
+        <Field label="Verifier-Issues">
+          {post.verifier_issues && post.verifier_issues.length > 0 ? (
+            <span className="text-amber-700 font-medium">
+              {post.verifier_issues.length} Befund
+              {post.verifier_issues.length === 1 ? "" : "e"}
+            </span>
+          ) : (
+            <span className="text-emerald-700">keine</span>
+          )}
+        </Field>
+
+        <Field label="Quelle">{post.candidate_quelle ?? "—"}</Field>
+
+        <Field label="Crawl-Zeitpunkt">
+          {post.candidate_fetched_at
+            ? new Date(post.candidate_fetched_at).toLocaleString("de-DE")
+            : "—"}
+        </Field>
+
+        <Field label="Veröffentlicht in Original-Quelle">
+          {post.candidate_published_at_source
+            ? new Date(post.candidate_published_at_source).toLocaleDateString(
+                "de-DE",
+              )
+            : "—"}
+        </Field>
+
+        <Field label="Relevanz / Standzeit">
+          {RELEVANZ_LABEL[post.relevanz]}
+          {post.lifetime_days != null && ` · ${post.lifetime_days} Tage`}
+        </Field>
+
+        <Field label="Status">{STATUS_LABEL[post.status]}</Field>
+
+        {post.published_at && (
+          <Field label="Live seit">
+            {new Date(post.published_at).toLocaleString("de-DE")}
+            {post.days_since_published != null && (
+              <span className="text-muted-foreground">
+                {" · "}
+                {post.days_since_published} Tag
+                {post.days_since_published === 1 ? "" : "e"}
+              </span>
+            )}
+          </Field>
+        )}
+
+        {post.expires_at && (
+          <Field label="Läuft ab">
+            {new Date(post.expires_at).toLocaleString("de-DE")}
+            {post.days_until_expiry != null && (
+              <span
+                className={cn(
+                  "ml-1",
+                  post.days_until_expiry <= 7
+                    ? "text-amber-700 font-medium"
+                    : "text-muted-foreground",
+                )}
+              >
+                {" · "}
+                {post.days_until_expiry > 0
+                  ? `in ${post.days_until_expiry} Tag${post.days_until_expiry === 1 ? "" : "en"}`
+                  : "abgelaufen"}
+              </span>
+            )}
+          </Field>
+        )}
+
+        <Field label="Beitrag-Slug">
+          <span className="font-mono text-xs">{post.slug}</span>
+        </Field>
+
+        <Field label="Notbremse-URL (Token)">
+          <a
+            href={post.notbremse_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline font-mono text-xs break-all"
+          >
+            {post.notbremse_url}
+          </a>
+        </Field>
+      </div>
+    </div>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">
+        {label}
+      </div>
+      <div className="text-sm text-slate-900">{children}</div>
+    </div>
   );
 }
