@@ -25,11 +25,7 @@ import { z } from "zod";
 export const mitarbeiterSchema = z.object({
   vorname: z.string().min(1, "Pflichtfeld"),
   nachname: z.string().min(1, "Pflichtfeld"),
-  email: z
-    .string()
-    .email("Bitte gültige E-Mail.")
-    .or(z.literal(""))
-    .optional(),
+  email: z.string().email("Bitte gültige E-Mail.").or(z.literal("")).optional(),
   abteilung: z.string().min(1, "Pflichtfeld"),
   rolle: z.string().min(1, "Pflichtfeld"),
   eintritt: z.string().min(1, "Pflichtfeld"),
