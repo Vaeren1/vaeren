@@ -137,3 +137,48 @@ def test_schulungs_welle_str_includes_status(tenant_setup):
         s = str(welle)
         assert "Q1-Schulung" in s
         assert "Entwurf" in s
+
+
+# --- Slice S1 (eigene Kurse): Kurs-Validierung -------------------------
+
+
+from django.core.exceptions import ValidationError
+
+from pflichtunterweisung.models import Kurs
+
+
+def test_kurs_clean_quiz_modus_default_passes():
+    kurs = KursFactory.build(
+        quiz_modus=Kurs.QuizModus.QUIZ, fragen_pro_quiz=10, min_richtig_prozent=80
+    )
+    kurs.clean()  # raises bei Fehler — soll NICHT raisen
+
+
+def test_kurs_clean_kenntnisnahme_requires_zero_quiz_fields():
+    kurs = KursFactory.build(
+        quiz_modus=Kurs.QuizModus.KENNTNISNAHME,
+        fragen_pro_quiz=10,
+        min_richtig_prozent=0,
+    )
+    with pytest.raises(ValidationError) as exc:
+        kurs.clean()
+    assert "fragen_pro_quiz" in exc.value.message_dict
+
+
+def test_kurs_clean_lesezeit_requires_positive_seconds():
+    kurs = KursFactory.build(
+        quiz_modus=Kurs.QuizModus.KENNTNISNAHME_LESEZEIT,
+        mindest_lesezeit_s=0,
+        fragen_pro_quiz=0,
+        min_richtig_prozent=0,
+    )
+    with pytest.raises(ValidationError) as exc:
+        kurs.clean()
+    assert "mindest_lesezeit_s" in exc.value.message_dict
+
+
+def test_kurs_ist_standardkatalog_property():
+    kurs_std = KursFactory.build(eigentuemer_tenant="")
+    kurs_own = KursFactory.build(eigentuemer_tenant="acme_gmbh")
+    assert kurs_std.ist_standardkatalog is True
+    assert kurs_own.ist_standardkatalog is False
