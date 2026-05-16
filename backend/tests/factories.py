@@ -111,7 +111,15 @@ from pflichtunterweisung.models import (  # noqa: E402
 )
 
 
+def _current_tenant_schema() -> str:
+    from django.db import connection
+
+    return connection.schema_name
+
+
 class KursFactory(factory.django.DjangoModelFactory):
+    """Standard-Katalog-Kurs (eigentuemer_tenant=""). Read-only fuer Tenants."""
+
     class Meta:
         model = Kurs
 
@@ -119,6 +127,18 @@ class KursFactory(factory.django.DjangoModelFactory):
     beschreibung = "Pflicht-Schulung zu Vaeren-Compliance-Grundlagen."
     gueltigkeit_monate = 12
     min_richtig_prozent = 80
+    fragen_pro_quiz = 10
+    quiz_modus = Kurs.QuizModus.QUIZ
+    mindest_lesezeit_s = 0
+    zertifikat_aktiv = True
+    eigentuemer_tenant = ""  # Standardkatalog
+
+
+class EigenerKursFactory(KursFactory):
+    """Vom Tenant selbst angelegter Kurs. eigentuemer_tenant + erstellt_von gesetzt."""
+
+    eigentuemer_tenant = factory.LazyFunction(_current_tenant_schema)
+    erstellt_von = factory.SubFactory(UserFactory)
 
 
 class KursModulFactory(factory.django.DjangoModelFactory):
@@ -210,6 +230,7 @@ __all__ = [
     "AntwortOptionFactory",
     "BearbeitungsschrittFactory",
     "ComplianceTaskFactory",
+    "EigenerKursFactory",
     "EvidenceFactory",
     "FrageFactory",
     "KursFactory",
