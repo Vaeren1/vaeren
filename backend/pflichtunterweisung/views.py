@@ -116,9 +116,57 @@ class KursViewSet(viewsets.ModelViewSet):
 
 
 class KursModulViewSet(viewsets.ModelViewSet):
-    queryset = KursModul.objects.all()
+    queryset = KursModul.objects.all().select_related("kurs", "asset")
     serializer_class = KursModulSerializer
     permission_classes: ClassVar = [KursPermission]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        kurs_id = self.request.query_params.get("kurs")
+        if kurs_id:
+            qs = qs.filter(kurs_id=kurs_id)
+        return qs
+
+    def _check_owner(self, kurs: Kurs) -> None:
+        from rest_framework.exceptions import PermissionDenied
+        if kurs.ist_standardkatalog:
+            raise PermissionDenied("Standard-Katalog-Kurse koennen nicht editiert werden.")
+
+    def perform_create(self, serializer):
+        self._check_owner(serializer.validated_data["kurs"])
+        serializer.save()
+
+    def perform_update(self, serializer):
+        self._check_owner(serializer.instance.kurs)
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        self._check_owner(instance.kurs)
+        instance.delete()
+
+    @action(detail=False, methods=["post"], url_path="reorder")
+    def reorder(self, request):
+        """Body: {kurs: <id>, modul_ids: [id1, id2, ...]}. Setzt reihenfolge atomar."""
+        from rest_framework.exceptions import PermissionDenied, ValidationError
+
+        kurs_id = request.data.get("kurs")
+        ids = request.data.get("modul_ids") or []
+        if not kurs_id or not isinstance(ids, list):
+            raise ValidationError("Body benoetigt {kurs, modul_ids}.")
+        kurs = get_object_or_404(Kurs, pk=kurs_id)
+        if kurs.ist_standardkatalog:
+            raise PermissionDenied("Standard-Katalog-Kurse koennen nicht editiert werden.")
+        existing = list(kurs.module.values_list("id", flat=True))
+        if set(existing) != set(ids):
+            raise ValidationError("modul_ids muessen exakt die existierenden Modul-IDs sein.")
+        with transaction.atomic():
+            # Zweiphasig: zuerst hohe Temp-Werte um unique_together zu vermeiden,
+            # dann finale Werte setzen.
+            for i, mid in enumerate(ids):
+                KursModul.objects.filter(pk=mid).update(reihenfolge=10000 + i)
+            for i, mid in enumerate(ids):
+                KursModul.objects.filter(pk=mid).update(reihenfolge=i)
+        return Response({"reordered": len(ids)})
 
 
 class FrageViewSet(viewsets.ModelViewSet):

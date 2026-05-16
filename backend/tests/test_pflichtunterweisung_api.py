@@ -13,6 +13,7 @@ from django_tenants.utils import (
 
 from core.models import ComplianceTaskStatus, TenantRole
 from pflichtunterweisung.models import (
+    KursModul,
     SchulungsTask,
     SchulungsWelle,
     SchulungsWelleStatus,
@@ -763,3 +764,104 @@ def test_seed_kurs_katalog_sets_kategorien():
     assert cnt["datenschutz"] == 2
     assert cnt["umwelt"] == 2
     assert sum(cnt.values()) == 20
+
+
+# --- Slice 2a: Modul-Editor (Text + Reorder) ---------------------------
+
+
+def test_create_text_modul_in_eigenem_kurs(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+    resp = client.post(
+        "/api/kurs-module/",
+        {
+            "kurs": kurs.pk,
+            "titel": "Mein erstes Modul",
+            "typ": "text",
+            "inhalt_md": "## Hallo\n\nLerninhalt hier.",
+            "reihenfolge": 0,
+        },
+        content_type="application/json",
+    )
+    assert resp.status_code == 201, resp.content
+    body = resp.json()
+    assert body["typ"] == "text"
+    assert "Hallo" in body["inhalt_md"]
+
+
+def test_create_modul_in_standardkatalog_blocked(tenant_setup):
+    tenant, domain = tenant_setup
+    client, _ = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant="")
+    resp = client.post(
+        "/api/kurs-module/",
+        {"kurs": kurs.pk, "titel": "X", "typ": "text", "inhalt_md": "x", "reihenfolge": 0},
+        content_type="application/json",
+    )
+    assert resp.status_code == 403
+
+
+def test_text_modul_validation_inhalt_md_pflicht(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+    resp = client.post(
+        "/api/kurs-module/",
+        {"kurs": kurs.pk, "titel": "Leer", "typ": "text", "inhalt_md": "  ", "reihenfolge": 0},
+        content_type="application/json",
+    )
+    assert resp.status_code == 400
+    assert "inhalt_md" in resp.json()
+
+
+def test_modul_reorder_atomic(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+        m1 = KursModulFactory(kurs=kurs, reihenfolge=0, titel="A")
+        m2 = KursModulFactory(kurs=kurs, reihenfolge=1, titel="B")
+        m3 = KursModulFactory(kurs=kurs, reihenfolge=2, titel="C")
+    resp = client.post(
+        "/api/kurs-module/reorder/",
+        {"kurs": kurs.pk, "modul_ids": [m3.pk, m1.pk, m2.pk]},
+        content_type="application/json",
+    )
+    assert resp.status_code == 200
+    with schema_context(tenant.schema_name):
+        titles_in_order = list(
+            KursModul.objects.filter(kurs=kurs).order_by("reihenfolge").values_list("titel", flat=True)
+        )
+    assert titles_in_order == ["C", "A", "B"]
+
+
+def test_modul_reorder_standardkatalog_blocked(tenant_setup):
+    tenant, domain = tenant_setup
+    client, _ = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant="")
+        m1 = KursModulFactory(kurs=kurs, reihenfolge=0)
+    resp = client.post(
+        "/api/kurs-module/reorder/",
+        {"kurs": kurs.pk, "modul_ids": [m1.pk]},
+        content_type="application/json",
+    )
+    assert resp.status_code == 403
+
+
+def test_modul_reorder_rejects_mismatched_ids(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+        m1 = KursModulFactory(kurs=kurs, reihenfolge=0)
+    resp = client.post(
+        "/api/kurs-module/reorder/",
+        {"kurs": kurs.pk, "modul_ids": [m1.pk, 99999]},
+        content_type="application/json",
+    )
+    assert resp.status_code == 400

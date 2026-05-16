@@ -1936,6 +1936,52 @@
                 }
             }
         },
+        "/api/kurs-module/reorder/": {
+            "post": {
+                "operationId": "kurs_module_reorder_create",
+                "description": "Body: {kurs: <id>, modul_ids: [id1, id2, ...]}. Setzt reihenfolge atomar.",
+                "tags": [
+                    "kurs-module"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KursModul"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KursModul"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KursModul"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KursModul"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/api/kurse/": {
             "get": {
                 "operationId": "kurse_list",
@@ -5091,20 +5137,38 @@
                         "type": "string",
                         "maxLength": 200
                     },
-                    "inhalt_md": {
-                        "type": "string",
-                        "description": "Lerninhalt als Markdown"
-                    },
                     "reihenfolge": {
                         "type": "integer",
                         "maximum": 32767,
                         "minimum": 0,
                         "default": 0
+                    },
+                    "typ": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/TypEnum"
+                            }
+                        ],
+                        "description": "Modul-Typ — bestimmt welches Inhalts-Feld gefuellt ist.\n\n* `text` - Text/Markdown\n* `pdf` - PDF\n* `bild` - Bild (PNG/JPG)\n* `office` - Office (DOCX/PPTX)\n* `video_upload` - Video-Upload\n* `video_youtube` - YouTube-Embed"
+                    },
+                    "inhalt_md": {
+                        "type": "string",
+                        "description": "Markdown-Lerninhalt. Befuellt nur bei typ=TEXT."
+                    },
+                    "youtube_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "YouTube-Watch-URL. Befuellt nur bei typ=VIDEO_YOUTUBE.",
+                        "maxLength": 200
+                    },
+                    "asset": {
+                        "type": "integer",
+                        "nullable": true,
+                        "description": "Datei-Asset. Befuellt bei pdf/bild/office/video_upload."
                     }
                 },
                 "required": [
                     "id",
-                    "inhalt_md",
                     "kurs",
                     "titel"
                 ]
@@ -6495,15 +6559,34 @@
                         "type": "string",
                         "maxLength": 200
                     },
-                    "inhalt_md": {
-                        "type": "string",
-                        "description": "Lerninhalt als Markdown"
-                    },
                     "reihenfolge": {
                         "type": "integer",
                         "maximum": 32767,
                         "minimum": 0,
                         "default": 0
+                    },
+                    "typ": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/TypEnum"
+                            }
+                        ],
+                        "description": "Modul-Typ — bestimmt welches Inhalts-Feld gefuellt ist.\n\n* `text` - Text/Markdown\n* `pdf` - PDF\n* `bild` - Bild (PNG/JPG)\n* `office` - Office (DOCX/PPTX)\n* `video_upload` - Video-Upload\n* `video_youtube` - YouTube-Embed"
+                    },
+                    "inhalt_md": {
+                        "type": "string",
+                        "description": "Markdown-Lerninhalt. Befuellt nur bei typ=TEXT."
+                    },
+                    "youtube_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "YouTube-Watch-URL. Befuellt nur bei typ=VIDEO_YOUTUBE.",
+                        "maxLength": 200
+                    },
+                    "asset": {
+                        "type": "integer",
+                        "nullable": true,
+                        "description": "Datei-Asset. Befuellt bei pdf/bild/office/video_upload."
                     }
                 }
             },
@@ -7216,6 +7299,18 @@
                 "required": [
                     "code"
                 ]
+            },
+            "TypEnum": {
+                "enum": [
+                    "text",
+                    "pdf",
+                    "bild",
+                    "office",
+                    "video_upload",
+                    "video_youtube"
+                ],
+                "type": "string",
+                "description": "* `text` - Text/Markdown\n* `pdf` - PDF\n* `bild` - Bild (PNG/JPG)\n* `office` - Office (DOCX/PPTX)\n* `video_upload` - Video-Upload\n* `video_youtube` - YouTube-Embed"
             },
             "TypeEnum": {
                 "enum": [

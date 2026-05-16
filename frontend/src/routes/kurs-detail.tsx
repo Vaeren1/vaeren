@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Markdown } from "@/components/ui/markdown";
+import { ModulEditor } from "@/components/kurs/modul-editor";
 import { KATEGORIE_LABEL, useKurs } from "@/lib/api/schulungen";
 import { Check, X } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
@@ -98,23 +98,19 @@ export function KursDetailPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Lerninhalt</CardTitle>
+          <CardTitle className="text-base">Module</CardTitle>
           <CardDescription>
-            Module in der Reihenfolge, wie Mitarbeitende sie sehen. Markdown-
-            Quelltext (## Überschriften, **fett**, Listen) — wird im Quiz-
-            Player als Klartext mit Zeilenumbrüchen angezeigt.
+            {data.ist_standardkatalog
+              ? "Module in der Reihenfolge, wie Mitarbeitende sie sehen (read-only)."
+              : "Module per Drag & Drop neu sortieren. Klick auf den Stift bearbeitet das Modul, Mülleimer löscht es."}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          {data.module.map((m, idx) => (
-            <div key={m.id} className="rounded border bg-muted/30 p-4">
-              <div className="mb-2 text-xs uppercase tracking-wide text-muted-foreground">
-                Modul {idx + 1} / {data.module.length}
-              </div>
-              <h3 className="mb-2 text-sm font-semibold">{m.titel}</h3>
-              <Markdown source={m.inhalt_md} />
-            </div>
-          ))}
+        <CardContent>
+          <ModulEditor
+            kursId={data.id}
+            module={data.module}
+            readonly={data.ist_standardkatalog}
+          />
         </CardContent>
       </Card>
 

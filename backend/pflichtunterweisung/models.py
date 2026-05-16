@@ -122,12 +122,48 @@ class Kurs(models.Model):
 
 
 class KursModul(models.Model):
-    """Lerninhalt-Block in einem Kurs. Markdown."""
+    """Lerninhalt-Block in einem Kurs.
+
+    Discriminator-Pattern: `typ` bestimmt, welche Felder gefuellt sind.
+    Slice 2a: nur TEXT/Markdown. 2b+: pdf, bild, office, video_upload,
+    video_youtube via KursAsset oder youtube_url.
+    """
+
+    class Typ(models.TextChoices):
+        TEXT = "text", "Text/Markdown"
+        PDF = "pdf", "PDF"
+        BILD = "bild", "Bild (PNG/JPG)"
+        OFFICE = "office", "Office (DOCX/PPTX)"
+        VIDEO_UPLOAD = "video_upload", "Video-Upload"
+        VIDEO_YOUTUBE = "video_youtube", "YouTube-Embed"
 
     kurs = models.ForeignKey(Kurs, on_delete=models.CASCADE, related_name="module")
     titel = models.CharField(max_length=200)
-    inhalt_md = models.TextField(help_text="Lerninhalt als Markdown")
     reihenfolge = models.PositiveSmallIntegerField(default=0)
+    typ = models.CharField(
+        max_length=20, choices=Typ.choices, default=Typ.TEXT,
+        help_text="Modul-Typ — bestimmt welches Inhalts-Feld gefuellt ist.",
+    )
+    inhalt_md = models.TextField(
+        blank=True,
+        help_text="Markdown-Lerninhalt. Befuellt nur bei typ=TEXT.",
+    )
+    youtube_url = models.URLField(
+        blank=True,
+        help_text="YouTube-Watch-URL. Befuellt nur bei typ=VIDEO_YOUTUBE.",
+    )
+    asset = models.ForeignKey(
+        "KursAsset", null=True, blank=True, on_delete=models.PROTECT,
+        related_name="module",
+        help_text="Datei-Asset. Befuellt bei pdf/bild/office/video_upload.",
+    )
+    transcript_cache = models.TextField(
+        blank=True,
+        help_text=(
+            "Cache fuer YouTube-Untertitel oder Audio-Transkript "
+            "(spaeter via youtube-transcript-api). Nur fuer LLM-Quiz."
+        ),
+    )
 
     class Meta:
         ordering = ("reihenfolge", "id")
@@ -137,6 +173,95 @@ class KursModul(models.Model):
 
     def __str__(self) -> str:
         return f"{self.kurs.titel} / {self.titel}"
+
+    def clean(self) -> None:
+        from django.core.exceptions import ValidationError
+
+        if self.typ == self.Typ.TEXT:
+            if not (self.inhalt_md or "").strip():
+                raise ValidationError({"inhalt_md": "Pflicht bei typ=text."})
+            if self.asset_id or self.youtube_url:
+                raise ValidationError(
+                    "Bei typ=text duerfen asset und youtube_url nicht gesetzt sein."
+                )
+        elif self.typ == self.Typ.VIDEO_YOUTUBE:
+            if not self.youtube_url:
+                raise ValidationError({"youtube_url": "Pflicht bei typ=video_youtube."})
+            if self.asset_id or (self.inhalt_md or "").strip():
+                raise ValidationError(
+                    "Bei typ=video_youtube duerfen asset und inhalt_md nicht gesetzt sein."
+                )
+        else:  # pdf, bild, office, video_upload
+            if not self.asset_id:
+                raise ValidationError({"asset": f"Pflicht bei typ={self.typ}."})
+            if self.youtube_url or (self.inhalt_md or "").strip():
+                raise ValidationError(
+                    f"Bei typ={self.typ} duerfen youtube_url und inhalt_md nicht gesetzt sein."
+                )
+
+
+class KursAsset(models.Model):
+    """Datei-Asset, das von KursModul referenziert wird.
+
+    Slice 2a: leere Tabelle, kein Upload-Endpoint. 2b+ aktivieren das.
+    """
+
+    class ScanStatus(models.TextChoices):
+        PENDING = "pending", "Pending"
+        CLEAN = "clean", "Clean"
+        INFECTED = "infected", "Infected"
+        ERROR = "error", "Error"
+
+    class KonvStatus(models.TextChoices):
+        NOT_NEEDED = "not_needed", "Nicht noetig"
+        PENDING = "pending", "Pending"
+        DONE = "done", "Done"
+        FAILED = "failed", "Fehlgeschlagen"
+
+    class CompressionStatus(models.TextChoices):
+        NOT_NEEDED = "not_needed", "Nicht noetig"
+        PENDING = "pending", "Pending"
+        DONE = "done", "Done"
+        SKIPPED = "skipped", "Skipped (kein Gewinn)"
+        FAILED = "failed", "Fehlgeschlagen"
+
+    kurs = models.ForeignKey(Kurs, on_delete=models.CASCADE, related_name="assets")
+    original_datei = models.FileField(upload_to="kurs-uploads/%Y/%m/")
+    original_mime = models.CharField(max_length=100)
+    original_size_bytes = models.PositiveBigIntegerField()
+    konvertierte_pdf = models.FileField(
+        upload_to="kurs-uploads/%Y/%m/", blank=True, null=True,
+        help_text="Bei typ=office: LibreOffice-konvertierte PDF zur Browser-Anzeige.",
+    )
+    scan_status = models.CharField(
+        max_length=20, choices=ScanStatus.choices, default=ScanStatus.CLEAN,
+        help_text="Im MVP immer 'clean'. Feld bleibt fuer Phase 2 (ClamAV).",
+    )
+    konvertierung_status = models.CharField(
+        max_length=20, choices=KonvStatus.choices, default=KonvStatus.NOT_NEEDED,
+    )
+    compression_status = models.CharField(
+        max_length=20, choices=CompressionStatus.choices, default=CompressionStatus.NOT_NEEDED,
+    )
+    compressed_size_bytes = models.PositiveBigIntegerField(null=True, blank=True)
+    extrahierter_text = models.TextField(
+        blank=True,
+        help_text="Plain-Text fuer LLM-Quiz-Generierung (Slice 3).",
+    )
+    hochgeladen_am = models.DateTimeField(auto_now_add=True)
+    hochgeladen_von = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT,
+        related_name="hochgeladene_assets",
+    )
+
+    class Meta:
+        ordering = ("-hochgeladen_am",)
+        verbose_name = "Kurs-Asset"
+        verbose_name_plural = "Kurs-Assets"
+
+    def __str__(self) -> str:
+        kb = self.original_size_bytes // 1024
+        return f"Asset #{self.pk} ({self.original_mime}, {kb} KB)"
 
 
 class Frage(models.Model):

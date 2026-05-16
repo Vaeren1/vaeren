@@ -35,12 +35,98 @@ export const KATEGORIE_ORDER: Kategorie[] = [
   "sonstiges",
 ];
 
+export type ModulTyp =
+  | "text"
+  | "pdf"
+  | "bild"
+  | "office"
+  | "video_upload"
+  | "video_youtube";
+
+export const MODUL_TYP_LABEL: Record<ModulTyp, string> = {
+  text: "Text / Markdown",
+  pdf: "PDF",
+  bild: "Bild (PNG/JPG)",
+  office: "Office (DOCX/PPTX)",
+  video_upload: "Video-Upload",
+  video_youtube: "YouTube-Embed",
+};
+
 export interface KursModul {
   id: number;
   kurs: number;
   titel: string;
-  inhalt_md: string;
   reihenfolge: number;
+  typ: ModulTyp;
+  inhalt_md: string;
+  youtube_url: string;
+  asset: number | null;
+}
+
+export interface ModulInput {
+  kurs: number;
+  titel: string;
+  reihenfolge: number;
+  typ: ModulTyp;
+  inhalt_md?: string;
+  youtube_url?: string;
+  asset?: number | null;
+}
+
+export function useCreateModul() {
+  const qc = useQueryClient();
+  return useMutation<KursModul, ApiError, ModulInput>({
+    mutationFn: (payload) =>
+      api<KursModul>("/api/kurs-module/", { method: "POST", json: payload }),
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: ["kurs", vars.kurs] });
+    },
+  });
+}
+
+export function useUpdateModul() {
+  const qc = useQueryClient();
+  return useMutation<
+    KursModul,
+    ApiError,
+    { id: number; payload: Partial<ModulInput> & { kurs: number } }
+  >({
+    mutationFn: ({ id, payload }) =>
+      api<KursModul>(`/api/kurs-module/${id}/`, {
+        method: "PATCH",
+        json: payload,
+      }),
+    onSuccess: (_d, vars) => {
+      qc.invalidateQueries({ queryKey: ["kurs", vars.payload.kurs] });
+    },
+  });
+}
+
+export function useDeleteModul() {
+  const qc = useQueryClient();
+  return useMutation<void, ApiError, { id: number; kursId: number }>({
+    mutationFn: ({ id }) =>
+      api<void>(`/api/kurs-module/${id}/`, { method: "DELETE" }),
+    onSuccess: (_d, vars) =>
+      qc.invalidateQueries({ queryKey: ["kurs", vars.kursId] }),
+  });
+}
+
+export function useReorderModule() {
+  const qc = useQueryClient();
+  return useMutation<
+    { reordered: number },
+    ApiError,
+    { kurs: number; modul_ids: number[] }
+  >({
+    mutationFn: (payload) =>
+      api<{ reordered: number }>("/api/kurs-module/reorder/", {
+        method: "POST",
+        json: payload,
+      }),
+    onSuccess: (_d, vars) =>
+      qc.invalidateQueries({ queryKey: ["kurs", vars.kurs] }),
+  });
 }
 
 export interface Kurs {

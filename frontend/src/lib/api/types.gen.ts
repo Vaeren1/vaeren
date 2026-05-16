@@ -557,6 +557,23 @@ export interface paths {
         patch: operations["kurs_module_partial_update"];
         trace?: never;
     };
+    "/api/kurs-module/reorder/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Body: {kurs: <id>, modul_ids: [id1, id2, ...]}. Setzt reihenfolge atomar. */
+        post: operations["kurs_module_reorder_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/kurse/": {
         parameters: {
             query?: never;
@@ -1390,10 +1407,28 @@ export interface components {
             readonly id: number;
             kurs: number;
             titel: string;
-            /** @description Lerninhalt als Markdown */
-            inhalt_md: string;
             /** @default 0 */
             reihenfolge: number;
+            /**
+             * @description Modul-Typ — bestimmt welches Inhalts-Feld gefuellt ist.
+             *
+             *     * `text` - Text/Markdown
+             *     * `pdf` - PDF
+             *     * `bild` - Bild (PNG/JPG)
+             *     * `office` - Office (DOCX/PPTX)
+             *     * `video_upload` - Video-Upload
+             *     * `video_youtube` - YouTube-Embed
+             */
+            typ?: components["schemas"]["TypEnum"];
+            /** @description Markdown-Lerninhalt. Befuellt nur bei typ=TEXT. */
+            inhalt_md?: string;
+            /**
+             * Format: uri
+             * @description YouTube-Watch-URL. Befuellt nur bei typ=VIDEO_YOUTUBE.
+             */
+            youtube_url?: string;
+            /** @description Datei-Asset. Befuellt bei pdf/bild/office/video_upload. */
+            asset?: number | null;
         };
         Login: {
             username?: string;
@@ -1905,10 +1940,28 @@ export interface components {
             readonly id?: number;
             kurs?: number;
             titel?: string;
-            /** @description Lerninhalt als Markdown */
-            inhalt_md?: string;
             /** @default 0 */
             reihenfolge: number;
+            /**
+             * @description Modul-Typ — bestimmt welches Inhalts-Feld gefuellt ist.
+             *
+             *     * `text` - Text/Markdown
+             *     * `pdf` - PDF
+             *     * `bild` - Bild (PNG/JPG)
+             *     * `office` - Office (DOCX/PPTX)
+             *     * `video_upload` - Video-Upload
+             *     * `video_youtube` - YouTube-Embed
+             */
+            typ?: components["schemas"]["TypEnum"];
+            /** @description Markdown-Lerninhalt. Befuellt nur bei typ=TEXT. */
+            inhalt_md?: string;
+            /**
+             * Format: uri
+             * @description YouTube-Watch-URL. Befuellt nur bei typ=VIDEO_YOUTUBE.
+             */
+            youtube_url?: string;
+            /** @description Datei-Asset. Befuellt bei pdf/bild/office/video_upload. */
+            asset?: number | null;
         };
         /** @description Bearbeiter-Update: nur Klassifizierungsfelder + Status. */
         PatchedMeldungPatch: {
@@ -2151,6 +2204,16 @@ export interface components {
         TotpVerifyRequest: {
             code: string;
         };
+        /**
+         * @description * `text` - Text/Markdown
+         *     * `pdf` - PDF
+         *     * `bild` - Bild (PNG/JPG)
+         *     * `office` - Office (DOCX/PPTX)
+         *     * `video_upload` - Video-Upload
+         *     * `video_youtube` - YouTube-Embed
+         * @enum {string}
+         */
+        TypEnum: "text" | "pdf" | "bild" | "office" | "video_upload" | "video_youtube";
         /**
          * @description * `gesetzgebung` - Gesetzgebung
          *     * `urteil` - Urteil
@@ -3242,6 +3305,31 @@ export interface operations {
                 "application/json": components["schemas"]["PatchedKursModul"];
                 "application/x-www-form-urlencoded": components["schemas"]["PatchedKursModul"];
                 "multipart/form-data": components["schemas"]["PatchedKursModul"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KursModul"];
+                };
+            };
+        };
+    };
+    kurs_module_reorder_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KursModul"];
+                "application/x-www-form-urlencoded": components["schemas"]["KursModul"];
+                "multipart/form-data": components["schemas"]["KursModul"];
             };
         };
         responses: {

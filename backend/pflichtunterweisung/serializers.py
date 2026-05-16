@@ -49,7 +49,22 @@ class FragePublicSerializer(serializers.ModelSerializer):
 class KursModulSerializer(serializers.ModelSerializer):
     class Meta:
         model = KursModul
-        fields = ("id", "kurs", "titel", "inhalt_md", "reihenfolge")
+        fields = (
+            "id", "kurs", "titel", "reihenfolge", "typ",
+            "inhalt_md", "youtube_url", "asset",
+        )
+
+    def validate(self, attrs):
+        from django.core.exceptions import ValidationError as DjangoValidationError
+
+        check = self.instance or KursModul()
+        for f, v in attrs.items():
+            setattr(check, f, v)
+        try:
+            check.clean()
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError(exc.message_dict if hasattr(exc, "message_dict") else {"non_field_errors": exc.messages})
+        return attrs
 
 
 class KursSerializer(serializers.ModelSerializer):
