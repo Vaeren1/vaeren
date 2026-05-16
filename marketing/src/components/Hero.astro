@@ -31,7 +31,10 @@ const { eyebrow, headline, sub, ctaPrimary, ctaSecondary } = Astro.props;
           </a>
         )}
         {ctaSecondary && (
-          <a href={ctaSecondary.href} class="inline-flex items-center px-5 py-3 text-ink no-underline rounded-full hover:bg-paper-soft text-sm">
+          <a
+            href={ctaSecondary.href}
+            class="inline-flex items-center px-6 py-3.5 bg-paper-soft text-ink font-medium text-base no-underline rounded-full border border-line hover:bg-paper hover:border-brand hover:text-brand transition-colors"
+          >
             {ctaSecondary.label}
           </a>
         )}
