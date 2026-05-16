@@ -1,13 +1,19 @@
 """Verifier-Stufe: prüft NewsPost-Entwurf gegen Quell-Volltext.
 
-Bei verifier-confidence >= 0.85 → status PUBLISHED via publisher.
+Bei verifier-confidence >= CONFIDENCE_THRESHOLD → status PUBLISHED via publisher.
 Sonst → status HOLD (manuelle Sichtung).
+
+Schwelle 0.90 (Konrad-Entscheidung 2026-05-17, Qualität > Quantität):
+Weniger Auto-Publishes, mehr Hold-Posts zur manuellen Sichtung. Reduziert
+Halluzinations-Risiko zulasten von Pipeline-Output.
+Override via env REDAKTION_CONFIDENCE_THRESHOLD.
 """
 
 from __future__ import annotations
 
 import json
 import logging
+import os
 
 import httpx
 
@@ -18,7 +24,9 @@ from .prompts import VERIFIER_SYSTEM
 
 logger = logging.getLogger(__name__)
 
-CONFIDENCE_THRESHOLD = 0.85
+CONFIDENCE_THRESHOLD = float(
+    os.environ.get("REDAKTION_CONFIDENCE_THRESHOLD", "0.90")
+)
 
 
 def _fetch_source_text(url: str) -> str:

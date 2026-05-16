@@ -604,10 +604,10 @@ function ConfidenceBadge({
   const pct = Math.round(confidence * 100);
   let toneClass = "bg-emerald-100 text-emerald-800 border-emerald-200";
   let icon = <CheckCircle2 className="inline h-3 w-3 mr-0.5" />;
-  if (confidence < 0.7) {
+  if (confidence < 0.75) {
     toneClass = "bg-rose-100 text-rose-800 border-rose-200";
     icon = <AlertTriangle className="inline h-3 w-3 mr-0.5" />;
-  } else if (confidence < 0.85) {
+  } else if (confidence < 0.9) {
     toneClass = "bg-amber-100 text-amber-800 border-amber-200";
     icon = <AlertTriangle className="inline h-3 w-3 mr-0.5" />;
   }
@@ -633,8 +633,8 @@ function PipelineAnalyse({ post }: { post: NewsPostAdmin }) {
   const confPct = conf != null ? Math.round(conf * 100) : null;
   let confColor = "bg-slate-200";
   if (conf != null) {
-    if (conf >= 0.85) confColor = "bg-emerald-500";
-    else if (conf >= 0.7) confColor = "bg-amber-500";
+    if (conf >= 0.9) confColor = "bg-emerald-500";
+    else if (conf >= 0.75) confColor = "bg-amber-500";
     else confColor = "bg-rose-500";
   }
   return (
@@ -655,7 +655,7 @@ function PipelineAnalyse({ post }: { post: NewsPostAdmin }) {
               {confPct != null ? `${confPct} %` : "n/a"}
               {confPct != null && (
                 <span className="text-muted-foreground">
-                  {" · Schwelle 85 %"}
+                  {" · Schwelle 90 %"}
                 </span>
               )}
             </span>
@@ -669,9 +669,9 @@ function PipelineAnalyse({ post }: { post: NewsPostAdmin }) {
           <div className="mt-1.5 text-xs text-muted-foreground">
             {conf == null
               ? "Verifier wurde noch nicht ausgeführt (Post manuell angelegt oder vom seed-Command erstellt)."
-              : conf >= 0.85
+              : conf >= 0.9
                 ? "Über Schwelle: automatisch published."
-                : conf >= 0.7
+                : conf >= 0.75
                   ? "Knapp unter Schwelle: in Hold zur manuellen Sichtung."
                   : "Deutlich unter Schwelle: Verifier hat substantielle Issues gefunden."}
           </div>

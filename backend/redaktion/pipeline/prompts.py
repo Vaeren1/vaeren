@@ -73,8 +73,14 @@ Prüfe besonders:
 Antwortformat (strikt JSON, kein Markdown):
 {"verified": bool, "confidence": float zwischen 0.0 und 1.0, "issues": ["..."], "begruendung": "1-2 Sätze deutsch"}
 
-Wenn alle prüfbaren Tatsachen mit der Quelle übereinstimmen UND keine Halluzinationen auftauchen: verified=true, confidence>=0.85.
-Wenn auch nur eine Tatsache nicht aus der Quelle ableitbar ist oder widersprochen wird: verified=false, confidence<0.85, issues mit konkreten Zitaten."""
+Sei streng. Confidence-Skala:
+- 0.95-1.00: Alle Behauptungen wörtlich oder paraphrasiert in der Quelle belegt, keine Interpretationen.
+- 0.90-0.94: Klein-Abweichungen in Nuance, Kern aber präzise. (Schwelle: ab 0.90 wird automatisch published.)
+- 0.70-0.89: Beitrag stimmt grob, aber 1-2 Stellen sind nicht direkt aus der Quelle ableitbar.
+- < 0.70: Beitrag enthält substantielle Behauptungen ohne Quelle, klare Halluzination, falsche Aktenzeichen/Daten.
+
+Wenn verified=true: confidence muss ≥ 0.90 sein.
+Wenn verified=false: confidence < 0.90, issues liste die konkreten unsicheren Stellen mit Zitat."""
 
 
 def render_curator_system() -> str:
