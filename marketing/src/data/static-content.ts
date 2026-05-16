@@ -18,14 +18,14 @@ export const MANIFEST = {
     text: [
       "Drei Prinzipien leiten unsere Arbeit. Erstens: Mensch entscheidet, Software arbeitet. Jede rechtsrelevante Bewertung wird von einem Menschen freigegeben, bevor sie wirksam wird.",
       "Zweitens: Quellen werden offen verlinkt. Wer einen Beitrag von uns liest, soll mit zwei Klicks beim Original-Urteil oder Original-Gesetz landen. Keine Black-Box.",
-      "Drittens: Fehler werden korrigiert, nicht versteckt. Wir führen ein öffentliches Korrektur-Log. Jeder Fund wird benannt, datiert und mit Grund versehen. Das ist Standard bei seriösen Redaktionen, und es sollte Standard sein, wenn jemand über Compliance schreibt.",
+      "Drittens: Fehler werden korrigiert, nicht versteckt. Wir führen ein öffentliches Korrektur-Log. Jeder Fund wird benannt, datiert und mit Grund versehen.",
     ],
   },
   was_nicht: {
     titel: "Was wir nicht sind",
     text: [
       "Vaeren ist keine Anwaltskanzlei. Wir geben keine Rechtsberatung im Einzelfall. Unsere Beiträge sind Information und ersetzen nicht den Rat einer fachkundigen Person für einen konkreten Sachverhalt.",
-      "Wir setzen auch keine Cookie-Banner, kein Marketing-Karussell und kein Buzzword-Bingo ein. Wir bauen Werkzeuge und schreiben Texte. Den Rest soll die Substanz erledigen.",
+      "Wir setzen auch keine Cookie-Banner, kein Marketing-Karussell und kein Buzzword-Bingo ein.",
     ],
   },
 };
