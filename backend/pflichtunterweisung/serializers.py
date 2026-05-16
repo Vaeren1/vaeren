@@ -54,7 +54,7 @@ class KursModulSerializer(serializers.ModelSerializer):
 
 class KursSerializer(serializers.ModelSerializer):
     module = KursModulSerializer(many=True, read_only=True)
-    fragen_anzahl = serializers.SerializerMethodField()
+    fragen_pool_groesse = serializers.SerializerMethodField()
 
     class Meta:
         model = Kurs
@@ -64,14 +64,15 @@ class KursSerializer(serializers.ModelSerializer):
             "beschreibung",
             "gueltigkeit_monate",
             "min_richtig_prozent",
+            "fragen_pro_quiz",
             "aktiv",
             "erstellt_am",
             "module",
-            "fragen_anzahl",
+            "fragen_pool_groesse",
         )
-        read_only_fields = ("erstellt_am", "module", "fragen_anzahl")
+        read_only_fields = ("erstellt_am", "module", "fragen_pool_groesse")
 
-    def get_fragen_anzahl(self, obj: Kurs) -> int:
+    def get_fragen_pool_groesse(self, obj: Kurs) -> int:
         return obj.fragen.count()
 
 

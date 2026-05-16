@@ -17,10 +17,11 @@ export interface Kurs {
   beschreibung: string;
   gueltigkeit_monate: number;
   min_richtig_prozent: number;
+  fragen_pro_quiz: number;
   aktiv: boolean;
   erstellt_am: string;
   module: KursModul[];
-  fragen_anzahl: number;
+  fragen_pool_groesse: number;
 }
 
 export interface AntwortOption {

@@ -13,6 +13,7 @@ Public Endpoints (token-based, kein Login):
 
 from __future__ import annotations
 
+import random
 import secrets
 from datetime import date
 from typing import ClassVar
@@ -42,6 +43,7 @@ from .models import (
     KursModul,
     QuizAntwort,
     SchulungsTask,
+    SchulungsTaskFrage,
     SchulungsWelle,
     SchulungsWelleStatus,
 )
@@ -238,6 +240,36 @@ def _resolve_task(token: str) -> SchulungsTask | None:
     return SchulungsTask.objects.filter(pk=task_id).first()
 
 
+def _ensure_gezogene_fragen(task: SchulungsTask) -> list[Frage]:
+    """Lazy-sampled, persistierte Fragen-Auswahl pro Task.
+
+    Beim ersten Aufruf werden `kurs.fragen_pro_quiz` Fragen zufaellig aus dem
+    Pool gezogen und via SchulungsTaskFrage festgeschrieben. Folgeaufrufe geben
+    dieselbe Auswahl in derselben Reihenfolge zurueck — Tab-Wechsel ist sicher,
+    Wiederholungs-Quiz desselben Mitarbeiters bekommt eine neue Stichprobe
+    (eigener Task, eigene gezogene_fragen).
+    """
+    existing = list(
+        task.frage_ziehungen.select_related("frage").order_by("reihenfolge", "id")
+    )
+    if existing:
+        return [stf.frage for stf in existing]
+
+    pool = list(task.welle.kurs.fragen.all())
+    if not pool:
+        return []
+    k = max(1, min(task.welle.kurs.fragen_pro_quiz, len(pool)))
+    sample = random.sample(pool, k)
+    with transaction.atomic():
+        SchulungsTaskFrage.objects.bulk_create(
+            [
+                SchulungsTaskFrage(task=task, frage=f, reihenfolge=idx)
+                for idx, f in enumerate(sample)
+            ]
+        )
+    return sample
+
+
 @extend_schema(
     responses=inline_serializer(
         name="PublicSchulungResolveResponse",
@@ -270,7 +302,8 @@ def public_schulung_resolve(request, token: str):
     welle = task.welle
     kurs = welle.kurs
     module = list(kurs.module.all().order_by("reihenfolge"))
-    fragen = FragePublicSerializer(kurs.fragen.all().order_by("reihenfolge"), many=True).data
+    gezogene = _ensure_gezogene_fragen(task)
+    fragen = FragePublicSerializer(gezogene, many=True).data
     return Response(
         {
             "task_id": task.pk,
@@ -386,10 +419,12 @@ def public_schulung_abschliessen(request, token: str):
                 "richtig_prozent": task.richtig_prozent,
             }
         )
-    fragen_count = task.welle.kurs.fragen.count()
+    gezogene = _ensure_gezogene_fragen(task)
+    fragen_count = len(gezogene)
     if fragen_count == 0:
         return Response({"detail": "Kurs hat keine Fragen."}, status=status.HTTP_400_BAD_REQUEST)
-    antworten = task.antworten.all()
+    gezogene_ids = {f.pk for f in gezogene}
+    antworten = task.antworten.filter(frage_id__in=gezogene_ids)
     if antworten.count() < fragen_count:
         return Response(
             {

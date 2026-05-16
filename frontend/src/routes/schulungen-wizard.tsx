@@ -140,7 +140,7 @@ export function SchulungenWizardPage() {
                 <option value="">— bitte wählen —</option>
                 {kurse.data?.results.map((k) => (
                   <option key={k.id} value={k.id}>
-                    {k.titel} ({k.fragen_anzahl} Fragen)
+                    {k.titel} ({k.fragen_pro_quiz} Fragen aus {k.fragen_pool_groesse}er Pool)
                   </option>
                 ))}
               </select>

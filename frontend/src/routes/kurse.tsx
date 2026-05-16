@@ -44,7 +44,7 @@ export function KurseListPage() {
               <TableRow>
                 <TableHead>Titel</TableHead>
                 <TableHead>Module</TableHead>
-                <TableHead>Fragen</TableHead>
+                <TableHead>Fragen (pro Quiz / Pool)</TableHead>
                 <TableHead>Gültigkeit</TableHead>
                 <TableHead>Bestehensschwelle</TableHead>
                 <TableHead>Aktiv</TableHead>
@@ -62,7 +62,7 @@ export function KurseListPage() {
                     </Link>
                   </TableCell>
                   <TableCell>{k.module.length}</TableCell>
-                  <TableCell>{k.fragen_anzahl}</TableCell>
+                  <TableCell>{k.fragen_pro_quiz} / {k.fragen_pool_groesse}</TableCell>
                   <TableCell>{k.gueltigkeit_monate} Mo.</TableCell>
                   <TableCell>{k.min_richtig_prozent} %</TableCell>
                   <TableCell>{k.aktiv ? "ja" : "nein"}</TableCell>

@@ -445,3 +445,118 @@ def test_public_zertifikat_blocked_when_not_passed(public_quiz_setup):
     client = Client(HTTP_HOST=domain.domain)
     resp = client.get(f"/api/public/schulung/{token}/zertifikat/")
     assert resp.status_code == 403
+
+
+# --- Fragenpool: Random-Sample + Persistenz ----------------------------
+
+
+@pytest.fixture
+def pool_setup(tenant_setup):
+    """Kurs mit 10-Fragen-Pool und fragen_pro_quiz=3. Sample sollte 3 ziehen."""
+    tenant, domain = tenant_setup
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(min_richtig_prozent=50, fragen_pro_quiz=3)
+        KursModulFactory(kurs=kurs, titel="Modul 1", reihenfolge=0)
+        for i in range(10):
+            f = FrageFactory(kurs=kurs, reihenfolge=i, text=f"Frage {i}")
+            AntwortOptionFactory(frage=f, ist_korrekt=True, reihenfolge=0, text="richtig")
+            AntwortOptionFactory(frage=f, ist_korrekt=False, reihenfolge=1, text="falsch")
+        u = UserFactory(email="creator-pool@pflapi.de")
+        welle = SchulungsWelleFactory(kurs=kurs, erstellt_von=u)
+        m = MitarbeiterFactory()
+        task = SchulungsTask.objects.create(
+            welle=welle,
+            mitarbeiter=m,
+            titel="Pool-Schulung",
+            modul="pflichtunterweisung",
+            kategorie="schulung",
+            frist=welle.deadline,
+            status=ComplianceTaskStatus.OFFEN,
+        )
+        token = make_token(task.pk)
+    return tenant, domain, task, token
+
+
+def test_pool_first_resolve_samples_subset(pool_setup):
+    """Erster resolve zieht fragen_pro_quiz Fragen aus dem 10er-Pool + persistiert sie."""
+    tenant, domain, task, _token = pool_setup
+    client = Client(HTTP_HOST=domain.domain)
+    resp = client.get(f"/api/public/schulung/{make_token(task.pk)}/")
+    assert resp.status_code == 200, resp.content
+    body = resp.json()
+    assert len(body["fragen"]) == 3, "fragen_pro_quiz=3 muss 3 ziehen"
+    with schema_context(tenant.schema_name):
+        task.refresh_from_db()
+        assert task.frage_ziehungen.count() == 3, "Auswahl muss persistiert sein"
+
+
+def test_pool_second_resolve_returns_same_fragen(pool_setup):
+    """Tab-Wechsel-Szenario: zweites resolve liefert exakt dieselbe Auswahl."""
+    _tenant, domain, task, _token = pool_setup
+    client = Client(HTTP_HOST=domain.domain)
+    tok = make_token(task.pk)
+    first = client.get(f"/api/public/schulung/{tok}/").json()
+    second = client.get(f"/api/public/schulung/{tok}/").json()
+    first_ids = [f["id"] for f in first["fragen"]]
+    second_ids = [f["id"] for f in second["fragen"]]
+    assert first_ids == second_ids, "Folge-resolves müssen identische Reihenfolge liefern"
+
+
+def test_pool_abschliessen_counts_against_gezogene_fragen(pool_setup):
+    """Prozent-Rechnung basiert auf gezogene_fragen.count(), nicht auf Pool-Größe."""
+    tenant, domain, task, _token = pool_setup
+    client = Client(HTTP_HOST=domain.domain)
+    tok = make_token(task.pk)
+    # Resolve sampelt 3 Fragen.
+    body = client.get(f"/api/public/schulung/{tok}/").json()
+    # 2 von 3 richtig beantworten.
+    for i, frage in enumerate(body["fragen"]):
+        # ist_korrekt ist nicht im public payload — wir wissen aber dass option 0 von
+        # jeder Frage die richtige ist (siehe pool_setup).
+        opt_id = frage["optionen"][0]["id"] if i < 2 else frage["optionen"][1]["id"]
+        client.post(
+            f"/api/public/schulung/{tok}/antwort/",
+            {"frage_id": frage["id"], "option_id": opt_id},
+            content_type="application/json",
+        )
+    resp = client.post(
+        f"/api/public/schulung/{tok}/abschliessen/", "{}", content_type="application/json"
+    )
+    assert resp.status_code == 200, resp.content
+    assert resp.json()["richtig_prozent"] == 67, "2/3 = 67 %, nicht 2/10 = 20 %"
+    with schema_context(tenant.schema_name):
+        task.refresh_from_db()
+        assert task.richtig_prozent == 67
+
+
+def test_pool_independent_samples_per_task(tenant_setup):
+    """Zwei verschiedene Tasks für denselben Kurs ziehen unabhängig (mit Mock-Random)."""
+    tenant, domain = tenant_setup
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(min_richtig_prozent=50, fragen_pro_quiz=3)
+        KursModulFactory(kurs=kurs, titel="Modul 1", reihenfolge=0)
+        fragen = []
+        for i in range(10):
+            f = FrageFactory(kurs=kurs, reihenfolge=i, text=f"Frage {i}")
+            AntwortOptionFactory(frage=f, ist_korrekt=True, reihenfolge=0)
+            AntwortOptionFactory(frage=f, ist_korrekt=False, reihenfolge=1)
+            fragen.append(f)
+        u = UserFactory(email="creator-indep@pflapi.de")
+        welle = SchulungsWelleFactory(kurs=kurs, erstellt_von=u)
+        m1, m2 = MitarbeiterFactory(), MitarbeiterFactory()
+        t1 = SchulungsTask.objects.create(
+            welle=welle, mitarbeiter=m1, titel="A", modul="pflichtunterweisung",
+            kategorie="schulung", frist=welle.deadline, status=ComplianceTaskStatus.OFFEN,
+        )
+        t2 = SchulungsTask.objects.create(
+            welle=welle, mitarbeiter=m2, titel="B", modul="pflichtunterweisung",
+            kategorie="schulung", frist=welle.deadline, status=ComplianceTaskStatus.OFFEN,
+        )
+    client = Client(HTTP_HOST=domain.domain)
+    # Mock random.sample so dass t1 die ersten 3, t2 die letzten 3 zieht.
+    samples = iter([fragen[:3], fragen[-3:]])
+    with patch("pflichtunterweisung.views.random.sample", side_effect=lambda _pool, _k: next(samples)):
+        b1 = client.get(f"/api/public/schulung/{make_token(t1.pk)}/").json()
+        b2 = client.get(f"/api/public/schulung/{make_token(t2.pk)}/").json()
+    assert [f["id"] for f in b1["fragen"]] == [f.pk for f in fragen[:3]]
+    assert [f["id"] for f in b2["fragen"]] == [f.pk for f in fragen[-3:]]

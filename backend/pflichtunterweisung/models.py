@@ -26,6 +26,13 @@ class Kurs(models.Model):
     min_richtig_prozent = models.PositiveSmallIntegerField(
         default=80, help_text="Bestehensschwelle (Prozent richtig)"
     )
+    fragen_pro_quiz = models.PositiveSmallIntegerField(
+        default=10,
+        help_text=(
+            "Anzahl Fragen pro Quiz-Durchlauf, zufällig aus fragen-Pool gezogen "
+            "und pro SchulungsTask persistiert. Muss <= fragen.count() sein."
+        ),
+    )
     aktiv = models.BooleanField(default=True)
     erstellt_am = models.DateTimeField(auto_now_add=True)
 
@@ -153,6 +160,16 @@ class SchulungsTask(ComplianceTask):
     bestanden = models.BooleanField(null=True)
     zertifikat_id = models.CharField(max_length=64, blank=True, db_index=True)
     ablauf_datum = models.DateField(null=True, blank=True)
+    gezogene_fragen = models.ManyToManyField(
+        "Frage",
+        through="SchulungsTaskFrage",
+        related_name="task_ziehungen",
+        help_text=(
+            "Beim ersten resolve gesampelt: kurs.fragen_pro_quiz Stück aus "
+            "kurs.fragen.all(), persistiert pro Task, damit Mitarbeiter:innen "
+            "bei Tab-Wechsel dieselben Fragen wiedersehen."
+        ),
+    )
 
     class Meta:
         unique_together = (("welle", "mitarbeiter"),)
@@ -161,6 +178,29 @@ class SchulungsTask(ComplianceTask):
 
     def __str__(self) -> str:
         return f"{self.mitarbeiter} -> {self.welle.titel}"
+
+
+class SchulungsTaskFrage(models.Model):
+    """Through-Model für SchulungsTask.gezogene_fragen.
+
+    Hält die konkrete Fragen-Auswahl (= Sample aus Pool) für einen Task fest,
+    inklusive Reihenfolge, in der sie dem Mitarbeiter präsentiert werden.
+    """
+
+    task = models.ForeignKey(
+        SchulungsTask, on_delete=models.CASCADE, related_name="frage_ziehungen"
+    )
+    frage = models.ForeignKey("Frage", on_delete=models.PROTECT)
+    reihenfolge = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        unique_together = (("task", "frage"),)
+        ordering = ("reihenfolge", "id")
+        verbose_name = "Gezogene Frage"
+        verbose_name_plural = "Gezogene Fragen"
+
+    def __str__(self) -> str:
+        return f"{self.task_id}#{self.reihenfolge}: {self.frage_id}"
 
 
 class QuizAntwort(models.Model):
