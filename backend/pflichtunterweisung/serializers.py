@@ -55,6 +55,10 @@ class KursModulSerializer(serializers.ModelSerializer):
 class KursSerializer(serializers.ModelSerializer):
     module = KursModulSerializer(many=True, read_only=True)
     fragen_pool_groesse = serializers.SerializerMethodField()
+    ist_standardkatalog = serializers.BooleanField(read_only=True)
+    erstellt_von_email = serializers.CharField(
+        source="erstellt_von.email", read_only=True, default=None
+    )
 
     class Meta:
         model = Kurs
@@ -65,15 +69,56 @@ class KursSerializer(serializers.ModelSerializer):
             "gueltigkeit_monate",
             "min_richtig_prozent",
             "fragen_pro_quiz",
+            "quiz_modus",
+            "mindest_lesezeit_s",
+            "zertifikat_aktiv",
+            "eigentuemer_tenant",
+            "ist_standardkatalog",
+            "erstellt_von",
+            "erstellt_von_email",
             "aktiv",
             "erstellt_am",
             "module",
             "fragen_pool_groesse",
         )
-        read_only_fields = ("erstellt_am", "module", "fragen_pool_groesse")
+        read_only_fields = (
+            "erstellt_am",
+            "module",
+            "fragen_pool_groesse",
+            "ist_standardkatalog",
+            "eigentuemer_tenant",
+            "erstellt_von",
+            "erstellt_von_email",
+        )
 
     def get_fragen_pool_groesse(self, obj: Kurs) -> int:
         return obj.fragen.count()
+
+    def validate(self, attrs):
+        # Normalisierung: bei non-QUIZ-Modi werden Quiz-Felder auf 0 gezwungen,
+        # bevor Model.clean() laeuft — UX-freundlicher als 400-Fehler an den User.
+        from django.core.exceptions import ValidationError as DjangoValidationError
+
+        from .models import Kurs as KursModel
+
+        quiz_modus = attrs.get("quiz_modus") or (
+            self.instance.quiz_modus if self.instance else KursModel.QuizModus.QUIZ
+        )
+        if quiz_modus != KursModel.QuizModus.QUIZ:
+            attrs["fragen_pro_quiz"] = 0
+            attrs["min_richtig_prozent"] = 0
+        if quiz_modus != KursModel.QuizModus.KENNTNISNAHME_LESEZEIT:
+            attrs["mindest_lesezeit_s"] = 0
+
+        # Merged-State fuer clean(): existing Instance (falls update) + neue attrs.
+        check_instance = self.instance or KursModel()
+        for field, value in attrs.items():
+            setattr(check_instance, field, value)
+        try:
+            check_instance.clean()
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError(exc.message_dict)
+        return attrs
 
 
 class KursDetailSerializer(KursSerializer):
