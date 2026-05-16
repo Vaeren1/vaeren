@@ -34,12 +34,53 @@ sponty.fun, www.sponty.fun, api.sponty.fun {
 }
 
 
-# --- Vaeren Apex + www → app-Subdomain --------------------------------
-# Hauptmarke ist `vaeren.de`, App lebt auf `app.vaeren.de` (Multi-Tenant-Subdomain-
-# Strategie laut Spec §3). Apex + www werden permanent auf die App-Subdomain
-# redirected. Phase 2: Marketing-Landing-Page direkt auf vaeren.de.
-vaeren.de, www.vaeren.de {
-    redir https://app.vaeren.de{uri} permanent
+# --- Vaeren Marketing-Site (statisch, Astro-Build) -------------------
+# Apex liefert die Astro-Marketing-Site aus /var/www/vaeren-marketing/.
+# Build erfolgt lokal (deploy.sh: `bun run build` mit PUBLIC_API_BASE=https://api.vaeren.de),
+# Output wird per rsync nach /var/www/vaeren-marketing gespiegelt.
+# www → apex (kanonisch, ein Hostname für SEO).
+www.vaeren.de {
+    redir https://vaeren.de{uri} permanent
+}
+
+vaeren.de {
+    encode gzip zstd
+    root * /var/www/vaeren-marketing
+    file_server
+    try_files {path} {path}/index.html /404.html
+
+    # Astro-Assets sind content-hashed → unendlich cachen
+    @astro_assets path /_astro/*
+    header @astro_assets Cache-Control "public, max-age=31536000, immutable"
+
+    # HTML kurz cachen, damit Updates schnell durchschlagen
+    header Cache-Control "public, max-age=600, must-revalidate"
+
+    # Sicherheits-Header
+    header X-Content-Type-Options "nosniff"
+    header X-Frame-Options "DENY"
+    header Referrer-Policy "strict-origin-when-cross-origin"
+    header Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+    # Klassische Fehlerseite
+    handle_errors {
+        rewrite * /404.html
+        file_server
+    }
+}
+
+
+# --- Vaeren Public-API (für Marketing-Site + andere öffentliche Clients) -
+# Mapped via TenantDomain auf das Public-Schema (`ensure_public_domains`-Command).
+# Liefert /api/public/news/, /api/public/korrekturen/, /api/public/redaktion/unpublish/<token>/
+# und (zukünftig) andere public-only Endpoints.
+api.vaeren.de {
+    encode gzip zstd
+    reverse_proxy vaeren-django:8000 {
+        header_up X-Forwarded-Proto https
+        header_up X-Real-IP {remote_host}
+        header_up Host {host}
+    }
 }
 
 
