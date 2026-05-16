@@ -558,7 +558,7 @@ Pro Slice:
 
 Das Feature gilt als abgeschlossen, wenn:
 
-- [ ] Alle 4 Slices nach §10 deployed sind
+- [~] Slice 1 deployed 2026-05-17 (S2-S4 ausstehend)
 - [ ] Demo-Tenant hat mindestens 1 eigenen Kurs aller 6 Modul-Typen
 - [ ] Eine Demo-Welle eines eigenen Kurses ist erfolgreich von einem Demo-Mitarbeiter durchlaufen
 - [ ] LLM-Vorschlag wurde an mindestens 1 PDF erfolgreich getestet (manueller Review)
