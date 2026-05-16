@@ -1110,312 +1110,420 @@ KATALOG: tuple[KursDef, ...] = (
             ModulDef(
                 titel="Brandklassen & Löschmittel",
                 inhalt_md=(
-                    "## Warum die Brandklassen wichtig sind\n\n"
-                    "Das **falsche Löschmittel** kann den Brand **verstärken** — "
-                    "Wasser auf einen Fettbrand führt zu einer Fettexplosion mit "
-                    "meterhoher Stichflamme. Wasser auf brennende Magnesiumspäne "
-                    "(in der Späne-Sammelwanne der CNC-Fräse) erzeugt Knallgas und "
-                    "kann eine **Explosion** auslösen. Die Brandklassen-Kennung "
-                    "auf jedem Feuerlöscher ist deshalb kein Schmuck, sondern "
-                    "lebenswichtig.\n\n"
-                    "## Die fünf Brandklassen nach DIN EN 2\n\n"
-                    "| Klasse | Brennstoff | Typische Beispiele im Industriebetrieb | Geeignete Löschmittel | UNGEEIGNET |\n"
+                    "## Worum geht's?\n\n"
+                    "Falsches Löschmittel macht Brände schlimmer. Wasser auf Frittierfett "
+                    "erzeugt eine meterhohe Stichflamme, Wasser auf brennende Magnesium-Späne "
+                    "löst eine Knallgas-Explosion aus. Du lernst, welcher Brand mit welchem "
+                    "Löscher zu löschen ist und warum die Klassen-Kennung auf jedem "
+                    "Feuerlöscher lebenswichtig ist.\n\n"
+                    "## Rechtsgrundlage\n\n"
+                    "- **DIN EN 2** — Einteilung der Brandklassen A bis F\n"
+                    "- **DIN EN 3** — Tragbare Feuerlöscher: Bauart, Kennzeichnung\n"
+                    "- **ASR A2.2** — Pflicht zur Ausstattung von Arbeitsstätten mit Feuerlöschern\n"
+                    "- **§ 10 ArbSchG** — Arbeitgeber muss Beschäftigte vor Brandgefahren schützen\n\n"
+                    "## Was musst du wissen\n\n"
+                    "Es gibt fünf Brandklassen, die sich nach dem brennenden Stoff richten. "
+                    "Jede Klasse hat geeignete und ungeeignete Löschmittel:\n\n"
+                    "| Klasse | Brennstoff | Beispiele | Geeignet | Ungeeignet |\n"
                     "|---|---|---|---|---|\n"
-                    "| **A** | Feste glutbildende Stoffe | Holz, Papier, Kartonage, Textil, Kunststoffe (langsam) | Wasser, Schaum, ABC-Pulver | — |\n"
-                    "| **B** | Flüssigkeiten, schmelzende Feststoffe | Benzin, Diesel, Heizöl, Lacke, Lösungsmittel | Schaum, CO₂, BC- oder ABC-Pulver | Wasser (Brand schwimmt + breitet sich aus) |\n"
-                    "| **C** | Gase | Propan, Erdgas, Wasserstoff, Acetylen | ABC-Pulver, BC-Pulver | Wasser, Schaum (Wirkungslos, Funkenrisiko) |\n"
-                    "| **D** | Metalle | Magnesium, Aluminium-Späne, Lithium, Titan | **NUR** D-Pulver oder trockener Sand | Wasser (Knallgas, Explosion!), Schaum, CO₂ |\n"
-                    "| **F** | Speisefette/-öle | Frittiertem, Pflanzenöl, tierische Fette | Fettbrand-Löscher (Klasse F) oder Decke | Wasser (Fettexplosion, lebensgefährlich!) |\n\n"
-                    "**Eselsbrücke ABCDEF:** **A**bsolut feste, **B**rennende Flüssigkeit, "
-                    "**C**hemisches Gas, **D**ünne Metallspäne, (E ausgelassen — "
-                    "war früher für Strom), **F**ettpfanne.\n\n"
-                    "## Welcher Löscher steht wo?\n\n"
-                    "Bei uns im Betrieb sind die Löscher nach Bereich gewählt:\n\n"
-                    "- **Büros, Lager Papier/Karton** → ABC-Pulver oder Schaum (Klasse A)\n"
-                    "- **Werkstatt mit Öl/Lacke** → Schaum + CO₂ (Klassen A/B)\n"
-                    "- **CNC-Bereich mit Späne-Sammler** → zusätzlich D-Pulver "
-                    "in Reichweite (Klasse D)\n"
-                    "- **Server-Raum, Elektrik** → CO₂ (rückstandsfrei, leitet nicht)\n"
-                    "- **Kantine, Spülküche** → Fettbrandlöscher (Klasse F)\n\n"
-                    "## Die wichtigsten Löschmittel im Detail\n\n"
-                    "### Wasser\n"
-                    "- Wirkt durch **Abkühlen** unter die Zündtemperatur\n"
-                    "- Universell für Klasse A, **billig** und reichlich verfügbar\n"
-                    "- **Niemals** auf Brennstoffflüssigkeiten (Klasse B), Metalle (D), "
-                    "Fette (F), elektrische Anlagen unter Spannung\n\n"
-                    "### Schaum\n"
-                    "- Erstickt + kühlt — gut für Klassen A + B\n"
-                    "- Hinterlässt Rückstände → ungeeignet für Elektronik/Mechanik\n\n"
-                    "### CO₂ (Kohlendioxid)\n"
-                    "- Wirkt durch **Verdrängen des Sauerstoffs** und Abkühlung\n"
-                    "- **Rückstandsfrei** → ideal für Elektronik, Maschinen, "
-                    "Lebensmittelbereich\n"
-                    "- **Vorsicht in engen Räumen**: Erstickungsgefahr für den "
-                    "Löschenden bei zu viel CO₂\n"
-                    "- Kalt (-78 °C bei der Austrittsdüse) → **Erfrierungs"
-                    "gefahr** an Händen\n\n"
-                    "### ABC-Pulver\n"
-                    "- Universell, gegen Klassen A, B, C\n"
-                    "- Wirkt durch chemische Reaktion + Erstickung\n"
-                    "- **Erheblicher Reinigungsaufwand** danach (Pulver kriecht "
-                    "in jede Ritze, korrodiert Elektronik) → nicht für Server-Räume\n\n"
-                    "### D-Pulver\n"
-                    "- **Spezialprodukt** für Metallbrände — chemisch reagiert "
-                    "mit dem brennenden Metall, isoliert es\n"
-                    "- Nur dort vorhalten, wo Klasse-D-Risiko besteht (Mg, Al-"
-                    "Späne in CNC-Hallen)\n\n"
-                    "### Fettbrandlöscher (Klasse F)\n"
-                    "- Wirkt durch chemische Reaktion mit dem heißen Fett: "
-                    "es bildet sich eine Seifenschicht, die Sauerstoff abschneidet\n"
-                    "- **Pflicht** in jeder gewerblichen Küche/Kantine\n\n"
-                    "## Die richtige Bedienung — alle Löscher gleich\n\n"
-                    "Egal welcher Typ, die Bedienung ist nach einem festen Schema:\n\n"
-                    "1. **Sicherung ziehen** (Splint oder Plombe)\n"
-                    "2. **Schlauch in die Hand** nehmen, auf den Brand richten\n"
-                    "3. **Auslöseventil drücken**\n"
-                    "4. **Stoßweise löschen** — nicht in einem Zug entleeren\n"
-                    "5. Bei mehreren Löschern: **gleichzeitig**, nicht nacheinander\n"
-                    "6. Nach dem Löschen: **Brandstelle beobachten** — Wieder"
-                    "entzündung möglich\n\n"
-                    "**Vorgehen am Brand selbst:**\n"
-                    "- **Mit dem Wind im Rücken** löschen — nicht gegen den Wind\n"
-                    "- **Glut + Wurzeln** löschen, nicht nur die Flammen oben drauf\n"
-                    "- **Flächenbrände** von vorne nach hinten löschen\n"
-                    "- **Tropfbrände** (Lack vom Regal in Pfütze): erst die Pfütze, "
-                    "dann oben\n\n"
-                    "## Niemals Wasser auf …\n\n"
-                    "**⚠️ Fettbrand** — Wasser verdampft schlagartig auf 100 °C, "
-                    "schleudert das brennende Fett meterhoch. Lebensgefährliche "
-                    "Verbrennungen am Lösch-Helfer. Stattdessen: Klassen-F-Löscher "
-                    "oder eine **dichte Branddecke** drüberwerfen.\n\n"
-                    "**⚠️ Metallbrand** — Wasser reagiert mit brennenden "
-                    "Magnesium/Aluminium-Spänen unter Bildung von Knallgas "
-                    "(Wasserstoff) → Explosion. **Nur D-Pulver oder Sand.**\n\n"
-                    "**⚠️ Strom unter Spannung** — Wasser leitet, Lebensgefahr "
-                    "für die löschende Person. Erst Strom abschalten, dann mit "
-                    "CO₂ oder ABC-Pulver."
+                    "| A | Feste glutbildende Stoffe | Holz, Papier, Textil, Kunststoff | Wasser, Schaum, ABC-Pulver | — |\n"
+                    "| B | Flüssigkeiten | Benzin, Diesel, Lacke, Lösemittel | Schaum, CO₂, ABC-Pulver | Wasser |\n"
+                    "| C | Gase | Propan, Erdgas, Acetylen | ABC-Pulver, BC-Pulver | Wasser, Schaum |\n"
+                    "| D | Metalle | Magnesium, Aluminium-Späne, Lithium | D-Pulver, trockener Sand | Wasser, Schaum, CO₂ |\n"
+                    "| F | Speisefette/-öle | Frittierfett, Pflanzenöl | Klasse-F-Löscher, Branddecke | Wasser |\n\n"
+                    "Im Industriebetrieb sind die Löscher nach Risiko-Bereich verteilt: "
+                    "ABC-Pulver oder Schaum in Büro und Lager, Schaum plus CO₂ in der "
+                    "Werkstatt, zusätzlich D-Pulver im CNC-Bereich mit Späne-Sammler, "
+                    "CO₂ am Server-Schrank und Klasse-F-Löscher in der Kantine.\n\n"
+                    "Wichtige Eigenschaften der Löschmittel:\n\n"
+                    "- **CO₂** löscht rückstandsfrei und ist gut für Elektronik, birgt aber "
+                    "Erstickungsgefahr in kleinen Räumen und Erfrierungsrisiko an der Düse\n"
+                    "- **ABC-Pulver** ist universell einsetzbar, hinterlässt jedoch "
+                    "Korrosionsschäden an Elektronik\n"
+                    "- **D-Pulver** ist ein Spezialprodukt für Metallbrände und darf "
+                    "niemals durch ABC-Pulver ersetzt werden\n\n"
+                    "## Was musst du tun\n\n"
+                    "Die Bedienung folgt für alle Löschertypen einem festen Schema:\n\n"
+                    "1. Sicherung ziehen (Splint oder Plombe)\n"
+                    "2. Schlauch greifen, auf den Brand richten\n"
+                    "3. Auslöseventil drücken\n"
+                    "4. Stoßweise löschen, nicht in einem Zug entleeren\n"
+                    "5. Mit dem Wind im Rücken arbeiten, Glut und Wurzeln löschen, nicht nur die Flammen\n"
+                    "6. Nach dem Löschen die Brandstelle beobachten, Wiederentzündung ist möglich\n\n"
+                    "Bei mehreren Löschern gleichzeitig einsetzen, nicht nacheinander.\n\n"
+                    "## Praxisbeispiel\n\n"
+                    "In einer Metallverarbeitung gerät die Späne-Sammelwanne an einer "
+                    "CNC-Fräse in Brand, weil Magnesium-Späne durch Funkenflug entzündet "
+                    "werden. Ein Kollege greift reflexartig zum Wasserlöscher an der Säule. "
+                    "Der Wasserstrahl löst eine Knallgas-Reaktion aus, eine kleine Verpuffung "
+                    "schleudert brennende Späne meterweit. Richtig wäre der **D-Pulver-Löscher** "
+                    "gewesen, der in dieser Halle in zwei Metern Entfernung hängt und in der "
+                    "Gefährdungsbeurteilung genau für dieses Szenario vorgesehen ist.\n\n"
+                    "## Quelle\n\n"
+                    "Inhalte gestützt auf DIN EN 2:2005 *Brandklassen*, "
+                    "DGUV Information 205-001 *Arbeitssicherheit durch vorbeugenden Brandschutz* "
+                    "und ASR A2.2 *Maßnahmen gegen Brände* (Ausgabe 2022)."
                 ),
             ),
             ModulDef(
                 titel="Verhalten im Brandfall",
                 inhalt_md=(
-                    "## Die ersten 60 Sekunden entscheiden\n\n"
-                    "Ein Zimmerbrand entwickelt sich in der **'Heißgasphase'** "
-                    "nach 2–3 Minuten zur **flashover**-Situation — die gesamten "
-                    "Raumgase entzünden sich auf einmal. Wer **innerhalb der "
-                    "ersten 60 Sekunden** richtig reagiert, rettet meistens "
-                    "alle. Wer zögert oder falsch reagiert, riskiert Tote.\n\n"
-                    "## Die richtige Reihenfolge — RAMS-Schema\n\n"
-                    "**R**uhe bewahren — **A**larm + Notruf — **M**enschen retten — "
-                    "**S**chließen + (eventuell) löschen.\n\n"
-                    "### 1. Ruhe bewahren\n\n"
-                    "Panik ist der häufigste Tötungsfaktor bei Bränden. Tief "
-                    "atmen, Situation einschätzen: Wo brennt's? Wo ist Rauch? "
-                    "Wo sind Fluchtwege? Wer ist um mich herum?\n\n"
-                    "### 2. Alarm auslösen + Notruf\n\n"
-                    "- **Brandmeldetaster** drücken (rote Kästen an Säulen/Wänden, "
-                    "Glas einschlagen)\n"
-                    "- **Notruf 112** absetzen (Mobil oder Festnetz)\n"
-                    "- **Alle anderen warnen** — Rufen, Whistle, Sirene\n\n"
-                    "Brandmeldeanlagen lösen automatisch die Sprinkler/Rauchabzüge "
-                    "aus und benachrichtigen die Feuerwehr — aber **nicht** "
-                    "automatisch alle Etagen. Direkter Notruf parallel macht "
-                    "Sinn.\n\n"
-                    "### 3. Menschen retten\n\n"
-                    "- **Sich selbst und andere** in Sicherheit bringen\n"
-                    "- **Hilflose** (gestürzte Kollegen, Verletzte) mitnehmen — "
-                    "wenn ohne Eigengefährdung möglich\n"
-                    "- **Türen schließen** beim Verlassen (verzögert die Rauch"
-                    "ausbreitung um ~10 Minuten!)\n"
-                    "- **Niemals den Aufzug** benutzen — kann zwischen Etagen "
-                    "stecken bleiben, Schacht wirkt wie Kamin\n"
-                    "- **Treppenhäuser** sind 'brandgeschützt' und meist 30–90 "
-                    "min sicher\n\n"
-                    "### 4. Schließen + ggf. löschen\n\n"
-                    "**Türen schließen — nicht aufreißen.** Hinter einer "
-                    "geschlossenen Tür kann ein Schwelbrand sich Stunden "
-                    "halten, bis Sauerstoff dazukommt. **Beim Aufreißen einer "
-                    "Brandraum-Tür** dringt schlagartig Sauerstoff ein → "
-                    "**Stichflamme** (Backdraft). Lebensgefährlich.\n\n"
-                    "**Hand vor die Tür-Klinke** — heiß? Dann nicht öffnen, "
-                    "Fluchtweg woanders suchen.\n\n"
-                    "**Löschversuche nur, wenn alle drei Bedingungen erfüllt:**\n"
-                    "1. **Fluchtweg gesichert** — du kannst jederzeit raus\n"
-                    "2. **Entstehungsbrand** — Flammen klein, nicht über "
-                    "Schreibtisch-Höhe\n"
-                    "3. **Geeignetes Löschmittel** zur Hand — und du weißt, wie\n\n"
-                    "Sonst: **rausgehen, Tür zumachen, warten auf Feuerwehr.**\n\n"
-                    "## Verhalten in verqualmten Räumen\n\n"
-                    "**Rauchgas tötet schneller als Feuer** — 95 % der Brandtoten "
-                    "sterben an Rauchvergiftung, nicht an Verbrennung. Schon "
-                    "**3–5 Atemzüge** Brandrauch können tödlich sein (CO, HCN, "
-                    "Salzsäure, Phosgen).\n\n"
-                    "- **Tief beugen oder kriechen** — am Boden sind etwa 30 cm "
-                    "über dem Boden frische Atemluft mit nur leichter Rauch"
-                    "verdünnung. In Augenhöhe ist es schon tödlich.\n"
-                    "- **Atem anhalten + zügig durch verrauchten Bereich** "
-                    "(max. 30 m)\n"
-                    "- **Tuch vor Mund und Nase** — feuchtes Tuch ist besser, "
-                    "filtert grobe Partikel (aber nicht CO!)\n"
-                    "- **Wenn du nicht raus kommst**: in einen Raum mit Tür + "
-                    "Fenster, Tür zu, Spalt mit nasser Kleidung abdichten, am "
-                    "Fenster bemerkbar machen\n\n"
-                    "## Im Brandfall NIEMALS\n\n"
-                    "- **Aufzug benutzen** — kann ausfallen, Schacht wird Schornstein\n"
-                    "- **Wertgegenstände holen** — Notebook, Handy, Tasche bleiben "
-                    "liegen. Sachen sind ersetzbar, du nicht.\n"
-                    "- **Türen aufreißen** ohne Klinken-Check\n"
-                    "- **Im Rauch aufrecht gehen** — schon ein einziger tiefer "
-                    "Atemzug kann zur Bewusstlosigkeit führen\n"
-                    "- **In ein Gebäude zurückkehren**, das du schon verlassen hast"
+                    "## Worum geht's?\n\n"
+                    "Ein Zimmerbrand erreicht nach zwei bis drei Minuten den Flashover — "
+                    "alle Raumgase entzünden sich gleichzeitig, der Raum wird zur Brennkammer. "
+                    "Wer in den ersten 60 Sekunden richtig reagiert, rettet meistens alle. "
+                    "Du lernst die richtige Reihenfolge und warum 95 Prozent der Brandtoten "
+                    "an Rauch sterben, nicht an Verbrennungen.\n\n"
+                    "## Rechtsgrundlage\n\n"
+                    "- **§ 10 ArbSchG** — Erste Hilfe und sonstige Maßnahmen bei Notfällen\n"
+                    "- **§ 22 DGUV Vorschrift 1** — Pflicht zu Räumungs- und Brandschutzübungen\n"
+                    "- **ASR A2.2** — Maßnahmen gegen Brände, Verhalten im Brandfall\n\n"
+                    "## Was musst du wissen\n\n"
+                    "Die richtige Reihenfolge folgt dem Merksatz **RAMS**:\n\n"
+                    "1. **R**uhe bewahren\n"
+                    "2. **A**larm auslösen und Notruf 112\n"
+                    "3. **M**enschen retten\n"
+                    "4. **S**chließen und gegebenenfalls löschen\n\n"
+                    "Panik ist der häufigste Tötungsfaktor: falsche Richtung, Aufzug benutzt, "
+                    "Türen aufgerissen. Tief atmen, einschätzen wo es brennt, wo Rauch ist, "
+                    "wo der Fluchtweg ist und wer in der Nähe ist.\n\n"
+                    "**Rauchgas** ist die eigentliche Gefahr. Brandrauch enthält Kohlenmonoxid, "
+                    "Cyanwasserstoff, Salzsäure und Phosgen. Drei bis fünf Atemzüge können "
+                    "tödlich sein. In Augenhöhe ist die Konzentration meist schon letal, am "
+                    "Boden bleibt eine 20 bis 30 Zentimeter dünne Schicht frischer Luft. "
+                    "Deshalb gilt im Rauch: kriechen oder tief gebückt gehen.\n\n"
+                    "**Türen** sind Brandschutzbarrieren. Eine geschlossene Tür verzögert die "
+                    "Rauchausbreitung um rund zehn Minuten und kann eine Stichflamme (Backdraft) "
+                    "beim Aufreißen eines Brandraums verhindern. Vor dem Öffnen einer Tür "
+                    "immer die Klinke mit dem Handrücken auf Hitze prüfen — ist sie heiß, "
+                    "nicht öffnen und einen anderen Fluchtweg suchen.\n\n"
+                    "**Löschversuche** sind nur sinnvoll, wenn drei Bedingungen gleichzeitig "
+                    "erfüllt sind: dein Fluchtweg bleibt gesichert, es ist ein Entstehungsbrand "
+                    "(Flammen klein, nicht über Tischhöhe) und du hast das richtige Löschmittel "
+                    "griffbereit. Sonst gilt: raus, Tür zu, auf die Feuerwehr warten.\n\n"
+                    "## Was musst du tun\n\n"
+                    "Im Brandfall sofort:\n\n"
+                    "1. Brandmeldetaster drücken (rote Kästen an Säulen und Wänden, Glas einschlagen)\n"
+                    "2. Notruf 112 absetzen, parallel zur Brandmeldeanlage\n"
+                    "3. Kollegen warnen, laut rufen und durch betroffene Hallen gehen\n"
+                    "4. Türen beim Verlassen schließen\n"
+                    "5. Treppe benutzen, niemals den Aufzug\n"
+                    "6. Zum Sammelplatz gehen und bei der verantwortlichen Person melden\n\n"
+                    "Wertgegenstände bleiben liegen: Notebook, Handy, Tasche sind ersetzbar. "
+                    "Wer zurückgeht, gefährdet sich und die Helfer. In ein evakuiertes "
+                    "Gebäude darf nur die Feuerwehr zurück.\n\n"
+                    "In stark verrauchten Bereichen Atem anhalten, ein Tuch vor Mund und "
+                    "Nase, zügig auf maximal 30 Meter durchqueren. Wenn der Weg blockiert "
+                    "ist, in einen Raum mit Fenster gehen, Tür schließen, den Türspalt mit "
+                    "nasser Kleidung abdichten und am Fenster bemerkbar machen.\n\n"
+                    "## Praxisbeispiel\n\n"
+                    "In einer Lackiererei rüstet ein Kollege nachmittags Verdünner ein, als "
+                    "ein Funke aus einem unsachgemäß abgestellten Schleifgerät einen "
+                    "Schwelbrand am Boden auslöst. Er reagiert ruhig: drückt den Brandmelder "
+                    "an der Säule, ruft per Funk die Schichtleitung, warnt die zwei Kollegen "
+                    "in der Spritzkabine, schließt die Lacktür beim Hinausgehen und sammelt "
+                    "alle am vereinbarten Treffpunkt vor Tor 2. Die Feuerwehr findet den "
+                    "Brand auf zwei Quadratmeter begrenzt vor — die geschlossene Brandschutztür "
+                    "hat die Sauerstoffzufuhr genug gedrosselt, um den Flashover zu verhindern.\n\n"
+                    "## Quelle\n\n"
+                    "Inhalte gestützt auf DGUV Information 205-001 *Arbeitssicherheit durch "
+                    "vorbeugenden Brandschutz* und ASR A2.2 *Maßnahmen gegen Brände* "
+                    "(Ausgabe 2022). Verhaltensregeln nach den Empfehlungen der "
+                    "vfdb (Vereinigung zur Förderung des Deutschen Brandschutzes)."
                 ),
             ),
             ModulDef(
                 titel="Flucht- und Rettungswege",
                 inhalt_md=(
-                    "## Was Flucht- und Rettungswege leisten müssen\n\n"
-                    "Ein **Fluchtweg** ist der Weg, den du nimmst, um aus eigenem "
-                    "Antrieb sicher ins Freie zu kommen. Ein **Rettungsweg** ist "
-                    "derselbe Weg aus Sicht der Feuerwehr — sie kommt rein, du "
-                    "kommst raus.\n\n"
-                    "Nach **Arbeitsstättenverordnung (ArbStättV) + ASR A2.3** "
-                    "muss jeder Arbeitsplatz mindestens einen **ersten** Flucht"
-                    "weg ins Freie haben, der **maximal 35 m lang** ist (in "
-                    "Bereichen erhöhter Brandgefahr 25 m, in normalen Büros bis "
-                    "50 m). Bei mehr als ~10 Personen oder größeren Räumen sind "
-                    "**zwei voneinander unabhängige Fluchtwege** Pflicht.\n\n"
-                    "## Bauliche Anforderungen\n\n"
-                    "- **Mindestbreite** 1,00 m bei ≤20 Personen, breiter bei "
-                    "mehr (0,60 m pro 100 Personen zusätzlich)\n"
-                    "- **Türen** öffnen in **Fluchtrichtung** und sind mit "
-                    "**Panik-Schloss** versehen (kein Schlüssel nötig, nicht "
-                    "abschließbar von Innen)\n"
-                    "- **Treppenhäuser** sind in eigene Brandabschnitte gefasst, "
-                    "mit feuerhemmenden Türen (T30/T90)\n"
-                    "- **Kennzeichnung** mit grünem Rettungszeichen "
-                    "(DIN EN ISO 7010 — Männchen läuft durch Tür, Pfeil)\n"
-                    "- **Sicherheitsbeleuchtung** muss bei Stromausfall **mindestens "
-                    "60 Minuten** leuchten, an der Decke entlang des Wegs montiert\n"
-                    "- **Bodenmarkierung** in besonders verqualmungsgefährdeten "
-                    "Bereichen (rutschfest, nachleuchtend)\n\n"
-                    "## Was darf NICHT auf Fluchtwegen stehen\n\n"
-                    "**Gar nichts.** Fluchtwege sind **vollständig freizuhalten** — "
-                    "auch 'nur kurz'.\n\n"
-                    "- Keine **Paletten, Kartons, Materialwagen**\n"
-                    "- Kein **Müll, Putzeimer, Stühle**\n"
-                    "- Keine **abgestellten Stapler oder Hubwagen**\n"
-                    "- Keine **Brandschutztüren keilen** (mit Holzkeil offen halten) — "
-                    "das ist eine **Ordnungswidrigkeit** (Bußgeld bis 50.000 €) "
-                    "und kann im Brandfall Menschenleben kosten\n\n"
-                    "**Stolperfallen** auf Fluchtwegen sind verboten. Selbst eine "
-                    "Bodenschwelle >4 mm muss markiert sein.\n\n"
-                    "**Wenn du eine Behinderung siehst**: räume sie weg (wenn "
-                    "möglich) oder melde sofort an die Schichtleitung. Das ist "
-                    "keine 'Petze' — das ist deine **gesetzliche Pflicht** als "
-                    "Beschäftigte:r nach § 16 ArbSchG.\n\n"
-                    "## Der Sammelplatz\n\n"
-                    "Nach einer Evakuierung gehen alle zum **vereinbarten Sammel"
-                    "platz** (bei uns: Parkplatz westlich der Halle, mind. 50 m "
-                    "Abstand zum Gebäude). Dort:\n\n"
-                    "- **Sammelplatz-Verantwortliche** zählt nach Anwesenheits"
-                    "liste / Schichtplan\n"
-                    "- **Feuerwehr** wird informiert, ob noch jemand vermisst wird\n"
-                    "- **Niemand betritt das Gebäude wieder**, bis die Feuerwehr "
-                    "freigibt — auch nicht 'kurz das Handy holen'\n\n"
-                    "Vermisste Personen werden gezielt **von Feuerwehrleuten "
-                    "unter Atemschutz** gesucht. Wer nach 'Wo ist Hans?' Hans "
-                    "selber suchen geht, lenkt die Feuerwehr ab und gefährdet "
-                    "alle Helfer.\n\n"
-                    "## Brandschutzhelfer\n\n"
-                    "Pro Etage bzw. Brandabschnitt sind **mindestens 5 % der "
-                    "Beschäftigten** als **Brandschutzhelfer** ausgebildet (ASR A2.2). "
-                    "Sie:\n"
-                    "- kennen die Position der Löscher + Brandmeldetaster\n"
-                    "- können einen Entstehungsbrand bekämpfen\n"
-                    "- führen die Evakuierung ihres Bereichs\n"
-                    "- kontrollieren Vollständigkeit am Sammelplatz\n\n"
-                    "Brandschutzhelfer haben eine Schulung von mind. 2 Stunden "
-                    "absolviert (Theorie + praktische Übung mit Löscher). "
-                    "Auffrischung alle 3–5 Jahre.\n\n"
-                    "## Verhaltens-Übung: Räumungsübung\n\n"
-                    "Mindestens **einmal jährlich** wird bei uns eine Räumungs"
-                    "übung durchgeführt (vorgegeben durch DGUV V1 § 22). Bei "
-                    "Alarm:\n\n"
-                    "1. Arbeit **sofort einstellen** — Maschine abschalten, "
-                    "PC stehen lassen, Geräte aus wenn schnell möglich\n"
-                    "2. **Sachen liegen lassen** — keine Tasche, kein Notebook\n"
-                    "3. **Ruhig + zügig** zum Fluchtweg\n"
-                    "4. **Türen schließen** beim Verlassen\n"
-                    "5. **Zum Sammelplatz** gehen — nicht zum Auto\n"
-                    "6. **Bei der Sammelplatz-Verantwortlichen melden**\n\n"
-                    "Auch wenn es 'nur eine Übung' ist: ernst nehmen. Wer bei "
-                    "einer Übung patzt, patzt im Ernstfall auch."
+                    "## Worum geht's?\n\n"
+                    "Ein Fluchtweg ist der Weg, auf dem du im Notfall ins Freie kommst. "
+                    "Ein blockierter oder schlecht gekennzeichneter Fluchtweg kann den "
+                    "Unterschied zwischen Evakuierung in zwei Minuten und Toten ausmachen. "
+                    "Du lernst, welche Anforderungen Fluchtwege erfüllen müssen, was darauf "
+                    "nichts zu suchen hat und was am Sammelplatz passiert.\n\n"
+                    "## Rechtsgrundlage\n\n"
+                    "- **§ 4 ArbStättV** — Arbeitsstätten müssen sichere Fluchtwege haben\n"
+                    "- **ASR A2.3** — Fluchtwege und Notausgänge: Maße, Kennzeichnung, Beleuchtung\n"
+                    "- **§ 16 ArbSchG** — Beschäftigte sind verpflichtet, Gefahren zu melden\n"
+                    "- **§ 22 DGUV Vorschrift 1** — Jährliche Räumungsübung\n\n"
+                    "## Was musst du wissen\n\n"
+                    "Jeder Arbeitsplatz muss mindestens einen Fluchtweg ins Freie haben. "
+                    "In normalen Büros darf dieser bis zu 35 Meter lang sein, in Bereichen "
+                    "erhöhter Brandgefahr nur 25 Meter. Bei mehr als rund zehn Personen "
+                    "oder in größeren Räumen sind zwei voneinander unabhängige Fluchtwege "
+                    "Pflicht.\n\n"
+                    "Bauliche Anforderungen nach ASR A2.3:\n\n"
+                    "| Element | Anforderung |\n"
+                    "|---|---|\n"
+                    "| Mindestbreite | 1,00 m bis 20 Personen, +0,60 m je weitere 100 |\n"
+                    "| Türen | öffnen in Fluchtrichtung, Panik-Schloss ohne Schlüssel |\n"
+                    "| Treppenhaus | eigener Brandabschnitt mit T30- oder T90-Türen |\n"
+                    "| Kennzeichnung | grünes Rettungszeichen nach DIN EN ISO 7010 |\n"
+                    "| Sicherheitsbeleuchtung | mindestens 60 Minuten Notstrom |\n\n"
+                    "Brandschutztüren dürfen niemals offen gekeilt werden. Das ist eine "
+                    "**Ordnungswidrigkeit** mit Bußgeld bis 50.000 Euro und kann im "
+                    "Brandfall Menschenleben kosten, weil eine offene Brandschutztür den "
+                    "ganzen Brandabschnitt zunichte macht.\n\n"
+                    "Pro Etage sind mindestens fünf Prozent der Beschäftigten als "
+                    "**Brandschutzhelfer** ausgebildet (ASR A2.2). Sie kennen die Löscher- "
+                    "und Melderpositionen, können Entstehungsbrände bekämpfen und führen "
+                    "die Evakuierung ihres Bereichs. Die Schulung dauert mindestens zwei "
+                    "Stunden inklusive praktischer Löschübung, Auffrischung alle drei bis "
+                    "fünf Jahre.\n\n"
+                    "## Was musst du tun\n\n"
+                    "Auf Fluchtwegen darf nichts stehen, auch nicht kurzfristig:\n\n"
+                    "- Keine Paletten, Kartons, Materialwagen\n"
+                    "- Keine Mülltonnen, Stühle, Putzeimer\n"
+                    "- Keine abgestellten Stapler oder Hubwagen\n"
+                    "- Keine gekeilten Brandschutztüren\n\n"
+                    "Wenn du ein Hindernis siehst, räume es weg oder melde es sofort der "
+                    "Schichtleitung. Das ist keine Petze, sondern deine gesetzliche Pflicht "
+                    "nach § 16 ArbSchG.\n\n"
+                    "Bei einem Alarm, auch bei einer Übung:\n\n"
+                    "1. Arbeit sofort einstellen, Maschine wenn schnell möglich abschalten\n"
+                    "2. Sachen liegen lassen, keine Tasche und kein Notebook\n"
+                    "3. Ruhig und zügig zum nächsten Fluchtweg\n"
+                    "4. Türen schließen beim Verlassen\n"
+                    "5. Zum Sammelplatz gehen, nicht zum Auto\n"
+                    "6. Bei der verantwortlichen Person am Sammelplatz melden\n\n"
+                    "Das Gebäude betritt niemand wieder, bis die Feuerwehr freigibt — "
+                    "auch nicht, um schnell das Handy zu holen.\n\n"
+                    "## Praxisbeispiel\n\n"
+                    "In einem Zulieferbetrieb hat sich über Wochen eingebürgert, dass leere "
+                    "Paletten vor der Brandschutztür zwischen Lager und Halle zwischen"
+                    "gelagert werden — angeblich nur bis zur nächsten Spedition. Bei der "
+                    "jährlichen Räumungsübung dauert die Evakuierung der Lagerschicht acht "
+                    "Minuten statt der geplanten drei, weil die Stapler über die Paletten "
+                    "manövrieren müssen. Die Geschäftsführung zieht Konsequenzen: alle "
+                    "Fluchtwege werden mit Bodenmarkierung versehen, das unbefugte Abstellen "
+                    "wird arbeitsvertraglich abmahnbar gemacht. Bei der nächsten Übung "
+                    "dauert die Evakuierung zwei Minuten zehn Sekunden.\n\n"
+                    "## Quelle\n\n"
+                    "Inhalte gestützt auf ArbStättV (Stand 2022), "
+                    "ASR A2.3 *Fluchtwege und Notausgänge* (Ausgabe 2022) und "
+                    "DGUV Information 205-023 *Brandschutzhelfer*."
                 ),
             ),
         ),
         fragen=(
             FrageDef(
-                text="Welches Löschmittel eignet sich NICHT für brennende Metallspäne (Klasse D)?",
-                erklaerung="Wasser reagiert mit brennenden Metallen explosionsartig. "
-                "Spezielles D-Pulver oder trockener Sand sind richtig.",
+                text="Welche Brandklasse beschreibt brennende Metalle wie Magnesium oder Aluminium-Späne?",
+                erklaerung="Brandklasse D umfasst Metallbrände. Diese erfordern Spezial-Löschmittel "
+                "(D-Pulver oder trockener Sand) — Wasser ist hier lebensgefährlich.",
+                optionen=_opts(
+                    ("Klasse A (feste glutbildende Stoffe)", False),
+                    ("Klasse B (Flüssigkeiten)", False),
+                    ("Klasse D (Metalle)", True),
+                    ("Klasse F (Speisefette)", False),
+                ),
+            ),
+            FrageDef(
+                text="Welches Löschmittel ist auf einem Fettbrand (Klasse F) lebensgefährlich?",
+                erklaerung="Wasser verdampft auf 100 °C explosionsartig und schleudert brennendes "
+                "Fett meterhoch. Richtig sind Klasse-F-Löscher oder eine dichte Branddecke.",
                 optionen=_opts(
                     ("Wasser", True),
-                    ("D-Pulver", False),
-                    ("Trockener Sand", False),
-                    ("Spezial-Trockenlöschmittel", False),
+                    ("Klasse-F-Löscher", False),
+                    ("Branddecke", False),
+                    ("CO₂", False),
                 ),
             ),
             FrageDef(
-                text="Du entdeckst in der Werkhalle einen Schwelbrand. Was tust du zuerst?",
-                erklaerung="Reihenfolge: Ruhe → Brand melden (112) → Personen retten → "
-                "ggf. Löschen.",
+                text="Warum ist CO₂ als Löschmittel besonders gut für Server-Räume geeignet?",
+                erklaerung="CO₂ verdrängt Sauerstoff und verdampft rückstandslos. Pulver-Löscher "
+                "würden Elektronik durch Korrosion zerstören.",
                 optionen=_opts(
-                    ("Ruhe bewahren, Notruf 112 absetzen, Personen warnen", True),
-                    ("Sofort selbst löschen, dann melden", False),
-                    ("Erst Vorgesetzten suchen", False),
-                    ("Foto machen und Twittern", False),
+                    ("Es löscht rückstandsfrei und beschädigt keine Elektronik", True),
+                    ("Es ist besonders kalt und kühlt schneller als andere Löschmittel", False),
+                    ("Es ist geräuschlos im Einsatz", False),
+                    ("Es ist ungiftig und kann unbedenklich eingeatmet werden", False),
                 ),
             ),
             FrageDef(
-                text="Was darf NICHT auf Flucht- und Rettungswegen abgestellt werden?",
-                erklaerung="Fluchtwege müssen jederzeit frei sein — sonst lebensgefährlich.",
+                text="Wo wird ein D-Pulver-Löscher in einer Maschinenbau-Halle typischerweise platziert?",
+                erklaerung="D-Pulver ist ein Spezial-Löschmittel für Metallbrände und gehört in "
+                "die Nähe von Späne-Sammlern an Magnesium- oder Aluminium-verarbeitenden Maschinen.",
                 optionen=_opts(
-                    ("Nichts — sie müssen immer komplett frei sein", True),
-                    ("Kleine Kartons, wenn sie schnell weggeräumt werden können", False),
-                    ("Mülltonnen, solange sie nicht voll sind", False),
-                    ("Schreibtische am Rand", False),
+                    ("In jedem Büro", False),
+                    ("In Bereichen mit Magnesium- oder Aluminium-Spänen, z.B. an CNC-Fräsen", True),
+                    ("In der Kantine", False),
+                    ("Ausschließlich im Server-Raum", False),
                 ),
             ),
             FrageDef(
-                text="Wie verhält man sich in einem stark verrauchten Flur?",
-                erklaerung="Am Boden ist die Sicht besser und mehr Sauerstoff — kriechen.",
+                text="Was passiert, wenn man Wasser auf brennendes Magnesium gibt?",
+                erklaerung="Wasser reagiert mit dem brennenden Metall unter Bildung von Wasserstoff "
+                "(Knallgas) — eine Explosion ist die Folge.",
                 optionen=_opts(
-                    ("Geduckt oder kriechend am Boden bewegen", True),
-                    ("Aufrecht und schnell laufen", False),
-                    ("Atem anhalten und rennen", False),
-                    ("Aufzug benutzen, das ist schneller", False),
+                    ("Der Brand wird effektiv gelöscht", False),
+                    ("Es bildet sich Knallgas, eine Explosion droht", True),
+                    ("Der Brand erlischt langsam von außen nach innen", False),
+                    ("Es entsteht giftiger Rauch ohne weitere Folgen", False),
                 ),
             ),
             FrageDef(
-                text="Wann darfst du selbst löschen?",
-                erklaerung="Drei Bedingungen müssen alle erfüllt sein: Entstehungsbrand, "
-                "Fluchtweg gesichert, geeignetes Löschmittel.",
+                text="Wie löscht man mit einem Pulverlöscher technisch richtig?",
+                erklaerung="Stoßweise löschen (nicht in einem Zug entleeren) und mit dem Wind "
+                "im Rücken, sonst löscht man sich selbst ein.",
                 optionen=_opts(
-                    ("Nur wenn Fluchtweg gesichert, Entstehungsbrand und passendes Löschmittel da", True),
-                    ("Immer — der Schaden soll klein bleiben", False),
-                    ("Nur als Brandschutzhelfer/in", False),
+                    ("In einem Zug entleeren, damit nichts übrig bleibt", False),
+                    ("Stoßweise und mit dem Wind im Rücken", True),
+                    ("Von oben senkrecht auf die Flammenspitzen", False),
+                    ("Mit langsamer kreisender Bewegung von außen nach innen", False),
+                ),
+            ),
+            FrageDef(
+                text="Wo sollte ABC-Pulver nach Möglichkeit NICHT eingesetzt werden?",
+                erklaerung="Pulver kriecht in jede Ritze und korrodiert Elektronik. Für Server-Räume "
+                "ist CO₂ die richtige Wahl.",
+                optionen=_opts(
+                    ("In der Werkhalle", False),
+                    ("Am Server-Schrank wegen Korrosionsschäden an Elektronik", True),
+                    ("Im Lager", False),
+                    ("Im Freien bei Windstille", False),
+                ),
+            ),
+            FrageDef(
+                text="Wofür steht das Akronym RAMS im Brandfall?",
+                erklaerung="RAMS gibt die Handlungs-Reihenfolge vor: erst Ruhe, dann Alarm, dann "
+                "Menschen retten, dann Schließen und ggf. Löschen.",
+                optionen=_opts(
+                    ("Rufen-Atmen-Melden-Sichern", False),
+                    ("Ruhe-Alarm-Menschen retten-Schließen", True),
+                    ("Rauch-Alarm-Maske-Sicherheit", False),
+                    ("Retten-Aufzug-Melden-Sammeln", False),
+                ),
+            ),
+            FrageDef(
+                text="Woran sterben rund 95 Prozent aller Brandopfer?",
+                erklaerung="Rauchgas (CO, Cyanwasserstoff, Phosgen) wirkt schon nach wenigen "
+                "Atemzügen tödlich, schneller als die Flammen selbst.",
+                optionen=_opts(
+                    ("An den Verbrennungen durch die Flammen", False),
+                    ("An Rauchgasvergiftung (Kohlenmonoxid und Cyanwasserstoff)", True),
+                    ("An Stromschlag durch beschädigte Leitungen", False),
+                    ("An Trümmer-Verletzungen durch einstürzende Decken", False),
+                ),
+            ),
+            FrageDef(
+                text="Du musst durch einen stark verrauchten Flur. Wie verhältst du dich?",
+                erklaerung="Am Boden, in den unteren 20-30 cm, bleibt eine Schicht frischerer Luft. "
+                "In Augenhöhe ist die Rauchkonzentration oft schon tödlich.",
+                optionen=_opts(
+                    ("Atem anhalten und aufrecht rennen", False),
+                    ("Tief gebückt oder kriechend bewegen, am Boden ist die Luft besser", True),
+                    ("Mund mit Tuch zuhalten und langsam aufrecht gehen", False),
+                    ("Augen schließen und sich an der Wand entlang tasten", False),
+                ),
+            ),
+            FrageDef(
+                text="Warum darf im Brandfall niemals der Aufzug benutzt werden?",
+                erklaerung="Der Aufzugsschacht wirkt wie ein Kamin und zieht Rauch hoch. Bei "
+                "Stromausfall bleibt der Aufzug zwischen den Etagen stecken.",
+                optionen=_opts(
+                    ("Weil er zu langsam ist", False),
+                    ("Weil er ausfallen kann und der Schacht wie ein Kamin wirkt", True),
+                    ("Weil er die Stromversorgung der Sprinkler blockiert", False),
+                    ("Weil das in der Hausordnung verboten ist", False),
+                ),
+            ),
+            FrageDef(
+                text="Du stehst vor einer geschlossenen Tür, hinter der du Feuer vermutest. Was tust du?",
+                erklaerung="Hinter einer geschlossenen Tür kann sich ein sauerstoffarmer Schwelbrand "
+                "halten. Beim Aufreißen schlägt eine Stichflamme (Backdraft) heraus.",
+                optionen=_opts(
+                    ("Sofort öffnen und mit Löscher angreifen", False),
+                    ("Klinke mit Handrücken auf Hitze prüfen, bei Wärme nicht öffnen", True),
+                    ("Mehrfach klopfen und horchen, dann öffnen", False),
+                    ("Tür einen Spalt öffnen, um zu schauen", False),
+                ),
+            ),
+            FrageDef(
+                text="Wann darfst du als Mitarbeiter:in einen Brand selbst löschen?",
+                erklaerung="Drei Bedingungen müssen alle gleichzeitig erfüllt sein. Sonst gilt: "
+                "raus, Tür zu, Feuerwehr abwarten.",
+                optionen=_opts(
+                    ("Immer, sobald du einen Löscher griffbereit hast", False),
+                    ("Nur wenn Fluchtweg gesichert, Entstehungsbrand und richtiges Löschmittel vorhanden ist", True),
+                    ("Nur als ausgebildeter Brandschutzhelfer", False),
                     ("Nur wenn die Feuerwehr nicht erreichbar ist", False),
                 ),
             ),
             FrageDef(
-                text="Wozu dient der Sammelplatz?",
-                erklaerung="Damit die Einsatzkräfte schnell wissen, ob noch Personen "
-                "im Gebäude vermisst werden.",
+                text="Warum sollte man im Brandfall Türen beim Verlassen des Raumes schließen?",
+                erklaerung="Eine geschlossene Tür reduziert Sauerstoffzufuhr und Rauchausbreitung. "
+                "Sie kann Leben retten — die der Kollegen hinter der Tür.",
                 optionen=_opts(
-                    ("Personen zählen — wer fehlt, wird vermisst und gesucht", True),
-                    ("Ein gemütlicher Ort zum Warten", False),
-                    ("Pflicht-Raucherpause für alle", False),
-                    ("Ein Ort, wo die Feuerwehr ihre Schläuche abstellt", False),
+                    ("Damit niemand reingeht und etwas gestohlen wird", False),
+                    ("Eine geschlossene Tür verzögert die Rauchausbreitung um rund 10 Minuten", True),
+                    ("Damit der Lärm der Sirenen draußen bleibt", False),
+                    ("Weil das in der Brandschutzordnung als Pflicht steht", False),
+                ),
+            ),
+            FrageDef(
+                text="Welche maximale Fluchtweg-Länge gilt nach ASR A2.3 in normalen Büros?",
+                erklaerung="Die Vorgabe ist 35 m. In Bereichen erhöhter Brandgefahr sind es 25 m, "
+                "in größeren Räumen mit guter Übersicht kann sie länger sein.",
+                optionen=_opts(
+                    ("15 m", False),
+                    ("25 m", False),
+                    ("35 m", True),
+                    ("50 m", False),
+                ),
+            ),
+            FrageDef(
+                text="Wie sind Fluchtwege gekennzeichnet?",
+                erklaerung="DIN EN ISO 7010 normiert das Rettungszeichen: weißes Männchen läuft "
+                "durch eine Tür, weißer Pfeil auf grünem Grund.",
+                optionen=_opts(
+                    ("Rote Pfeile auf weißem Grund", False),
+                    ("Grünes Rettungszeichen mit Männchen und Pfeil nach DIN EN ISO 7010", True),
+                    ("Blaue Schilder mit weißer Schrift", False),
+                    ("Gelbe Punktmarkierung am Boden", False),
+                ),
+            ),
+            FrageDef(
+                text="Was sind die rechtlichen Folgen, wenn jemand eine Brandschutztür offen keilt?",
+                erklaerung="Eine offene Brandschutztür hebt den ganzen Brandabschnitt auf. "
+                "Bußgeld bis 50.000 €, im Schadensfall ist persönliche Haftung möglich.",
+                optionen=_opts(
+                    ("Keine, das ist eine gängige Praxis", False),
+                    ("Ordnungswidrigkeit mit Bußgeld bis 50.000 € und Aufhebung des Brandschutz-Konzepts", True),
+                    ("Nur in öffentlichen Gebäuden verboten", False),
+                    ("Erlaubt, solange Material durchgetragen wird", False),
+                ),
+            ),
+            FrageDef(
+                text="Du siehst eine abgestellte Palette mitten auf dem Fluchtweg. Was ist deine Pflicht?",
+                erklaerung="§ 16 ArbSchG verpflichtet jede:n Beschäftigte:n, Gefahren unverzüglich "
+                "zu melden — oder selbst zu beseitigen, wenn das ohne Gefährdung möglich ist.",
+                optionen=_opts(
+                    ("Vorbeigehen, ist nicht dein Bereich", False),
+                    ("Wegräumen wenn möglich oder sofort an die Schichtleitung melden (§ 16 ArbSchG)", True),
+                    ("Nur melden, wenn die Palette groß ist", False),
+                    ("Fotografieren und am nächsten Tag im Teammeeting ansprechen", False),
+                ),
+            ),
+            FrageDef(
+                text="Wofür ist der Sammelplatz nach einer Evakuierung da?",
+                erklaerung="Am Sammelplatz wird per Anwesenheitsliste geprüft, wer fehlt. Diese "
+                "Information bekommt die Feuerwehr, damit gezielt gesucht werden kann.",
+                optionen=_opts(
+                    ("Pflicht-Raucherpause während der Evakuierung", False),
+                    ("Damit Verantwortliche prüfen können, wer noch im Gebäude vermisst wird", True),
+                    ("Wartebereich für Angehörige der Mitarbeitenden", False),
+                    ("Treffpunkt für die Feuerwehr zum Abladen der Schläuche", False),
+                ),
+            ),
+            FrageDef(
+                text="Welcher Anteil der Beschäftigten muss pro Brandabschnitt als Brandschutzhelfer ausgebildet sein?",
+                erklaerung="ASR A2.2 fordert mindestens 5 % — bei besonderen Risiken auch mehr. "
+                "Brandschutzhelfer sind die Erstmaßnahme vor dem Eintreffen der Feuerwehr.",
+                optionen=_opts(
+                    ("Nur die Geschäftsführung", False),
+                    ("Mindestens 5 % der Beschäftigten pro Brandabschnitt (ASR A2.2)", True),
+                    ("Nur das eigene Sicherheitspersonal", False),
+                    ("Nur freiwillige Feuerwehrleute aus der Belegschaft", False),
                 ),
             ),
         ),
