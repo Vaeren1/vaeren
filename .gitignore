@@ -45,3 +45,7 @@ media/
 
 # Superpowers
 .superpowers/
+
+# Local upload artifacts (overridden by MEDIA_ROOT in prod)
+backend/kurs-uploads/
+backend/media/
