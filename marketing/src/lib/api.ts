@@ -87,7 +87,13 @@ export const RELEVANZ_LABELS: Record<Relevanz, string> = {
 
 async function safeFetch<T>(url: string, fallback: T): Promise<T> {
   try {
-    const res = await fetch(url);
+    // X-Forwarded-Proto: https hilft beim Server-Side-Build im Docker-
+    // Netzwerk (vaeren-django sieht uns sonst als plain-HTTP und schickt
+    // 301 → HTTPS, was im container nicht greift).
+    const res = await fetch(url, {
+      headers: { "X-Forwarded-Proto": "https" },
+      redirect: "follow",
+    });
     if (!res.ok) {
       console.warn(`[vaeren-api] ${url} → ${res.status}`);
       return fallback;

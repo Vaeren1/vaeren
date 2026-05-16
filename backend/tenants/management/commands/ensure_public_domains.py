@@ -16,14 +16,25 @@ from django_tenants.utils import get_public_schema_name, schema_context
 from tenants.models import Tenant, TenantDomain
 
 PUBLIC_DOMAINS = [
-    "hinweise.app.vaeren.de",
+    # Marketing-API (NewsPost, Korrekturen, Notbremse)
     "api.vaeren.de",
+    # Marketing-Site (Caddy file_server, kein Backend-Routing, aber DRF
+    # braucht Host-Header-Match für ALLOWED_HOSTS)
     "vaeren.de",
     "www.vaeren.de",
+    # Container-Hostname für interne SSG-Builds (Marketing-Site-Build
+    # läuft im docker-Netzwerk und fetcht direkt gegen vaeren-django:8000)
+    "vaeren-django",
     # Dev:
     "localhost",
     "127.0.0.1",
 ]
+
+# WICHTIG: hinweise.app.vaeren.de NICHT hier rein — gehört zum demo-Tenant
+# (oder einem anderen tenant-spezifischen Schema), weil der HinSchG-Public-
+# Endpoint in urls_tenant.py registriert ist (path "public/hinschg/...").
+# Diese Liste ist ausschließlich für Domains, die das PUBLIC_SCHEMA_URLCONF
+# bedienen sollen.
 
 
 class Command(BaseCommand):

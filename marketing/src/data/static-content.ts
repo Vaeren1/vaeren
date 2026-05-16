@@ -65,7 +65,7 @@ export const METHODIK = {
 
 export const IMPRESSUM = {
   name: "Konrad Bizer",
-  postanschrift: ["[Postanschrift Konrad — bitte ausfüllen]", "[PLZ Ort]"],
+  postanschrift: ["Ochsengasse 40", "89081 Ulm"],
   email: "kontakt@vaeren.de",
   ust_id_hinweis:
     "Kleinunternehmer im Sinne von §19 UStG. Es wird keine Umsatzsteuer berechnet.",

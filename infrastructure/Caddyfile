@@ -35,9 +35,9 @@ sponty.fun, www.sponty.fun, api.sponty.fun {
 
 
 # --- Vaeren Marketing-Site (statisch, Astro-Build) -------------------
-# Apex liefert die Astro-Marketing-Site aus /var/www/vaeren-marketing/.
+# Apex liefert die Astro-Marketing-Site aus /srv/vaeren-marketing/.
 # Build erfolgt lokal (deploy.sh: `bun run build` mit PUBLIC_API_BASE=https://api.vaeren.de),
-# Output wird per rsync nach /var/www/vaeren-marketing gespiegelt.
+# Output wird per rsync nach /srv/vaeren-marketing gespiegelt.
 # www → apex (kanonisch, ein Hostname für SEO).
 www.vaeren.de {
     redir https://vaeren.de{uri} permanent
@@ -45,7 +45,7 @@ www.vaeren.de {
 
 vaeren.de {
     encode gzip zstd
-    root * /var/www/vaeren-marketing
+    root * /srv/vaeren-marketing
     file_server
     try_files {path} {path}/index.html /404.html
 
