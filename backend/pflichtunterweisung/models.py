@@ -18,6 +18,11 @@ from core.models import ComplianceTask, Mitarbeiter
 class Kurs(models.Model):
     """Kurs-Vorlage. Mehrfach in Wellen verwendbar."""
 
+    class QuizModus(models.TextChoices):
+        QUIZ = "quiz", "Quiz"
+        KENNTNISNAHME = "kenntnisnahme", "Kenntnisnahme"
+        KENNTNISNAHME_LESEZEIT = "kenntnisnahme_lesezeit", "Kenntnisnahme + Min-Lesezeit"
+
     titel = models.CharField(max_length=200)
     beschreibung = models.TextField(blank=True)
     gueltigkeit_monate = models.PositiveSmallIntegerField(
@@ -33,6 +38,38 @@ class Kurs(models.Model):
             "und pro SchulungsTask persistiert. Muss <= fragen.count() sein."
         ),
     )
+    quiz_modus = models.CharField(
+        max_length=30,
+        choices=QuizModus.choices,
+        default=QuizModus.QUIZ,
+        help_text="Bestimmt, was der Mitarbeiter im Player macht.",
+    )
+    mindest_lesezeit_s = models.PositiveIntegerField(
+        default=0,
+        help_text=(
+            "Sekunden pro Modul, ab denen 'Kenntnisnahme' aktivierbar ist. "
+            "Nur ausgewertet bei quiz_modus=kenntnisnahme_lesezeit."
+        ),
+    )
+    zertifikat_aktiv = models.BooleanField(
+        default=True,
+        help_text="Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert.",
+    )
+    eigentuemer_tenant = models.CharField(
+        max_length=63,
+        blank=True,
+        help_text=(
+            "Schema-Name des Tenants, der den Kurs erstellt hat. "
+            "Leer = Vaeren-Standardkatalog (read-only für Tenants)."
+        ),
+    )
+    erstellt_von = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="erstellte_kurse",
+    )
     aktiv = models.BooleanField(default=True)
     erstellt_am = models.DateTimeField(auto_now_add=True)
 
@@ -43,6 +80,30 @@ class Kurs(models.Model):
 
     def __str__(self) -> str:
         return self.titel
+
+    def clean(self) -> None:
+        from django.core.exceptions import ValidationError
+
+        if self.quiz_modus != self.QuizModus.QUIZ:
+            if self.fragen_pro_quiz != 0:
+                raise ValidationError(
+                    {"fragen_pro_quiz": "Muss 0 sein wenn quiz_modus != quiz."}
+                )
+            if self.min_richtig_prozent != 0:
+                raise ValidationError(
+                    {"min_richtig_prozent": "Muss 0 sein wenn quiz_modus != quiz."}
+                )
+        if (
+            self.quiz_modus == self.QuizModus.KENNTNISNAHME_LESEZEIT
+            and self.mindest_lesezeit_s <= 0
+        ):
+            raise ValidationError(
+                {"mindest_lesezeit_s": "Muss > 0 sein wenn quiz_modus=kenntnisnahme_lesezeit."}
+            )
+
+    @property
+    def ist_standardkatalog(self) -> bool:
+        return self.eigentuemer_tenant == ""
 
 
 class KursModul(models.Model):
