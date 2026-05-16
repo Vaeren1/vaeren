@@ -13,6 +13,8 @@ urlpatterns = [
     path("api/", include("core.urls")),
     path("api/", include("pflichtunterweisung.urls")),
     path("api/", include("hinschg.urls")),
+    # Redaktion-Backend (auth-only, schema-switching auf public).
+    path("api/", include("redaktion.urls_internal")),
     # MFA-aware Login MUSS vor dj_rest_auth.urls stehen, sonst gewinnt der Default.
     path("api/auth/login/", MfaAwareLoginView.as_view(), name="rest_login"),
     path("api/auth/", include("dj_rest_auth.urls")),

@@ -24,6 +24,7 @@ import {
   LayoutDashboard,
   LogOut,
   type LucideIcon,
+  Newspaper,
   Settings,
   Shield,
   ShieldCheck,
@@ -37,7 +38,7 @@ const NAV: Array<{
   to: string;
   label: string;
   icon: LucideIcon;
-  group?: "compliance" | "stamm";
+  group?: "compliance" | "stamm" | "intern";
 }> = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, group: "compliance" },
   {
@@ -56,6 +57,7 @@ const NAV: Array<{
   { to: "/audit", label: "Audit-Log", icon: FileSearch, group: "compliance" },
   { to: "/mitarbeiter", label: "Mitarbeiter", icon: Users, group: "stamm" },
   { to: "/settings", label: "Einstellungen", icon: Settings, group: "stamm" },
+  { to: "/redaktion", label: "Redaktion", icon: Newspaper, group: "intern" },
 ];
 
 const SCORE_LEVEL_BG = {
@@ -92,6 +94,10 @@ export function SidebarShell() {
           <SidebarGroup
             label="Verwaltung"
             items={NAV.filter((n) => n.group === "stamm")}
+          />
+          <SidebarGroup
+            label="Intern"
+            items={NAV.filter((n) => n.group === "intern")}
           />
         </nav>
 

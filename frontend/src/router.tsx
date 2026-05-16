@@ -15,6 +15,7 @@ import { MitarbeiterFormPage } from "@/routes/mitarbeiter-form";
 import { PublicHinweisePage } from "@/routes/public-hinweise";
 import { PublicHinweiseStatusPage } from "@/routes/public-hinweise-status";
 import { PublicSchulungPage } from "@/routes/public-schulung";
+import { RedaktionPage } from "@/routes/redaktion";
 import { SchulungenListPage } from "@/routes/schulungen";
 import { SchulungenWizardPage } from "@/routes/schulungen-wizard";
 import { SettingsPage } from "@/routes/settings";
@@ -50,6 +51,7 @@ export const router = createBrowserRouter([
       { path: "/meldungen", element: <MeldungenListPage /> },
       { path: "/meldungen/:id", element: <MeldungDetailPage /> },
       { path: "/audit", element: <AuditLogPage /> },
+      { path: "/redaktion", element: <RedaktionPage /> },
       { path: "/settings", element: <SettingsPage /> },
       { path: "/mfa-setup", element: <MfaSetupPage /> },
     ],
