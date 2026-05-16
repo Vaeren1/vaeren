@@ -23,6 +23,15 @@ class Kurs(models.Model):
         KENNTNISNAHME = "kenntnisnahme", "Kenntnisnahme"
         KENNTNISNAHME_LESEZEIT = "kenntnisnahme_lesezeit", "Kenntnisnahme + Min-Lesezeit"
 
+    class Kategorie(models.TextChoices):
+        ARBEITSSCHUTZ = "arbeitsschutz", "Arbeitsschutz"
+        BRANDSCHUTZ = "brandschutz", "Brand- & Erste Hilfe"
+        GEFAHRSTOFFE = "gefahrstoffe", "Gefahrstoffe & Maschinen"
+        DATENSCHUTZ = "datenschutz", "Datenschutz & IT"
+        COMPLIANCE = "compliance", "Compliance & Recht"
+        UMWELT = "umwelt", "Umwelt & Qualität"
+        SONSTIGES = "sonstiges", "Sonstiges"
+
     titel = models.CharField(max_length=200)
     beschreibung = models.TextField(blank=True)
     gueltigkeit_monate = models.PositiveSmallIntegerField(
@@ -54,6 +63,12 @@ class Kurs(models.Model):
     zertifikat_aktiv = models.BooleanField(
         default=True,
         help_text="Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert.",
+    )
+    kategorie = models.CharField(
+        max_length=30,
+        choices=Kategorie.choices,
+        default=Kategorie.SONSTIGES,
+        help_text="Thematische Einordnung fuer die Kurs-Bibliothek-Gruppierung.",
     )
     eigentuemer_tenant = models.CharField(
         max_length=63,

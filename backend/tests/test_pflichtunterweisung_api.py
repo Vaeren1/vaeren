@@ -718,3 +718,48 @@ def test_tenant_a_cannot_see_kurs_of_tenant_b(db, settings):
     titel = [k["titel"] for k in resp.json()["results"]]
     assert "GEHEIM-B" not in titel
     connection.set_schema_to_public()
+
+
+# --- Kategorien (Mini-Feature 2026-05-17) ------------------------------
+
+
+def test_kurs_kategorie_round_trip(tenant_setup):
+    tenant, domain = tenant_setup
+    client, _ = _qm_client(tenant, domain)
+    resp = client.post(
+        "/api/kurse/",
+        {"titel": "Mein Compliance-Kurs", "kategorie": "compliance"},
+        content_type="application/json",
+    )
+    assert resp.status_code == 201, resp.content
+    assert resp.json()["kategorie"] == "compliance"
+
+
+def test_kurs_kategorie_invalid_choice_rejected(tenant_setup):
+    tenant, domain = tenant_setup
+    client, _ = _qm_client(tenant, domain)
+    resp = client.post(
+        "/api/kurse/",
+        {"titel": "Bla", "kategorie": "kein_choice_value"},
+        content_type="application/json",
+    )
+    assert resp.status_code == 400
+    assert "kategorie" in resp.json()
+
+
+def test_seed_kurs_katalog_sets_kategorien():
+    """Nach dem Seed haben die 20 Standard-Kurse die geseedeten Kategorien."""
+    from collections import Counter
+    from pflichtunterweisung.seed_data import KATALOG
+
+    cnt = Counter(k.kategorie for k in KATALOG)
+    # Sanity: alle 20 sind kategorisiert (keiner default 'sonstiges')
+    assert cnt.get("sonstiges", 0) == 0
+    # Erwartete Verteilung (siehe seed_data + Mapping)
+    assert cnt["compliance"] == 6
+    assert cnt["arbeitsschutz"] == 4
+    assert cnt["gefahrstoffe"] == 4
+    assert cnt["brandschutz"] == 2
+    assert cnt["datenschutz"] == 2
+    assert cnt["umwelt"] == 2
+    assert sum(cnt.values()) == 20

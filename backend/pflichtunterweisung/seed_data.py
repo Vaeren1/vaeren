@@ -44,6 +44,7 @@ class KursDef:
     beschreibung: str
     gueltigkeit_monate: int = 12
     min_richtig_prozent: int = 80
+    kategorie: str = "sonstiges"
     module: tuple[ModulDef, ...] = field(default_factory=tuple)
     fragen: tuple[FrageDef, ...] = field(default_factory=tuple)
 
@@ -65,6 +66,7 @@ KATALOG: tuple[KursDef, ...] = (
         "Grundbegriffe, Betroffenenrechte, Umgang mit Datenpannen, "
         "technisch-organisatorische Maßnahmen (TOMs).",
         gueltigkeit_monate=12,
+        kategorie="datenschutz",
         module=(
             ModulDef(
                 titel="Grundbegriffe & Schutzziele",
@@ -620,6 +622,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #2
     KursDef(
         titel="IT-Security & Phishing-Erkennung",
+        kategorie="datenschutz",
         beschreibung="Cyber-Security-Pflichtbasiskurs nach DSGVO Art. 32 + ISO 27001. "
         "Passwörter, MFA, Phishing-Erkennung, mobiles Arbeiten, Verhalten bei Sicherheitsvorfällen.",
         gueltigkeit_monate=12,
@@ -1084,6 +1087,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #3
     KursDef(
             titel="Arbeitsschutz — Grundunterweisung",
+            kategorie="arbeitsschutz",
             beschreibung="Jährliche Pflichtunterweisung nach § 12 ArbSchG. "
             "Gefährdungsbeurteilung, Unterweisungspflichten, Notfallorganisation.",
             gueltigkeit_monate=12,
@@ -1544,6 +1548,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #4
     KursDef(
         titel="Brandschutz am Arbeitsplatz",
+        kategorie="brandschutz",
         beschreibung="Pflichtunterweisung nach ASR A2.2 + § 10 ArbSchG. "
         "Brandklassen, Löschmittel, Verhalten im Brandfall, Flucht- und Rettungswege.",
         gueltigkeit_monate=12,
@@ -1972,6 +1977,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #5
     KursDef(
         titel="Erste Hilfe — Auffrischung",
+        kategorie="brandschutz",
         beschreibung="Auffrischung nach DGUV Vorschrift 1 § 26. "
         "Notruf, Bewusstlosigkeit, Wiederbelebung, Wundversorgung.",
         gueltigkeit_monate=24,
@@ -2460,6 +2466,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #6
     KursDef(
         titel="Umgang mit Gefahrstoffen",
+        kategorie="gefahrstoffe",
         beschreibung="Jährliche Pflichtunterweisung nach § 14 GefStoffV. "
         "GHS-Piktogramme, Sicherheitsdatenblätter, Lagerung, Unfallvermeidung.",
         gueltigkeit_monate=12,
@@ -3004,6 +3011,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #7
     KursDef(
         titel="Persönliche Schutzausrüstung (PSA)",
+        kategorie="arbeitsschutz",
         beschreibung="Unterweisung nach PSA-Benutzungsverordnung. Auswahl, Tragepflicht, Prüfung & Wartung, Atemschutz.",
         gueltigkeit_monate=12,
         module=(
@@ -3467,6 +3475,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #8
     KursDef(
         titel="Maschinen- und Anlagensicherheit",
+        kategorie="gefahrstoffe",
         beschreibung="Sichere Arbeit an Maschinen nach BetrSichV § 12. "
         "Schutzeinrichtungen, Lockout-Tagout, Wartungssicherheit.",
         gueltigkeit_monate=12,
@@ -3966,6 +3975,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #9
     KursDef(
         titel="Lärm und Vibration am Arbeitsplatz",
+        kategorie="arbeitsschutz",
         beschreibung="Unterweisung nach LärmVibrationsArbSchV. Auslösewerte, Gehörschutz-Praxis.",
         gueltigkeit_monate=12,
         module=(
@@ -4357,6 +4367,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #10
     KursDef(
         titel="Antikorruption & Geschenke-Policy",
+        kategorie="compliance",
         beschreibung="Compliance-Schulung zu Bestechung & Vorteilsnahme nach § 299 StGB + ISO 37001. Zuwendungen erkennen, Lieferantenkontakt, Meldewege.",
         gueltigkeit_monate=24,
         module=(
@@ -4808,6 +4819,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #11
     KursDef(
         titel="AGG — Gleichbehandlung am Arbeitsplatz",
+        kategorie="compliance",
         beschreibung="Pflichtunterweisung nach § 12 Abs. 2 AGG. "
         "Diskriminierungsmerkmale + Beschwerderecht.",
         gueltigkeit_monate=24,
@@ -5256,6 +5268,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #12
     KursDef(
             titel="Hinweisgeberschutz (HinSchG)",
+            kategorie="compliance",
             beschreibung="Was Mitarbeitende über das Hinweisgebersystem wissen müssen "
             "(HinSchG § 8 ff.). Meldekanal, Schutzrechte, Repressalienverbot.",
             gueltigkeit_monate=24,
@@ -5653,6 +5666,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #13
     KursDef(
         titel="Flurförderzeuge & Gabelstapler",
+        kategorie="arbeitsschutz",
         beschreibung="Pflichtunterweisung Stapler-Fahrer:innen nach DGUV Grundsatz 308-001. "
         "Fahrerlaubnis, sicherer Betrieb, Stand­sicherheit/Last.",
         gueltigkeit_monate=12,
@@ -6097,6 +6111,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #14
     KursDef(
         titel="Lieferkettengesetz (LkSG)",
+        kategorie="compliance",
         beschreibung="Pflichten nach LkSG §§ 3-10. Risikoanalyse, Sorgfaltspflichten, "
         "Beschwerdeverfahren in der Lieferkette.",
         gueltigkeit_monate=24,
@@ -6556,6 +6571,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #15
     KursDef(
         titel="Geldwäscheprävention (GwG)",
+        kategorie="compliance",
         beschreibung="Grundlagen Geldwäschegesetz (§ 6 GwG) + § 261 StGB. Verdachtsmerkmale, KYC-Pflichten, Meldewege FIU.",
         gueltigkeit_monate=12,
         module=(
@@ -7022,6 +7038,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #16
     KursDef(
         titel="Schweißen & Heißarbeiten",
+        kategorie="gefahrstoffe",
         beschreibung="Schutzunterweisung Schweißen/Brennschneiden/Trennen nach DGUV Regel 100-500 Kapitel 2.26. "
         "Erlaubnisschein, Brand-/Explosionsschutz, Atemwege/Strahlung.",
         gueltigkeit_monate=12,
@@ -7481,6 +7498,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #17
     KursDef(
         titel="Ladungssicherung",
+        kategorie="gefahrstoffe",
         beschreibung="Pflichtunterweisung Versand-/Fahrpersonal nach § 22 StVO + DGUV Vorschrift 70. "
         "Physik der Sicherung, Hilfsmittel & Stauplan.",
         gueltigkeit_monate=12,
@@ -7890,6 +7908,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #18
     KursDef(
         titel="Exportkontrolle & Sanktionen",
+        kategorie="compliance",
         beschreibung="Pflichtschulung für Versand/Vertrieb nach AWG + EU-Dual-Use-VO 2021/821. Embargos, Sanktionslisten-Prüfung, Dual-Use-Güter.",
         gueltigkeit_monate=24,
         module=(
@@ -8331,6 +8350,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #19
     KursDef(
         titel="Umweltschutz & Abfallrecht",
+        kategorie="umwelt",
         beschreibung="Pflichtgrundlagen Kreislaufwirtschaftsgesetz (KrWG) + ISO 14001. "
         "Abfallhierarchie, Trennung & Doku, Gefahrgut-Versand ADR-Basics.",
         gueltigkeit_monate=24,
@@ -8798,6 +8818,7 @@ KATALOG: tuple[KursDef, ...] = (
     # ------------------------------------------------------------------- #20
     KursDef(
         titel="ISO 9001 Qualitätsbewusstsein",
+        kategorie="umwelt",
         beschreibung="Awareness-Kurs ISO 9001:2015 + IATF 16949. "
         "Prozessdenken & PDCA, Reklamations- und Audit-Verhalten.",
         gueltigkeit_monate=24,

@@ -72,6 +72,7 @@ class KursSerializer(serializers.ModelSerializer):
             "quiz_modus",
             "mindest_lesezeit_s",
             "zertifikat_aktiv",
+            "kategorie",
             "eigentuemer_tenant",
             "ist_standardkatalog",
             "erstellt_von",

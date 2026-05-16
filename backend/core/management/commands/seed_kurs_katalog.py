@@ -84,6 +84,7 @@ class Command(BaseCommand):
             beschreibung=kurs_def.beschreibung,
             gueltigkeit_monate=kurs_def.gueltigkeit_monate,
             min_richtig_prozent=kurs_def.min_richtig_prozent,
+            kategorie=kurs_def.kategorie,
             aktiv=True,
         )
         for idx, modul_def in enumerate(kurs_def.module):

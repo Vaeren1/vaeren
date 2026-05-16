@@ -9,10 +9,16 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -170,13 +176,20 @@ export function RedaktionPage() {
         </CardContent>
       </Card>
 
-      {/* Detail-Panel */}
-      {selectedSlug && (
-        <PostDetail
-          slug={selectedSlug}
-          onClose={() => setSelectedSlug(null)}
-        />
-      )}
+      {/* Detail-Modal */}
+      <Dialog
+        open={!!selectedSlug}
+        onOpenChange={(open) => !open && setSelectedSlug(null)}
+      >
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          {selectedSlug && (
+            <PostDetail
+              slug={selectedSlug}
+              onClose={() => setSelectedSlug(null)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -337,13 +350,11 @@ function PostDetail({
   const [editLead, setEditLead] = useState<string | null>(null);
   const [editBody, setEditBody] = useState<string | null>(null);
 
+  const [editMode, setEditMode] = useState(false);
+
   if (isLoading || !post) {
     return (
-      <Card>
-        <CardContent className="p-6 text-sm text-muted-foreground">
-          Lade…
-        </CardContent>
-      </Card>
+      <div className="p-6 text-sm text-muted-foreground">Lade…</div>
     );
   }
 
@@ -379,128 +390,148 @@ function PostDetail({
   };
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-start justify-between gap-2">
-        <div>
-          <CardTitle className="font-serif text-lg">
-            Beitrag bearbeiten
-          </CardTitle>
-          <CardDescription>
-            Status:{" "}
-            <span className="font-medium text-foreground">
-              {STATUS_LABEL[post.status]}
-            </span>
-            {post.verifier_confidence != null && (
-              <>
-                {" "}· Verifier-Confidence{" "}
-                <span className="font-mono">
-                  {post.verifier_confidence.toFixed(2)}
-                </span>
-              </>
-            )}
-          </CardDescription>
-        </div>
-        <Button variant="ghost" size="sm" onClick={onClose}>
-          schließen
-        </Button>
-      </CardHeader>
-      <CardContent className="space-y-5">
-        {/* Pipeline-Analyse: alle Daten der LLM-Stufen + Crawler */}
-        <PipelineAnalyse post={post} />
-
-        {post.verifier_issues && post.verifier_issues.length > 0 && (
-          <div className="p-4 rounded-md bg-amber-50 border border-amber-200">
-            <div className="flex items-center gap-2 text-amber-900 font-medium mb-2">
-              <AlertTriangle className="h-4 w-4" />
-              Verifier-Befunde ({post.verifier_issues.length})
-            </div>
-            <ul className="text-sm text-amber-900 space-y-1.5">
-              {post.verifier_issues.map((i, idx) => (
-                <li key={idx} className="flex gap-2">
-                  <span className="text-amber-700 font-mono mt-0.5">{idx + 1}.</span>
-                  <span>{i}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {post.candidate_titel && (
-          <div className="p-4 rounded-md bg-slate-50 border border-slate-200">
-            <div className="text-xs uppercase tracking-widest text-slate-700 font-medium mb-2">
-              Roh-Quelle (vor LLM-Bearbeitung)
-            </div>
-            <div className="text-sm font-medium text-slate-900 mb-1">
-              {post.candidate_titel}
-            </div>
-            {post.candidate_excerpt && (
-              <p className="text-sm text-slate-600 leading-relaxed line-clamp-4">
-                {post.candidate_excerpt}
-              </p>
-            )}
-            {post.candidate_quell_url && (
-              <a
-                href={post.candidate_quell_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-2"
+    <div className="space-y-5">
+      <DialogHeader>
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex-1 min-w-0">
+            <DialogTitle className="font-serif text-xl leading-snug">
+              {titel}
+            </DialogTitle>
+            <DialogDescription className="mt-1">
+              <span
+                className={cn(
+                  "inline-block px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wide font-medium mr-2",
+                  STATUS_COLOR[post.status],
+                )}
               >
-                <ExternalLink className="h-3 w-3" />
-                Original im neuen Tab öffnen
-              </a>
-            )}
+                {STATUS_LABEL[post.status]}
+              </span>
+              {KATEGORIE_LABEL[post.kategorie]} · {GEO_LABEL[post.geo]} ·{" "}
+              {TYPE_LABEL[post.type]} · {RELEVANZ_LABEL[post.relevanz]}
+            </DialogDescription>
           </div>
-        )}
+          <Button
+            variant={editMode ? "default" : "outline"}
+            size="sm"
+            onClick={() => setEditMode((m) => !m)}
+          >
+            {editMode ? "Vorschau" : "Bearbeiten"}
+          </Button>
+        </div>
+      </DialogHeader>
 
-        {post.curator_begruendung && (
-          <div className="p-4 rounded-md bg-indigo-50 border border-indigo-200">
-            <div className="flex items-center gap-2 text-indigo-900 font-medium mb-2">
-              <Sparkles className="h-4 w-4" />
-              Curator-Begründung (warum wurde dieser Beitrag ausgewählt)
-            </div>
-            <p className="text-sm text-indigo-900 leading-relaxed">
-              {post.curator_begruendung}
+      {/* Pipeline-Analyse: alle Daten der LLM-Stufen + Crawler */}
+      <PipelineAnalyse post={post} />
+
+      {post.verifier_issues && post.verifier_issues.length > 0 && (
+        <div className="p-4 rounded-md bg-amber-50 border border-amber-200">
+          <div className="flex items-center gap-2 text-amber-900 font-medium mb-2">
+            <AlertTriangle className="h-4 w-4" />
+            Verifier-Befunde ({post.verifier_issues.length})
+          </div>
+          <ul className="text-sm text-amber-900 space-y-1.5">
+            {post.verifier_issues.map((i, idx) => (
+              <li key={idx} className="flex gap-2">
+                <span className="text-amber-700 font-mono mt-0.5">{idx + 1}.</span>
+                <span>{i}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Editier- vs. Vorschau-Modus */}
+      {editMode ? (
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="redaktion-titel" className="text-xs uppercase tracking-wide">
+              Titel
+            </Label>
+            <Input
+              id="redaktion-titel"
+              value={titel}
+              onChange={(e) => setEditTitel(e.target.value)}
+              className="mt-1"
+            />
+          </div>
+          <div>
+            <Label htmlFor="redaktion-lead" className="text-xs uppercase tracking-wide">
+              Lead
+            </Label>
+            <textarea
+              id="redaktion-lead"
+              value={lead}
+              onChange={(e) => setEditLead(e.target.value)}
+              rows={3}
+              className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            />
+          </div>
+          <div>
+            <Label htmlFor="redaktion-body" className="text-xs uppercase tracking-wide">
+              Body (HTML)
+            </Label>
+            <textarea
+              id="redaktion-body"
+              value={body}
+              onChange={(e) => setEditBody(e.target.value)}
+              rows={16}
+              className="mt-1 w-full font-mono text-xs rounded-md border border-input bg-background px-3 py-2"
+            />
+          </div>
+        </div>
+      ) : (
+        <article className="space-y-4 border-l-4 border-slate-200 pl-5 py-2">
+          <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium">
+            Veröffentlichter Beitrag
+          </div>
+          <p className="font-serif text-lg leading-relaxed text-slate-800">
+            {lead}
+          </p>
+          <div
+            className="prose prose-sm prose-slate max-w-none [&_p]:my-3 [&_a]:text-primary [&_a]:underline"
+            dangerouslySetInnerHTML={{ __html: body }}
+          />
+        </article>
+      )}
+
+      {post.candidate_titel && (
+        <div className="p-4 rounded-md bg-slate-50 border border-slate-200">
+          <div className="text-xs uppercase tracking-widest text-slate-700 font-medium mb-2">
+            Roh-Quelle (vor LLM-Bearbeitung)
+          </div>
+          <div className="text-sm font-medium text-slate-900 mb-1">
+            {post.candidate_titel}
+          </div>
+          {post.candidate_excerpt && (
+            <p className="text-sm text-slate-600 leading-relaxed line-clamp-6">
+              {post.candidate_excerpt}
             </p>
+          )}
+          {post.candidate_quell_url && (
+            <a
+              href={post.candidate_quell_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-2"
+            >
+              <ExternalLink className="h-3 w-3" />
+              Original im neuen Tab öffnen
+            </a>
+          )}
+        </div>
+      )}
+
+      {post.curator_begruendung && (
+        <div className="p-4 rounded-md bg-indigo-50 border border-indigo-200">
+          <div className="flex items-center gap-2 text-indigo-900 font-medium mb-2">
+            <Sparkles className="h-4 w-4" />
+            Curator-Begründung (warum wurde dieser Beitrag ausgewählt)
           </div>
-        )}
-
-        <div>
-          <Label htmlFor="redaktion-titel" className="text-xs uppercase tracking-wide">
-            Titel
-          </Label>
-          <Input
-            id="redaktion-titel"
-            value={titel}
-            onChange={(e) => setEditTitel(e.target.value)}
-            className="mt-1"
-          />
+          <p className="text-sm text-indigo-900 leading-relaxed">
+            {post.curator_begruendung}
+          </p>
         </div>
-
-        <div>
-          <Label htmlFor="redaktion-lead" className="text-xs uppercase tracking-wide">
-            Lead
-          </Label>
-          <textarea
-            id="redaktion-lead"
-            value={lead}
-            onChange={(e) => setEditLead(e.target.value)}
-            rows={3}
-            className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="redaktion-body" className="text-xs uppercase tracking-wide">
-            Body (HTML)
-          </Label>
-          <textarea
-            id="redaktion-body"
-            value={body}
-            onChange={(e) => setEditBody(e.target.value)}
-            rows={12}
-            className="mt-1 w-full font-mono text-xs rounded-md border border-input bg-background px-3 py-2"
-          />
-        </div>
+      )}
 
         {post.source_links && post.source_links.length > 0 && (
           <div>
@@ -523,24 +554,25 @@ function PostDetail({
           </div>
         )}
 
-        <div className="flex items-center gap-2 pt-2 border-t">
-          <a
-            href={`https://vaeren.de/news/${post.slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-primary hover:underline inline-flex items-center gap-1"
-          >
-            <ScrollText className="h-3.5 w-3.5" /> Live-Vorschau
-          </a>
-          <span className="text-xs text-muted-foreground ml-2">
-            Slug: <span className="font-mono">{post.slug}</span>
-          </span>
-          <div className="ml-auto flex gap-2">
-            {hasEdits && (
-              <Button variant="outline" size="sm" onClick={handleDiscard}>
-                Verwerfen
-              </Button>
-            )}
+      <div className="flex items-center gap-2 pt-3 border-t">
+        <a
+          href={`https://vaeren.de/news/${post.slug}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+        >
+          <ScrollText className="h-3.5 w-3.5" /> Live-Vorschau
+        </a>
+        <span className="text-xs text-muted-foreground ml-2">
+          Slug: <span className="font-mono">{post.slug}</span>
+        </span>
+        <div className="ml-auto flex gap-2">
+          {hasEdits && (
+            <Button variant="outline" size="sm" onClick={handleDiscard}>
+              Verwerfen
+            </Button>
+          )}
+          {editMode && (
             <Button
               size="sm"
               onClick={handleSave}
@@ -548,10 +580,13 @@ function PostDetail({
             >
               Speichern
             </Button>
-          </div>
+          )}
+          <Button variant="outline" size="sm" onClick={onClose}>
+            Schließen
+          </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 

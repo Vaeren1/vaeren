@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Markdown } from "@/components/ui/markdown";
-import { useKurs } from "@/lib/api/schulungen";
+import { KATEGORIE_LABEL, useKurs } from "@/lib/api/schulungen";
 import { Check, X } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 
@@ -69,6 +69,7 @@ export function KursDetailPage() {
           </div>
         </CardHeader>
         <CardContent className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
+          <Metric label="Kategorie" value={KATEGORIE_LABEL[data.kategorie]} />
           <Metric label="Module" value={data.module.length} />
           <Metric label="Fragen" value={data.fragen.length} />
           <Metric label="Gültigkeit" value={`${data.gueltigkeit_monate} Mo.`} />

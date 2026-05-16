@@ -10,6 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { ApiError } from "@/lib/api/client";
 import {
+  KATEGORIE_LABEL,
+  KATEGORIE_ORDER,
+  type Kategorie,
   type KursInput,
   type QuizModus,
   useCreateKurs,
@@ -27,6 +30,15 @@ export const kursSchema = z
   .object({
     titel: z.string().min(1, "Pflichtfeld").max(200),
     beschreibung: z.string().max(2000).optional().default(""),
+    kategorie: z.enum([
+      "arbeitsschutz",
+      "brandschutz",
+      "gefahrstoffe",
+      "datenschutz",
+      "compliance",
+      "umwelt",
+      "sonstiges",
+    ]),
     quiz_modus: z.enum(["quiz", "kenntnisnahme", "kenntnisnahme_lesezeit"]),
     fragen_pro_quiz: z.number().int().min(0).max(100),
     min_richtig_prozent: z.number().int().min(0).max(100),
@@ -49,6 +61,7 @@ export type KursFormValues = z.infer<typeof kursSchema>;
 const DEFAULTS: KursFormValues = {
   titel: "",
   beschreibung: "",
+  kategorie: "sonstiges",
   quiz_modus: "quiz",
   fragen_pro_quiz: 10,
   min_richtig_prozent: 80,
@@ -85,6 +98,7 @@ export function KursFormPage() {
     if (existing.data) {
       setValue("titel", existing.data.titel);
       setValue("beschreibung", existing.data.beschreibung);
+      setValue("kategorie", existing.data.kategorie);
       setValue("quiz_modus", existing.data.quiz_modus);
       setValue("fragen_pro_quiz", existing.data.fragen_pro_quiz);
       setValue("min_richtig_prozent", existing.data.min_richtig_prozent);
@@ -166,6 +180,25 @@ export function KursFormPage() {
               {...register("beschreibung")}
               disabled={isStandardCatalog}
             />
+          </div>
+
+          <div>
+            <Label htmlFor="kategorie">Kategorie *</Label>
+            <select
+              id="kategorie"
+              className="block w-full rounded border border-input bg-background p-2 text-sm"
+              {...register("kategorie")}
+              disabled={isStandardCatalog}
+            >
+              {KATEGORIE_ORDER.map((k: Kategorie) => (
+                <option key={k} value={k}>
+                  {KATEGORIE_LABEL[k]}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Bestimmt die Gruppierung in der Kurs-Bibliothek.
+            </p>
           </div>
 
           <fieldset className="rounded border p-3">

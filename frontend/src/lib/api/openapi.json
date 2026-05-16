@@ -4809,19 +4809,18 @@
                     "nachricht"
                 ]
             },
-            "KategorieEnum": {
+            "Kategorie0bfEnum": {
                 "enum": [
-                    "ai_act",
+                    "arbeitsschutz",
+                    "brandschutz",
+                    "gefahrstoffe",
                     "datenschutz",
-                    "hinschg",
-                    "lieferkette",
-                    "arbeitsrecht",
-                    "geldwaesche_finanzen",
-                    "it_sicherheit",
-                    "esg_nachhaltigkeit"
+                    "compliance",
+                    "umwelt",
+                    "sonstiges"
                 ],
                 "type": "string",
-                "description": "* `ai_act` - AI Act\n* `datenschutz` - Datenschutz\n* `hinschg` - HinSchG\n* `lieferkette` - Lieferkette\n* `arbeitsrecht` - Arbeitsrecht\n* `geldwaesche_finanzen` - Geldwäsche/Finanzen\n* `it_sicherheit` - IT-Sicherheit\n* `esg_nachhaltigkeit` - ESG/Nachhaltigkeit"
+                "description": "* `arbeitsschutz` - Arbeitsschutz\n* `brandschutz` - Brand- & Erste Hilfe\n* `gefahrstoffe` - Gefahrstoffe & Maschinen\n* `datenschutz` - Datenschutz & IT\n* `compliance` - Compliance & Recht\n* `umwelt` - Umwelt & Qualität\n* `sonstiges` - Sonstiges"
             },
             "KorrekturInternal": {
                 "type": "object",
@@ -4902,6 +4901,14 @@
                     "zertifikat_aktiv": {
                         "type": "boolean",
                         "description": "Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert."
+                    },
+                    "kategorie": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Kategorie0bfEnum"
+                            }
+                        ],
+                        "description": "Thematische Einordnung fuer die Kurs-Bibliothek-Gruppierung.\n\n* `arbeitsschutz` - Arbeitsschutz\n* `brandschutz` - Brand- & Erste Hilfe\n* `gefahrstoffe` - Gefahrstoffe & Maschinen\n* `datenschutz` - Datenschutz & IT\n* `compliance` - Compliance & Recht\n* `umwelt` - Umwelt & Qualität\n* `sonstiges` - Sonstiges"
                     },
                     "eigentuemer_tenant": {
                         "type": "string",
@@ -5003,6 +5010,14 @@
                     "zertifikat_aktiv": {
                         "type": "boolean",
                         "description": "Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert."
+                    },
+                    "kategorie": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Kategorie0bfEnum"
+                            }
+                        ],
+                        "description": "Thematische Einordnung fuer die Kurs-Bibliothek-Gruppierung.\n\n* `arbeitsschutz` - Arbeitsschutz\n* `brandschutz` - Brand- & Erste Hilfe\n* `gefahrstoffe` - Gefahrstoffe & Maschinen\n* `datenschutz` - Datenschutz & IT\n* `compliance` - Compliance & Recht\n* `umwelt` - Umwelt & Qualität\n* `sonstiges` - Sonstiges"
                     },
                     "eigentuemer_tenant": {
                         "type": "string",
@@ -5562,7 +5577,7 @@
                         "type": "string"
                     },
                     "kategorie": {
-                        "$ref": "#/components/schemas/KategorieEnum"
+                        "$ref": "#/components/schemas/NewsPostInternalKategorieEnum"
                     },
                     "geo": {
                         "$ref": "#/components/schemas/GeoEnum"
@@ -5616,10 +5631,50 @@
                         "readOnly": true,
                         "nullable": true
                     },
+                    "candidate_excerpt": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true
+                    },
                     "candidate_quelle": {
                         "type": "string",
                         "readOnly": true,
                         "nullable": true
+                    },
+                    "candidate_quell_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "candidate_fetched_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "candidate_published_at_source": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "curator_begruendung": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "lifetime_days": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "days_until_expiry": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "days_since_published": {
+                        "type": "string",
+                        "readOnly": true
                     },
                     "notbremse_url": {
                         "type": "string",
@@ -5628,13 +5683,21 @@
                 },
                 "required": [
                     "body_html",
+                    "candidate_excerpt",
+                    "candidate_fetched_at",
+                    "candidate_published_at_source",
+                    "candidate_quell_url",
                     "candidate_quelle",
                     "candidate_titel",
                     "created_at",
+                    "curator_begruendung",
+                    "days_since_published",
+                    "days_until_expiry",
                     "geo",
                     "id",
                     "kategorie",
                     "lead",
+                    "lifetime_days",
                     "notbremse_url",
                     "relevanz",
                     "slug",
@@ -5644,6 +5707,20 @@
                     "verifier_confidence",
                     "verifier_issues"
                 ]
+            },
+            "NewsPostInternalKategorieEnum": {
+                "enum": [
+                    "ai_act",
+                    "datenschutz",
+                    "hinschg",
+                    "lieferkette",
+                    "arbeitsrecht",
+                    "geldwaesche_finanzen",
+                    "it_sicherheit",
+                    "esg_nachhaltigkeit"
+                ],
+                "type": "string",
+                "description": "* `ai_act` - AI Act\n* `datenschutz` - Datenschutz\n* `hinschg` - HinSchG\n* `lieferkette` - Lieferkette\n* `arbeitsrecht` - Arbeitsrecht\n* `geldwaesche_finanzen` - Geldwäsche/Finanzen\n* `it_sicherheit` - IT-Sicherheit\n* `esg_nachhaltigkeit` - ESG/Nachhaltigkeit"
             },
             "NewsPostInternalStatusEnum": {
                 "enum": [
@@ -6357,6 +6434,14 @@
                         "type": "boolean",
                         "description": "Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert."
                     },
+                    "kategorie": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Kategorie0bfEnum"
+                            }
+                        ],
+                        "description": "Thematische Einordnung fuer die Kurs-Bibliothek-Gruppierung.\n\n* `arbeitsschutz` - Arbeitsschutz\n* `brandschutz` - Brand- & Erste Hilfe\n* `gefahrstoffe` - Gefahrstoffe & Maschinen\n* `datenschutz` - Datenschutz & IT\n* `compliance` - Compliance & Recht\n* `umwelt` - Umwelt & Qualität\n* `sonstiges` - Sonstiges"
+                    },
                     "eigentuemer_tenant": {
                         "type": "string",
                         "readOnly": true,
@@ -6524,7 +6609,7 @@
                         "type": "string"
                     },
                     "kategorie": {
-                        "$ref": "#/components/schemas/KategorieEnum"
+                        "$ref": "#/components/schemas/NewsPostInternalKategorieEnum"
                     },
                     "geo": {
                         "$ref": "#/components/schemas/GeoEnum"
@@ -6578,10 +6663,50 @@
                         "readOnly": true,
                         "nullable": true
                     },
+                    "candidate_excerpt": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true
+                    },
                     "candidate_quelle": {
                         "type": "string",
                         "readOnly": true,
                         "nullable": true
+                    },
+                    "candidate_quell_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "candidate_fetched_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "candidate_published_at_source": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "curator_begruendung": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "lifetime_days": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "days_until_expiry": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "days_since_published": {
+                        "type": "string",
+                        "readOnly": true
                     },
                     "notbremse_url": {
                         "type": "string",

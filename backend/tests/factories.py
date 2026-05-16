@@ -131,6 +131,7 @@ class KursFactory(factory.django.DjangoModelFactory):
     quiz_modus = Kurs.QuizModus.QUIZ
     mindest_lesezeit_s = 0
     zertifikat_aktiv = True
+    kategorie = Kurs.Kategorie.SONSTIGES
     eigentuemer_tenant = ""  # Standardkatalog
 
 

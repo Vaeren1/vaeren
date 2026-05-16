@@ -1270,17 +1270,16 @@ export interface components {
             nachricht: string;
         };
         /**
-         * @description * `ai_act` - AI Act
-         *     * `datenschutz` - Datenschutz
-         *     * `hinschg` - HinSchG
-         *     * `lieferkette` - Lieferkette
-         *     * `arbeitsrecht` - Arbeitsrecht
-         *     * `geldwaesche_finanzen` - Geldwäsche/Finanzen
-         *     * `it_sicherheit` - IT-Sicherheit
-         *     * `esg_nachhaltigkeit` - ESG/Nachhaltigkeit
+         * @description * `arbeitsschutz` - Arbeitsschutz
+         *     * `brandschutz` - Brand- & Erste Hilfe
+         *     * `gefahrstoffe` - Gefahrstoffe & Maschinen
+         *     * `datenschutz` - Datenschutz & IT
+         *     * `compliance` - Compliance & Recht
+         *     * `umwelt` - Umwelt & Qualität
+         *     * `sonstiges` - Sonstiges
          * @enum {string}
          */
-        KategorieEnum: "ai_act" | "datenschutz" | "hinschg" | "lieferkette" | "arbeitsrecht" | "geldwaesche_finanzen" | "it_sicherheit" | "esg_nachhaltigkeit";
+        Kategorie0bfEnum: "arbeitsschutz" | "brandschutz" | "gefahrstoffe" | "datenschutz" | "compliance" | "umwelt" | "sonstiges";
         KorrekturInternal: {
             readonly id: number;
             post: number;
@@ -1311,6 +1310,18 @@ export interface components {
             mindest_lesezeit_s?: number;
             /** @description Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert. */
             zertifikat_aktiv?: boolean;
+            /**
+             * @description Thematische Einordnung fuer die Kurs-Bibliothek-Gruppierung.
+             *
+             *     * `arbeitsschutz` - Arbeitsschutz
+             *     * `brandschutz` - Brand- & Erste Hilfe
+             *     * `gefahrstoffe` - Gefahrstoffe & Maschinen
+             *     * `datenschutz` - Datenschutz & IT
+             *     * `compliance` - Compliance & Recht
+             *     * `umwelt` - Umwelt & Qualität
+             *     * `sonstiges` - Sonstiges
+             */
+            kategorie?: components["schemas"]["Kategorie0bfEnum"];
             /** @description Schema-Name des Tenants, der den Kurs erstellt hat. Leer = Vaeren-Standardkatalog (read-only für Tenants). */
             readonly eigentuemer_tenant: string;
             readonly ist_standardkatalog: boolean;
@@ -1351,6 +1362,18 @@ export interface components {
             mindest_lesezeit_s?: number;
             /** @description Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert. */
             zertifikat_aktiv?: boolean;
+            /**
+             * @description Thematische Einordnung fuer die Kurs-Bibliothek-Gruppierung.
+             *
+             *     * `arbeitsschutz` - Arbeitsschutz
+             *     * `brandschutz` - Brand- & Erste Hilfe
+             *     * `gefahrstoffe` - Gefahrstoffe & Maschinen
+             *     * `datenschutz` - Datenschutz & IT
+             *     * `compliance` - Compliance & Recht
+             *     * `umwelt` - Umwelt & Qualität
+             *     * `sonstiges` - Sonstiges
+             */
+            kategorie?: components["schemas"]["Kategorie0bfEnum"];
             /** @description Schema-Name des Tenants, der den Kurs erstellt hat. Leer = Vaeren-Standardkatalog (read-only für Tenants). */
             readonly eigentuemer_tenant: string;
             readonly ist_standardkatalog: boolean;
@@ -1500,7 +1523,7 @@ export interface components {
             titel: string;
             lead: string;
             body_html: string;
-            kategorie: components["schemas"]["KategorieEnum"];
+            kategorie: components["schemas"]["NewsPostInternalKategorieEnum"];
             geo: components["schemas"]["GeoEnum"];
             type: components["schemas"]["TypeEnum"];
             relevanz: components["schemas"]["RelevanzEnum"];
@@ -1520,9 +1543,32 @@ export interface components {
             /** Format: date-time */
             readonly updated_at: string;
             readonly candidate_titel: string | null;
+            readonly candidate_excerpt: string | null;
             readonly candidate_quelle: string | null;
+            /** Format: uri */
+            readonly candidate_quell_url: string | null;
+            /** Format: date-time */
+            readonly candidate_fetched_at: string | null;
+            /** Format: date-time */
+            readonly candidate_published_at_source: string | null;
+            readonly curator_begruendung: string | null;
+            readonly lifetime_days: string;
+            readonly days_until_expiry: string;
+            readonly days_since_published: string;
             readonly notbremse_url: string;
         };
+        /**
+         * @description * `ai_act` - AI Act
+         *     * `datenschutz` - Datenschutz
+         *     * `hinschg` - HinSchG
+         *     * `lieferkette` - Lieferkette
+         *     * `arbeitsrecht` - Arbeitsrecht
+         *     * `geldwaesche_finanzen` - Geldwäsche/Finanzen
+         *     * `it_sicherheit` - IT-Sicherheit
+         *     * `esg_nachhaltigkeit` - ESG/Nachhaltigkeit
+         * @enum {string}
+         */
+        NewsPostInternalKategorieEnum: "ai_act" | "datenschutz" | "hinschg" | "lieferkette" | "arbeitsrecht" | "geldwaesche_finanzen" | "it_sicherheit" | "esg_nachhaltigkeit";
         /**
          * @description * `pending_verify` - Wartet auf Verifier
          *     * `hold` - Manuelle Sichtung erforderlich
@@ -1832,6 +1878,18 @@ export interface components {
             mindest_lesezeit_s?: number;
             /** @description Wenn False, wird bei Abschluss kein PDF-Zertifikat generiert. */
             zertifikat_aktiv?: boolean;
+            /**
+             * @description Thematische Einordnung fuer die Kurs-Bibliothek-Gruppierung.
+             *
+             *     * `arbeitsschutz` - Arbeitsschutz
+             *     * `brandschutz` - Brand- & Erste Hilfe
+             *     * `gefahrstoffe` - Gefahrstoffe & Maschinen
+             *     * `datenschutz` - Datenschutz & IT
+             *     * `compliance` - Compliance & Recht
+             *     * `umwelt` - Umwelt & Qualität
+             *     * `sonstiges` - Sonstiges
+             */
+            kategorie?: components["schemas"]["Kategorie0bfEnum"];
             /** @description Schema-Name des Tenants, der den Kurs erstellt hat. Leer = Vaeren-Standardkatalog (read-only für Tenants). */
             readonly eigentuemer_tenant?: string;
             readonly ist_standardkatalog?: boolean;
@@ -1885,7 +1943,7 @@ export interface components {
             titel?: string;
             lead?: string;
             body_html?: string;
-            kategorie?: components["schemas"]["KategorieEnum"];
+            kategorie?: components["schemas"]["NewsPostInternalKategorieEnum"];
             geo?: components["schemas"]["GeoEnum"];
             type?: components["schemas"]["TypeEnum"];
             relevanz?: components["schemas"]["RelevanzEnum"];
@@ -1905,7 +1963,18 @@ export interface components {
             /** Format: date-time */
             readonly updated_at?: string;
             readonly candidate_titel?: string | null;
+            readonly candidate_excerpt?: string | null;
             readonly candidate_quelle?: string | null;
+            /** Format: uri */
+            readonly candidate_quell_url?: string | null;
+            /** Format: date-time */
+            readonly candidate_fetched_at?: string | null;
+            /** Format: date-time */
+            readonly candidate_published_at_source?: string | null;
+            readonly curator_begruendung?: string | null;
+            readonly lifetime_days?: string;
+            readonly days_until_expiry?: string;
+            readonly days_since_published?: string;
             readonly notbremse_url?: string;
         };
         PatchedSchulungsWelle: {

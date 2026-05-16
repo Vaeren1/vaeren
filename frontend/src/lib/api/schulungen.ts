@@ -5,6 +5,36 @@ import { type ApiError, api } from "./client";
 
 export type QuizModus = "quiz" | "kenntnisnahme" | "kenntnisnahme_lesezeit";
 
+export type Kategorie =
+  | "arbeitsschutz"
+  | "brandschutz"
+  | "gefahrstoffe"
+  | "datenschutz"
+  | "compliance"
+  | "umwelt"
+  | "sonstiges";
+
+export const KATEGORIE_LABEL: Record<Kategorie, string> = {
+  arbeitsschutz: "Arbeitsschutz",
+  brandschutz: "Brand- & Erste Hilfe",
+  gefahrstoffe: "Gefahrstoffe & Maschinen",
+  datenschutz: "Datenschutz & IT",
+  compliance: "Compliance & Recht",
+  umwelt: "Umwelt & Qualität",
+  sonstiges: "Sonstiges",
+};
+
+// Anzeige-Reihenfolge der Standard-Sektionen in der Bibliothek.
+export const KATEGORIE_ORDER: Kategorie[] = [
+  "arbeitsschutz",
+  "brandschutz",
+  "gefahrstoffe",
+  "datenschutz",
+  "compliance",
+  "umwelt",
+  "sonstiges",
+];
+
 export interface KursModul {
   id: number;
   kurs: number;
@@ -23,6 +53,7 @@ export interface Kurs {
   quiz_modus: QuizModus;
   mindest_lesezeit_s: number;
   zertifikat_aktiv: boolean;
+  kategorie: Kategorie;
   eigentuemer_tenant: string;
   ist_standardkatalog: boolean;
   erstellt_von: number | null;
@@ -42,6 +73,7 @@ export interface KursInput {
   quiz_modus: QuizModus;
   mindest_lesezeit_s: number;
   zertifikat_aktiv: boolean;
+  kategorie: Kategorie;
   aktiv: boolean;
 }
 
