@@ -1109,3 +1109,66 @@ def test_convert_office_to_pdf_unit_skipt_wenn_kein_soffice(monkeypatch):
     finally:
         monkeypatch.setattr(subprocess, "run", real_run)
         src.unlink(missing_ok=True)
+
+
+# --- Slice 2e: Video + YouTube -----------------------------------------
+
+
+def test_youtube_modul_no_asset_no_upload(tenant_setup):
+    """typ=video_youtube braucht youtube_url, kein Asset, kein File-Upload."""
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+    resp = client.post(
+        "/api/kurs-module/",
+        {
+            "kurs": kurs.pk,
+            "titel": "YT-Modul",
+            "typ": "video_youtube",
+            "youtube_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            "reihenfolge": 0,
+        },
+        content_type="application/json",
+    )
+    assert resp.status_code == 201, resp.content
+    assert resp.json()["youtube_url"].endswith("dQw4w9WgXcQ")
+
+
+def test_youtube_modul_ohne_url_rejected(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+    resp = client.post(
+        "/api/kurs-module/",
+        {"kurs": kurs.pk, "titel": "Y", "typ": "video_youtube", "reihenfolge": 0},
+        content_type="application/json",
+    )
+    assert resp.status_code == 400
+
+
+def test_video_upload_creates_asset(tenant_setup):
+    """MP4-Upload → 201, compress_asset dispatched."""
+    from unittest.mock import patch
+
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+    from django.core.files.uploadedfile import SimpleUploadedFile
+    # Minimal MP4-magic-bytes (kein echtes Video, aber MIME=video/mp4)
+    upload = SimpleUploadedFile(
+        "schulung.mp4",
+        b"\x00\x00\x00\x18ftypmp42" + b"\x00" * 1000,
+        content_type="video/mp4",
+    )
+    with patch("pflichtunterweisung.tasks.compress_asset.delay") as m:
+        resp = client.post(
+            "/api/kurs-assets/upload/",
+            {"kurs": kurs.pk, "file": upload},
+            format="multipart",
+        )
+    assert resp.status_code == 201, resp.content
+    assert resp.json()["original_mime"] == "video/mp4"
+    m.assert_called_once()

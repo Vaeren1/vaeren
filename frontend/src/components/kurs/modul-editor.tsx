@@ -42,7 +42,14 @@ import { toast } from "sonner";
 
 // Schrittweise nach Sub-Slice freischalten. S2a: text. S2b: + pdf. S2c: + bild.
 // S2d: + office. S2e: + video_upload + video_youtube.
-const SUPPORTED_TYPES: ModulTyp[] = ["text", "pdf", "bild", "office"];
+const SUPPORTED_TYPES: ModulTyp[] = [
+  "text",
+  "pdf",
+  "bild",
+  "office",
+  "video_upload",
+  "video_youtube",
+];
 
 const ASSET_TYPE_CONFIG: Partial<
   Record<ModulTyp, { accept: string; maxBytes: number; hint: string }>
