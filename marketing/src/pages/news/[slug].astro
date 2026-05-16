@@ -1,0 +1,95 @@
+---
+import Layout from "../../components/Layout.astro";
+import KategoriePill from "../../components/KategoriePill.astro";
+import GeoTag from "../../components/GeoTag.astro";
+import NewsCard from "../../components/NewsCard.astro";
+import KorrekturBox from "../../components/KorrekturBox.astro";
+import ZitationsBox from "../../components/ZitationsBox.tsx";
+import Prose from "../../components/Prose.astro";
+import { fetchNewsDetail, fetchNewsList, TYPE_LABELS } from "../../lib/api";
+import { formatDate, readingTimeMinutes, buildZitation } from "../../lib/format";
+
+export async function getStaticPaths() {
+  const list = await fetchNewsList();
+  return list.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const post = await fetchNewsDetail(slug as string);
+
+if (!post) {
+  return Astro.redirect("/404");
+}
+
+const allPosts = await fetchNewsList();
+const related = allPosts
+  .filter((p) => p.kategorie === post.kategorie && p.slug !== post.slug)
+  .slice(0, 3);
+
+const readingTime = readingTimeMinutes(post.body_html);
+const zitation = buildZitation(post.titel, post.published_at, post.slug);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  headline: post.titel,
+  description: post.lead,
+  datePublished: post.published_at,
+  inLanguage: "de-DE",
+  publisher: {
+    "@type": "Organization",
+    name: "Vaeren",
+    url: "https://vaeren.de",
+  },
+  isAccessibleForFree: true,
+};
+---
+
+<Layout title={post.titel} description={post.lead} jsonLd={jsonLd}>
+  <article class="max-w-(--container-wide) mx-auto px-6 py-16">
+    <a href="/news" class="text-sm text-ink-muted no-underline hover:text-brand">← Alle Beiträge</a>
+
+    <header class="mt-6 mb-10 max-w-(--container-prose)">
+      <div class="flex flex-wrap items-center gap-3 mb-6">
+        <KategoriePill kategorie={post.kategorie} />
+        <GeoTag geo={post.geo} />
+        <span class="text-xs uppercase tracking-wide text-ink-muted">{TYPE_LABELS[post.type]}</span>
+        <span class="text-xs text-ink-muted">{formatDate(post.published_at)}</span>
+        <span class="text-xs text-ink-muted">· {readingTime} Min. Lesezeit</span>
+      </div>
+      <h1 class="font-serif text-4xl md:text-5xl leading-tight text-ink mb-6">{post.titel}</h1>
+      <p class="font-serif text-xl md:text-2xl text-ink-soft leading-relaxed">{post.lead}</p>
+    </header>
+
+    <Prose html={post.body_html} />
+
+    {post.source_links.length > 0 && (
+      <aside class="mt-12 max-w-(--container-prose) p-5 border border-line rounded-lg bg-paper-soft/40">
+        <div class="text-xs uppercase tracking-widest text-ink-muted font-medium mb-3">Quellen</div>
+        <ul class="space-y-2 text-sm">
+          {post.source_links.map((l) => (
+            <li>
+              <a href={l.url} class="text-brand no-underline hover:underline" rel="external nofollow">{l.titel}</a>
+              <span class="block text-xs text-ink-muted break-all">{l.url}</span>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )}
+
+    <div class="max-w-(--container-prose)">
+      <ZitationsBox zitation={zitation} client:visible />
+      <KorrekturBox korrekturen={post.korrekturen} />
+    </div>
+
+    {related.length > 0 && (
+      <section class="mt-20 no-print">
+        <div class="text-xs uppercase tracking-widest text-brand font-medium mb-4">Weiterlesen</div>
+        <h2 class="font-serif text-2xl text-ink mb-8">Verwandte Beiträge</h2>
+        <div class="grid md:grid-cols-3 gap-4">
+          {related.map((r) => <NewsCard post={r} variant="related" />)}
+        </div>
+      </section>
+    )}
+  </article>
+</Layout>

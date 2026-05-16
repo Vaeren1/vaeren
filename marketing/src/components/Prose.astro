@@ -1,0 +1,9 @@
+---
+interface Props {
+  html: string;
+}
+
+const { html } = Astro.props;
+---
+
+<div class="editorial max-w-(--container-prose)" set:html={html} />

@@ -1,0 +1,70 @@
+---
+import Layout from "../components/Layout.astro";
+---
+
+<Layout
+  title="Kontakt"
+  description="Demo anfragen, Pilot werden, Frage stellen. Direkt an die Vaeren-Gründung."
+>
+  <section class="max-w-(--container-wide) mx-auto px-6 py-16">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Kontakt</div>
+    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-4 max-w-3xl">Reden wir.</h1>
+    <p class="text-lg text-ink-soft max-w-2xl leading-relaxed mb-12">
+      Demo, Pilot-Anfrage, Compliance-Sparrings-Termin oder einfache Frage. Sie erreichen uns direkt, ohne CRM-Trichter und ohne Lead-Scoring.
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-12">
+      <form
+        method="post"
+        action="mailto:kontakt@vaeren.de"
+        enctype="text/plain"
+        class="space-y-5"
+      >
+        <div>
+          <label for="name" class="block text-sm text-ink-soft mb-2">Name</label>
+          <input id="name" name="Name" type="text" required class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
+        </div>
+        <div>
+          <label for="firma" class="block text-sm text-ink-soft mb-2">Unternehmen</label>
+          <input id="firma" name="Firma" type="text" class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
+        </div>
+        <div>
+          <label for="email" class="block text-sm text-ink-soft mb-2">E-Mail</label>
+          <input id="email" name="Email" type="email" required class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
+        </div>
+        <div>
+          <label for="groesse" class="block text-sm text-ink-soft mb-2">Mitarbeitende</label>
+          <select id="groesse" name="Mitarbeitende" class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand">
+            <option>unter 50</option>
+            <option>50 bis 99</option>
+            <option>100 bis 249</option>
+            <option>250 bis 499</option>
+            <option>500 und mehr</option>
+          </select>
+        </div>
+        <div>
+          <label for="anliegen" class="block text-sm text-ink-soft mb-2">Anliegen</label>
+          <textarea id="anliegen" name="Anliegen" required rows="5" class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand"></textarea>
+        </div>
+        <button type="submit" class="px-6 py-3 bg-ink text-paper rounded-full hover:bg-brand">Anfrage senden</button>
+        <p class="text-xs text-ink-muted">Dieses Formular öffnet Ihren Standard-Mail-Client. Sie senden uns die Nachricht direkt, ohne dass Daten über uns laufen.</p>
+      </form>
+
+      <aside class="space-y-8 text-ink-soft">
+        <div>
+          <h2 class="font-serif text-xl text-ink mb-2">Direkt per E-Mail</h2>
+          <p>Wenn Sie das Formular umgehen möchten:</p>
+          <a href="mailto:kontakt@vaeren.de" class="text-brand text-lg">kontakt@vaeren.de</a>
+        </div>
+        <div>
+          <h2 class="font-serif text-xl text-ink mb-2">Sicherheits- oder Datenschutz-Hinweis</h2>
+          <p>Falls es um eine sicherheitskritische Meldung geht (Schwachstelle, Datenleck, missbräuchliche Nutzung), schreiben Sie bitte an <a href="mailto:security@vaeren.de" class="text-brand">security@vaeren.de</a>.</p>
+        </div>
+        <div>
+          <h2 class="font-serif text-xl text-ink mb-2">Korrektur an einem Beitrag?</h2>
+          <p>Hinweise an unseren News-Bereich gehen an <a href="mailto:redaktion@vaeren.de" class="text-brand">redaktion@vaeren.de</a>. Wir bestätigen jeden Hinweis und veröffentlichen Korrekturen transparent.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Layout>

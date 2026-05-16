@@ -1,0 +1,37 @@
+---
+interface Props {
+  eyebrow?: string;
+  headline: string;
+  sub: string;
+  ctaPrimary?: { href: string; label: string };
+  ctaSecondary?: { href: string; label: string };
+}
+
+const { eyebrow, headline, sub, ctaPrimary, ctaSecondary } = Astro.props;
+---
+
+<section class="border-b border-line">
+  <div class="max-w-(--container-wide) mx-auto px-6 py-20 md:py-28">
+    {eyebrow && (
+      <div class="text-xs uppercase tracking-widest text-brand font-medium mb-6">{eyebrow}</div>
+    )}
+    <h1 class="font-serif text-5xl md:text-6xl leading-[1.1] text-ink max-w-4xl">
+      {headline}
+    </h1>
+    <p class="mt-6 text-xl md:text-2xl text-ink-soft max-w-2xl leading-relaxed">{sub}</p>
+    {(ctaPrimary || ctaSecondary) && (
+      <div class="mt-10 flex flex-wrap items-center gap-4">
+        {ctaPrimary && (
+          <a href={ctaPrimary.href} class="inline-flex items-center px-6 py-3 bg-ink text-paper no-underline rounded-full hover:bg-brand">
+            {ctaPrimary.label}
+          </a>
+        )}
+        {ctaSecondary && (
+          <a href={ctaSecondary.href} class="inline-flex items-center px-6 py-3 border border-ink text-ink no-underline rounded-full hover:bg-paper-soft">
+            {ctaSecondary.label}
+          </a>
+        )}
+      </div>
+    )}
+  </div>
+</section>

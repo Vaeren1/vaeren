@@ -1,0 +1,36 @@
+---
+const links = [
+  { href: "/leistungen", label: "Leistungen" },
+  { href: "/news", label: "Aktuelles" },
+  { href: "/themen/ai-act", label: "Themen" },
+  { href: "/fristen", label: "Fristen" },
+  { href: "/manifest", label: "Über uns" },
+  { href: "/kontakt", label: "Kontakt" },
+];
+---
+
+<header class="border-b border-line bg-paper/95 backdrop-blur-sm sticky top-0 z-30">
+  <div class="max-w-(--container-wide) mx-auto px-6 py-4 flex items-center justify-between gap-6">
+    <a href="/" class="flex items-center gap-2 no-underline" aria-label="Vaeren Startseite">
+      <span class="font-serif text-2xl font-semibold tracking-tight text-ink">Vaeren</span>
+      <span class="hidden sm:inline text-xs uppercase tracking-widest text-ink-muted border-l border-line pl-2">Compliance-Autopilot</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-7 text-sm">
+      {links.map(l => (
+        <a href={l.href} class="text-ink-soft hover:text-brand no-underline">{l.label}</a>
+      ))}
+      <a href="https://app.vaeren.de" class="text-ink no-underline border border-line rounded-full px-4 py-1.5 hover:border-brand hover:text-brand">Login →</a>
+    </nav>
+    <details class="md:hidden relative">
+      <summary class="list-none cursor-pointer p-2 -m-2">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </summary>
+      <div class="absolute right-0 top-full mt-2 w-56 bg-paper border border-line rounded-lg shadow-lg p-2 flex flex-col">
+        {links.map(l => (
+          <a href={l.href} class="px-3 py-2 text-sm text-ink-soft hover:bg-paper-soft no-underline rounded">{l.label}</a>
+        ))}
+        <a href="https://app.vaeren.de" class="px-3 py-2 text-sm text-ink no-underline border-t border-line mt-1 pt-2">Login →</a>
+      </div>
+    </details>
+  </div>
+</header>

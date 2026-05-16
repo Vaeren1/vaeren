@@ -1,0 +1,69 @@
+---
+import Layout from "../components/Layout.astro";
+import { FRISTEN } from "../data/fristen";
+import { KATEGORIE_LABELS } from "../lib/api";
+import { formatDate } from "../lib/format";
+
+const sortedFristen = [...FRISTEN].sort((a, b) => a.datum.localeCompare(b.datum));
+const groupedByYear = sortedFristen.reduce((acc, f) => {
+  const year = f.datum.slice(0, 4);
+  (acc[year] ??= []).push(f);
+  return acc;
+}, {} as Record<string, typeof sortedFristen>);
+const years = Object.keys(groupedByYear).sort();
+
+const today = new Date().toISOString().slice(0, 10);
+---
+
+<Layout
+  title="Fristen-Kalender"
+  description="Compliance-Stichtage 2026 bis 2029. AI Act, NIS2, CSDDD, HinSchG, CSRD, GwG und mehr."
+>
+  <section class="max-w-(--container-wide) mx-auto px-6 py-16">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Fristen-Kalender</div>
+    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-4 max-w-3xl">Compliance-Stichtage 2026 bis 2029.</h1>
+    <p class="text-lg text-ink-soft max-w-2xl leading-relaxed mb-12">
+      Alle bekannten Fristen aus AI Act, NIS2, CSDDD, HinSchG, CSRD und weiteren Regulierungen. Mit Quellverweis und Kategorie. Aktualisiert, sobald neue Termine offiziell werden.
+    </p>
+
+    {years.map(year => (
+      <section class="mb-16">
+        <div class="flex items-center gap-4 mb-6">
+          <h2 class="font-serif text-3xl text-ink">{year}</h2>
+          <div class="flex-1 h-px bg-line"></div>
+        </div>
+        <ul class="space-y-3">
+          {groupedByYear[year].map(f => {
+            const past = f.datum < today;
+            return (
+              <li class={`grid grid-cols-1 md:grid-cols-[180px_1fr_auto] gap-4 p-5 border rounded-lg ${past ? "border-line bg-paper-soft/30 opacity-70" : "border-line bg-paper hover:border-brand"}`}>
+                <div>
+                  <div class="text-xs uppercase tracking-widest text-ink-muted">{f.geo}</div>
+                  <div class="font-serif text-lg text-ink">{formatDate(f.datum)}</div>
+                  {past && <div class="text-xs text-ink-muted mt-1">vergangen</div>}
+                </div>
+                <div>
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class={`pill pill-${f.kategorie}`}>{KATEGORIE_LABELS[f.kategorie]}</span>
+                  </div>
+                  <div class="font-medium text-ink mb-1">{f.titel}</div>
+                  <p class="text-sm text-ink-muted">{f.kurz}</p>
+                </div>
+                <div class="self-center">
+                  <a href={f.quelle_url} class="text-sm no-underline border-b border-line hover:border-brand hover:text-brand" rel="external nofollow">Quelle →</a>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    ))}
+
+    <aside class="mt-12 max-w-(--container-prose) p-5 bg-paper-soft border-l-4 border-brand rounded-r">
+      <h3 class="font-serif text-lg text-ink mb-2">Hinweis</h3>
+      <p class="text-sm text-ink-soft leading-relaxed">
+        Der Kalender wird laufend gepflegt. Stichtage können sich durch politische Entwicklungen verschieben. Wir aktualisieren die Liste, sobald ein neuer Termin offiziell wird.
+      </p>
+    </aside>
+  </section>
+</Layout>

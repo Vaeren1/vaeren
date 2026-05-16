@@ -1,0 +1,36 @@
+---
+import Layout from "../components/Layout.astro";
+import { DATENSCHUTZ } from "../data/static-content";
+
+const sections = [
+  DATENSCHUTZ.verantwortlich,
+  DATENSCHUTZ.hosting,
+  DATENSCHUTZ.analyse,
+  DATENSCHUTZ.kontakt,
+  DATENSCHUTZ.newsletter,
+  DATENSCHUTZ.rechte,
+  DATENSCHUTZ.beschwerde,
+];
+---
+
+<Layout title="Datenschutz" description="Informationen zur Verarbeitung personenbezogener Daten nach DSGVO.">
+  <section class="max-w-(--container-wide) mx-auto px-6 py-16">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Rechtliches</div>
+    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-12">Datenschutz</h1>
+
+    <div class="max-w-(--container-prose) space-y-10 text-ink-soft leading-relaxed">
+      <p class="text-lg">{DATENSCHUTZ.einleitung}</p>
+      {sections.map(s => (
+        <section>
+          <h2 class="font-serif text-xl text-ink mb-3">{s.titel}</h2>
+          <p>{s.text}</p>
+        </section>
+      ))}
+
+      <section>
+        <h2 class="font-serif text-xl text-ink mb-3">Stand</h2>
+        <p>Diese Datenschutzerklärung ist gültig ab 16. Mai 2026.</p>
+      </section>
+    </div>
+  </section>
+</Layout>

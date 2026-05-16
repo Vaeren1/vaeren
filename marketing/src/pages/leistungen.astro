@@ -1,0 +1,54 @@
+---
+import Layout from "../components/Layout.astro";
+import { LEISTUNGEN } from "../data/leistungen";
+---
+
+<Layout
+  title="Leistungen"
+  description="Pflichtunterweisungen, HinSchG-Hinweisgeberportal, Compliance-Cockpit. Drei Module, eine Plattform."
+>
+  <section class="max-w-(--container-wide) mx-auto px-6 py-16">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Leistungen</div>
+    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-4 max-w-3xl">Drei Module. Eine Plattform. Alle Pflichten.</h1>
+    <p class="text-lg text-ink-soft max-w-2xl mb-16 leading-relaxed">
+      Vaeren bündelt die drei wiederkehrenden Compliance-Lasten des Industrie-Mittelstands in einer integrierten Software. Modulübergreifender Compliance-Index, gemeinsames Audit-Log, eine Anmeldung.
+    </p>
+
+    <div class="space-y-20">
+      {LEISTUNGEN.map((l, idx) => (
+        <article id={l.id} class="grid md:grid-cols-12 gap-10 border-t border-line pt-12">
+          <div class="md:col-span-4">
+            <div class="text-xs uppercase tracking-widest text-ink-muted mb-2">Modul {idx + 1}</div>
+            <h2 class="font-serif text-3xl text-ink mb-3">{l.titel}</h2>
+            <p class="text-ink-soft leading-relaxed">{l.einzeiler}</p>
+            <div class="mt-6 text-xs uppercase tracking-widest text-ink-muted">Rechtlicher Bezug</div>
+            <p class="text-sm text-ink-soft mt-1">{l.bezug}</p>
+          </div>
+          <div class="md:col-span-8 space-y-6">
+            <p class="text-lg text-ink-soft leading-relaxed">{l.details}</p>
+            <div>
+              <div class="text-xs uppercase tracking-widest text-brand font-medium mb-3">Features</div>
+              <ul class="space-y-2 text-ink-soft">
+                {l.beweise.map(b => (
+                  <li class="flex gap-3"><span class="text-brand mt-1.5">▸</span><span>{b}</span></li>
+                ))}
+              </ul>
+            </div>
+            <div class="bg-paper-soft border-l-4 border-brand p-5 rounded-r">
+              <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Aus der Praxis</div>
+              <p class="text-sm text-ink-soft leading-relaxed">{l.use_case}</p>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <section class="mt-20 p-8 border border-line rounded-lg bg-ink text-paper flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div>
+        <h2 class="font-serif text-2xl">Demo gewünscht?</h2>
+        <p class="mt-2 text-paper/80">30 Minuten Live-Tour durch alle drei Module. Wir zeigen den Compliance-Index, ein HinSchG-Formular und einen Wizard für eine Schulungswelle.</p>
+      </div>
+      <a href="/kontakt" class="inline-flex items-center px-6 py-3 bg-paper text-ink no-underline rounded-full hover:bg-paper-soft">Termin vereinbaren →</a>
+    </section>
+  </section>
+</Layout>

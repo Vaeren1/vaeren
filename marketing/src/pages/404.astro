@@ -1,0 +1,14 @@
+---
+import Layout from "../components/Layout.astro";
+---
+
+<Layout title="Seite nicht gefunden" noindex={true}>
+  <section class="max-w-(--container-wide) mx-auto px-6 py-32 text-center">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-4">Fehler 404</div>
+    <h1 class="font-serif text-5xl md:text-6xl text-ink mb-6">Seite nicht gefunden.</h1>
+    <p class="text-lg text-ink-soft max-w-md mx-auto leading-relaxed mb-10">
+      Die gesuchte Seite existiert nicht oder wurde verschoben. Möglicherweise wurde ein Beitrag zurückgezogen — dann finden Sie eine Notiz im <a href="/korrekturen" class="text-brand">Korrektur-Log</a>.
+    </p>
+    <a href="/" class="inline-flex items-center px-6 py-3 bg-ink text-paper no-underline rounded-full hover:bg-brand">Zur Startseite</a>
+  </section>
+</Layout>

@@ -1,0 +1,25 @@
+---
+import { formatDateShort } from "../lib/format";
+
+interface Props {
+  korrekturen: { korrigiert_am: string; was_geaendert: string; grund: string }[];
+}
+
+const { korrekturen } = Astro.props;
+---
+
+{korrekturen.length > 0 && (
+  <aside class="mt-10 p-5 bg-paper-soft border-l-4 border-accent-warm rounded-r">
+    <div class="text-xs uppercase tracking-widest text-accent-warm font-medium mb-3">
+      Diesen Beitrag transparent korrigiert
+    </div>
+    <ul class="space-y-3 text-sm text-ink-soft">
+      {korrekturen.map(k => (
+        <li>
+          <div class="font-medium text-ink">{formatDateShort(k.korrigiert_am)}: {k.was_geaendert}</div>
+          <div class="text-ink-muted text-xs mt-1">Grund: {k.grund}</div>
+        </li>
+      ))}
+    </ul>
+  </aside>
+)}

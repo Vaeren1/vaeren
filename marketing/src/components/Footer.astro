@@ -1,0 +1,44 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-line bg-paper-soft">
+  <div class="max-w-(--container-wide) mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+    <div>
+      <div class="font-serif text-xl font-semibold text-ink mb-2">Vaeren</div>
+      <p class="text-ink-muted leading-snug">Compliance-Autopilot für den Industrie-Mittelstand. Wir übernehmen die Pflichten, ihr macht Produktion.</p>
+    </div>
+    <div>
+      <div class="text-xs uppercase tracking-widest text-ink-muted mb-3">Module</div>
+      <ul class="space-y-2">
+        <li><a href="/leistungen#pflichtunterweisungen" class="text-ink-soft no-underline hover:text-brand">Pflichtunterweisungen</a></li>
+        <li><a href="/leistungen#hinschg-portal" class="text-ink-soft no-underline hover:text-brand">HinSchG-Portal</a></li>
+        <li><a href="/leistungen#compliance-cockpit" class="text-ink-soft no-underline hover:text-brand">Compliance-Cockpit</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="text-xs uppercase tracking-widest text-ink-muted mb-3">Wissen</div>
+      <ul class="space-y-2">
+        <li><a href="/news" class="text-ink-soft no-underline hover:text-brand">News</a></li>
+        <li><a href="/themen/ai-act" class="text-ink-soft no-underline hover:text-brand">Themen-Hubs</a></li>
+        <li><a href="/fristen" class="text-ink-soft no-underline hover:text-brand">Fristen-Kalender</a></li>
+        <li><a href="/methodik" class="text-ink-soft no-underline hover:text-brand">Methodik</a></li>
+        <li><a href="/korrekturen" class="text-ink-soft no-underline hover:text-brand">Korrekturen</a></li>
+        <li><a href="/feed.xml" class="text-ink-soft no-underline hover:text-brand">RSS</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="text-xs uppercase tracking-widest text-ink-muted mb-3">Rechtliches</div>
+      <ul class="space-y-2">
+        <li><a href="/manifest" class="text-ink-soft no-underline hover:text-brand">Manifest</a></li>
+        <li><a href="/kontakt" class="text-ink-soft no-underline hover:text-brand">Kontakt</a></li>
+        <li><a href="/impressum" class="text-ink-soft no-underline hover:text-brand">Impressum</a></li>
+        <li><a href="/datenschutz" class="text-ink-soft no-underline hover:text-brand">Datenschutz</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="max-w-(--container-wide) mx-auto px-6 py-6 border-t border-line text-xs text-ink-muted flex flex-col md:flex-row justify-between gap-2">
+    <span>© {currentYear} Vaeren. Beiträge entstehen redaktionell mit KI-Unterstützung und durchlaufen eine Fakten-Verifikation.</span>
+    <span>Korrekturhinweise: <a href="mailto:redaktion@vaeren.de" class="text-ink-soft no-underline hover:text-brand">redaktion@vaeren.de</a></span>
+  </div>
+</footer>

@@ -1,0 +1,115 @@
+---
+import Layout from "../components/Layout.astro";
+import Hero from "../components/Hero.astro";
+import TrustBadges from "../components/TrustBadges.astro";
+import NewsCard from "../components/NewsCard.astro";
+import { fetchNewsList } from "../lib/api";
+import { LEISTUNGEN } from "../data/leistungen";
+import { HUBS } from "../data/themen";
+
+const posts = await fetchNewsList();
+const teaserPosts = posts
+  .sort((a, b) => {
+    if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+    const order: Record<string, number> = { hoch: 0, mittel: 1, niedrig: 2 };
+    if (a.relevanz !== b.relevanz)
+      return (order[a.relevanz] ?? 3) - (order[b.relevanz] ?? 3);
+    return (b.published_at ?? "").localeCompare(a.published_at ?? "");
+  })
+  .slice(0, 3);
+---
+
+<Layout
+  title="Vaeren"
+  description="Vaeren ist der Compliance-Autopilot für den industriellen Mittelstand. Pflichtunterweisungen, HinSchG-Hinweisgeberportal und Compliance-Cockpit aus einer Hand."
+>
+  <Hero
+    eyebrow="2026 — die Compliance-Welle"
+    headline="Compliance-Autopilot für den Industrie-Mittelstand."
+    sub="Wir übernehmen die Pflichten, ihr macht Produktion."
+    ctaPrimary={{ href: "/kontakt", label: "Demo anfragen" }}
+    ctaSecondary={{ href: "/leistungen", label: "Was wir abdecken" }}
+  />
+
+  <TrustBadges />
+
+  <section class="max-w-(--container-wide) mx-auto px-6 py-20">
+    <div class="flex items-end justify-between gap-4 mb-10">
+      <div>
+        <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Rechtsentwicklungen</div>
+        <h2 class="font-serif text-3xl md:text-4xl text-ink">Aktuelle Beiträge</h2>
+      </div>
+      <a href="/news" class="text-sm no-underline border-b border-ink hover:border-brand hover:text-brand">Alle Beiträge →</a>
+    </div>
+    {teaserPosts.length === 0 ? (
+      <p class="text-ink-muted">Beiträge erscheinen in Kürze.</p>
+    ) : (
+      <div class="grid md:grid-cols-3 gap-6">
+        {teaserPosts.map(post => <NewsCard post={post} variant="compact" />)}
+      </div>
+    )}
+  </section>
+
+  <section class="border-t border-line bg-paper-soft/40">
+    <div class="max-w-(--container-wide) mx-auto px-6 py-20">
+      <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Was Vaeren tut</div>
+      <h2 class="font-serif text-3xl md:text-4xl text-ink mb-12 max-w-3xl">Drei Module. Eine integrierte Plattform. Alle Pflichten an einer Stelle.</h2>
+      <div class="grid md:grid-cols-3 gap-10">
+        {LEISTUNGEN.map(l => (
+          <article class="space-y-4">
+            <h3 class="font-serif text-2xl text-ink">{l.titel}</h3>
+            <p class="text-ink-soft leading-relaxed">{l.einzeiler}</p>
+            <ul class="text-sm space-y-2 text-ink-muted">
+              {l.beweise.map(b => (
+                <li class="flex gap-2"><span class="text-brand">•</span><span>{b}</span></li>
+              ))}
+            </ul>
+            <a href={`/leistungen#${l.id}`} class="inline-block text-sm no-underline border-b border-line hover:border-brand hover:text-brand">Mehr zu {l.titel} →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-(--container-wide) mx-auto px-6 py-20">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Themen-Hubs</div>
+    <h2 class="font-serif text-3xl md:text-4xl text-ink mb-10 max-w-3xl">Living Documents zu den wichtigsten Compliance-Themen.</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      {HUBS.map(h => (
+        <a href={`/themen/${h.slug}`} class="block group no-underline">
+          <article class="h-full p-6 border border-line rounded-lg hover:border-brand hover:bg-paper-soft transition-colors space-y-3">
+            <div class="text-xs uppercase tracking-widest text-ink-muted">Themen-Hub</div>
+            <h3 class="font-serif text-2xl text-ink group-hover:text-brand">{h.titel}</h3>
+            <p class="text-sm text-ink-soft leading-relaxed">{h.untertitel}</p>
+            <p class="text-xs text-ink-muted mt-3 border-t border-line pt-3">Stand: {h.status_satz}</p>
+          </article>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="border-t border-line">
+    <div class="max-w-(--container-wide) mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-start">
+      <div>
+        <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Warum 2026</div>
+        <h2 class="font-serif text-3xl md:text-4xl text-ink">Compliance war noch nie so dicht.</h2>
+      </div>
+      <div class="space-y-6 text-ink-soft leading-relaxed">
+        <p>AI Act, NIS2, CSDDD, HinSchG, CSRD. Fünf große Regulierungs-Pakete fallen 2026 und 2027 zeitgleich auf den Schreibtisch der Geschäftsführung. Jedes mit eigenen Fristen, eigenen Berichts-Formaten, eigener Aufsichtsbehörde.</p>
+        <p>Im Industrie-Mittelstand fehlt die Schicht aus Stabsstellen, die das in Konzernen abfedert. Die Compliance-Beauftragte ist oft die HR-Leitung in Personalunion. Externe Beratung kostet 1.500 EUR pro Tag und löst nichts strukturell.</p>
+        <p>Vaeren übernimmt die wiederkehrende Arbeit. Dokumentations-Pflichten, Fristen-Überwachung, Berichts-Vorbereitung, Schulungen, Hinweisgeberkanäle. Sie behalten den Überblick, statt ständig im Reaktiv-Modus zu rennen.</p>
+        <a href="/fristen" class="inline-flex items-center gap-2 mt-2 text-sm no-underline border-b border-ink hover:border-brand hover:text-brand">Alle Fristen ansehen →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-line bg-ink text-paper">
+    <div class="max-w-(--container-wide) mx-auto px-6 py-20 flex flex-col md:flex-row md:items-center justify-between gap-8">
+      <div>
+        <h2 class="font-serif text-3xl md:text-4xl">Pilot werden.</h2>
+        <p class="mt-4 text-paper/80 max-w-xl">Wir suchen Industrie-Mittelständler mit 50 bis 300 Mitarbeitenden für die Pilotphase 2026. 40 % Pilot-Rabatt, gemeinsame Produktentwicklung, direkter Draht zur Gründung.</p>
+      </div>
+      <a href="/kontakt" class="inline-flex items-center px-6 py-3 bg-paper text-ink no-underline rounded-full hover:bg-paper-soft">Gespräch vereinbaren →</a>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource-variable/source-serif-4";
+
+@theme {
+  --color-ink: #0A0A0A;
+  --color-ink-soft: #2D2D2D;
+  --color-ink-muted: #6B6B6B;
+  --color-paper: #FAFAF9;
+  --color-paper-soft: #F4F3F1;
+  --color-line: #E5E3DE;
+  --color-brand: #0F4C5C;
+  --color-brand-soft: #C3D9DE;
+  --color-accent-warm: #B45309;
+
+  --font-serif: 'Source Serif 4 Variable', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  --container-prose: 42rem;
+  --container-wide: 72rem;
+}
+
+/* Pastell-Tags für Kategorien (8 Stück). */
+@layer components {
+  .pill {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium tracking-wide uppercase rounded-full;
+  }
+  .pill-ai_act { background: #DBEAFE; color: #1E40AF; }
+  .pill-datenschutz { background: #E0E7FF; color: #3730A3; }
+  .pill-hinschg { background: #FEF3C7; color: #92400E; }
+  .pill-lieferkette { background: #DCFCE7; color: #166534; }
+  .pill-arbeitsrecht { background: #FCE7F3; color: #9D174D; }
+  .pill-geldwaesche_finanzen { background: #FEE2E2; color: #991B1B; }
+  .pill-it_sicherheit { background: #E0F2FE; color: #075985; }
+  .pill-esg_nachhaltigkeit { background: #D9F99D; color: #365314; }
+}
+
+html {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-feature-settings: "ss01", "cv11";
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+a {
+  color: var(--color-brand);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Editorial body type — used in <Prose>. */
+.editorial {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--color-ink-soft);
+}
+
+.editorial p {
+  margin: 1.25em 0;
+}
+
+.editorial p:first-child {
+  margin-top: 0;
+}
+
+.editorial a {
+  color: var(--color-brand);
+  text-decoration: underline;
+  text-decoration-color: var(--color-brand-soft);
+  text-decoration-thickness: 1px;
+}
+
+.editorial a:hover {
+  text-decoration-color: var(--color-brand);
+}
+
+.editorial ul, .editorial ol {
+  margin: 1.25em 0;
+  padding-left: 1.5em;
+}
+
+.editorial li {
+  margin: 0.4em 0;
+}
+
+.editorial blockquote {
+  border-left: 3px solid var(--color-brand-soft);
+  padding-left: 1.25em;
+  font-style: italic;
+  margin: 1.5em 0;
+}
+
+/* Print-Optimierung für Beiträge — saubere Akten-Ausdrucke. */
+@media print {
+  header, footer, .no-print { display: none !important; }
+  body { font-size: 11pt; color: black; background: white; }
+  main { max-width: none; padding: 0; }
+  a { color: black; text-decoration: none; }
+  a[href]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; }
+  .editorial { font-size: 11pt; }
+}

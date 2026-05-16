@@ -1,0 +1,11 @@
+---
+import { KATEGORIE_LABELS, type Kategorie } from "../lib/api";
+
+interface Props {
+  kategorie: Kategorie;
+}
+
+const { kategorie } = Astro.props;
+---
+
+<span class={`pill pill-${kategorie}`}>{KATEGORIE_LABELS[kategorie]}</span>

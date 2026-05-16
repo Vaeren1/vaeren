@@ -1,0 +1,69 @@
+---
+import Layout from "../components/Layout.astro";
+import { METHODIK } from "../data/static-content";
+
+const QUELLEN = [
+  { name: "EUR-Lex", url: "https://eur-lex.europa.eu", was: "EU-Rechtsakte, Verordnungen, Richtlinien" },
+  { name: "EU-Kommission Pressedienst", url: "https://ec.europa.eu/commission/presscorner", was: "Beschlüsse, Konsultationen" },
+  { name: "EU-Parlament News", url: "https://www.europarl.europa.eu/news", was: "Abstimmungen, Ausschuss-Berichte" },
+  { name: "EDPB", url: "https://edpb.europa.eu", was: "Datenschutz-Leitlinien EU" },
+  { name: "BMJ", url: "https://www.bmj.de", was: "DE-Gesetzgebung" },
+  { name: "BfDI", url: "https://www.bfdi.bund.de", was: "Datenschutz DE" },
+  { name: "BaFin", url: "https://www.bafin.de", was: "Finanz-Compliance, GwG" },
+  { name: "BAFA", url: "https://www.bafa.de", was: "LkSG, Lieferkette" },
+  { name: "EuGH (Curia)", url: "https://curia.europa.eu", was: "EU-Urteile" },
+  { name: "Bundesverfassungsgericht", url: "https://www.bundesverfassungsgericht.de", was: "DE-Verfassungsurteile" },
+  { name: "Bundesgerichtshof", url: "https://www.bundesgerichtshof.de", was: "Zivil- und Strafurteile" },
+  { name: "ENISA", url: "https://www.enisa.europa.eu", was: "NIS2, IT-Sicherheit EU" },
+];
+---
+
+<Layout
+  title="Methodik"
+  description="Wie die Rechtsnews auf vaeren.de entstehen. Quellen, Pipeline, Verifikation. Volle Transparenz statt Black-Box."
+>
+  <section class="max-w-(--container-wide) mx-auto px-6 py-16">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Methodik</div>
+    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-4 max-w-3xl">Wie diese Beiträge entstehen.</h1>
+    <p class="text-lg text-ink-soft max-w-(--container-prose) leading-relaxed mb-16">{METHODIK.einleitung}</p>
+
+    <section class="mb-20 max-w-(--container-prose)">
+      <h2 class="font-serif text-2xl text-ink mb-4">Unsere zwölf Quellen</h2>
+      <p class="text-ink-soft leading-relaxed mb-8">{METHODIK.quellen_text}</p>
+      <ul class="grid sm:grid-cols-2 gap-3 text-sm">
+        {QUELLEN.map(q => (
+          <li class="p-3 border border-line rounded-lg">
+            <a href={q.url} class="text-brand no-underline hover:underline font-medium" rel="external">{q.name}</a>
+            <div class="text-xs text-ink-muted mt-1">{q.was}</div>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mb-20 max-w-(--container-prose)">
+      <h2 class="font-serif text-2xl text-ink mb-8">Die Pipeline</h2>
+      <ol class="space-y-8">
+        {METHODIK.pipeline.map((step, i) => (
+          <li class="grid grid-cols-[auto_1fr] gap-5">
+            <div class="w-10 h-10 rounded-full bg-brand text-paper font-serif text-lg flex items-center justify-center">{i + 1}</div>
+            <div>
+              <h3 class="font-serif text-lg text-ink mb-1">{step.titel}</h3>
+              <p class="text-ink-soft leading-relaxed">{step.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="mb-16 max-w-(--container-prose)">
+      <h2 class="font-serif text-2xl text-ink mb-4">Korrekturen</h2>
+      <p class="text-ink-soft leading-relaxed mb-4">{METHODIK.korrekturen_text}</p>
+      <a href="/korrekturen" class="text-sm no-underline border-b border-ink hover:border-brand hover:text-brand">Zum Korrektur-Log →</a>
+    </section>
+
+    <section class="max-w-(--container-prose) p-5 bg-paper-soft border-l-4 border-accent-warm rounded-r">
+      <div class="text-xs uppercase tracking-widest text-accent-warm font-medium mb-2">Wichtiger Hinweis</div>
+      <p class="text-sm text-ink-soft leading-relaxed">{METHODIK.rdg_disclaimer}</p>
+    </section>
+  </section>
+</Layout>

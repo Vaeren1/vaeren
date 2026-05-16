@@ -1,0 +1,13 @@
+---
+import { GEO_LABELS, type Geo } from "../lib/api";
+
+interface Props {
+  geo: Geo;
+}
+
+const { geo } = Astro.props;
+---
+
+<span class="inline-flex items-center text-xs uppercase tracking-wide text-ink-muted">
+  {GEO_LABELS[geo]}
+</span>

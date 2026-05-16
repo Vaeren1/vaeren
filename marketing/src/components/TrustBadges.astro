@@ -1,0 +1,19 @@
+---
+const badges = [
+  { titel: "Hosting in Deutschland", text: "Hetzner-Rechenzentrum Falkenstein. DSGVO-konform, kein Drittstaat-Transfer." },
+  { titel: "Mensch entscheidet", text: "Jede rechtsrelevante Bewertung durchläuft ein Human-in-the-Loop-Gate." },
+  { titel: "Quellen offen verlinkt", text: "Jeder Beitrag verlinkt auf das Original. Keine Black-Box, kein Rosinen-Picking." },
+  { titel: "Fehler werden korrigiert", text: "Öffentliches Korrektur-Log mit Datum, Stelle und Grund. Transparenz statt Verstecken." },
+];
+---
+
+<section class="border-b border-line bg-paper-soft/40">
+  <div class="max-w-(--container-wide) mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    {badges.map(b => (
+      <div>
+        <div class="font-serif text-base font-semibold text-ink mb-2">{b.titel}</div>
+        <p class="text-sm text-ink-muted leading-relaxed">{b.text}</p>
+      </div>
+    ))}
+  </div>
+</section>

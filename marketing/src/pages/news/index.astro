@@ -1,0 +1,22 @@
+---
+import Layout from "../../components/Layout.astro";
+import NewsFilter from "../../components/NewsFilter.tsx";
+import { fetchNewsList } from "../../lib/api";
+
+const posts = await fetchNewsList();
+posts.sort((a, b) => (b.published_at ?? "").localeCompare(a.published_at ?? ""));
+---
+
+<Layout
+  title="Aktuelle Beiträge"
+  description="Aktuelle Rechtsnews zu AI Act, DSGVO, HinSchG, Lieferketten, IT-Sicherheit und ESG. Aus zwölf autoritativen Primärquellen, wöchentlich kuratiert."
+>
+  <section class="max-w-(--container-wide) mx-auto px-6 py-16">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Aktuelles</div>
+    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-4 max-w-3xl">Beiträge zu Compliance, Recht und Aufsicht.</h1>
+    <p class="text-lg text-ink-soft max-w-2xl mb-12 leading-relaxed">
+      Wöchentlich aus zwölf Primärquellen kuratiert: EUR-Lex, BfDI, EuGH, BMJ, BaFin und weiteren. Jeder Beitrag mit Quellverweis und Korrektur-Historie.
+    </p>
+    <NewsFilter posts={posts} client:load />
+  </section>
+</Layout>

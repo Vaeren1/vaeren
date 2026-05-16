@@ -1,0 +1,40 @@
+---
+import Layout from "../components/Layout.astro";
+import { fetchKorrekturen } from "../lib/api";
+import { formatDate } from "../lib/format";
+
+const korrekturen = await fetchKorrekturen();
+---
+
+<Layout
+  title="Korrekturen"
+  description="Öffentliches Korrektur-Log. Jeder Fund wird mit Datum, Stelle und Grund dokumentiert."
+>
+  <section class="max-w-(--container-wide) mx-auto px-6 py-16">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Korrekturen</div>
+    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-4 max-w-3xl">Was wir geändert haben.</h1>
+    <p class="text-lg text-ink-soft max-w-(--container-prose) leading-relaxed mb-12">
+      Diese Seite listet jede inhaltliche Korrektur an einem unserer Beiträge. Wir veröffentlichen sie öffentlich, weil Vertrauen aus Transparenz wächst, nicht aus geschöntem Auftritt.
+    </p>
+
+    {korrekturen.length === 0 ? (
+      <div class="max-w-(--container-prose) p-8 border border-line rounded-lg bg-paper-soft/40">
+        <h2 class="font-serif text-2xl text-ink mb-3">Bisher waren keine Korrekturen erforderlich.</h2>
+        <p class="text-ink-soft leading-relaxed">
+          Das heißt nicht, dass wir fehlerfrei sind. Es heißt nur, dass uns bislang kein Fehler aufgefallen oder gemeldet worden ist. Wenn Sie einen finden: <a href="mailto:redaktion@vaeren.de" class="text-brand">redaktion@vaeren.de</a>.
+        </p>
+      </div>
+    ) : (
+      <ul class="max-w-(--container-prose) space-y-8">
+        {korrekturen.map(k => (
+          <li class="border-l-4 border-accent-warm pl-5 py-2">
+            <div class="text-xs uppercase tracking-widest text-ink-muted mb-1">{formatDate(k.korrigiert_am)}</div>
+            <div class="font-serif text-lg text-ink mb-1">{k.was_geaendert}</div>
+            <p class="text-sm text-ink-soft mb-2">Grund: {k.grund}</p>
+            <a href={`/news/${k.post_slug}`} class="text-sm no-underline border-b border-line hover:border-brand hover:text-brand">Beitrag „{k.post_titel}" ansehen →</a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</Layout>

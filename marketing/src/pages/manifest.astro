@@ -1,0 +1,29 @@
+---
+import Layout from "../components/Layout.astro";
+import { MANIFEST } from "../data/static-content";
+---
+
+<Layout
+  title="Manifest"
+  description="Wofür Vaeren steht. Warum es Vaeren gibt, wie wir arbeiten, was wir nicht sind."
+>
+  <section class="max-w-(--container-wide) mx-auto px-6 py-16">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Manifest</div>
+    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-12 max-w-3xl">Wofür Vaeren steht.</h1>
+
+    <div class="max-w-(--container-prose) space-y-16">
+      <section>
+        <h2 class="font-serif text-2xl text-ink mb-4">{MANIFEST.warum.titel}</h2>
+        {MANIFEST.warum.text.map(p => <p class="text-lg text-ink-soft leading-relaxed mb-4">{p}</p>)}
+      </section>
+      <section>
+        <h2 class="font-serif text-2xl text-ink mb-4">{MANIFEST.wie.titel}</h2>
+        {MANIFEST.wie.text.map(p => <p class="text-lg text-ink-soft leading-relaxed mb-4">{p}</p>)}
+      </section>
+      <section>
+        <h2 class="font-serif text-2xl text-ink mb-4">{MANIFEST.was_nicht.titel}</h2>
+        {MANIFEST.was_nicht.text.map(p => <p class="text-lg text-ink-soft leading-relaxed mb-4">{p}</p>)}
+      </section>
+    </div>
+  </section>
+</Layout>
