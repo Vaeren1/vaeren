@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useWelle } from "@/lib/api/schulungen";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const STATUS_LABEL: Record<string, string> = {
   draft: "Entwurf",
@@ -36,8 +36,11 @@ export function WelleDetailPage() {
         <CardHeader>
           <CardTitle>{data.titel}</CardTitle>
           <CardDescription>
-            Kurs: {data.kurs_titel} · Status: {STATUS_LABEL[data.status]} ·
-            Deadline: {data.deadline}
+            Kurs:{" "}
+            <Link to={`/kurse/${data.kurs}`} className="underline">
+              {data.kurs_titel}
+            </Link>{" "}
+            · Status: {STATUS_LABEL[data.status]} · Deadline: {data.deadline}
             {data.versendet_am && ` · Versendet: ${data.versendet_am}`}
           </CardDescription>
         </CardHeader>

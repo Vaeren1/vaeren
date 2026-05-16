@@ -50,6 +50,7 @@ from .serializers import (
     AntwortOptionSerializer,
     FragePublicSerializer,
     FrageSerializer,
+    KursDetailSerializer,
     KursModulSerializer,
     KursSerializer,
     PersonalisierenResponseSerializer,
@@ -64,9 +65,19 @@ from .tokens import make_token, parse_token
 
 
 class KursViewSet(viewsets.ModelViewSet):
-    queryset = Kurs.objects.all()
+    queryset = Kurs.objects.all().prefetch_related(
+        "module",
+        "fragen__optionen",
+    )
     serializer_class = KursSerializer
     permission_classes: ClassVar = [KursPermission]
+
+    def get_serializer_class(self):
+        # Detail-View (retrieve) liefert nested fragen + optionen mit ist_korrekt
+        # für die interne Kurs-Bibliothek im Cockpit.
+        if self.action == "retrieve":
+            return KursDetailSerializer
+        return KursSerializer
 
 
 class KursModulViewSet(viewsets.ModelViewSet):

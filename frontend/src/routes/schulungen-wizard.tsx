@@ -19,7 +19,7 @@ import {
   useZuweisen,
 } from "@/lib/api/schulungen";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 type Step = 1 | 2 | 3 | 4;
@@ -144,6 +144,16 @@ export function SchulungenWizardPage() {
                   </option>
                 ))}
               </select>
+              {kursId && (
+                <Link
+                  to={`/kurse/${kursId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-muted-foreground underline"
+                >
+                  Kurs-Inhalt ansehen ↗
+                </Link>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="titel">Titel der Welle</Label>

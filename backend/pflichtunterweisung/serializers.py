@@ -75,6 +75,21 @@ class KursSerializer(serializers.ModelSerializer):
         return obj.fragen.count()
 
 
+class KursDetailSerializer(KursSerializer):
+    """Wie KursSerializer, plus nested fragen + optionen INKLUSIVE ist_korrekt.
+
+    Nur für interne Bearbeiter-Sicht (Kurs-Bibliothek im Cockpit) — die
+    Public-Variante für Mitarbeiter beim Quiz nutzt FragePublicSerializer
+    ohne `ist_korrekt`.
+    """
+
+    fragen = FrageSerializer(many=True, read_only=True)
+
+    class Meta(KursSerializer.Meta):
+        fields = (*KursSerializer.Meta.fields, "fragen")
+        read_only_fields = (*KursSerializer.Meta.read_only_fields, "fragen")
+
+
 class SchulungsTaskSummarySerializer(serializers.ModelSerializer):
     mitarbeiter_name = serializers.CharField(source="mitarbeiter.__str__", read_only=True)
 

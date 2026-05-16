@@ -23,6 +23,27 @@ export interface Kurs {
   fragen_anzahl: number;
 }
 
+export interface AntwortOption {
+  id: number;
+  frage: number;
+  text: string;
+  ist_korrekt: boolean;
+  reihenfolge: number;
+}
+
+export interface Frage {
+  id: number;
+  kurs: number;
+  text: string;
+  erklaerung: string;
+  reihenfolge: number;
+  optionen: AntwortOption[];
+}
+
+export interface KursDetail extends Kurs {
+  fragen: Frage[];
+}
+
 export interface KursPage {
   count: number;
   next: string | null;
@@ -38,9 +59,9 @@ export function useKursList() {
 }
 
 export function useKurs(id: number | undefined) {
-  return useQuery<Kurs, ApiError>({
+  return useQuery<KursDetail, ApiError>({
     queryKey: ["kurs", id],
-    queryFn: () => api<Kurs>(`/api/kurse/${id}/`),
+    queryFn: () => api<KursDetail>(`/api/kurse/${id}/`),
     enabled: id !== undefined,
   });
 }

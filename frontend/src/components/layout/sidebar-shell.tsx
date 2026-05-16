@@ -17,6 +17,7 @@ import { useTenantSettings } from "@/lib/api/settings";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { cn } from "@/lib/utils";
 import {
+  BookOpen,
   ChevronDown,
   FileSearch,
   Inbox,
@@ -43,6 +44,12 @@ const NAV: Array<{
     to: "/schulungen",
     label: "Schulungen",
     icon: ShieldCheck,
+    group: "compliance",
+  },
+  {
+    to: "/kurse",
+    label: "Kurs-Bibliothek",
+    icon: BookOpen,
     group: "compliance",
   },
   { to: "/meldungen", label: "HinSchG", icon: Inbox, group: "compliance" },
