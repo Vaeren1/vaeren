@@ -378,12 +378,15 @@ Antikorruption, AGG, HinSchG, Gabelstapler, LkSG, GwG, Schweißen,
 Ladungssicherung, Exportkontrolle, Umweltschutz, ISO 9001 …):
 
 ```bash
-ssh hel1 'cd /opt/ai-act && docker compose exec backend \
-    uv run python manage.py seed_kurs_katalog --tenant demo --dry-run'
+ssh hel1 'cd /opt/ai-act && docker compose -f docker-compose.prod.yml exec -T django \
+    python manage.py seed_kurs_katalog --tenant demo --dry-run'
 # Treffer prüfen — dann ohne --dry-run:
-ssh hel1 'cd /opt/ai-act && docker compose exec backend \
-    uv run python manage.py seed_kurs_katalog --tenant demo'
+ssh hel1 'cd /opt/ai-act && docker compose -f docker-compose.prod.yml exec -T django \
+    python manage.py seed_kurs_katalog --tenant demo'
 ```
+
+> Hinweis: prod-Container hat `uv` **nicht** installiert (nur das
+> fertige venv) — daher direkt `python manage.py` statt `uv run python …`.
 
 Idempotent über Kurs-Titel: bestehende Kurse bleiben unverändert,
 nur fehlende werden ergänzt. Sicher mehrfach ausführbar.
@@ -393,13 +396,13 @@ vaeren-demo umstellen):
 
 ```bash
 # Erst dry-run!
-ssh hel1 'cd /opt/ai-act && docker compose exec backend \
-    uv run python manage.py rename_emails \
+ssh hel1 'cd /opt/ai-act && docker compose -f docker-compose.prod.yml exec -T django \
+    python manage.py rename_emails \
         --tenant demo --from-domain paywise.de --to-domain vaeren-demo.de \
         --dry-run'
 # Nach Prüfung der Liste — ohne --dry-run wiederholen:
-ssh hel1 'cd /opt/ai-act && docker compose exec backend \
-    uv run python manage.py rename_emails \
+ssh hel1 'cd /opt/ai-act && docker compose -f docker-compose.prod.yml exec -T django \
+    python manage.py rename_emails \
         --tenant demo --from-domain paywise.de --to-domain vaeren-demo.de'
 ```
 
@@ -413,8 +416,32 @@ werden übersprungen, nicht abgebrochen.
 Stündlich via Celery-Beat. Manuell auslösen für Debugging:
 
 ```bash
-ssh hel1 'cd /opt/ai-act && docker compose exec backend \
-    uv run python manage.py dispatch_notifications --all-tenants'
+ssh hel1 'cd /opt/ai-act && docker compose -f docker-compose.prod.yml exec -T django \
+    python manage.py dispatch_notifications --all-tenants'
+```
+
+### J.4 Caddy-Anbindung nach Recreate
+
+Seit 2026-05-16 deklariert `docker-compose.prod.yml` das `caddy-net`
+als `external: true` und hängt `vaeren-django` + `vaeren-frontend`
+explizit dort ein. **Nach `./deploy.sh` ist keine manuelle
+Reconnect-Aktion mehr nötig.**
+
+Historisch (vor diesem Fix) führte der `--remove-orphans`-Recreate
+dazu, dass die manuell per `docker network connect caddy-net <name>`
+hergestellte Verbindung verloren ging → Caddy → 502. Falls das nach
+einem zukünftigen Deploy wieder auftritt, als Notfall-Heilung:
+
+```bash
+ssh hel1 'docker network connect caddy-net vaeren-django && \
+          docker network connect caddy-net vaeren-frontend'
+```
+
+Verifikation:
+
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" https://app.vaeren.de/api/health/
+# 200 erwartet
 ```
 
 ### J.3 Backup-Status

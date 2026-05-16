@@ -85,6 +85,9 @@ services:
       start_period: 60s
     expose:
       - "8000"
+    networks:
+      - default
+      - caddy-net
 
   celery-worker:
     image: vaeren-django:latest
@@ -132,6 +135,9 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+    networks:
+      - default
+      - caddy-net
 
 volumes:
   vaeren-postgres-data:
@@ -142,3 +148,9 @@ volumes:
 networks:
   default:
     name: vaeren-net
+  # caddy-net wird ausserhalb angelegt (von /opt/caddy/-Stack). Hier nur
+  # referenziert, damit `vaeren-django` + `vaeren-frontend` auch nach
+  # einem Recreate automatisch wieder eingehängt sind und Caddy sie per
+  # Container-Name auflösen kann.
+  caddy-net:
+    external: true
