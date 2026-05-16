@@ -7,8 +7,10 @@ export interface Mitarbeiter {
   nachname: string;
   email: string;
   abteilung: string;
-  externe_id: string | null;
-  aktiv: boolean;
+  rolle: string;
+  eintritt: string;
+  austritt: string | null;
+  external_id: string;
 }
 
 export interface MitarbeiterPage {
@@ -23,8 +25,10 @@ export interface MitarbeiterInput {
   nachname: string;
   email: string;
   abteilung: string;
-  externe_id?: string | null;
-  aktiv: boolean;
+  rolle: string;
+  eintritt: string;
+  austritt?: string | null;
+  external_id?: string;
 }
 
 const KEY = "mitarbeiter";

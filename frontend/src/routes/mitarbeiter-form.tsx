@@ -25,10 +25,16 @@ import { z } from "zod";
 export const mitarbeiterSchema = z.object({
   vorname: z.string().min(1, "Pflichtfeld"),
   nachname: z.string().min(1, "Pflichtfeld"),
-  email: z.string().email("Bitte gültige E-Mail."),
+  email: z
+    .string()
+    .email("Bitte gültige E-Mail.")
+    .or(z.literal(""))
+    .optional(),
   abteilung: z.string().min(1, "Pflichtfeld"),
-  externe_id: z.string().optional().nullable(),
-  aktiv: z.boolean().default(true),
+  rolle: z.string().min(1, "Pflichtfeld"),
+  eintritt: z.string().min(1, "Pflichtfeld"),
+  austritt: z.string().optional().nullable(),
+  external_id: z.string().optional(),
 });
 
 export type MitarbeiterFormValues = z.infer<typeof mitarbeiterSchema>;
@@ -55,8 +61,10 @@ export function MitarbeiterFormPage() {
       nachname: "",
       email: "",
       abteilung: "",
-      externe_id: "",
-      aktiv: true,
+      rolle: "",
+      eintritt: "",
+      austritt: "",
+      external_id: "",
     },
   });
 
@@ -66,8 +74,10 @@ export function MitarbeiterFormPage() {
       setValue("nachname", existing.data.nachname);
       setValue("email", existing.data.email);
       setValue("abteilung", existing.data.abteilung);
-      setValue("externe_id", existing.data.externe_id ?? "");
-      setValue("aktiv", existing.data.aktiv);
+      setValue("rolle", existing.data.rolle);
+      setValue("eintritt", existing.data.eintritt);
+      setValue("austritt", existing.data.austritt ?? "");
+      setValue("external_id", existing.data.external_id ?? "");
     }
   }, [existing.data, setValue]);
 
@@ -92,8 +102,14 @@ export function MitarbeiterFormPage() {
 
   const onSubmit = handleSubmit((values) => {
     const payload: MitarbeiterInput = {
-      ...values,
-      externe_id: values.externe_id || null,
+      vorname: values.vorname,
+      nachname: values.nachname,
+      email: values.email ?? "",
+      abteilung: values.abteilung,
+      rolle: values.rolle,
+      eintritt: values.eintritt,
+      austritt: values.austritt || null,
+      external_id: values.external_id || "",
     };
     if (numericId !== undefined) {
       update.mutate(payload, {
@@ -115,14 +131,13 @@ export function MitarbeiterFormPage() {
   });
 
   const pending = create.isPending || update.isPending;
+  const isEdit = numericId !== undefined;
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          {numericId !== undefined
-            ? "Mitarbeiter bearbeiten"
-            : "Neuer Mitarbeiter"}
+          {isEdit ? "Mitarbeiter bearbeiten" : "Neuer Mitarbeiter"}
         </CardTitle>
       </CardHeader>
       <form onSubmit={onSubmit}>
@@ -148,33 +163,65 @@ export function MitarbeiterFormPage() {
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">E-Mail</Label>
+            <Label htmlFor="email">E-Mail (optional)</Label>
             <Input id="email" type="email" {...register("email")} />
             {errors.email && (
               <p className="text-xs text-destructive">{errors.email.message}</p>
             )}
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="abteilung">Abteilung</Label>
-            <Input id="abteilung" {...register("abteilung")} />
-            {errors.abteilung && (
-              <p className="text-xs text-destructive">
-                {errors.abteilung.message}
-              </p>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="abteilung">Abteilung</Label>
+              <Input
+                id="abteilung"
+                {...register("abteilung")}
+                placeholder="z. B. Produktion"
+              />
+              {errors.abteilung && (
+                <p className="text-xs text-destructive">
+                  {errors.abteilung.message}
+                </p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="rolle">Rolle / Tätigkeit</Label>
+              <Input
+                id="rolle"
+                {...register("rolle")}
+                placeholder="z. B. Maschinenführer:in"
+              />
+              {errors.rolle && (
+                <p className="text-xs text-destructive">
+                  {errors.rolle.message}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="eintritt">Eintrittsdatum</Label>
+              <Input id="eintritt" type="date" {...register("eintritt")} />
+              {errors.eintritt && (
+                <p className="text-xs text-destructive">
+                  {errors.eintritt.message}
+                </p>
+              )}
+            </div>
+            {isEdit && (
+              <div className="space-y-2">
+                <Label htmlFor="austritt">Austrittsdatum (optional)</Label>
+                <Input id="austritt" type="date" {...register("austritt")} />
+                {errors.austritt && (
+                  <p className="text-xs text-destructive">
+                    {errors.austritt.message}
+                  </p>
+                )}
+              </div>
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="externe_id">Externe ID (optional)</Label>
-            <Input id="externe_id" {...register("externe_id")} />
-          </div>
-          <div className="flex items-center gap-2">
-            <input
-              id="aktiv"
-              type="checkbox"
-              className="h-4 w-4"
-              {...register("aktiv")}
-            />
-            <Label htmlFor="aktiv">Aktiv</Label>
+            <Label htmlFor="external_id">Externe ID (optional, ERP-Sync)</Label>
+            <Input id="external_id" {...register("external_id")} />
           </div>
         </CardContent>
         <CardFooter className="gap-2">

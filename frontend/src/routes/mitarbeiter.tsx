@@ -43,6 +43,7 @@ export function MitarbeiterListPage() {
                 <TableHead>Name</TableHead>
                 <TableHead>E-Mail</TableHead>
                 <TableHead>Abteilung</TableHead>
+                <TableHead>Rolle</TableHead>
                 <TableHead>Aktiv</TableHead>
                 {canEdit && <TableHead className="w-32">Aktionen</TableHead>}
               </TableRow>
@@ -55,7 +56,8 @@ export function MitarbeiterListPage() {
                   </TableCell>
                   <TableCell>{m.email}</TableCell>
                   <TableCell>{m.abteilung}</TableCell>
-                  <TableCell>{m.aktiv ? "ja" : "nein"}</TableCell>
+                  <TableCell>{m.rolle}</TableCell>
+                  <TableCell>{m.austritt ? "nein" : "ja"}</TableCell>
                   {canEdit && (
                     <TableCell>
                       <div className="flex gap-2">
@@ -90,7 +92,7 @@ export function MitarbeiterListPage() {
               ))}
               {data.results.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={canEdit ? 5 : 4}>
+                  <TableCell colSpan={canEdit ? 6 : 5}>
                     Keine Mitarbeiter angelegt.
                   </TableCell>
                 </TableRow>
