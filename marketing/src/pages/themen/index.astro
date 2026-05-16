@@ -1,0 +1,39 @@
+---
+import Layout from "../../components/Layout.astro";
+import ThemenFilter from "../../components/ThemenFilter.tsx";
+import { fetchNewsList } from "../../lib/api";
+import { THEMEN_UEBERSICHT } from "../../data/themen";
+
+const posts = await fetchNewsList();
+
+const postsByKategorie: Record<string, number> = {};
+const latestByKategorie: Record<string, { titel: string; slug: string; published_at: string | null } | null> = {};
+
+for (const t of THEMEN_UEBERSICHT) {
+  const matching = posts.filter((p) => p.kategorie === t.kategorie);
+  postsByKategorie[t.kategorie] = matching.length;
+  matching.sort((a, b) => (b.published_at ?? "").localeCompare(a.published_at ?? ""));
+  latestByKategorie[t.kategorie] = matching[0]
+    ? { titel: matching[0].titel, slug: matching[0].slug, published_at: matching[0].published_at }
+    : null;
+}
+---
+
+<Layout
+  title="Themen"
+  description="Living Documents zu den großen Compliance-Bereichen. AI Act, HinSchG, NIS2, DSGVO, Lieferkette, Arbeitsrecht, Geldwäsche, ESG."
+>
+  <section class="max-w-(--container-wide) mx-auto px-6 py-12 md:py-16">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Themen</div>
+    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-4 max-w-3xl">Acht Compliance-Bereiche, ein Überblick.</h1>
+    <p class="text-lg text-ink-soft max-w-2xl leading-relaxed mb-10">
+      Pro Bereich pflegen wir aktuelle Beiträge und nach und nach einen Themen-Hub als Living Document mit Pflichten, Fristen, FAQ und Quellen. Bisher drei Hubs final, fünf in Vorbereitung.
+    </p>
+    <ThemenFilter
+      themen={THEMEN_UEBERSICHT}
+      postsByKategorie={postsByKategorie}
+      latestByKategorie={latestByKategorie}
+      client:load
+    />
+  </section>
+</Layout>

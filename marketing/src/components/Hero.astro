@@ -11,23 +11,27 @@ const { eyebrow, headline, sub, ctaPrimary, ctaSecondary } = Astro.props;
 ---
 
 <section class="border-b border-line">
-  <div class="max-w-(--container-wide) mx-auto px-6 py-20 md:py-28">
+  <div class="max-w-(--container-wide) mx-auto px-6 py-14 md:py-20">
     {eyebrow && (
-      <div class="text-xs uppercase tracking-widest text-brand font-medium mb-6">{eyebrow}</div>
+      <div class="text-xs uppercase tracking-widest text-brand font-medium mb-5">{eyebrow}</div>
     )}
-    <h1 class="font-serif text-5xl md:text-6xl leading-[1.1] text-ink max-w-4xl">
+    <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-ink max-w-4xl">
       {headline}
     </h1>
-    <p class="mt-6 text-xl md:text-2xl text-ink-soft max-w-2xl leading-relaxed">{sub}</p>
+    <p class="mt-5 text-lg md:text-xl text-ink-soft max-w-2xl leading-relaxed">{sub}</p>
     {(ctaPrimary || ctaSecondary) && (
-      <div class="mt-10 flex flex-wrap items-center gap-4">
+      <div class="mt-8 flex flex-wrap items-center gap-3">
         {ctaPrimary && (
-          <a href={ctaPrimary.href} class="inline-flex items-center px-6 py-3 bg-ink text-paper no-underline rounded-full hover:bg-brand">
-            {ctaPrimary.label}
+          <a
+            href={ctaPrimary.href}
+            class="group inline-flex items-center gap-2 px-7 py-3.5 bg-brand text-paper font-medium text-base no-underline rounded-full shadow-sm shadow-brand/30 hover:bg-ink hover:shadow-md hover:shadow-ink/20 transition-all"
+          >
+            <span>{ctaPrimary.label}</span>
+            <span class="transition-transform group-hover:translate-x-1">→</span>
           </a>
         )}
         {ctaSecondary && (
-          <a href={ctaSecondary.href} class="inline-flex items-center px-6 py-3 border border-ink text-ink no-underline rounded-full hover:bg-paper-soft">
+          <a href={ctaSecondary.href} class="inline-flex items-center px-5 py-3 text-ink no-underline rounded-full hover:bg-paper-soft text-sm">
             {ctaSecondary.label}
           </a>
         )}

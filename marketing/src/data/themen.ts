@@ -127,3 +127,74 @@ export function getHub(slug: Hub["slug"]): Hub {
   if (!hub) throw new Error(`Hub not found: ${slug}`);
   return hub;
 }
+
+
+/**
+ * Themen-Index. Listet alle 8 Kategorien für `/themen`-Übersicht.
+ *
+ * Themen mit einem ausgearbeiteten Hub bekommen `hub_slug` gesetzt (Link
+ * auf `/themen/<slug>`). Themen ohne Hub linken stattdessen auf die
+ * gefilterte News-Liste (`/news?kategorie=<key>`).
+ */
+export interface ThemaUebersicht {
+  kategorie: Kategorie;
+  titel: string;
+  kurz: string;
+  schlagworte: string[];
+  hub_slug?: Hub["slug"];
+}
+
+export const THEMEN_UEBERSICHT: ThemaUebersicht[] = [
+  {
+    kategorie: "ai_act",
+    titel: "AI Act",
+    kurz: "Die KI-Verordnung der EU. Hochrisiko-Systeme, GPAI, Konformitätsbewertung.",
+    schlagworte: ["GPAI", "Hochrisiko", "CE", "Art. 4", "BNetzA", "AI-Inventar"],
+    hub_slug: "ai-act",
+  },
+  {
+    kategorie: "hinschg",
+    titel: "Hinweisgeberschutz (HinSchG)",
+    kurz: "Pflicht zur internen Meldestelle ab 50 Mitarbeitenden. Vertraulichkeit, Fristen, Sanktionen.",
+    schlagworte: ["Meldestelle", "Anonymität", "§17", "Repressalien-Schutz", "Bußgeld"],
+    hub_slug: "hinschg",
+  },
+  {
+    kategorie: "it_sicherheit",
+    titel: "NIS2 + IT-Sicherheit",
+    kurz: "Cybersecurity-Pflichten für wesentliche und wichtige Einrichtungen. Vorfall-Meldung 24/72h, Geschäftsführungs-Haftung.",
+    schlagworte: ["NIS2", "BSI", "Supply-Chain", "ENISA", "Vorfall-Meldung"],
+    hub_slug: "nis2",
+  },
+  {
+    kategorie: "datenschutz",
+    titel: "Datenschutz (DSGVO)",
+    kurz: "Verarbeitungsverzeichnis, DSFA, Auskunftsanspruch, Schnittstellen zu AI Act und HinSchG.",
+    schlagworte: ["Art. 15", "DSFA", "EDPB", "BfDI", "Pseudonymisierung"],
+  },
+  {
+    kategorie: "lieferkette",
+    titel: "Lieferkette (LkSG + CSDDD)",
+    kurz: "Sorgfaltspflichten in der globalen Wertschöpfungskette. Risikomanagement, Berichterstattung, BAFA.",
+    schlagworte: ["LkSG", "CSDDD", "BAFA", "Menschenrechte", "Sorgfaltsanalyse"],
+  },
+  {
+    kategorie: "arbeitsrecht",
+    titel: "Arbeitsrecht",
+    kurz: "AGG, ArbSchG, Mindestlohn, KI-Bias im Recruiting, Pflicht-Unterweisungen.",
+    schlagworte: ["AGG", "ArbSchG", "Mindestlohn", "Unterweisung", "Bias-Test"],
+  },
+  {
+    kategorie: "geldwaesche_finanzen",
+    titel: "Geldwäsche + Finanzen",
+    kurz: "GwG-Pflichten für Verpflichtete, Transparenzregister, BaFin-Auslegung, Kryptowerte.",
+    schlagworte: ["GwG", "KYC", "BaFin", "Transparenzregister", "Kryptowerte"],
+  },
+  {
+    kategorie: "esg_nachhaltigkeit",
+    titel: "ESG + CSRD",
+    kurz: "Nachhaltigkeitsberichterstattung nach ESRS, doppelte Wesentlichkeit, EU-Taxonomie.",
+    schlagworte: ["CSRD", "ESRS", "Doppelte Wesentlichkeit", "Taxonomie", "EUDR"],
+  },
+];
+

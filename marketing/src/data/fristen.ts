@@ -10,6 +10,36 @@ export interface Frist {
 }
 
 export const FRISTEN: Frist[] = [
+  // 2023 — historisch
+  { datum: "2023-07-02", titel: "HinSchG: Inkrafttreten für Unternehmen ab 250 Mitarbeitenden", kategorie: "hinschg", geo: "DE",
+    kurz: "Erste Anwendungsstufe des Hinweisgeberschutzgesetzes. Interne Meldestellen Pflicht ab 250 MA.",
+    quelle_url: "https://www.gesetze-im-internet.de/hinschg/" },
+  { datum: "2023-12-17", titel: "HinSchG: vollständige Anwendung für 50-249 Mitarbeitende", kategorie: "hinschg", geo: "DE",
+    kurz: "Mit Ablauf der Schonfrist sind auch Unternehmen ab 50 MA voll HinSchG-pflichtig.",
+    quelle_url: "https://www.gesetze-im-internet.de/hinschg/" },
+
+  // 2024 — historisch
+  { datum: "2024-01-01", titel: "LkSG: Schwellenwert sinkt auf 1.000 Mitarbeitende", kategorie: "lieferkette", geo: "DE",
+    kurz: "Sorgfaltspflichtengesetz greift seitdem für rund 4.800 Unternehmen in Deutschland.",
+    quelle_url: "https://www.gesetze-im-internet.de/lksg/" },
+  { datum: "2024-07-12", titel: "AI Act: Amtsblatt-Veröffentlichung", kategorie: "ai_act", geo: "EU",
+    kurz: "Mit der Veröffentlichung im Amtsblatt der EU beginnt der gestaffelte Anwendungs-Kalender.",
+    quelle_url: "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32024R1689" },
+  { datum: "2024-08-01", titel: "AI Act: Inkrafttreten", kategorie: "ai_act", geo: "EU",
+    kurz: "20 Tage nach Amtsblatt-Veröffentlichung tritt die Verordnung in Kraft. Übergangsfristen starten.",
+    quelle_url: "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32024R1689" },
+  { datum: "2024-10-17", titel: "NIS2: EU-Umsetzungsfrist abgelaufen (DE verfehlt)", kategorie: "it_sicherheit", geo: "EU",
+    kurz: "Ursprünglicher Stichtag für die nationale Umsetzung. Deutschland und mehrere andere Mitgliedsstaaten haben verfehlt.",
+    quelle_url: "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32022L2555" },
+
+  // 2025 — historisch
+  { datum: "2025-02-02", titel: "AI Act: Verbotene Praktiken + KI-Kompetenz-Pflicht greifen", kategorie: "ai_act", geo: "EU",
+    kurz: "Art. 4 (KI-Kompetenz aller Beschäftigten) und Art. 5 (Social-Scoring, Echtzeit-Biometrie) sind seitdem anwendbar.",
+    quelle_url: "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32024R1689" },
+  { datum: "2025-08-02", titel: "AI Act: GPAI-Pflichten gelten", kategorie: "ai_act", geo: "EU",
+    kurz: "Anbieter von General-Purpose-KI (GPT, Claude, Gemini, Llama) unterliegen erweiterten Transparenz- und Compliance-Pflichten.",
+    quelle_url: "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32024R1689" },
+
   // 2026
   { datum: "2026-08-02", titel: "AI Act: Hochrisiko-Pflichten greifen", kategorie: "ai_act", geo: "EU",
     kurz: "Anhang-III-Systeme fallen unter volle Hochrisiko-Pflichten: Risikomanagement, Logging, Human Oversight, Konformitätsbewertung.",
