@@ -51,6 +51,19 @@ const canonical = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site).href;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title="Vaeren-Compliance-Brief" href="/feed.xml" />
 
+    {/* Plausible Analytics, self-hosted, kein Cookie, kein PII.
+        Nur aktiv wenn PUBLIC_PLAUSIBLE_DOMAIN gesetzt ist — sonst wird
+        kein Script-Tag emittiert (vermeidet 404 wenn stats.vaeren.de
+        noch nicht live ist). */}
+    {import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN && (
+      <script
+        defer
+        data-domain={import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN}
+        src="https://stats.vaeren.de/js/script.js"
+        is:inline
+      />
+    )}
+
     {jsonLd && (
       <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     )}

@@ -519,7 +519,7 @@ KATALOG: tuple[KursDef, ...] = (
                     "aufbewahren (Tresor zuhause, NICHT im selben Passwort-Manager). "
                     "Sie sind dein letzter Rettungsanker bei Verlust des Tokens.\n\n"
                     "## Praxis-Beispiel\n\n"
-                    "Kollege erhält morgens eine Slack-Nachricht: 'Hey, ich hab 
+                    "Kollege erhält morgens eine Slack-Nachricht: 'Hey, ich hab "
                     "mein Passwort vergessen, kannst du mir kurz deins für den "
                     "CRM-Zugang geben? Brauche nur 5 Minuten.' → **NIEMALS** "
                     "Passwörter weitergeben, auch nicht 'kurz'. Stattdessen: "
@@ -544,7 +544,7 @@ KATALOG: tuple[KursDef, ...] = (
                     "Reputationsverlust).\n\n"
                     "## Die acht typischen Indikatoren\n\n"
                     "### 1. Dringlichkeit + Drohung\n\n"
-                    "'Ihr Konto wird **in 24 Stunden gesperrt**, wenn Sie nicht '
+                    "'Ihr Konto wird **in 24 Stunden gesperrt**, wenn Sie nicht "
                     "sofort handeln.' Echte Banken/Behörden setzen keine Stunden-"
                     "Fristen per E-Mail. **Eile ist Manipulation.**\n\n"
                     "### 2. Unpersönliche Anrede\n\n"
@@ -587,7 +587,7 @@ KATALOG: tuple[KursDef, ...] = (
                     "IBAN per E-Mail? → **Telefonisch rückbestätigen** (mit der "
                     "Nummer aus deinem Adressbuch, NICHT aus der Mail).\n\n"
                     "### 8. Druck zur Geheimhaltung\n\n"
-                    "'Erzählen Sie niemandem davon' oder 'nur Sie haben dieses '
+                    "'Erzählen Sie niemandem davon' oder 'nur Sie haben dieses ' "
                     "Angebot' — fast immer Betrug. Echte Vorgesetzte und Banken "
                     "haben kein Problem mit interner Rücksprache.\n\n"
                     "## Spezialfall: CEO-Fraud (BEC)\n\n"
@@ -595,7 +595,7 @@ KATALOG: tuple[KursDef, ...] = (
                     "den Mittelstand am häufigsten trifft. Ablauf:\n\n"
                     "1. Angreifer recherchiert auf LinkedIn die Führungsebene\n"
                     "2. Mail an Buchhaltung, vorgeblich vom Geschäftsführer: "
-                    "'Bin gerade in einem Meeting, wir müssen eine Akquisition '
+                    "'Bin gerade in einem Meeting, wir müssen eine Akquisition ' "
                     "anzahlen. Können Sie 87.000 € auf folgendes Konto "
                     "überweisen? Streng vertraulich.'\n"
                     "3. Buchhaltung will gehorsam sein, hat keine Zeit für "
@@ -871,7 +871,7 @@ KATALOG: tuple[KursDef, ...] = (
                     "## Das Herzstück des Arbeitsschutzes\n\n"
                     "Die **Gefährdungsbeurteilung (GBU)** nach § 5 ArbSchG ist das "
                     "**zentrale Werkzeug** des modernen Arbeitsschutzes. Sie ist "
-                    "die schriftliche Antwort auf die Frage: 'Was kann hier '
+                    "die schriftliche Antwort auf die Frage: 'Was kann hier ' "
                     "schiefgehen — und was tun wir dagegen?'\n\n"
                     "Ohne GBU gibt es keine systematischen Schutzmaßnahmen, ohne "
                     "systematische Schutzmaßnahmen gibt es keine wirksame "
@@ -879,7 +879,7 @@ KATALOG: tuple[KursDef, ...] = (
                     "**Ordnungswidrigkeit** (Bußgeld bis 25.000 €, im Wiederholungs"
                     "fall Straftat).\n\n"
                     "## Die sieben Schritte einer GBU\n\n"
-                    "1. **Arbeitsbereich** und Tätigkeit abgrenzen (z. B. 'CNC-Fräse '
+                    "1. **Arbeitsbereich** und Tätigkeit abgrenzen (z. B. 'CNC-Fräse ' "
                     "Halle B, Schicht 1')\n"
                     "2. **Gefährdungen ermitteln** — was kann passieren?\n"
                     "3. **Gefährdungen bewerten** — wie wahrscheinlich, wie schwer?\n"
@@ -1440,7 +1440,7 @@ KATALOG: tuple[KursDef, ...] = (
                     "### 1. **W**o ist der Notfall?\n\n"
                     "**Möglichst exakt:** Straßenname + Hausnummer + Etage + Halle/"
                     "Raum + besondere Hinweise (z. B. 'Eingang über den Hof').\n\n"
-                    "Bei uns: **'Vaeren-Werke, Industriestraße 12, 91564 Neuendettelsau, '
+                    "Bei uns: **'Vaeren-Werke, Industriestraße 12, 91564 Neuendettelsau, ' "
                     "Halle 2, CNC-Bereich West'** — diesen Standort-Text **kennt "
                     "jede:r Mitarbeiter:in auswendig**. Ohne Adresse keine Hilfe.\n\n"
                     "Auf Werks- und Baustellen-Geländen ist die exakte **Tor**-"
@@ -1455,7 +1455,7 @@ KATALOG: tuple[KursDef, ...] = (
                     "Keine Geschichten ('… und dann meinte mein Kollege …'), "
                     "keine Spekulationen, keine Vorwürfe. Sachverhalt.\n\n"
                     "### 3. **W**ieviele Verletzte / Betroffene?\n\n"
-                    "Anzahl konkret nennen. 'Eine Person', 'drei Personen, davon '
+                    "Anzahl konkret nennen. 'Eine Person', 'drei Personen, davon ' "
                     "zwei bewusstlos". Bei Massenanfall: 'Mehrere, mindestens 5, '
                     "wir können noch nicht zählen' — die Leitstelle schickt dann "
                     "automatisch mehr Mittel.\n\n"

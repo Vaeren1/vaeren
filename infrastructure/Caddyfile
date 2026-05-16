@@ -123,6 +123,19 @@ errors.app.vaeren.de {
 }
 
 
+# --- Plausible Analytics (self-hosted) ----------------------------------
+# Eigener Stack in /opt/plausible/. Caddy muss in plausible-net joinen
+# (docker network connect plausible-net caddy).
+stats.vaeren.de {
+    encode gzip zstd
+    reverse_proxy plausible:8000 {
+        header_up X-Forwarded-Proto https
+        header_up X-Real-IP {remote_host}
+        header_up Host {host}
+    }
+}
+
+
 # --- Vaeren Public-Hinweisgeber-Portal ------------------------------------
 hinweise.app.vaeren.de {
     encode gzip zstd
