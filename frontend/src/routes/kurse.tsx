@@ -54,8 +54,8 @@ export function KurseListPage() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-start justify-between">
-        <div>
+      <CardHeader className="flex flex-row items-start justify-between gap-6">
+        <div className="max-w-2xl">
           <CardTitle>Kurs-Bibliothek</CardTitle>
           <CardDescription>
             Alle Pflicht-Kurse, die in diesem Tenant verfügbar sind. Standard-
@@ -63,7 +63,7 @@ export function KurseListPage() {
             Kurse legen Sie über „+ Neuer Kurs" an.
           </CardDescription>
         </div>
-        <Button onClick={() => navigate("/kurse/neu")}>
+        <Button onClick={() => navigate("/kurse/neu")} className="shrink-0">
           <Plus className="mr-1 h-4 w-4" /> Neuer Kurs
         </Button>
       </CardHeader>
