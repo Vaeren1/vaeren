@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import type { ApiError } from "@/lib/api/client";
 import {
   type MeldungStatusValue,
   useAbschliessen,
@@ -22,8 +23,23 @@ import {
   useMeldung,
   usePatchMeldung,
 } from "@/lib/api/hinschg";
+import { useAuthStore } from "@/lib/stores/auth-store";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { toast } from "sonner";
+
+function handleMutationError(err: ApiError): void {
+  if (err.status === 403) {
+    toast.error(
+      "Keine Berechtigung — nur Compliance-Beauftragte:r kann Meldungen bearbeiten.",
+    );
+  } else if (err.status === 409) {
+    const body = err.body as { detail?: string } | null;
+    toast.error(body?.detail ?? "Konflikt — Aktion bereits ausgeführt.");
+  } else {
+    toast.error(`Fehler ${err.status}.`);
+  }
+}
 
 const STATUS_OPTIONS: Array<[MeldungStatusValue, string]> = [
   ["eingegangen", "Eingegangen"],
@@ -39,6 +55,9 @@ const SCHWEREGRADE = ["niedrig", "mittel", "hoch", "kritisch"];
 export function MeldungDetailPage() {
   const { id } = useParams<{ id: string }>();
   const numericId = id ? Number.parseInt(id, 10) : undefined;
+  const role = useAuthStore((s) => s.user?.tenant_role);
+  // Nach core.rules.py: edit nur für Compliance-Beauftragte:r. GF darf nur lesen.
+  const canEdit = role === "compliance_beauftragter";
   const { data, isLoading, isError } = useMeldung(numericId);
   const patch = usePatchMeldung(numericId ?? 0);
   const bestaetigen = useBestaetigen(numericId ?? 0);
@@ -75,9 +94,19 @@ export function MeldungDetailPage() {
   }
 
   const isAbgeschlossen = data.status === "abgeschlossen";
+  // Klassifizierungs-Felder + Aktions-Buttons werden nur aktiviert, wenn
+  // (a) der User edit-Rechte hat und (b) die Meldung noch nicht abgeschlossen ist.
+  const fieldsDisabled = isAbgeschlossen || !canEdit;
+  const statusUrl = `/hinweise/status/${data.eingangs_token}`;
 
   return (
     <div className="space-y-4">
+      {!canEdit && (
+        <div className="rounded border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          Lese-Modus — nur Compliance-Beauftragte:r kann Status/Klassifizierung
+          ändern oder die Meldung abschließen.
+        </div>
+      )}
       <Card>
         <CardHeader>
           <CardTitle className="break-all">
@@ -88,6 +117,15 @@ export function MeldungDetailPage() {
             Status: {data.status_display} · Eingang:{" "}
             {new Date(data.eingegangen_am).toLocaleString("de-DE")} ·{" "}
             {data.anonym ? "anonym" : "mit Kontakt"}
+            <br />
+            <Link
+              to={statusUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs underline"
+            >
+              Hinweisgeber-Status-Seite öffnen ↗
+            </Link>
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -119,11 +157,14 @@ export function MeldungDetailPage() {
               <Input
                 id="kategorie"
                 value={kategorie}
-                disabled={isAbgeschlossen}
+                disabled={fieldsDisabled}
                 onChange={(e) => setKategorie(e.target.value)}
                 onBlur={(e) => {
                   if (e.target.value !== (data.kategorie ?? "")) {
-                    patch.mutate({ kategorie: e.target.value });
+                    patch.mutate(
+                      { kategorie: e.target.value },
+                      { onError: handleMutationError },
+                    );
                   }
                 }}
                 placeholder="z. B. Korruption, Diskriminierung, Compliance"
@@ -133,11 +174,14 @@ export function MeldungDetailPage() {
               <Label htmlFor="schweregrad">Schweregrad</Label>
               <select
                 id="schweregrad"
-                disabled={isAbgeschlossen}
+                disabled={fieldsDisabled}
                 value={schweregrad}
                 onChange={(e) => {
                   setSchweregrad(e.target.value);
-                  patch.mutate({ schweregrad: e.target.value });
+                  patch.mutate(
+                    { schweregrad: e.target.value },
+                    { onError: handleMutationError },
+                  );
                 }}
                 className="w-full rounded border bg-background px-2 py-2 text-sm"
               >
@@ -153,12 +197,12 @@ export function MeldungDetailPage() {
               <Label htmlFor="status">Status</Label>
               <select
                 id="status"
-                disabled={isAbgeschlossen}
+                disabled={fieldsDisabled}
                 value={statusValue}
                 onChange={(e) => {
                   const v = e.target.value as MeldungStatusValue;
                   setStatusValue(v);
-                  patch.mutate({ status: v });
+                  patch.mutate({ status: v }, { onError: handleMutationError });
                 }}
                 className="w-full rounded border bg-background px-2 py-2 text-sm"
               >
@@ -170,26 +214,45 @@ export function MeldungDetailPage() {
               </select>
             </div>
           </div>
-          <div className="flex gap-2 pt-2">
-            <Button
-              variant="outline"
-              disabled={
-                bestaetigen.isPending ||
-                data.bestaetigung_versandt_am !== null ||
-                isAbgeschlossen
-              }
-              onClick={() => bestaetigen.mutate()}
-            >
-              Eingangsbestätigung versendet markieren
-            </Button>
-            <Button
-              variant="destructive"
-              disabled={abschliessen.isPending || isAbgeschlossen}
-              onClick={() => abschliessen.mutate()}
-            >
-              Meldung abschließen
-            </Button>
-          </div>
+          {canEdit && (
+            <div className="flex gap-2 pt-2">
+              <Button
+                variant="outline"
+                disabled={
+                  bestaetigen.isPending ||
+                  data.bestaetigung_versandt_am !== null ||
+                  isAbgeschlossen
+                }
+                onClick={() =>
+                  bestaetigen.mutate(undefined, {
+                    onSuccess: () =>
+                      toast.success("Eingangsbestätigung markiert."),
+                    onError: handleMutationError,
+                  })
+                }
+              >
+                Eingangsbestätigung versendet markieren
+              </Button>
+              <Button
+                variant="destructive"
+                disabled={abschliessen.isPending || isAbgeschlossen}
+                onClick={() => {
+                  if (
+                    !window.confirm(
+                      "Meldung wirklich abschließen? Status wird auf 'abgeschlossen' gesetzt, offene Pflicht-Tasks erledigt und das Lösch­datum (3 J.) gesetzt. Nicht rückgängig.",
+                    )
+                  )
+                    return;
+                  abschliessen.mutate(undefined, {
+                    onSuccess: () => toast.success("Meldung abgeschlossen."),
+                    onError: handleMutationError,
+                  });
+                }}
+              >
+                Meldung abschließen
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -241,13 +304,19 @@ export function MeldungDetailPage() {
               ))}
             </ul>
           )}
-          {!isAbgeschlossen && (
+          {!isAbgeschlossen && canEdit && (
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 addSchritt.mutate(
                   { aktion, notiz_verschluesselt: notiz },
-                  { onSuccess: () => setNotiz("") },
+                  {
+                    onSuccess: () => {
+                      setNotiz("");
+                      toast.success("Bearbeitungsschritt angelegt.");
+                    },
+                    onError: handleMutationError,
+                  },
                 );
               }}
               className="space-y-2 border-t pt-3"
