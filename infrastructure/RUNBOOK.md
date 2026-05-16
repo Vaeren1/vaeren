@@ -362,3 +362,66 @@ zcat /tmp/restore-probe/var/lib/vaeren-restic/*.sql.gz | grep encryption_key
 
 Auch ohne offene Punkte ist Vaeren **demo-fähig** dank Module-Fallbacks
 (Console-Mail, Static-LLM, Console-Logging) — siehe Sprint 4/5/6/8 by-design.
+
+---
+
+## J. Operations — Wiederkehrende & gelegentliche Befehle
+
+Alle Befehle laufen aus `/opt/ai-act/` auf dem Production-Server gegen
+den Backend-Container. Vorlauf: `docker compose exec backend …`.
+
+### J.1 Demo-Tenant pflegen
+
+**Standard-Schulungskatalog seeden** (20 Pflicht-Kurse: DSGVO,
+Arbeitsschutz, Brandschutz, Gefahrstoffe, PSA, Maschinen, Lärm,
+Antikorruption, AGG, HinSchG, Gabelstapler, LkSG, GwG, Schweißen,
+Ladungssicherung, Exportkontrolle, Umweltschutz, ISO 9001 …):
+
+```bash
+ssh hel1 'cd /opt/ai-act && docker compose exec backend \
+    uv run python manage.py seed_kurs_katalog --tenant demo --dry-run'
+# Treffer prüfen — dann ohne --dry-run:
+ssh hel1 'cd /opt/ai-act && docker compose exec backend \
+    uv run python manage.py seed_kurs_katalog --tenant demo'
+```
+
+Idempotent über Kurs-Titel: bestehende Kurse bleiben unverändert,
+nur fehlende werden ergänzt. Sicher mehrfach ausführbar.
+
+**E-Mail-Domain-Rewrite** (z. B. Demo-Daten von PayWise auf
+vaeren-demo umstellen):
+
+```bash
+# Erst dry-run!
+ssh hel1 'cd /opt/ai-act && docker compose exec backend \
+    uv run python manage.py rename_emails \
+        --tenant demo --from-domain paywise.de --to-domain vaeren-demo.de \
+        --dry-run'
+# Nach Prüfung der Liste — ohne --dry-run wiederholen:
+ssh hel1 'cd /opt/ai-act && docker compose exec backend \
+    uv run python manage.py rename_emails \
+        --tenant demo --from-domain paywise.de --to-domain vaeren-demo.de'
+```
+
+Touched: `core.Mitarbeiter.email` + `core.User.email`, case-insensitivem
+Suffix-Match. AuditLog-Eintrag pro Umbenennung mit
+`actor_email_snapshot="system:rename_emails"`. Ziel-Email-Konflikte
+werden übersprungen, nicht abgebrochen.
+
+### J.2 Notifications
+
+Stündlich via Celery-Beat. Manuell auslösen für Debugging:
+
+```bash
+ssh hel1 'cd /opt/ai-act && docker compose exec backend \
+    uv run python manage.py dispatch_notifications --all-tenants'
+```
+
+### J.3 Backup-Status
+
+```bash
+ssh hel1 'tail -50 /var/log/vaeren-restic.log'
+```
+
+Restore-Übungs-Snippets in §H oben.
+
