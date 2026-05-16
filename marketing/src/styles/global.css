@@ -38,31 +38,37 @@
   .pill-esg_nachhaltigkeit { background: #D9F99D; color: #365314; }
 }
 
-html {
-  font-family: var(--font-sans);
-  color: var(--color-ink);
-  background: var(--color-paper);
-  -webkit-font-smoothing: antialiased;
-}
+/* Base-Styles MÜSSEN in @layer base liegen, damit Utility-Klassen wie
+   text-paper, text-ink-muted etc. sie überschreiben können. Ungeschichtete
+   Selektoren würden gegen alle Tailwind-Layer gewinnen — der berüchtigte
+   `a { color: ... }`-Override-Bug. */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background: var(--color-paper);
+    -webkit-font-smoothing: antialiased;
+  }
 
-body {
-  font-feature-settings: "ss01", "cv11";
-}
+  body {
+    font-feature-settings: "ss01", "cv11";
+  }
 
-h1, h2, h3, h4 {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  color: var(--color-ink);
-}
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
+  }
 
-a {
-  color: var(--color-brand);
-  text-underline-offset: 3px;
-}
+  a {
+    color: var(--color-brand);
+    text-underline-offset: 3px;
+  }
 
-a:hover {
-  text-decoration: underline;
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 /* Editorial body type — used in <Prose>. */
