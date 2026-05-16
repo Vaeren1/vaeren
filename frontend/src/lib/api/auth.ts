@@ -1,7 +1,8 @@
 import { type AuthUser, useAuthStore } from "@/lib/stores/auth-store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { ApiError, api } from "./client";
+import { toast } from "sonner";
+import { ApiError, _resetCsrfCacheForTests, api } from "./client";
 
 export interface LoginPayload {
   email: string;
@@ -89,12 +90,37 @@ export function useLogout() {
   const navigate = useNavigate();
   const clear = useAuthStore((s) => s.clear);
   const queryClient = useQueryClient();
+
+  const finish = () => {
+    clear();
+    queryClient.clear();
+    _resetCsrfCacheForTests(); // CSRF-Token-Cache leeren — sonst nutzt der nächste Login einen stale Token
+    navigate("/login");
+  };
+
   return useMutation<unknown, ApiError, void>({
-    mutationFn: () => api("/api/auth/logout/", { method: "POST" }),
-    onSuccess: () => {
-      clear();
-      queryClient.clear();
-      navigate("/login");
+    mutationFn: async () => {
+      try {
+        return await api("/api/auth/logout/", { method: "POST" });
+      } catch (err) {
+        // Backend-Logout darf nicht den Client-State blockieren — wenn die
+        // Server-Session bereits ungültig ist (CSRF-Rotation, abgelaufen,
+        // konkurrierender Logout), würden wir sonst hängen bleiben.
+        if (
+          err instanceof ApiError &&
+          (err.status === 401 || err.status === 403)
+        ) {
+          return undefined;
+        }
+        throw err;
+      }
+    },
+    onSuccess: finish,
+    onError: () => {
+      // Auch bei Netzwerk-/5xx-Fehler: lokal abmelden + navigieren. Der
+      // User darf nicht im halb-eingeloggten Zustand stehen bleiben.
+      toast.error("Abmeldung serverseitig fehlgeschlagen — lokal abgemeldet.");
+      finish();
     },
   });
 }
