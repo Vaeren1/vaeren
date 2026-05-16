@@ -65,6 +65,7 @@ Bei Unsicherheit immer zuerst hier nachsehen:
 - **Type-Safety End-to-End:** Backend-API-Schema (drf-spectacular) → Frontend-Types (openapi-typescript). Backend-Bruch ohne Frontend-Update = TypeScript-Build-Fehler. CI-Pflicht.
 - **YAGNI ruthlessly:** Keine Features bauen, bis Pilot-Kunden sie verlangen. Keine Mocks für Hypothesen.
 - **Tests-First für kritische Pfade:** Multi-Tenant-Isolation, Frist-Berechnungen, RDG-Layer-2 (Output-Validator), Permission-Tests.
+- **Feature-Completion-Discipline:** Jedes Feature wird *komplett* ausgebaut und abgeschlossen, bevor das nächste begonnen wird. „Komplett" = Backend + Frontend + Tests + Migration + Deploy-fähig. Keine halbfertigen Module, keine TODO-Stubs, kein Parallel-Switching zwischen Features. Begründung: Konrad ist Solo-Builder und braucht den Kopf frei für die nächste Aufgabe — angefangene Halbfertig-Features sind kognitive Last + technische Schulden gleichzeitig. Wenn ein Feature zu groß für einen Schritt ist, in Spec/Plan in vollständige Sub-Features schneiden — jedes für sich abgeschlossen.
 
 ## 4-Schichten-Test-Strategie (Pflicht-Coverage)
 
