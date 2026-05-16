@@ -1455,8 +1455,8 @@ KATALOG: tuple[KursDef, ...] = (
                     "Keine Geschichten ('… und dann meinte mein Kollege …'), "
                     "keine Spekulationen, keine Vorwürfe. Sachverhalt.\n\n"
                     "### 3. **W**ieviele Verletzte / Betroffene?\n\n"
-                    "Anzahl konkret nennen. 'Eine Person', 'drei Personen, davon ' "
-                    "zwei bewusstlos". Bei Massenanfall: 'Mehrere, mindestens 5, '
+                    "Anzahl konkret nennen. 'Eine Person', 'drei Personen, davon "
+                    "zwei bewusstlos'. Bei Massenanfall: 'Mehrere, mindestens 5, "
                     "wir können noch nicht zählen' — die Leitstelle schickt dann "
                     "automatisch mehr Mittel.\n\n"
                     "### 4. **W**elche Verletzungen oder Erkrankungen?\n\n"
