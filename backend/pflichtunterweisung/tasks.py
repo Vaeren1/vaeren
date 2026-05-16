@@ -16,6 +16,52 @@ from django_tenants.utils import schema_context
 logger = logging.getLogger(__name__)
 
 
+OFFICE_MIMES = (
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+)
+
+
+@shared_task(name="pflichtunterweisung.convert_office")
+def convert_office(tenant_schema: str, asset_id: int) -> dict:
+    """Konvertiert Office-Asset (DOCX/PPTX) zu PDF via headless soffice.
+
+    Setzt asset.konvertierte_pdf + konvertierung_status. Asynchron, Player/
+    Editor pollen den Status.
+    """
+    from pathlib import Path
+    from django.core.files import File
+
+    from core.compression import convert_office_to_pdf
+
+    from .models import KursAsset
+
+    with schema_context(tenant_schema):
+        try:
+            asset = KursAsset.objects.get(pk=asset_id)
+        except KursAsset.DoesNotExist:
+            return {"status": "missing"}
+
+        src = Path(asset.original_datei.path)
+        dest_dir = src.parent  # gleiches Verzeichnis wie Original
+        pdf_path, error = convert_office_to_pdf(src, dest_dir)
+        if pdf_path is None:
+            asset.konvertierung_status = KursAsset.KonvStatus.FAILED
+            asset.save(update_fields=("konvertierung_status",))
+            logger.warning("convert_office failed asset=%s: %s", asset_id, error)
+            return {"status": "failed", "error": error}
+
+        # FileField mit relative path zu MEDIA_ROOT
+        from django.conf import settings as dj_settings
+
+        media_root = Path(dj_settings.MEDIA_ROOT)
+        rel_path = pdf_path.relative_to(media_root)
+        asset.konvertierte_pdf.name = str(rel_path)
+        asset.konvertierung_status = KursAsset.KonvStatus.DONE
+        asset.save(update_fields=("konvertierte_pdf", "konvertierung_status"))
+        return {"status": "done", "pdf": str(rel_path)}
+
+
 @shared_task(name="pflichtunterweisung.compress_asset")
 def compress_asset(tenant_schema: str, asset_id: int) -> dict:
     """Komprimiert Asset (PDF/Bild/Video) in-place.

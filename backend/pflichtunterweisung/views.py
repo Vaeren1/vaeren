@@ -222,21 +222,27 @@ class KursAssetViewSet(viewsets.ReadOnlyModelViewSet):
             raise ValidationError(
                 f"Datei zu gross ({upload.size // 1024} KB). Limit fuer {mime}: {limit_mb} MB."
             )
+        from .tasks import OFFICE_MIMES, convert_office
+
+        is_office = mime in OFFICE_MIMES
         asset = KursAsset.objects.create(
             kurs=kurs,
             original_datei=upload,
             original_mime=mime,
             original_size_bytes=upload.size,
             compression_status=KursAsset.CompressionStatus.PENDING,
+            konvertierung_status=(
+                KursAsset.KonvStatus.PENDING if is_office else KursAsset.KonvStatus.NOT_NEEDED
+            ),
             hochgeladen_von=request.user,
         )
-        # Async dispatch — bewusst .apply_async ohne wait. Frontend pollt Status.
         try:
             compress_asset.delay(connection.schema_name, asset.pk)
+            if is_office:
+                convert_office.delay(connection.schema_name, asset.pk)
         except Exception as exc:  # noqa: BLE001  # broker down etc.
-            # Asset bleibt PENDING, kann manuell re-triggered werden
             import logging
-            logging.getLogger(__name__).warning("compress_asset dispatch failed: %s", exc)
+            logging.getLogger(__name__).warning("celery dispatch failed: %s", exc)
         return Response(KursAssetSerializer(asset).data, status=status.HTTP_201_CREATED)
 
 

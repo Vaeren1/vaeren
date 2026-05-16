@@ -121,6 +121,37 @@ def compress_image(path: Path, max_dimension: int = 2048, jpeg_quality: int = 85
     return _replace_if_smaller(path, out)
 
 
+def convert_office_to_pdf(src: Path, dest_dir: Path) -> tuple[Path | None, str]:
+    """Konvertiert DOCX/PPTX zu PDF via headless soffice.
+
+    Returns (pdf_path, error). pdf_path ist None bei Fehler.
+    """
+    if not src.exists():
+        return None, "Datei fehlt"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    cmd = [
+        "soffice",
+        "--headless",
+        "--nologo",
+        "--nofirststartwizard",
+        "--convert-to", "pdf",
+        "--outdir", str(dest_dir),
+        str(src),
+    ]
+    try:
+        subprocess.run(cmd, check=True, capture_output=True, timeout=300)
+    except subprocess.CalledProcessError as e:
+        return None, e.stderr.decode("utf-8", "replace")[:300]
+    except subprocess.TimeoutExpired:
+        return None, "timeout"
+    except FileNotFoundError:
+        return None, "soffice nicht installiert"
+    expected = dest_dir / (src.stem + ".pdf")
+    if not expected.exists():
+        return None, f"PDF nicht erstellt (erwartet: {expected})"
+    return expected, ""
+
+
 def compress_video(path: Path, max_height: int = 1080, crf: int = 23) -> CompressionResult:
     """ffmpeg libx264 CRF 23 preset medium, scale max 1080p, AAC 128k."""
     if not path.exists():

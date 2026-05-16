@@ -57,7 +57,11 @@ RUN apt-get update && \
         tini \
         # Slice 2b/c/e: Smart-Compression fuer Kurs-Assets
         ghostscript \
-        ffmpeg && \
+        ffmpeg \
+        # Slice 2d: Office-Konvertierung (DOCX/PPTX → PDF) via headless soffice
+        libreoffice-core-nogui \
+        libreoffice-writer-nogui \
+        libreoffice-impress-nogui && \
     rm -rf /var/lib/apt/lists/*
 
 # venv + Code aus builder

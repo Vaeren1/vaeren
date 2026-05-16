@@ -1049,3 +1049,63 @@ def test_bild_modul_ohne_asset_rejected(tenant_setup):
     )
     assert resp.status_code == 400
     # asset.required oder analog
+
+
+# --- Slice 2d: Office-Konvertierung ------------------------------------
+
+
+def test_office_upload_dispatches_convert_task(tenant_setup):
+    """DOCX-Upload dispatched convert_office UND compress_asset, setzt konvertierung_status=PENDING."""
+    from unittest.mock import patch
+
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+
+    # Minimal valider DOCX-Stub (kein echter Inhalt — Test mockt soffice anyway).
+    docx_bytes = b"PK\x03\x04dummy-docx"
+    from django.core.files.uploadedfile import SimpleUploadedFile
+    upload = SimpleUploadedFile(
+        "schulungsunterlage.docx",
+        docx_bytes,
+        content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    )
+    with patch("pflichtunterweisung.tasks.compress_asset.delay") as m_comp, \
+         patch("pflichtunterweisung.tasks.convert_office.delay") as m_conv:
+        resp = client.post(
+            "/api/kurs-assets/upload/",
+            {"kurs": kurs.pk, "file": upload},
+            format="multipart",
+        )
+    assert resp.status_code == 201, resp.content
+    body = resp.json()
+    assert body["konvertierung_status"] == "pending"
+    m_comp.assert_called_once()
+    m_conv.assert_called_once()
+
+
+def test_convert_office_to_pdf_unit_skipt_wenn_kein_soffice(monkeypatch):
+    """Unit-Test fuer convert_office_to_pdf: gibt sauberen Error wenn soffice fehlt."""
+    import tempfile
+    from pathlib import Path
+    from core.compression import convert_office_to_pdf
+
+    # Erzwinge FileNotFoundError fuer subprocess.run
+    import subprocess
+    real_run = subprocess.run
+
+    def fake_run(*args, **kwargs):
+        raise FileNotFoundError("soffice")
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    try:
+        with tempfile.NamedTemporaryFile(suffix=".docx", delete=False) as f:
+            f.write(b"PK\x03\x04")
+            src = Path(f.name)
+        with tempfile.TemporaryDirectory() as d:
+            pdf, err = convert_office_to_pdf(src, Path(d))
+            assert pdf is None
+            assert "soffice" in err
+    finally:
+        monkeypatch.setattr(subprocess, "run", real_run)
+        src.unlink(missing_ok=True)

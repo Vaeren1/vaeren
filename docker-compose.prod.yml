@@ -119,6 +119,7 @@ services:
     entrypoint: ["/usr/bin/tini", "--"]
     command: ["celery", "-A", "config.celery", "beat", "--loglevel=INFO"]
 
+
   frontend:
     build:
       context: .
