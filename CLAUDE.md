@@ -97,7 +97,7 @@ Bei Unsicherheit immer zuerst hier nachsehen:
 
 - **Pattern:** rsync + scp + docker compose up (analog Sponty `deploy.sh`)
 - **Build:** server-side ARM64-native (kein Cross-Compile)
-- **Trigger:** **manuell** durch `./deploy.sh` von Konrads Laptop. **Kein Auto-Deploy in CI** (bewusste Entscheidung — weniger Risiko, weniger Secrets in CI)
+- **Trigger:** Claude darf nach Feature-Fertigstellung autonom `git push origin main && ./deploy.sh` ausführen — keine Bestätigung nötig. Sonderfall riskante Datenmigrationen / Schema-Drops / Tenant-Lösch-Ops: vorher kurz erklären, dann ausführen. **Kein Auto-Deploy in CI** (bleibt manuell-aus-Laptop-getriggert, aber Claude darf das triggern)
 - **Migrations:** `migrate_schemas --noinput` im Container-CMD vor Daphne-Start. Migrations müssen rückwärtskompatibel sein
 - **Reverse-Proxy:** Caddy 2 als **Container** in `/opt/caddy/`, belegt Port 80/443, routet sponty-Domains + vaeren-Domains + glitchtip. Caddy hängt im `caddy-net`-Docker-Bridge mit allen Backends, daher direkt via Container-Name reachable. Spec sagte „Host-Service" — Container ist sauberer (Konfig in einem File pro Stack, kein systemd-DNS-Trick nötig).
 
