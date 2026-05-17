@@ -299,6 +299,57 @@ class AntwortOption(models.Model):
         return f"{marker} {self.text}"
 
 
+class FrageVorschlag(models.Model):
+    """LLM-generierter Quiz-Vorschlag, wartet auf HITL-Bestaetigung (RDG-Layer-3).
+
+    Slice 3: Akzeptierte Vorschlaege werden zu echten Frage-Eintraegen
+    konvertiert. Verworfene bleiben als Audit-Trail bestehen.
+    """
+
+    class Status(models.TextChoices):
+        OFFEN = "offen", "Offen"
+        AKZEPTIERT = "akzeptiert", "Akzeptiert"
+        VERWORFEN = "verworfen", "Verworfen"
+
+    kurs = models.ForeignKey(Kurs, on_delete=models.CASCADE, related_name="vorschlaege")
+    text = models.TextField()
+    erklaerung = models.TextField(blank=True)
+    optionen = models.JSONField(
+        help_text="Liste {text, ist_korrekt} — analog zu AntwortOption.",
+    )
+    quell_module = models.ManyToManyField(
+        KursModul, blank=True, related_name="basierte_vorschlaege",
+        help_text="Aus welchen Modulen wurde dieser Vorschlag generiert?",
+    )
+    erstellt_am = models.DateTimeField(auto_now_add=True)
+    erstellt_von = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT,
+        related_name="erstellte_vorschlaege",
+    )
+    llm_modell = models.CharField(max_length=100)
+    llm_prompt_hash = models.CharField(
+        max_length=64,
+        help_text="SHA-256 des Prompts fuer Reproduzierbarkeit / Audit.",
+    )
+    status = models.CharField(
+        max_length=20, choices=Status.choices, default=Status.OFFEN,
+    )
+    entschieden_am = models.DateTimeField(null=True, blank=True)
+    entschieden_von = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True,
+        on_delete=models.PROTECT, related_name="entschiedene_vorschlaege",
+    )
+    akzeptiert_als = models.ForeignKey(
+        "Frage", null=True, blank=True, on_delete=models.SET_NULL,
+        help_text="Bei status=AKZEPTIERT: Verweis auf die erzeugte Frage.",
+    )
+
+    class Meta:
+        ordering = ("-erstellt_am",)
+        verbose_name = "Fragen-Vorschlag"
+        verbose_name_plural = "Fragen-Vorschlaege"
+
+
 class SchulungsWelleStatus(models.TextChoices):
     DRAFT = "draft", "Entwurf"
     SENT = "sent", "Versendet"

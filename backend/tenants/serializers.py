@@ -1,8 +1,18 @@
-"""Serializer für public-Schema-Modelle (Demo-Lead-Capture)."""
+"""Serializer für public-Schema-Modelle (Demo-Lead-Capture + Kontakt-Formular)."""
 
 from rest_framework import serializers
 
 from .models import DemoRequest
+
+
+class KontaktRequestSerializer(serializers.Serializer):
+    """Marketing-Site-Kontakt-Formular. Kein Model — Mail-only."""
+
+    name = serializers.CharField(max_length=120)
+    firma = serializers.CharField(max_length=200, required=False, allow_blank=True)
+    email = serializers.EmailField()
+    mitarbeitende = serializers.CharField(max_length=40, required=False, allow_blank=True)
+    anliegen = serializers.CharField(max_length=5000)
 
 
 class DemoRequestSerializer(serializers.ModelSerializer):

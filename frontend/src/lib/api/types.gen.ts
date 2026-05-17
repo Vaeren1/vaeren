@@ -405,6 +405,100 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/fragen-vorschlaege/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Read + akzeptieren/verwerfen/generieren via actions. Kein direkter Edit
+         *     (Vorschlag ist immutable — User editiert beim Akzeptieren via Body).
+         */
+        get: operations["fragen_vorschlaege_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragen-vorschlaege/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Read + akzeptieren/verwerfen/generieren via actions. Kein direkter Edit
+         *     (Vorschlag ist immutable — User editiert beim Akzeptieren via Body).
+         */
+        get: operations["fragen_vorschlaege_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragen-vorschlaege/{id}/akzeptieren/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Body optional: {text, erklaerung, optionen} fuer User-Edits vor Promotion. */
+        post: operations["fragen_vorschlaege_akzeptieren_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragen-vorschlaege/{id}/verwerfen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Read + akzeptieren/verwerfen/generieren via actions. Kein direkter Edit
+         *     (Vorschlag ist immutable — User editiert beim Akzeptieren via Body).
+         */
+        post: operations["fragen_vorschlaege_verwerfen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragen-vorschlaege/generieren/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Body: {kurs: <id>, anzahl?: 10}. Dispatched Celery-Task. */
+        post: operations["fragen_vorschlaege_generieren_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/fragen/{id}/": {
         parameters: {
             query?: never;
@@ -1342,8 +1436,37 @@ export interface components {
             /** @description Erklärung nach Beantwortung */
             erklaerung?: string;
             reihenfolge?: number;
-            readonly optionen: components["schemas"]["AntwortOption"][];
+            optionen: components["schemas"]["_AntwortOptionNested"][];
         };
+        FrageVorschlag: {
+            readonly id: number;
+            kurs: number;
+            text: string;
+            erklaerung?: string;
+            /** @description Liste {text, ist_korrekt} — analog zu AntwortOption. */
+            optionen: unknown;
+            /** @description Aus welchen Modulen wurde dieser Vorschlag generiert? */
+            quell_module?: number[];
+            /** Format: date-time */
+            readonly erstellt_am: string;
+            readonly erstellt_von: number;
+            readonly llm_modell: string;
+            /** @description SHA-256 des Prompts fuer Reproduzierbarkeit / Audit. */
+            readonly llm_prompt_hash: string;
+            readonly status: components["schemas"]["FrageVorschlagStatusEnum"];
+            /** Format: date-time */
+            readonly entschieden_am: string | null;
+            readonly entschieden_von: number | null;
+            /** @description Bei status=AKZEPTIERT: Verweis auf die erzeugte Frage. */
+            readonly akzeptiert_als: number | null;
+        };
+        /**
+         * @description * `offen` - Offen
+         *     * `akzeptiert` - Akzeptiert
+         *     * `verworfen` - Verworfen
+         * @enum {string}
+         */
+        FrageVorschlagStatusEnum: "offen" | "akzeptiert" | "verworfen";
         /**
          * @description * `EU` - EU
          *     * `DE` - DE
@@ -1788,6 +1911,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["Frage"][];
         };
+        PaginatedFrageVorschlagList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["FrageVorschlag"][];
+        };
         PaginatedKorrekturInternalList: {
             /** @example 123 */
             count: number;
@@ -1988,7 +2126,7 @@ export interface components {
             /** @description Erklärung nach Beantwortung */
             erklaerung?: string;
             reihenfolge?: number;
-            readonly optionen?: components["schemas"]["AntwortOption"][];
+            optionen?: components["schemas"]["_AntwortOptionNested"][];
         };
         PatchedKorrekturInternal: {
             readonly id?: number;
@@ -2332,6 +2470,13 @@ export interface components {
         TypeEnum: "gesetzgebung" | "urteil" | "leitlinie" | "konsultation" | "frist";
         UnreadCountResponse: {
             unread: number;
+        };
+        /** @description Nested-Write-Variante: frage wird vom Parent gesetzt, nicht vom Body. */
+        _AntwortOptionNested: {
+            readonly id: number;
+            text: string;
+            ist_korrekt?: boolean;
+            reihenfolge?: number;
         };
     };
     responses: never;
@@ -2980,6 +3125,135 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Frage"];
+                };
+            };
+        };
+    };
+    fragen_vorschlaege_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedFrageVorschlagList"];
+                };
+            };
+        };
+    };
+    fragen_vorschlaege_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Fragen-Vorschlag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FrageVorschlag"];
+                };
+            };
+        };
+    };
+    fragen_vorschlaege_akzeptieren_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Fragen-Vorschlag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FrageVorschlag"];
+                "application/x-www-form-urlencoded": components["schemas"]["FrageVorschlag"];
+                "multipart/form-data": components["schemas"]["FrageVorschlag"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FrageVorschlag"];
+                };
+            };
+        };
+    };
+    fragen_vorschlaege_verwerfen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Fragen-Vorschlag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FrageVorschlag"];
+                "application/x-www-form-urlencoded": components["schemas"]["FrageVorschlag"];
+                "multipart/form-data": components["schemas"]["FrageVorschlag"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FrageVorschlag"];
+                };
+            };
+        };
+    };
+    fragen_vorschlaege_generieren_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FrageVorschlag"];
+                "application/x-www-form-urlencoded": components["schemas"]["FrageVorschlag"];
+                "multipart/form-data": components["schemas"]["FrageVorschlag"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FrageVorschlag"];
                 };
             };
         };

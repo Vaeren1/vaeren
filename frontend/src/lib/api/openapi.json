@@ -1152,6 +1152,258 @@
                 }
             }
         },
+        "/api/fragen-vorschlaege/": {
+            "get": {
+                "operationId": "fragen_vorschlaege_list",
+                "description": "Read + akzeptieren/verwerfen/generieren via actions. Kein direkter Edit\n(Vorschlag ist immutable — User editiert beim Akzeptieren via Body).",
+                "parameters": [
+                    {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "fragen-vorschlaege"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedFrageVorschlagList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/fragen-vorschlaege/{id}/": {
+            "get": {
+                "operationId": "fragen_vorschlaege_retrieve",
+                "description": "Read + akzeptieren/verwerfen/generieren via actions. Kein direkter Edit\n(Vorschlag ist immutable — User editiert beim Akzeptieren via Body).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Fragen-Vorschlag identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragen-vorschlaege"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FrageVorschlag"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/fragen-vorschlaege/{id}/akzeptieren/": {
+            "post": {
+                "operationId": "fragen_vorschlaege_akzeptieren_create",
+                "description": "Body optional: {text, erklaerung, optionen} fuer User-Edits vor Promotion.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Fragen-Vorschlag identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragen-vorschlaege"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FrageVorschlag"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FrageVorschlag"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FrageVorschlag"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FrageVorschlag"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/fragen-vorschlaege/{id}/verwerfen/": {
+            "post": {
+                "operationId": "fragen_vorschlaege_verwerfen_create",
+                "description": "Read + akzeptieren/verwerfen/generieren via actions. Kein direkter Edit\n(Vorschlag ist immutable — User editiert beim Akzeptieren via Body).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der Fragen-Vorschlag identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragen-vorschlaege"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FrageVorschlag"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FrageVorschlag"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FrageVorschlag"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FrageVorschlag"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/fragen-vorschlaege/generieren/": {
+            "post": {
+                "operationId": "fragen_vorschlaege_generieren_create",
+                "description": "Body: {kurs: <id>, anzahl?: 10}. Dispatched Celery-Task.",
+                "tags": [
+                    "fragen-vorschlaege"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FrageVorschlag"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FrageVorschlag"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FrageVorschlag"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FrageVorschlag"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/api/fragen/{id}/": {
             "get": {
                 "operationId": "fragen_retrieve",
@@ -4950,9 +5202,8 @@
                     "optionen": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/AntwortOption"
-                        },
-                        "readOnly": true
+                            "$ref": "#/components/schemas/_AntwortOptionNested"
+                        }
                     }
                 },
                 "required": [
@@ -4961,6 +5212,100 @@
                     "optionen",
                     "text"
                 ]
+            },
+            "FrageVorschlag": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "kurs": {
+                        "type": "integer"
+                    },
+                    "text": {
+                        "type": "string"
+                    },
+                    "erklaerung": {
+                        "type": "string"
+                    },
+                    "optionen": {
+                        "description": "Liste {text, ist_korrekt} — analog zu AntwortOption."
+                    },
+                    "quell_module": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Aus welchen Modulen wurde dieser Vorschlag generiert?"
+                    },
+                    "erstellt_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "erstellt_von": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "llm_modell": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "llm_prompt_hash": {
+                        "type": "string",
+                        "readOnly": true,
+                        "description": "SHA-256 des Prompts fuer Reproduzierbarkeit / Audit."
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/FrageVorschlagStatusEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "entschieden_am": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "entschieden_von": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "akzeptiert_als": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Bei status=AKZEPTIERT: Verweis auf die erzeugte Frage."
+                    }
+                },
+                "required": [
+                    "akzeptiert_als",
+                    "entschieden_am",
+                    "entschieden_von",
+                    "erstellt_am",
+                    "erstellt_von",
+                    "id",
+                    "kurs",
+                    "llm_modell",
+                    "llm_prompt_hash",
+                    "optionen",
+                    "status",
+                    "text"
+                ]
+            },
+            "FrageVorschlagStatusEnum": {
+                "enum": [
+                    "offen",
+                    "akzeptiert",
+                    "verworfen"
+                ],
+                "type": "string",
+                "description": "* `offen` - Offen\n* `akzeptiert` - Akzeptiert\n* `verworfen` - Verworfen"
             },
             "GeoEnum": {
                 "enum": [
@@ -6213,6 +6558,37 @@
                     }
                 }
             },
+            "PaginatedFrageVorschlagList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FrageVorschlag"
+                        }
+                    }
+                }
+            },
             "PaginatedKorrekturInternalList": {
                 "type": "object",
                 "required": [
@@ -6666,9 +7042,8 @@
                     "optionen": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/AntwortOption"
-                        },
-                        "readOnly": true
+                            "$ref": "#/components/schemas/_AntwortOptionNested"
+                        }
                     }
                 }
             },
@@ -7579,6 +7954,32 @@
                 },
                 "required": [
                     "unread"
+                ]
+            },
+            "_AntwortOptionNested": {
+                "type": "object",
+                "description": "Nested-Write-Variante: frage wird vom Parent gesetzt, nicht vom Body.",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "text": {
+                        "type": "string",
+                        "maxLength": 300
+                    },
+                    "ist_korrekt": {
+                        "type": "boolean"
+                    },
+                    "reihenfolge": {
+                        "type": "integer",
+                        "maximum": 32767,
+                        "minimum": 0
+                    }
+                },
+                "required": [
+                    "id",
+                    "text"
                 ]
             }
         },

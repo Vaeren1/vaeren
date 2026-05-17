@@ -12,8 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ModulEditor } from "@/components/kurs/modul-editor";
+import { QuizEditor } from "@/components/kurs/quiz-editor";
 import { KATEGORIE_LABEL, useKurs } from "@/lib/api/schulungen";
-import { Check, X } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 
 const MODUS_LABEL: Record<string, string> = {
@@ -114,55 +114,27 @@ export function KursDetailPage() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">
-            Quiz ({data.fragen.length} Fragen)
-          </CardTitle>
-          <CardDescription>
-            Single-Choice. Korrekte Antwort grün markiert (interne Sicht —
-            Mitarbeitende sehen die Markierung NICHT). Erklärung erscheint bei
-            den Mitarbeitenden nach Auswahl.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {data.fragen.map((f, idx) => (
-            <div key={f.id} className="rounded border bg-muted/30 p-4">
-              <div className="mb-1 text-xs uppercase tracking-wide text-muted-foreground">
-                Frage {idx + 1}
-              </div>
-              <p className="mb-3 font-medium">{f.text}</p>
-              <ul className="space-y-1">
-                {f.optionen.map((o) => (
-                  <li
-                    key={o.id}
-                    className={
-                      o.ist_korrekt
-                        ? "flex items-start gap-2 rounded bg-emerald-50 px-2 py-1 text-emerald-900"
-                        : "flex items-start gap-2 rounded px-2 py-1 text-slate-700"
-                    }
-                  >
-                    {o.ist_korrekt ? (
-                      <Check
-                        size={16}
-                        className="mt-0.5 shrink-0 text-emerald-600"
-                      />
-                    ) : (
-                      <X size={16} className="mt-0.5 shrink-0 text-slate-400" />
-                    )}
-                    <span>{o.text}</span>
-                  </li>
-                ))}
-              </ul>
-              {f.erklaerung && (
-                <p className="mt-3 rounded border-l-2 border-emerald-400 bg-emerald-50/50 px-3 py-2 text-xs text-emerald-900">
-                  <span className="font-medium">Erklärung:</span> {f.erklaerung}
-                </p>
-              )}
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      {data.quiz_modus === "quiz" && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">
+              Quiz-Pool ({data.fragen.length} Fragen)
+            </CardTitle>
+            <CardDescription>
+              {data.ist_standardkatalog
+                ? "Single-Choice. Korrekte Antwort grün markiert (interne Sicht — Mitarbeitende sehen die Markierung im Quiz NICHT)."
+                : "Fragen manuell anlegen oder vom LLM aus den Modul-Texten vorschlagen lassen. Vorschläge müssen einzeln bestätigt werden (RDG-Layer-3)."}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <QuizEditor
+              kursId={data.id}
+              fragen={data.fragen}
+              readonly={data.ist_standardkatalog}
+            />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

@@ -19,7 +19,7 @@ from datetime import date
 from typing import ClassVar
 
 from dateutil.relativedelta import relativedelta
-from django.db import transaction
+from django.db import models, transaction
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -40,6 +40,7 @@ from integrations.mailjet.client import send_schulung_invite
 from .models import (
     AntwortOption,
     Frage,
+    FrageVorschlag,
     Kurs,
     KursAsset,
     KursModul,
@@ -55,6 +56,7 @@ from .serializers import (
     AntwortOptionSerializer,
     FragePublicSerializer,
     FrageSerializer,
+    FrageVorschlagSerializer,
     KursAssetSerializer,
     KursDetailSerializer,
     KursModulSerializer,
@@ -247,9 +249,137 @@ class KursAssetViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class FrageViewSet(viewsets.ModelViewSet):
-    queryset = Frage.objects.all().prefetch_related("optionen")
+    queryset = Frage.objects.all().prefetch_related("optionen").select_related("kurs")
     serializer_class = FrageSerializer
     permission_classes: ClassVar = [KursPermission]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        kurs_id = self.request.query_params.get("kurs")
+        if kurs_id:
+            qs = qs.filter(kurs_id=kurs_id)
+        return qs
+
+    def _check_owner(self, kurs: Kurs) -> None:
+        from rest_framework.exceptions import PermissionDenied
+        if kurs.ist_standardkatalog:
+            raise PermissionDenied("Standard-Katalog-Kurse koennen nicht editiert werden.")
+
+    def perform_create(self, serializer):
+        self._check_owner(serializer.validated_data["kurs"])
+        serializer.save()
+
+    def perform_update(self, serializer):
+        self._check_owner(serializer.instance.kurs)
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        self._check_owner(instance.kurs)
+        instance.delete()
+
+
+class FrageVorschlagViewSet(viewsets.ReadOnlyModelViewSet):
+    """Read + akzeptieren/verwerfen/generieren via actions. Kein direkter Edit
+    (Vorschlag ist immutable — User editiert beim Akzeptieren via Body)."""
+
+    queryset = FrageVorschlag.objects.all().select_related("kurs", "erstellt_von")
+    serializer_class = FrageVorschlagSerializer
+    permission_classes: ClassVar = [KursPermission]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        kurs_id = self.request.query_params.get("kurs")
+        if kurs_id:
+            qs = qs.filter(kurs_id=kurs_id)
+        st = self.request.query_params.get("status")
+        if st:
+            qs = qs.filter(status=st)
+        return qs
+
+    def _check_owner(self, kurs: Kurs) -> None:
+        from rest_framework.exceptions import PermissionDenied
+        if kurs.ist_standardkatalog:
+            raise PermissionDenied("Standard-Katalog erlaubt keine Vorschlaege.")
+
+    @action(detail=False, methods=["post"], url_path="generieren")
+    def generieren(self, request):
+        """Body: {kurs: <id>, anzahl?: 10}. Dispatched Celery-Task."""
+        from rest_framework.exceptions import ValidationError
+
+        from .tasks import generiere_fragen_vorschlaege
+
+        kurs_id = request.data.get("kurs")
+        anzahl = int(request.data.get("anzahl", 10))
+        if not kurs_id:
+            raise ValidationError("kurs ist Pflicht.")
+        kurs = get_object_or_404(Kurs, pk=kurs_id)
+        self._check_owner(kurs)
+        from django.db import connection
+
+        try:
+            generiere_fragen_vorschlaege.delay(
+                connection.schema_name, kurs.pk, request.user.pk, anzahl,
+            )
+        except Exception as exc:  # noqa: BLE001
+            import logging
+            logging.getLogger(__name__).warning("generieren dispatch failed: %s", exc)
+            raise ValidationError(f"Konnte Task nicht starten: {exc}")
+        return Response({"queued": True, "kurs": kurs.pk, "anzahl": anzahl}, status=202)
+
+    @action(detail=True, methods=["post"], url_path="akzeptieren")
+    def akzeptieren(self, request, pk=None):
+        """Body optional: {text, erklaerung, optionen} fuer User-Edits vor Promotion."""
+        from rest_framework.exceptions import ValidationError as DrfVal
+
+        vorschlag: FrageVorschlag = self.get_object()
+        self._check_owner(vorschlag.kurs)
+        if vorschlag.status != FrageVorschlag.Status.OFFEN:
+            raise DrfVal("Vorschlag ist nicht mehr offen.")
+
+        text = request.data.get("text", vorschlag.text)
+        erklaerung = request.data.get("erklaerung", vorschlag.erklaerung)
+        optionen = request.data.get("optionen", vorschlag.optionen)
+        if not isinstance(optionen, list) or len(optionen) < 2:
+            raise DrfVal("optionen muss eine Liste mit >=2 Eintraegen sein.")
+        if sum(1 for o in optionen if o.get("ist_korrekt")) != 1:
+            raise DrfVal("Genau eine Option muss korrekt markiert sein.")
+
+        with transaction.atomic():
+            max_order = vorschlag.kurs.fragen.aggregate(
+                m=models.Max("reihenfolge")
+            )["m"] or 0
+            frage = Frage.objects.create(
+                kurs=vorschlag.kurs,
+                text=text,
+                erklaerung=erklaerung,
+                reihenfolge=max_order + 1,
+            )
+            for idx, o in enumerate(optionen):
+                AntwortOption.objects.create(
+                    frage=frage,
+                    text=o["text"],
+                    ist_korrekt=bool(o.get("ist_korrekt")),
+                    reihenfolge=o.get("reihenfolge", idx),
+                )
+            vorschlag.status = FrageVorschlag.Status.AKZEPTIERT
+            vorschlag.entschieden_am = timezone.now()
+            vorschlag.entschieden_von = request.user
+            vorschlag.akzeptiert_als = frage
+            vorschlag.save()
+        return Response(FrageVorschlagSerializer(vorschlag).data)
+
+    @action(detail=True, methods=["post"], url_path="verwerfen")
+    def verwerfen(self, request, pk=None):
+        vorschlag: FrageVorschlag = self.get_object()
+        self._check_owner(vorschlag.kurs)
+        if vorschlag.status != FrageVorschlag.Status.OFFEN:
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError("Vorschlag ist nicht mehr offen.")
+        vorschlag.status = FrageVorschlag.Status.VERWORFEN
+        vorschlag.entschieden_am = timezone.now()
+        vorschlag.entschieden_von = request.user
+        vorschlag.save()
+        return Response(FrageVorschlagSerializer(vorschlag).data)
 
 
 class AntwortOptionViewSet(viewsets.ModelViewSet):

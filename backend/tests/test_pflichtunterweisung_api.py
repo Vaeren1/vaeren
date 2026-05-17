@@ -1172,3 +1172,148 @@ def test_video_upload_creates_asset(tenant_setup):
     assert resp.status_code == 201, resp.content
     assert resp.json()["original_mime"] == "video/mp4"
     m.assert_called_once()
+
+
+# --- Slice 3: Frage-CRUD + Vorschlag-Pipeline --------------------------
+
+
+def test_frage_create_with_optionen_nested(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+    resp = client.post(
+        "/api/fragen/",
+        {
+            "kurs": kurs.pk,
+            "text": "Welche Aussage ist korrekt?",
+            "erklaerung": "Antwort A ist korrekt, weil...",
+            "reihenfolge": 0,
+            "optionen": [
+                {"text": "A", "ist_korrekt": True, "reihenfolge": 0},
+                {"text": "B", "ist_korrekt": False, "reihenfolge": 1},
+                {"text": "C", "ist_korrekt": False, "reihenfolge": 2},
+                {"text": "D", "ist_korrekt": False, "reihenfolge": 3},
+            ],
+        },
+        content_type="application/json",
+    )
+    assert resp.status_code == 201, resp.content
+    assert len(resp.json()["optionen"]) == 4
+
+
+def test_frage_create_rejects_zero_korrekt(tenant_setup):
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+    resp = client.post(
+        "/api/fragen/",
+        {
+            "kurs": kurs.pk,
+            "text": "Test",
+            "reihenfolge": 0,
+            "optionen": [
+                {"text": "A", "ist_korrekt": False},
+                {"text": "B", "ist_korrekt": False},
+            ],
+        },
+        content_type="application/json",
+    )
+    assert resp.status_code == 400
+
+
+def test_frage_create_blocked_for_standardkatalog(tenant_setup):
+    tenant, domain = tenant_setup
+    client, _ = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant="")
+    resp = client.post(
+        "/api/fragen/",
+        {
+            "kurs": kurs.pk, "text": "x", "reihenfolge": 0,
+            "optionen": [
+                {"text": "A", "ist_korrekt": True}, {"text": "B", "ist_korrekt": False}
+            ],
+        },
+        content_type="application/json",
+    )
+    assert resp.status_code == 403
+
+
+def test_vorschlag_generieren_dispatches_celery(tenant_setup):
+    from unittest.mock import patch
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+    with patch("pflichtunterweisung.tasks.generiere_fragen_vorschlaege.delay") as m:
+        resp = client.post(
+            "/api/fragen-vorschlaege/generieren/",
+            {"kurs": kurs.pk, "anzahl": 5},
+            content_type="application/json",
+        )
+    assert resp.status_code == 202, resp.content
+    m.assert_called_once()
+
+
+def test_vorschlag_akzeptieren_creates_frage(tenant_setup):
+    from pflichtunterweisung.models import FrageVorschlag
+
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+        v = FrageVorschlag.objects.create(
+            kurs=kurs,
+            text="Welche Massnahme ist korrekt?",
+            erklaerung="A ist korrekt.",
+            optionen=[
+                {"text": "A", "ist_korrekt": True},
+                {"text": "B", "ist_korrekt": False},
+                {"text": "C", "ist_korrekt": False},
+                {"text": "D", "ist_korrekt": False},
+            ],
+            erstellt_von=user,
+            llm_modell="test",
+            llm_prompt_hash="x" * 64,
+        )
+    resp = client.post(f"/api/fragen-vorschlaege/{v.pk}/akzeptieren/")
+    assert resp.status_code == 200, resp.content
+    with schema_context(tenant.schema_name):
+        v.refresh_from_db()
+        assert v.status == "akzeptiert"
+        assert v.akzeptiert_als is not None
+        assert v.akzeptiert_als.optionen.count() == 4
+        assert v.akzeptiert_als.optionen.filter(ist_korrekt=True).count() == 1
+
+
+def test_vorschlag_verwerfen_sets_status(tenant_setup):
+    from pflichtunterweisung.models import FrageVorschlag
+
+    tenant, domain = tenant_setup
+    client, user = _qm_client(tenant, domain)
+    with schema_context(tenant.schema_name):
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+        v = FrageVorschlag.objects.create(
+            kurs=kurs, text="x", optionen=[{"text": "A", "ist_korrekt": True}],
+            erstellt_von=user, llm_modell="t", llm_prompt_hash="x" * 64,
+        )
+    resp = client.post(f"/api/fragen-vorschlaege/{v.pk}/verwerfen/")
+    assert resp.status_code == 200
+    with schema_context(tenant.schema_name):
+        v.refresh_from_db()
+        assert v.status == "verworfen"
+
+
+def test_generiere_task_returns_error_on_empty_material(tenant_setup):
+    """Unit-Test ohne LLM-Mock: leeres Material → status=error."""
+    from pflichtunterweisung.tasks import generiere_fragen_vorschlaege
+
+    tenant, _ = tenant_setup
+    with schema_context(tenant.schema_name):
+        user = UserFactory(email="bot@x.de", tenant_role=TenantRole.QM_LEITER)
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+    result = generiere_fragen_vorschlaege(tenant.schema_name, kurs.pk, user.pk, 5)
+    assert result["status"] == "error"
+    assert "Lehrtext" in result["reason"]

@@ -166,6 +166,146 @@ export function useDeleteModul() {
   });
 }
 
+// --- Frage (Quiz-Pool) -------------------------------------------------
+
+export interface AntwortOptionInput {
+  text: string;
+  ist_korrekt: boolean;
+  reihenfolge?: number;
+}
+
+export interface FrageInput {
+  kurs: number;
+  text: string;
+  erklaerung: string;
+  reihenfolge: number;
+  optionen: AntwortOptionInput[];
+}
+
+export function useCreateFrage() {
+  const qc = useQueryClient();
+  return useMutation<Frage, ApiError, FrageInput>({
+    mutationFn: (payload) =>
+      api<Frage>("/api/fragen/", { method: "POST", json: payload }),
+    onSuccess: (_d, v) => qc.invalidateQueries({ queryKey: ["kurs", v.kurs] }),
+  });
+}
+
+export function useUpdateFrage() {
+  const qc = useQueryClient();
+  return useMutation<
+    Frage,
+    ApiError,
+    { id: number; payload: FrageInput }
+  >({
+    mutationFn: ({ id, payload }) =>
+      api<Frage>(`/api/fragen/${id}/`, { method: "PATCH", json: payload }),
+    onSuccess: (_d, v) =>
+      qc.invalidateQueries({ queryKey: ["kurs", v.payload.kurs] }),
+  });
+}
+
+export function useDeleteFrage() {
+  const qc = useQueryClient();
+  return useMutation<void, ApiError, { id: number; kursId: number }>({
+    mutationFn: ({ id }) =>
+      api<void>(`/api/fragen/${id}/`, { method: "DELETE" }),
+    onSuccess: (_d, v) => qc.invalidateQueries({ queryKey: ["kurs", v.kursId] }),
+  });
+}
+
+// --- FrageVorschlag (LLM) ---------------------------------------------
+
+export type VorschlagStatus = "offen" | "akzeptiert" | "verworfen";
+
+export interface FrageVorschlag {
+  id: number;
+  kurs: number;
+  text: string;
+  erklaerung: string;
+  optionen: { text: string; ist_korrekt: boolean }[];
+  quell_module: number[];
+  erstellt_am: string;
+  erstellt_von: number;
+  llm_modell: string;
+  llm_prompt_hash: string;
+  status: VorschlagStatus;
+  entschieden_am: string | null;
+  entschieden_von: number | null;
+  akzeptiert_als: number | null;
+}
+
+export function useVorschlaege(kursId: number) {
+  return useQuery<{ results: FrageVorschlag[] } | FrageVorschlag[], ApiError>({
+    queryKey: ["vorschlaege", kursId],
+    queryFn: () =>
+      api<{ results: FrageVorschlag[] }>(
+        `/api/fragen-vorschlaege/?kurs=${kursId}`,
+      ),
+    refetchInterval: 5000, // Poll während Celery-Task läuft
+  });
+}
+
+export function useGenerateVorschlaege() {
+  const qc = useQueryClient();
+  return useMutation<
+    { queued: boolean; kurs: number; anzahl: number },
+    ApiError,
+    { kurs: number; anzahl?: number }
+  >({
+    mutationFn: (payload) =>
+      api("/api/fragen-vorschlaege/generieren/", {
+        method: "POST",
+        json: payload,
+      }),
+    onSuccess: (_d, v) =>
+      qc.invalidateQueries({ queryKey: ["vorschlaege", v.kurs] }),
+  });
+}
+
+export function useAkzeptiereVorschlag() {
+  const qc = useQueryClient();
+  return useMutation<
+    FrageVorschlag,
+    ApiError,
+    {
+      id: number;
+      kursId: number;
+      payload?: {
+        text?: string;
+        erklaerung?: string;
+        optionen?: { text: string; ist_korrekt: boolean }[];
+      };
+    }
+  >({
+    mutationFn: ({ id, payload }) =>
+      api<FrageVorschlag>(`/api/fragen-vorschlaege/${id}/akzeptieren/`, {
+        method: "POST",
+        json: payload ?? {},
+      }),
+    onSuccess: (_d, v) => {
+      qc.invalidateQueries({ queryKey: ["vorschlaege", v.kursId] });
+      qc.invalidateQueries({ queryKey: ["kurs", v.kursId] });
+    },
+  });
+}
+
+export function useVerwerfeVorschlag() {
+  const qc = useQueryClient();
+  return useMutation<
+    FrageVorschlag,
+    ApiError,
+    { id: number; kursId: number }
+  >({
+    mutationFn: ({ id }) =>
+      api<FrageVorschlag>(`/api/fragen-vorschlaege/${id}/verwerfen/`, {
+        method: "POST",
+      }),
+    onSuccess: (_d, v) =>
+      qc.invalidateQueries({ queryKey: ["vorschlaege", v.kursId] }),
+  });
+}
+
 export function useReorderModule() {
   const qc = useQueryClient();
   return useMutation<

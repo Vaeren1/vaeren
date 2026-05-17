@@ -31,6 +31,7 @@ dependencies = [
     "httpx>=0.28.1",
     "responses>=0.26.0",
     "pillow>=11.0",
+    "pypdf>=5.0",
 ]
 
 [tool.ruff]

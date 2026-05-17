@@ -7,6 +7,7 @@ from rest_framework import serializers
 from .models import (
     AntwortOption,
     Frage,
+    FrageVorschlag,
     Kurs,
     KursAsset,
     KursModul,
@@ -64,12 +65,73 @@ class AntwortOptionPublicSerializer(serializers.ModelSerializer):
         fields = ("id", "text", "reihenfolge")
 
 
+class _AntwortOptionNestedSerializer(serializers.ModelSerializer):
+    """Nested-Write-Variante: frage wird vom Parent gesetzt, nicht vom Body."""
+
+    class Meta:
+        model = AntwortOption
+        fields = ("id", "text", "ist_korrekt", "reihenfolge")
+
+
 class FrageSerializer(serializers.ModelSerializer):
-    optionen = AntwortOptionSerializer(many=True, read_only=True)
+    optionen = _AntwortOptionNestedSerializer(many=True)
 
     class Meta:
         model = Frage
         fields = ("id", "kurs", "text", "erklaerung", "reihenfolge", "optionen")
+
+    def validate_optionen(self, value):
+        if not value or len(value) < 2:
+            raise serializers.ValidationError("Mindestens 2 Antwort-Optionen.")
+        if len(value) > 6:
+            raise serializers.ValidationError("Maximal 6 Antwort-Optionen.")
+        correct = sum(1 for o in value if o.get("ist_korrekt"))
+        if correct != 1:
+            raise serializers.ValidationError("Genau eine Option muss als korrekt markiert sein.")
+        return value
+
+    def create(self, validated_data):
+        optionen = validated_data.pop("optionen", [])
+        frage = Frage.objects.create(**validated_data)
+        for idx, o in enumerate(optionen):
+            AntwortOption.objects.create(
+                frage=frage,
+                text=o["text"],
+                ist_korrekt=o.get("ist_korrekt", False),
+                reihenfolge=o.get("reihenfolge", idx),
+            )
+        return frage
+
+    def update(self, instance, validated_data):
+        optionen = validated_data.pop("optionen", None)
+        for f, v in validated_data.items():
+            setattr(instance, f, v)
+        instance.save()
+        if optionen is not None:
+            instance.optionen.all().delete()
+            for idx, o in enumerate(optionen):
+                AntwortOption.objects.create(
+                    frage=instance,
+                    text=o["text"],
+                    ist_korrekt=o.get("ist_korrekt", False),
+                    reihenfolge=o.get("reihenfolge", idx),
+                )
+        return instance
+
+
+class FrageVorschlagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FrageVorschlag
+        fields = (
+            "id", "kurs", "text", "erklaerung", "optionen",
+            "quell_module", "erstellt_am", "erstellt_von",
+            "llm_modell", "llm_prompt_hash",
+            "status", "entschieden_am", "entschieden_von", "akzeptiert_als",
+        )
+        read_only_fields = (
+            "erstellt_am", "erstellt_von", "llm_modell", "llm_prompt_hash",
+            "status", "entschieden_am", "entschieden_von", "akzeptiert_als",
+        )
 
 
 class FragePublicSerializer(serializers.ModelSerializer):
