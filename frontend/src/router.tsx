@@ -11,6 +11,44 @@ import { KIInventarListPage } from "@/routes/ki-inventar";
 import { KIToolDetailPage } from "@/routes/ki-tool-detail";
 import { KIToolFormPage } from "@/routes/ki-tool-form";
 import { NIS2Page } from "@/routes/nis2";
+import { lazy, Suspense } from "react";
+
+const ArbeitsschutzDashboardPage = lazy(() =>
+  import("@/routes/arbeitsschutz/Dashboard").then((m) => ({
+    default: m.ArbeitsschutzDashboardPage,
+  })),
+);
+const StrukturPage = lazy(() =>
+  import("@/routes/arbeitsschutz/Struktur").then((m) => ({ default: m.StrukturPage })),
+);
+const GbuListPage = lazy(() =>
+  import("@/routes/arbeitsschutz/GbuList").then((m) => ({ default: m.GbuListPage })),
+);
+const MassnahmenBoardPage = lazy(() =>
+  import("@/routes/arbeitsschutz/MassnahmenBoard").then((m) => ({
+    default: m.MassnahmenBoardPage,
+  })),
+);
+const AsaCalendarPage = lazy(() =>
+  import("@/routes/arbeitsschutz/AsaCalendar").then((m) => ({ default: m.AsaCalendarPage })),
+);
+const UnfallListPage = lazy(() =>
+  import("@/routes/arbeitsschutz/UnfallList").then((m) => ({ default: m.UnfallListPage })),
+);
+const BeauftragteRegisterPage = lazy(() =>
+  import("@/routes/arbeitsschutz/BeauftragteRegister").then((m) => ({
+    default: m.BeauftragteRegisterPage,
+  })),
+);
+const BetriebsanweisungBibliothekPage = lazy(() =>
+  import("@/routes/arbeitsschutz/BetriebsanweisungBibliothek").then((m) => ({
+    default: m.BetriebsanweisungBibliothekPage,
+  })),
+);
+
+function Lazy({ children }: { children: React.ReactNode }) {
+  return <Suspense fallback={<p>Lade…</p>}>{children}</Suspense>;
+}
 import { KursDetailPage } from "@/routes/kurs-detail";
 import { KursFormPage } from "@/routes/kurs-form";
 import { KurseListPage } from "@/routes/kurse";
@@ -72,6 +110,14 @@ export const router = createBrowserRouter([
       { path: "/ki-inventar/:id", element: <KIToolDetailPage /> },
       { path: "/avv", element: <AVVListPage /> },
       { path: "/nis2", element: <NIS2Page /> },
+      { path: "/arbeitsschutz", element: <Lazy><ArbeitsschutzDashboardPage /></Lazy> },
+      { path: "/arbeitsschutz/struktur", element: <Lazy><StrukturPage /></Lazy> },
+      { path: "/arbeitsschutz/gbu", element: <Lazy><GbuListPage /></Lazy> },
+      { path: "/arbeitsschutz/massnahmen", element: <Lazy><MassnahmenBoardPage /></Lazy> },
+      { path: "/arbeitsschutz/asa", element: <Lazy><AsaCalendarPage /></Lazy> },
+      { path: "/arbeitsschutz/unfaelle", element: <Lazy><UnfallListPage /></Lazy> },
+      { path: "/arbeitsschutz/beauftragte", element: <Lazy><BeauftragteRegisterPage /></Lazy> },
+      { path: "/arbeitsschutz/betriebsanweisungen", element: <Lazy><BetriebsanweisungBibliothekPage /></Lazy> },
       { path: "/redaktion", element: <RedaktionPage /> },
       { path: "/settings", element: <SettingsPage /> },
       { path: "/mfa-setup", element: <MfaSetupPage /> },

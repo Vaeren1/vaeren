@@ -102,3 +102,14 @@ rules.add_rule("can_edit_transparenzregister", is_geschaeftsfuehrer)
 
 rules.add_rule("can_view_nis2", _read_all_but_view_only | is_view_only)
 rules.add_rule("can_edit_nis2", _compliance_write | is_it_leiter)
+
+# --- Phase 3: Arbeitsschutz --------------------------------------------------
+# Read für alle berechtigten + View-Only. Write für GF/QM/Compliance.
+# Unfall-Detail (Klarname + Verletzungsart) ist sensibler — eigene Regeln.
+rules.add_rule("can_view_arbeitsschutz", _read_all_but_view_only | is_view_only)
+rules.add_rule("can_edit_arbeitsschutz", _compliance_write)
+rules.add_rule(
+    "can_view_arbeitsunfall_detail",
+    is_geschaeftsfuehrer | is_qm_leiter | is_compliance_beauftragter,
+)
+rules.add_rule("can_edit_arbeitsunfall", _compliance_write)

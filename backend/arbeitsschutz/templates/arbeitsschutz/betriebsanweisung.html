@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Betriebsanweisung: {{ ba.titel }}</title>
+  <style>
+    body { font-family: "Helvetica", Arial, sans-serif; font-size: 11pt; margin: 2cm; }
+    h1 { font-size: 18pt; color: #1f3a5f; }
+    h2 { font-size: 13pt; color: #1f3a5f; border-bottom: 1px solid #1f3a5f; }
+    .meta { color: #555; font-size: 9pt; margin-bottom: 1cm; }
+    .content { white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Betriebsanweisung: {{ ba.titel }}</h1>
+  <div class="meta">
+    Version {{ version.version }} &mdash; erstellt {{ version.erstellt_am|date:"d.m.Y" }}
+    {% if version.freigegeben_am %} &mdash; freigegeben {{ version.freigegeben_am|date:"d.m.Y" }}{% endif %}
+  </div>
+  <div class="content">{{ version.inhalt_md|safe }}</div>
+</body>
+</html>
