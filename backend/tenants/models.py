@@ -69,6 +69,16 @@ class Tenant(TenantMixin):
             " in Settings. Plan-2-Feature-Flag."
         ),
     )
+    audit_signing_key = models.BinaryField(
+        editable=False,
+        default=b"",
+        help_text=(
+            "HMAC-SHA256-Schlüssel für Audit-Export-Manifeste (Phase 3). Auto-generiert"
+            " in save(). Strikt getrennt vom HinSchG-encryption_key — Rotation hier ist"
+            " erlaubt (alte Mappen behalten ihre Signatur, neue werden mit neuem Key"
+            " signiert)."
+        ),
+    )
 
     auto_create_schema = True
     # PROD-Risiko: löscht das gesamte Postgres-Schema bei Tenant.delete().
@@ -78,6 +88,8 @@ class Tenant(TenantMixin):
     def save(self, *args, **kwargs):
         if not self.encryption_key:
             self.encryption_key = Fernet.generate_key()
+        if not self.audit_signing_key:
+            self.audit_signing_key = secrets.token_bytes(32)
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
@@ -128,6 +140,33 @@ class DemoRequest(models.Model):
 
     def __str__(self) -> str:
         return f"{self.firma} ({self.email}) — {self.erstellt_am:%Y-%m-%d}"
+
+
+class AuditExportRunIndex(models.Model):
+    """Public-Schema-Spiegel für Audit-Export-Verify-Endpoint (Phase 3).
+
+    Wird per Signal vom Tenant-Schema-internen `AuditExportRun.save()` befüllt,
+    sobald `status=DONE`. Enthält KEINE PII — nur Tenant-Schema-Name + Hash.
+
+    Verify-Endpoint (`/api/verify/`) lookt darin auf und bestätigt Authentizität
+    einer Audit-Mappe gegenüber externen Auditoren.
+    """
+
+    mappe_id = models.CharField(max_length=30, unique=True, db_index=True)
+    tenant_schema = models.CharField(max_length=63, db_index=True)
+    file_hash_sha256 = models.CharField(max_length=64, db_index=True)
+    pdf_hash_sha256 = models.CharField(max_length=64, blank=True, default="")
+    norm_scope = models.JSONField(default=list)
+    generated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("-generated_at",)
+        verbose_name = "Audit-Export-Run-Index"
+        verbose_name_plural = "Audit-Export-Run-Indizes"
+
+    def __str__(self) -> str:
+        return f"{self.mappe_id} → {self.tenant_schema}"
 
 
 class OnboardingStatus(models.TextChoices):

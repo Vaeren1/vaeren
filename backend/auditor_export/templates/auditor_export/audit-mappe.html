@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Audit-Mappe {{ run.mappe_id }}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 2cm 1.8cm 2cm 1.8cm;
+      @bottom-left {
+        content: "Vaeren — Audit-Mappe {{ run.mappe_id }}";
+        font-size: 8pt;
+        color: #6b7280;
+      }
+      @bottom-right {
+        content: "Seite " counter(page) " / " counter(pages);
+        font-size: 8pt;
+        color: #6b7280;
+      }
+    }
+
+    body {
+      font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.5;
+      color: #0f172a;
+    }
+
+    h1 { font-size: 22pt; color: #064e3b; margin-top: 0; }
+    h2 { font-size: 16pt; color: #065f46; border-bottom: 2px solid #d1fae5; padding-bottom: 4px; margin-top: 24px; }
+    h3 { font-size: 12pt; color: #047857; margin-top: 16px; }
+
+    .cover {
+      page-break-after: always;
+      padding-top: 8cm;
+    }
+    .cover .mappe-id {
+      font-family: monospace;
+      font-size: 14pt;
+      color: #065f46;
+      letter-spacing: 0.05em;
+    }
+    .cover .firma {
+      font-size: 28pt;
+      font-weight: 600;
+      margin: 0.4em 0;
+    }
+    .cover .meta {
+      margin-top: 2em;
+      color: #4b5563;
+      font-size: 11pt;
+    }
+    .cover .meta table { border: none; }
+    .cover .meta td { border: none; padding: 2px 0; }
+    .cover .meta td:first-child { color: #6b7280; padding-right: 12px; }
+
+    .rdg-block {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 12px 16px;
+      margin: 16px 0 24px 0;
+      font-size: 9.5pt;
+      color: #78350f;
+    }
+
+    .section { page-break-before: always; }
+
+    table.records {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 16px 0;
+      font-size: 9.5pt;
+    }
+    table.records th, table.records td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    table.records th {
+      background: #ecfdf5;
+      color: #064e3b;
+      font-weight: 600;
+    }
+    table.records td.status-erledigt { color: #065f46; }
+    table.records td.status-offen { color: #b45309; }
+
+    .toc {
+      page-break-after: always;
+    }
+    .toc ol { padding-left: 1.4em; }
+    .toc li { margin: 0.2em 0; }
+
+    .signature-block {
+      margin-top: 32px;
+      padding: 16px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      font-size: 9.5pt;
+      font-family: monospace;
+    }
+    .signature-block .label { color: #6b7280; }
+    .signature-block .value { color: #0f172a; word-break: break-all; }
+
+    {% if watermark %}
+    body::before {
+      content: "ENTWURF — NICHT FÜR EXTERNE WEITERGABE";
+      position: fixed;
+      top: 40%;
+      left: 5%;
+      width: 90%;
+      text-align: center;
+      transform: rotate(-30deg);
+      font-size: 60pt;
+      color: rgba(239, 68, 68, 0.18);
+      z-index: -1;
+      pointer-events: none;
+    }
+    {% endif %}
+  </style>
+</head>
+<body>
+
+<!-- ========== Deckblatt ========== -->
+<div class="cover">
+  <div class="mappe-id">{{ run.mappe_id }}</div>
+  <div class="firma">{{ tenant_firma|default:tenant_schema }}</div>
+  <h1>Audit-Beweismappe</h1>
+  <div class="meta">
+    <table>
+      <tr><td>Norm-Scope:</td><td>
+        {% for scope in norm_scope %}{{ scope }}{% if not forloop.last %}, {% endif %}{% endfor %}
+      </td></tr>
+      <tr><td>Zeitraum:</td><td>{{ zeitraum_von|date:"d.m.Y" }} – {{ zeitraum_bis|date:"d.m.Y" }}</td></tr>
+      <tr><td>Generiert am:</td><td>{{ generated_at|date:"d.m.Y H:i" }} UTC</td></tr>
+      <tr><td>Belege gesamt:</td><td>{{ total_records }}</td></tr>
+      <tr><td>Verifikation:</td><td>{{ verify_url }}</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ========== Inhaltsverzeichnis ========== -->
+<div class="toc">
+  <h1>Inhaltsverzeichnis</h1>
+  <ol>
+    <li>Geltungsbereich und Hinweise</li>
+    <li>Coverage-Übersicht</li>
+    {% for slug, records in groups %}
+      <li>Norm-Bereich: {{ slug }} ({{ records|length }} Belege)</li>
+    {% endfor %}
+    <li>Audit-Log-Auszug (Hash-Chain)</li>
+    <li>Signatur und Verifikation</li>
+  </ol>
+</div>
+
+<!-- ========== Geltungsbereich + RDG-Hinweis ========== -->
+<section class="section">
+  <h1>1. Geltungsbereich und Hinweise</h1>
+  <p><strong>Mappe-ID:</strong> {{ run.mappe_id }}<br/>
+     <strong>Tenant:</strong> {{ tenant_schema }}<br/>
+     <strong>Firma:</strong> {{ tenant_firma|default:tenant_schema }}<br/>
+     <strong>Zeitraum:</strong> {{ zeitraum_von|date:"d.m.Y" }} – {{ zeitraum_bis|date:"d.m.Y" }}<br/>
+     <strong>Generiert:</strong> {{ generated_at|date:"d.m.Y H:i" }} UTC</p>
+
+  <div class="rdg-block">
+    <strong>Hinweis (RDG):</strong> {{ rdg_disclaimer }}
+  </div>
+</section>
+
+<!-- ========== Coverage-Übersicht ========== -->
+<section class="section">
+  <h1>2. Coverage-Übersicht</h1>
+  <table class="records">
+    <thead>
+      <tr><th>Norm-Scope</th><th>Aggregator</th><th>Belege</th></tr>
+    </thead>
+    <tbody>
+      {% for slug, records in groups %}
+        <tr><td>{{ slug }}</td><td>{{ slug }}</td><td>{{ records|length }}</td></tr>
+      {% endfor %}
+      {% if not groups %}
+        <tr><td colspan="3"><em>Keine Belege im gewählten Zeitraum.</em></td></tr>
+      {% endif %}
+    </tbody>
+  </table>
+</section>
+
+<!-- ========== Norm-Bereiche ========== -->
+{% for slug, records in groups %}
+<section class="section">
+  <h1>3. Norm-Bereich: {{ slug }}</h1>
+  <p>{{ records|length }} Belege im Zeitraum.</p>
+
+  <table class="records">
+    <thead>
+      <tr>
+        <th>Record-ID</th>
+        <th>Titel</th>
+        <th>Status</th>
+        <th>Erstellt</th>
+        <th>Control-IDs</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td><code>{{ r.record_id }}</code></td>
+        <td>{{ r.titel }}</td>
+        <td class="status-{{ r.status }}">{{ r.status }}</td>
+        <td>{{ r.erstellt_am|date:"d.m.Y" }}</td>
+        <td>{% for cid in r.oscal_control_ids %}{{ cid }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endfor %}
+
+<!-- ========== Audit-Log-Hash-Chain ========== -->
+<section class="section">
+  <h1>4. Audit-Log-Auszug (Hash-Chain)</h1>
+  <p>Hash-Chain-Head für das Zeitfenster:</p>
+  <div class="signature-block">
+    <span class="label">SHA-256 Chain-Head:</span><br/>
+    <span class="value">{{ audit_log_chain_head|default:"(noch nicht berechnet)" }}</span>
+  </div>
+  <p style="font-size: 9pt; color: #6b7280;">
+    Der Hash-Chain-Head berechnet sich als
+    <code>chain_hash = SHA256(prev_chain_hash || sha256(entry_json))</code>
+    iterativ über alle AuditLog-Einträge im Zeitraum, sortiert nach Timestamp.
+    Audit-Tools können den Hash unabhängig rekonstruieren.
+  </p>
+</section>
+
+<!-- ========== Signatur ========== -->
+<section class="section">
+  <h1>5. Signatur und Verifikation</h1>
+  <p>Diese Mappe ist im ZIP-Bundle (<code>audit-mappe-{{ run.mappe_id }}.zip</code>)
+  mit einem HMAC-SHA256-Manifest signiert. Authentizität kann unter folgender URL
+  geprüft werden:</p>
+  <div class="signature-block">
+    <span class="label">Verify-URL:</span><br/>
+    <span class="value">{{ verify_url }}</span><br/><br/>
+    <span class="label">Bundle SHA-256:</span><br/>
+    <span class="value">{{ run.file_hash_sha256|default:"(wird nach Bundle-Erstellung gesetzt)" }}</span>
+  </div>
+
+  <h3>Anleitung für Auditor:innen</h3>
+  <ol>
+    <li>Bundle-ZIP herunterladen oder vom Tenant erhalten.</li>
+    <li>Auf <code>{{ verify_url }}</code> die SHA-256 des Bundles eingeben.</li>
+    <li>Bei Treffer bestätigt Vaeren: Tenant, Norm-Scope, Generierungs-Datum.</li>
+  </ol>
+</section>
+
+</body>
+</html>

@@ -1,6 +1,10 @@
 import { ProtectedRoute } from "@/components/auth/protected-route";
 import { SidebarShell } from "@/components/layout/sidebar-shell";
+import { AuditExportDashboard } from "@/routes/audit-export";
+import { AuditExportRunDetailPage } from "@/routes/audit-export-run-detail";
+import { AuditExportWizardPage } from "@/routes/audit-export-wizard";
 import { AuditLogPage } from "@/routes/audit-log";
+import { VerifyPage } from "@/routes/verify";
 import { AVVListPage } from "@/routes/auftragsverarbeitung";
 import { DashboardPage } from "@/routes/dashboard";
 import { DatenpanneDetailPage } from "@/routes/datenpanne-detail";
@@ -92,6 +96,7 @@ export const router = createBrowserRouter([
   { path: "/hinweise", element: <PublicHinweisePage /> },
   { path: "/hinweise/status/:token", element: <PublicHinweiseStatusPage /> },
   { path: "/onboarding/setup", element: <OnboardingSetupPage /> },
+  { path: "/verify", element: <VerifyPage /> },
   {
     element: (
       <ProtectedRoute>
@@ -116,6 +121,9 @@ export const router = createBrowserRouter([
       { path: "/meldungen", element: <MeldungenListPage /> },
       { path: "/meldungen/:id", element: <MeldungDetailPage /> },
       { path: "/audit", element: <AuditLogPage /> },
+      { path: "/audit-export", element: <AuditExportDashboard /> },
+      { path: "/audit-export/profil/neu", element: <AuditExportWizardPage /> },
+      { path: "/audit-export/runs/:id", element: <AuditExportRunDetailPage /> },
       { path: "/datenpannen", element: <DatenpannenListPage /> },
       { path: "/datenpannen/neu", element: <DatenpanneFormPage /> },
       { path: "/datenpannen/:id", element: <DatenpanneDetailPage /> },
