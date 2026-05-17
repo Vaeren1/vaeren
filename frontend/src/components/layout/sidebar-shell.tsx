@@ -62,6 +62,7 @@ const NAV: Array<{
   { to: "/ki-inventar", label: "KI-Inventar", icon: Cpu, group: "compliance" },
   { to: "/avv", label: "Auftragsverarbeitung", icon: FileCheck2, group: "compliance" },
   { to: "/nis2", label: "NIS2", icon: Network, group: "compliance" },
+  { to: "/iso27001", label: "ISO 27001", icon: ShieldCheck, group: "compliance" },
   { to: "/audit", label: "Audit-Log", icon: FileSearch, group: "compliance" },
   { to: "/mitarbeiter", label: "Mitarbeiter", icon: Users, group: "stamm" },
   { to: "/settings", label: "Einstellungen", icon: Settings, group: "stamm" },

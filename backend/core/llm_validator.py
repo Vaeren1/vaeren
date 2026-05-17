@@ -34,7 +34,26 @@ FORBIDDEN_PHRASES: tuple[str, ...] = (
 )
 
 
-_COMPILED = tuple(re.compile(p, re.IGNORECASE) for p in FORBIDDEN_PHRASES)
+# ISO-spezifische Verbote (Layer 2 für iso27001-LLM-Calls). Ergänzen die
+# generischen FORBIDDEN_PHRASES — Auditoren wollen KEINE
+# konformitätsbestätigende Sprache vom LLM.
+ISO_FORBIDDEN_PHRASES: tuple[str, ...] = (
+    r"\berfüllt\s+die\s+Norm\b",
+    r"\bist\s+konform\b",
+    r"\bentspricht\s+ISO\s*27001\b",
+    r"\bwir\s+bewerten\s+als\b",
+    r"\babschließende\s+Einstufung\b",
+    r"\brisikofrei\b",
+    r"\bvollständig\s+abgesichert\b",
+    r"\bist\s+zertifiziert\b",
+    r"\bgilt\s+als\s+konform\b",
+    r"\bstuft\s+sich\s+ein\b",
+)
+
+
+_COMPILED = tuple(
+    re.compile(p, re.IGNORECASE) for p in (FORBIDDEN_PHRASES + ISO_FORBIDDEN_PHRASES)
+)
 
 
 @dataclass(frozen=True)
