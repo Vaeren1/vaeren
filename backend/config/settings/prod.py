@@ -19,6 +19,9 @@ from .base import *
 DEBUG = False
 
 SECURE_SSL_REDIRECT = True
+# Caddy ruft den Cert-Ask-Endpoint via HTTP von intra-Container an —
+# kein Redirect zu HTTPS, weil Caddy nicht folgt.
+SECURE_REDIRECT_EXEMPT = [r"^api/internal/cert-allowed$"]
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
