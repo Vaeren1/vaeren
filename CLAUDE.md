@@ -2,7 +2,21 @@
 
 > **Für künftige Claude-Sessions:** Diese Datei enthält die wichtigsten Architektur- und Konventions-Entscheidungen für das ai-act-Projekt. Sie ist die schnelle Referenz; die tiefe Wahrheit liegt in den Specs unter `docs/superpowers/specs/`.
 
-## Stand 2026-05-10 — Vaeren ist live in Production
+## Stand 2026-05-17 — Phase 3 implementiert (lokal, noch nicht deployed)
+
+**Phase-3-Module fertig integriert** (4 parallele Subagent-Worktrees → sequenziell gemerged):
+- `iso27001/` — ISO-27001-Evidence-Sammler (93 Annex-A-Controls, RDG-3-Layer, SoA-PDF, Risk-Register, 39 Tests / 92% Coverage)
+- `iso42001/` + `iso42001_catalog/` — KI-Management-System nach ISO 42001 (38 Controls Public-Schema, AIIA-4-Augen, Policy-CRUD, Incident→Datenpanne-Eskalation, Module-Activation-Gate, 46 Tests / 85% Coverage)
+- `arbeitsschutz/` — GBU + ASA + Unfälle (verschlüsselt) + Beauftragte + Betriebsanweisungen (76 Gefährdungs-Seed, STOP-Hierarchie, Compliance-Score-Formel-Änderung auf 0.40/0.15/0.45, 34 Tests)
+- `auditor_export/` — OSCAL + PDF (WeasyPrint) + ZIP-Bundle mit HMAC-Signatur, 10 Aggregatoren, public Verify-Endpoint (44 Tests)
+
+**Tenant-Model erweitert:** `module_iso42001_aktiv` (BooleanField), `audit_signing_key` (BinaryField, HMAC-SHA256). Migrations `tenants/0005_iso42001` und `tenants/0006_audit_signing_key`.
+
+**Bekannter pre-existing Test-Break (NICHT durch Phase 3 verursacht):** `tests/test_redaktion_pipeline.py` mockt `redaktion.pipeline.curator.call_json` — wurde in Commit c6ff49a zu `call_json_with_fallback` umbenannt, Test-Mock blieb. Vor Phase 3 schon kaputt.
+
+**Deploy steht aus** (manuell via `./deploy.sh` von User). Vor Deploy: Migrations gegen Prod-DB testen (5 neue tenant-schema Migrations: iso27001/0001, iso27001/0002 seed, iso42001/0001, arbeitsschutz/0001, auditor_export/0001 + 2 tenants-Migrationen).
+
+## Stand 2026-05-10 — Vaeren ist live in Production (MVP)
 
 8 Sprints abgeschlossen, MVP deployed auf Hetzner CAX31, 5 Live-Domains:
 
