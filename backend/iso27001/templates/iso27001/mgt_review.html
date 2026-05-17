@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Management-Review {{ review.review_jahr }}</title>
+    <style>
+      @page { size: A4; margin: 2cm; }
+      body { font-family: "Helvetica", "Arial", sans-serif; color: #1a1a1a; font-size: 10pt; }
+      h1 { font-size: 18pt; margin: 0 0 0.5rem; }
+      h2 { font-size: 12pt; margin: 1.2rem 0 0.4rem; border-bottom: 1px solid #ccc; padding-bottom: 0.2rem; }
+      .disclaimer { background: #fff7ed; border: 1px solid #fed7aa; padding: 0.6rem; margin: 1rem 0; font-size: 8.5pt; }
+      pre { white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>Management-Review {{ review.review_jahr }}</h1>
+    <p>Durchgeführt am: {{ review.durchgefuehrt_am|date:"d.m.Y"|default:"(noch nicht durchgeführt)" }} · Status: {{ review.get_status_display }}</p>
+    <div class="disclaimer">
+      <strong>Hinweis:</strong> Vom Tenant verantwortet. Vaeren liefert nur das Erfassungs-Werkzeug.
+    </div>
+    <h2>Teilnehmer</h2>
+    <pre>{{ review.teilnehmer|default:"(keine erfasst)" }}</pre>
+    <h2>Inputs (ISO 9.3)</h2>
+    <p><strong>Audit-Ergebnisse:</strong></p><pre>{{ review.inputs_audit_ergebnisse }}</pre>
+    <p><strong>Findings-Status:</strong></p><pre>{{ review.inputs_findings_status }}</pre>
+    <p><strong>Risiko-Änderungen:</strong></p><pre>{{ review.inputs_risiko_aenderungen }}</pre>
+    <p><strong>ISMS-Performance:</strong></p><pre>{{ review.inputs_isms_performance }}</pre>
+    <h2>Outputs (ISO 9.3)</h2>
+    <p><strong>Verbesserungen:</strong></p><pre>{{ review.outputs_verbesserungen }}</pre>
+    <p><strong>Ressourcen-Bedarf:</strong></p><pre>{{ review.outputs_ressourcen_bedarf }}</pre>
+    <p><strong>Zielanpassungen:</strong></p><pre>{{ review.outputs_zielanpassungen }}</pre>
+    <h2>Beschluss</h2>
+    <p>Beschlossen von: {{ review.beschlossen_von|default:"—" }}</p>
+  </body>
+</html>

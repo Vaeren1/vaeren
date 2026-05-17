@@ -48,6 +48,7 @@ TENANT_APPS: list[str] = [
     "auftragsverarbeitung",
     "transparenzregister",
     "nis2",
+    "iso27001",
     "rest_framework",
     "drf_spectacular",
     "django_filters",

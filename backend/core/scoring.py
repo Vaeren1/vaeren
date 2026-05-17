@@ -133,6 +133,26 @@ def _module_score_hinschg() -> ModuleScore:
     )
 
 
+def _module_score_iso27001() -> ModuleScore:
+    """Delegiert an iso27001/scoring.py — Phase-3-Modul.
+
+    Lazy import vermeidet zirkuläre Imports beim Tenant-Migrations-Setup.
+    """
+    try:
+        from iso27001.scoring import module_score
+
+        return module_score()
+    except Exception:
+        # iso27001 ist evtl. nicht migriert → Neutralwert 100.
+        return ModuleScore(
+            modul="iso27001",
+            label="ISO 27001",
+            score=100,
+            level="green",
+            detail="Modul nicht aktiviert.",
+        )
+
+
 def calculate_compliance_score() -> ComplianceScore:
     """Berechnet Score für aktuell aktiven Tenant.
 
@@ -156,6 +176,7 @@ def calculate_compliance_score() -> ComplianceScore:
     modules = [
         _module_score_pflichtunterweisung(),
         _module_score_hinschg(),
+        _module_score_iso27001(),
     ]
     score_module_avg = round(sum(m.score for m in modules) / len(modules))
 

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Statement of Applicability — Version {{ version }}</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 2cm;
+      }
+      body {
+        font-family: "Helvetica", "Arial", sans-serif;
+        color: #1a1a1a;
+        font-size: 9pt;
+      }
+      h1 {
+        font-size: 18pt;
+        margin: 0 0 0.5rem;
+      }
+      h2 {
+        font-size: 12pt;
+        margin: 1.5rem 0 0.5rem;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 0.2rem;
+      }
+      .header {
+        border-bottom: 2px solid #1a1a1a;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+      }
+      .disclaimer {
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        padding: 0.6rem;
+        margin: 1rem 0;
+        font-size: 8.5pt;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 0.5rem;
+      }
+      th, td {
+        border: 1px solid #ddd;
+        padding: 4px 6px;
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        background: #f4f4f5;
+      }
+      .badge {
+        display: inline-block;
+        padding: 1px 6px;
+        border-radius: 3px;
+        font-size: 8pt;
+      }
+      .status-verifiziert { background: #d1fae5; color: #065f46; }
+      .status-umgesetzt   { background: #dbeafe; color: #1e3a8a; }
+      .status-geplant     { background: #fef9c3; color: #713f12; }
+      .status-nicht_bewertet { background: #f4f4f5; color: #374151; }
+      .status-nicht_anwendbar { background: #ffffff; color: #6b7280; border: 1px solid #d1d5db; }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Statement of Applicability</h1>
+      <p>ISO/IEC 27001:2022 · Version {{ version }} · Erstellt: {{ erstellt_am|date:"d.m.Y" }}</p>
+      <p><strong>Geltungsbereich:</strong> {{ geltungsbereich|default:"(noch nicht festgelegt)" }}</p>
+    </div>
+
+    <div class="disclaimer">
+      <strong>Hinweis:</strong> Dieses Dokument ist vom Tenant verantwortet.
+      Vaeren liefert das Erfassungs-Werkzeug — die rechtliche Bewertung obliegt
+      der/dem Compliance-Verantwortlichen sowie ggf. einer akkreditierten
+      Zertifizierungsstelle.
+    </div>
+
+    <h2>Annex-A-Controls ({{ controls|length }})</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Name</th>
+          <th>Kat.</th>
+          <th>Anwendbar</th>
+          <th>Status</th>
+          <th>Evidence-Anzahl</th>
+          <th>Begründung / Beschreibung</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in controls %}
+        <tr>
+          <td>{{ c.code }}</td>
+          <td>{{ c.name }}</td>
+          <td>{{ c.kategorie }}</td>
+          <td>{% if c.anwendbar %}Ja{% else %}Nein{% endif %}</td>
+          <td>
+            <span class="badge status-{{ c.status }}">{{ c.status_label }}</span>
+          </td>
+          <td>{{ c.evidence_count }}</td>
+          <td>
+            {% if not c.anwendbar %}
+              {{ c.nicht_anwendbar_begruendung|default:"(keine Begründung)" }}
+            {% else %}
+              {{ c.implementation_beschreibung|default:"(keine Beschreibung)"|truncatechars:200 }}
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

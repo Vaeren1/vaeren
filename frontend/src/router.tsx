@@ -11,6 +11,13 @@ import { KIInventarListPage } from "@/routes/ki-inventar";
 import { KIToolDetailPage } from "@/routes/ki-tool-detail";
 import { KIToolFormPage } from "@/routes/ki-tool-form";
 import { NIS2Page } from "@/routes/nis2";
+import { Iso27001Dashboard } from "@/routes/iso27001/Dashboard";
+import { Iso27001ControlList } from "@/routes/iso27001/ControlList";
+import { Iso27001ControlDetail } from "@/routes/iso27001/ControlDetail";
+import { Iso27001RiskRegister } from "@/routes/iso27001/RiskRegister";
+import { Iso27001SoaGenerator } from "@/routes/iso27001/SoaGenerator";
+import { Iso27001Audits } from "@/routes/iso27001/Audits";
+import { Iso27001ManagementReview } from "@/routes/iso27001/ManagementReview";
 import { KursDetailPage } from "@/routes/kurs-detail";
 import { KursFormPage } from "@/routes/kurs-form";
 import { KurseListPage } from "@/routes/kurse";
@@ -72,6 +79,13 @@ export const router = createBrowserRouter([
       { path: "/ki-inventar/:id", element: <KIToolDetailPage /> },
       { path: "/avv", element: <AVVListPage /> },
       { path: "/nis2", element: <NIS2Page /> },
+      { path: "/iso27001", element: <Iso27001Dashboard /> },
+      { path: "/iso27001/controls", element: <Iso27001ControlList /> },
+      { path: "/iso27001/controls/:code", element: <Iso27001ControlDetail /> },
+      { path: "/iso27001/risiken", element: <Iso27001RiskRegister /> },
+      { path: "/iso27001/soa", element: <Iso27001SoaGenerator /> },
+      { path: "/iso27001/audits", element: <Iso27001Audits /> },
+      { path: "/iso27001/management-review", element: <Iso27001ManagementReview /> },
       { path: "/redaktion", element: <RedaktionPage /> },
       { path: "/settings", element: <SettingsPage /> },
       { path: "/mfa-setup", element: <MfaSetupPage /> },
