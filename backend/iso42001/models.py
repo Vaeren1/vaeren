@@ -200,8 +200,13 @@ class AiSystemRegistration(models.Model):
 
     ki_tool = models.OneToOneField(
         "ki_inventar.KITool",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="aims_registrierung",
+        help_text=(
+            "PROTECT statt CASCADE: ISO-42001 Kap. 7.5 verlangt dokumentierte"
+            " Information auch nach Decommissioning. Decommission-Workflow muss"
+            " AiSystemRegistration explizit archivieren, bevor KITool löschbar ist."
+        ),
     )
     risiko_aims = models.CharField(
         max_length=20,

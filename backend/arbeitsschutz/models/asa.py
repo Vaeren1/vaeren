@@ -9,6 +9,7 @@ Arbeitssicherheit (FaSi), Betriebsrat.
 
 from __future__ import annotations
 
+import datetime
 from typing import ClassVar
 
 from django.db import models
@@ -30,7 +31,7 @@ class AsaKonfig(models.Model):
         default=2,
         help_text="0=Mo, 6=So. Für Quartals-Auto-Generierung.",
     )
-    default_uhrzeit = models.TimeField(default="10:00")
+    default_uhrzeit = models.TimeField(default=datetime.time(10, 0))
     aktiv = models.BooleanField(
         default=True,
         help_text="Ab 21 MA Pflicht. Tenant kann manuell deaktivieren bei <21 MA.",

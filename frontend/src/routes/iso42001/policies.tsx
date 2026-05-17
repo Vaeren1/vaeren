@@ -9,11 +9,13 @@ import {
   createPolicyFromTemplate,
   listPolicies,
   listPolicyTemplates,
+  policyKenntnisnahme,
   policyNewVersion,
   policyRatify,
   updatePolicy,
   type AiPolicy,
 } from "@/lib/api/iso42001";
+import { useMitarbeiterList } from "@/lib/api/mitarbeiter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -29,6 +31,9 @@ export function Iso42001PoliciesPage() {
     queryFn: listPolicyTemplates,
   });
   const [selected, setSelected] = useState<AiPolicy | null>(null);
+  const [kenntnisnahmePolicy, setKenntnisnahmePolicy] = useState<AiPolicy | null>(
+    null,
+  );
 
   const createFromTemplate = useMutation({
     mutationFn: createPolicyFromTemplate,
@@ -40,7 +45,7 @@ export function Iso42001PoliciesPage() {
   });
 
   const ratifyMut = useMutation({
-    mutationFn: policyRatify,
+    mutationFn: (id: number) => policyRatify(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["iso42001-policies"] });
       qc.invalidateQueries({ queryKey: ["iso42001-dashboard"] });
@@ -59,6 +64,20 @@ export function Iso42001PoliciesPage() {
       qc.invalidateQueries({ queryKey: ["iso42001-policies"] });
       toast.success(`Neue Version v${p.version} angelegt.`);
       setSelected(p);
+    },
+  });
+
+  const kenntnisnahmeMut = useMutation({
+    mutationFn: (vars: { policyId: number; mitarbeiter_id: number }) =>
+      policyKenntnisnahme(vars.policyId, vars.mitarbeiter_id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["iso42001-policies"] });
+      toast.success("Kenntnisnahme erfasst.");
+      setKenntnisnahmePolicy(null);
+    },
+    onError: (e: unknown) => {
+      const msg = e instanceof Error ? e.message : "Fehler bei Kenntnisnahme";
+      toast.error(msg);
     },
   });
 
@@ -132,6 +151,15 @@ export function Iso42001PoliciesPage() {
                       Ratifizieren
                     </Button>
                   )}
+                  {p.aktiv && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setKenntnisnahmePolicy(p)}
+                    >
+                      Kenntnisnahme abgeben
+                    </Button>
+                  )}
                   <Button
                     size="sm"
                     variant="outline"
@@ -160,6 +188,79 @@ export function Iso42001PoliciesPage() {
           }}
         />
       )}
+
+      {kenntnisnahmePolicy && (
+        <KenntnisnahmeDialog
+          policy={kenntnisnahmePolicy}
+          onCancel={() => setKenntnisnahmePolicy(null)}
+          onConfirm={(mitarbeiter_id) =>
+            kenntnisnahmeMut.mutate({
+              policyId: kenntnisnahmePolicy.id,
+              mitarbeiter_id,
+            })
+          }
+          isPending={kenntnisnahmeMut.isPending}
+        />
+      )}
+    </div>
+  );
+}
+
+function KenntnisnahmeDialog({
+  policy,
+  onCancel,
+  onConfirm,
+  isPending,
+}: {
+  policy: AiPolicy;
+  onCancel: () => void;
+  onConfirm: (mitarbeiter_id: number) => void;
+  isPending: boolean;
+}) {
+  const mitarbeiter = useMitarbeiterList();
+  const [selectedId, setSelectedId] = useState<number | "">("");
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+      <form
+        className="w-[480px] max-w-full rounded-md bg-white p-6 shadow-xl"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (selectedId !== "") onConfirm(Number(selectedId));
+        }}
+      >
+        <h2 className="mb-2 text-lg font-semibold">Kenntnisnahme abgeben</h2>
+        <p className="text-sm text-muted-foreground">
+          Bestätigt, dass der/die gewählte Mitarbeiter:in die Policy{" "}
+          <strong>{policy.titel}</strong> v{policy.version} gelesen und verstanden
+          hat.
+        </p>
+        <div className="mt-3">
+          <label className="text-sm font-medium">Mitarbeiter:in</label>
+          <select
+            className="mt-1 w-full rounded border px-3 py-2 text-sm"
+            value={selectedId}
+            onChange={(e) =>
+              setSelectedId(e.target.value ? Number(e.target.value) : "")
+            }
+            required
+          >
+            <option value="">— Bitte wählen —</option>
+            {mitarbeiter.data?.results.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.nachname}, {m.vorname} ({m.abteilung})
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mt-4 flex justify-end gap-2">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Abbrechen
+          </Button>
+          <Button type="submit" disabled={isPending || selectedId === ""}>
+            Bestätigen
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }

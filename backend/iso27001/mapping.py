@@ -15,6 +15,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from django.db import DatabaseError
+
 from core.models import Evidence
 
 if TYPE_CHECKING:
@@ -149,7 +151,7 @@ def suggest_evidence_links_for(
     for modul, suggestor in SUGGESTORS.items():
         try:
             evidences = suggestor(code)
-        except Exception as exc:  # pragma: no cover
+        except (ImportError, AttributeError, DatabaseError) as exc:  # pragma: no cover
             logger.warning("Suggestor %s schlug fehl: %s", modul, exc)
             continue
         for ev in evidences:

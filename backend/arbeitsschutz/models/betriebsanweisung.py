@@ -5,8 +5,8 @@ PDF wird via WeasyPrint beim Speichern generiert.
 
 Kenntnisnahme erfolgt über bestehende Pflichtunterweisungs-Engine — pro
 BA kann ein "Kenntnisnahme"-Kurs (Kurs.quiz_modus=KENNTNISNAHME) erstellt
-werden, der die PDF-Version als Modul referenziert. Bridge-Helper in
-services/schulungs_brigde.py.
+werden, der die PDF-Version als Modul referenziert. Bridge-Helper (Phase 3b,
+YAGNI — derzeit nicht im Scope; siehe Spec 2026-05-17 §11.4).
 """
 
 from __future__ import annotations

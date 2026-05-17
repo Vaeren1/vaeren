@@ -1,6 +1,7 @@
 import { ProtectedRoute } from "@/components/auth/protected-route";
 import { SidebarShell } from "@/components/layout/sidebar-shell";
 import { AuditExportDashboard } from "@/routes/audit-export";
+import { AuditExportProfileEditPage } from "@/routes/audit-export-profile-edit";
 import { AuditExportRunDetailPage } from "@/routes/audit-export-run-detail";
 import { AuditExportWizardPage } from "@/routes/audit-export-wizard";
 import { AuditLogPage } from "@/routes/audit-log";
@@ -21,7 +22,9 @@ import { Iso27001ControlDetail } from "@/routes/iso27001/ControlDetail";
 import { Iso27001RiskRegister } from "@/routes/iso27001/RiskRegister";
 import { Iso27001SoaGenerator } from "@/routes/iso27001/SoaGenerator";
 import { Iso27001Audits } from "@/routes/iso27001/Audits";
+import { Iso27001AuditDetail } from "@/routes/iso27001/AuditDetail";
 import { Iso27001ManagementReview } from "@/routes/iso27001/ManagementReview";
+import { Iso27001ManagementReviewDetail } from "@/routes/iso27001/ManagementReviewDetail";
 import { Iso42001AIIAsPage } from "@/routes/iso42001/aiias";
 import { Iso42001AiSystemsPage } from "@/routes/iso42001/ai-systems";
 import { Iso42001ControlListPage } from "@/routes/iso42001/control-list";
@@ -41,6 +44,9 @@ const StrukturPage = lazy(() =>
 );
 const GbuListPage = lazy(() =>
   import("@/routes/arbeitsschutz/GbuList").then((m) => ({ default: m.GbuListPage })),
+);
+const GbuWizardPage = lazy(() =>
+  import("@/routes/arbeitsschutz/GbuWizard").then((m) => ({ default: m.GbuWizardPage })),
 );
 const MassnahmenBoardPage = lazy(() =>
   import("@/routes/arbeitsschutz/MassnahmenBoard").then((m) => ({
@@ -123,6 +129,7 @@ export const router = createBrowserRouter([
       { path: "/audit", element: <AuditLogPage /> },
       { path: "/audit-export", element: <AuditExportDashboard /> },
       { path: "/audit-export/profil/neu", element: <AuditExportWizardPage /> },
+      { path: "/audit-export/profil/:id", element: <AuditExportProfileEditPage /> },
       { path: "/audit-export/runs/:id", element: <AuditExportRunDetailPage /> },
       { path: "/datenpannen", element: <DatenpannenListPage /> },
       { path: "/datenpannen/neu", element: <DatenpanneFormPage /> },
@@ -138,7 +145,12 @@ export const router = createBrowserRouter([
       { path: "/iso27001/risiken", element: <Iso27001RiskRegister /> },
       { path: "/iso27001/soa", element: <Iso27001SoaGenerator /> },
       { path: "/iso27001/audits", element: <Iso27001Audits /> },
+      { path: "/iso27001/audits/:id", element: <Iso27001AuditDetail /> },
       { path: "/iso27001/management-review", element: <Iso27001ManagementReview /> },
+      {
+        path: "/iso27001/management-review/:id",
+        element: <Iso27001ManagementReviewDetail />,
+      },
       { path: "/iso42001", element: <Iso42001DashboardPage /> },
       { path: "/iso42001/controls", element: <Iso42001ControlListPage /> },
       { path: "/iso42001/policies", element: <Iso42001PoliciesPage /> },
@@ -149,6 +161,8 @@ export const router = createBrowserRouter([
       { path: "/arbeitsschutz", element: <Lazy><ArbeitsschutzDashboardPage /></Lazy> },
       { path: "/arbeitsschutz/struktur", element: <Lazy><StrukturPage /></Lazy> },
       { path: "/arbeitsschutz/gbu", element: <Lazy><GbuListPage /></Lazy> },
+      { path: "/arbeitsschutz/gbu/neu", element: <Lazy><GbuWizardPage /></Lazy> },
+      { path: "/arbeitsschutz/gbu/:id/bearbeiten", element: <Lazy><GbuWizardPage /></Lazy> },
       { path: "/arbeitsschutz/massnahmen", element: <Lazy><MassnahmenBoardPage /></Lazy> },
       { path: "/arbeitsschutz/asa", element: <Lazy><AsaCalendarPage /></Lazy> },
       { path: "/arbeitsschutz/unfaelle", element: <Lazy><UnfallListPage /></Lazy> },

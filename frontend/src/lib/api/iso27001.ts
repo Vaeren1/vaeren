@@ -257,8 +257,25 @@ export async function createRisiko(
   return api("/api/iso27001/risiken/", { method: "POST", json: payload });
 }
 
+export async function updateRisiko(
+  id: number,
+  payload: Partial<IsmsRiskAssessment>,
+): Promise<IsmsRiskAssessment> {
+  return api(`/api/iso27001/risiken/${id}/`, { method: "PATCH", json: payload });
+}
+
 export async function llmTreatmentVorschlag(id: number): Promise<LlmEntwurfResponse> {
   return api(`/api/iso27001/risiken/${id}/treatment-vorschlag/`, { method: "POST" });
+}
+
+export async function akzeptiereRisiko(
+  id: number,
+  mitarbeiterId: number,
+): Promise<IsmsRiskAssessment> {
+  return api(`/api/iso27001/risiken/${id}/akzeptieren/`, {
+    method: "POST",
+    json: { mitarbeiter_id: mitarbeiterId },
+  });
 }
 
 // --- Assets -------------------------------------------------------------
@@ -287,14 +304,51 @@ export async function erzeugeSoa(payload: {
   return api("/api/iso27001/soa/", { method: "POST", json: payload });
 }
 
+export async function getSoaNextVersion(): Promise<{ vorschlag: string }> {
+  return api("/api/iso27001/soa/next-version/");
+}
+
 // --- Audits + Findings --------------------------------------------------
 
 export async function listAudits(): Promise<{ count: number; results: InternesAudit[] }> {
   return api("/api/iso27001/audits/");
 }
 
-export async function listFindings(): Promise<{ count: number; results: AuditFinding[] }> {
-  return api("/api/iso27001/findings/");
+export async function getAudit(id: number): Promise<InternesAudit> {
+  return api(`/api/iso27001/audits/${id}/`);
+}
+
+export async function createAudit(
+  payload: Partial<InternesAudit>,
+): Promise<InternesAudit> {
+  return api("/api/iso27001/audits/", { method: "POST", json: payload });
+}
+
+export async function updateAudit(
+  id: number,
+  payload: Partial<InternesAudit>,
+): Promise<InternesAudit> {
+  return api(`/api/iso27001/audits/${id}/`, { method: "PATCH", json: payload });
+}
+
+export async function listFindings(
+  auditId?: number,
+): Promise<{ count: number; results: AuditFinding[] }> {
+  const q = auditId ? `?audit=${auditId}&page_size=100` : "?page_size=100";
+  return api(`/api/iso27001/findings/${q}`);
+}
+
+export async function createFinding(
+  payload: Partial<AuditFinding>,
+): Promise<AuditFinding> {
+  return api("/api/iso27001/findings/", { method: "POST", json: payload });
+}
+
+export async function updateFinding(
+  id: number,
+  payload: Partial<AuditFinding>,
+): Promise<AuditFinding> {
+  return api(`/api/iso27001/findings/${id}/`, { method: "PATCH", json: payload });
 }
 
 // --- Mgt-Reviews --------------------------------------------------------
@@ -304,4 +358,34 @@ export async function listMgtReviews(): Promise<{
   results: ManagementReview[];
 }> {
   return api("/api/iso27001/management-reviews/");
+}
+
+export async function getMgtReview(id: number): Promise<ManagementReview> {
+  return api(`/api/iso27001/management-reviews/${id}/`);
+}
+
+export async function createMgtReview(
+  payload: Partial<ManagementReview>,
+): Promise<ManagementReview> {
+  return api("/api/iso27001/management-reviews/", { method: "POST", json: payload });
+}
+
+export async function updateMgtReview(
+  id: number,
+  payload: Partial<ManagementReview>,
+): Promise<ManagementReview> {
+  return api(`/api/iso27001/management-reviews/${id}/`, {
+    method: "PATCH",
+    json: payload,
+  });
+}
+
+export async function vorbefuelleMgtReviewInputs(id: number): Promise<ManagementReview> {
+  return api(`/api/iso27001/management-reviews/${id}/inputs-vorbefuellen/`, {
+    method: "POST",
+  });
+}
+
+export function mgtReviewPdfUrl(id: number): string {
+  return `/api/iso27001/management-reviews/${id}/pdf/`;
 }

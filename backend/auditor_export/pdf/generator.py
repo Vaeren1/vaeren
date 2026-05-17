@@ -49,12 +49,14 @@ class PDFGenerator:
         tenant_firma: str,
         records: list[EvidenceRecord],
         audit_log_chain_head: str = "",
+        zip_sha256: str = "",
     ) -> None:
         self.run = run
         self.tenant_schema = tenant_schema
         self.tenant_firma = tenant_firma
         self.records = records
         self.audit_log_chain_head = audit_log_chain_head
+        self.zip_sha256 = zip_sha256
 
     def _context(self) -> dict:
         """Template-Kontext für audit-mappe.html."""
@@ -83,7 +85,11 @@ class PDFGenerator:
                 self.run.profile.watermark_draft if self.run.profile else False
             ),
             "audit_log_chain_head": self.audit_log_chain_head,
-            "verify_url": f"https://app.vaeren.de/verify?mappe={self.run.mappe_id}",
+            "verify_url": (
+                f"https://app.vaeren.de/verify?mappe={self.run.mappe_id}&hash={self.zip_sha256}"
+                if self.zip_sha256
+                else f"https://app.vaeren.de/verify?mappe={self.run.mappe_id}"
+            ),
             "rdg_disclaimer": (
                 "Diese Mappe enthält ausschließlich menschlich bestätigte Daten. "
                 "Vom KI-Modul der Vaeren-Plattform erzeugte Risiko-Vorschläge sind erst "

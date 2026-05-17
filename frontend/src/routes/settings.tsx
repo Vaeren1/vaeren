@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTenantSettings, useUpdateTenantSettings } from "@/lib/api/settings";
+import { useAuthStore } from "@/lib/stores/auth-store";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -63,6 +64,8 @@ export function SettingsPage() {
 function GeneralTab() {
   const settings = useTenantSettings();
   const update = useUpdateTenantSettings();
+  const role = useAuthStore((s) => s.user?.tenant_role);
+  const isGF = role === "geschaeftsfuehrer";
   const [firmaName, setFirmaName] = useState("");
   const [locale, setLocale] = useState("de-DE");
 
@@ -141,47 +144,51 @@ function GeneralTab() {
           </Button>
         </form>
 
-        <hr className="my-6" />
+        {isGF && (
+          <>
+            <hr className="my-6" />
 
-        <div>
-          <h3 className="mb-2 font-semibold">Module</h3>
-          <label className="flex cursor-pointer items-start gap-3">
-            <input
-              type="checkbox"
-              checked={Boolean(data.module_iso42001_aktiv)}
-              onChange={(e) =>
-                update.mutate(
-                  { module_iso42001_aktiv: e.target.checked },
-                  {
-                    onSuccess: () =>
-                      toast.success(
-                        e.target.checked
-                          ? "ISO-42001-Modul aktiviert."
-                          : "ISO-42001-Modul deaktiviert.",
-                      ),
-                    onError: (err) =>
-                      toast.error(
-                        err.status === 403
-                          ? "Keine Berechtigung — nur Geschäftsführer:innen."
-                          : "Aktualisierung fehlgeschlagen.",
-                      ),
-                  },
-                )
-              }
-              className="mt-0.5 h-4 w-4"
-            />
             <div>
-              <div className="text-sm font-medium">
-                ISO 42001 — KI-Management-System
-              </div>
-              <div className="text-xs text-slate-500">
-                Phase-3-Modul. Aktiviert die SoA-Liste, Policies, AIIAs,
-                KI-Vorfälle und Management-Reviews nach ISO/IEC 42001:2023.
-                Modul-Beitrag zum Compliance-Index: bis zu 15 Punkte.
-              </div>
+              <h3 className="mb-2 font-semibold">Module</h3>
+              <label className="flex cursor-pointer items-start gap-3">
+                <input
+                  type="checkbox"
+                  checked={Boolean(data.module_iso42001_aktiv)}
+                  onChange={(e) =>
+                    update.mutate(
+                      { module_iso42001_aktiv: e.target.checked },
+                      {
+                        onSuccess: () =>
+                          toast.success(
+                            e.target.checked
+                              ? "ISO-42001-Modul aktiviert."
+                              : "ISO-42001-Modul deaktiviert.",
+                          ),
+                        onError: (err) =>
+                          toast.error(
+                            err.status === 403
+                              ? "Keine Berechtigung — nur Geschäftsführer:innen."
+                              : "Aktualisierung fehlgeschlagen.",
+                          ),
+                      },
+                    )
+                  }
+                  className="mt-0.5 h-4 w-4"
+                />
+                <div>
+                  <div className="text-sm font-medium">
+                    ISO 42001 — KI-Management-System
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    Phase-3-Modul. Aktiviert die SoA-Liste, Policies, AIIAs,
+                    KI-Vorfälle und Management-Reviews nach ISO/IEC 42001:2023.
+                    Modul-Beitrag zum Compliance-Index: bis zu 15 Punkte.
+                  </div>
+                </div>
+              </label>
             </div>
-          </label>
-        </div>
+          </>
+        )}
       </CardContent>
     </Card>
   );

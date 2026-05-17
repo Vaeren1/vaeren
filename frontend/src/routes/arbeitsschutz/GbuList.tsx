@@ -2,6 +2,7 @@
  * GBU-Übersicht: alle Gefährdungsbeurteilungen mit Status-Ampel.
  */
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -13,7 +14,7 @@ import {
 } from "@/components/ui/table";
 import { listGbu, type GbuStatus } from "@/lib/api/arbeitsschutz";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const STATUS_BADGE: Record<GbuStatus, string> = {
   entwurf: "text-slate-700",
@@ -30,14 +31,22 @@ const STATUS_LABEL: Record<GbuStatus, string> = {
 };
 
 export function GbuListPage() {
+  const navigate = useNavigate();
   const { data, isLoading } = useQuery({ queryKey: ["as-gbu"], queryFn: listGbu });
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Gefährdungsbeurteilungen</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          ArbSchG §5. Eine GBU pro Tätigkeit, Wirksamkeitsprüfung jährlich.
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Gefährdungsbeurteilungen</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              ArbSchG §5. Eine GBU pro Tätigkeit, Wirksamkeitsprüfung jährlich.
+            </p>
+          </div>
+          <Button onClick={() => navigate("/arbeitsschutz/gbu/neu")}>
+            + Neue GBU
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         {isLoading && <p>Lade…</p>}

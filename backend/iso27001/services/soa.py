@@ -43,10 +43,6 @@ def _build_snapshot() -> list[dict]:
         i.control_id: i
         for i in ControlImplementation.objects.select_related("control").all()
     }
-    counts = {
-        cl.implementation_id: counts
-        for cl, counts in _link_counts().items()
-    }
     snapshot: list[dict] = []
     for c in controls:
         impl = impls.get(c.id)
@@ -77,11 +73,6 @@ def _build_snapshot() -> list[dict]:
             }
         )
     return snapshot
-
-
-def _link_counts() -> dict:
-    """Stub-Helper: gibt leeres Dict zurück, evidence-count wird inline berechnet."""
-    return {}
 
 
 def render_soa_html(snapshot: list[dict], *, version: str, geltungsbereich: str) -> str:
@@ -151,8 +142,14 @@ def erzeuge_soa_snapshot(
 
 
 def render_evidence_bytes(evidence: Evidence) -> bytes:
-    """Reading helper — Evidence-File ist im Volume, hier rendern wir aber
-    gegen die snapshot_data neu (Bytes-Inhalt nicht persistiert)."""
+    """Reading helper — die PDF-Bytes werden NICHT persistiert.
+
+    Reproduktion erfolgt deterministisch per Re-Render aus
+    `StatementOfApplicability.snapshot_data`, das durch den Save-Guard
+    in `models.StatementOfApplicability.save()` immutable ist
+    (siehe RDG-Disclaimer im View).
+    """
     # Im MVP haben wir kein Filesystem-Backend für Evidence-Inhalte —
-    # der View-Caller rendert frisch aus dem snapshot_data.
+    # der View-Caller rendert frisch aus dem snapshot_data, der durch den
+    # Save-Guard auf dem Model unveränderlich ist → byte-identische Reproduktion.
     return b""

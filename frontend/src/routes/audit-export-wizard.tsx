@@ -2,6 +2,10 @@
  * 5-Step-Wizard zum Anlegen eines AuditExportProfile.
  *
  * Steps: 1 Name+Zeitraum → 2 Norm-Scope → 3 Template → 4 Optionen → 5 Preview+Generate.
+ *
+ * Step 5 ruft beim Einstieg `POST /profiles/` (Save) + `POST /profiles/:id/preview/`
+ * (Preview-API) und zeigt erwartete Record-Count + Bundle-Size, damit der User vor
+ * "Run starten" sieht ob überhaupt Daten im Zeitraum sind.
  */
 
 import { Button } from "@/components/ui/button";
@@ -11,38 +15,18 @@ import { Label } from "@/components/ui/label";
 import {
   createProfile,
   NORM_LABEL,
+  previewRun,
   startRun,
   TEMPLATE_LABEL,
+  type AuditExportProfile,
   type AuditTemplate,
   type EvidenceMode,
   type NormScope,
+  type RunPreview,
 } from "@/lib/api/audit_export";
-import { useState } from "react";
+import { ALL_NORMS, ALL_TEMPLATES } from "@/lib/api/audit_export_constants";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const ALL_NORMS: NormScope[] = [
-  "iso_27001",
-  "iso_42001",
-  "nis2",
-  "dsgvo",
-  "ai_act",
-  "arbeitsschutz",
-  "pflichtunterweisung",
-  "hinschg",
-  "avv",
-  "datenpannen",
-  "transparenzregister",
-];
-
-const ALL_TEMPLATES: AuditTemplate[] = [
-  "iso_27001_audit",
-  "gap_analyse",
-  "tisax_light",
-  "ai_act_konformitaet",
-  "nis2_behoerden_vorlage",
-  "bfdi_template",
-  "geschaeftsfuehrer_mappe",
-];
 
 function defaultDateRange(): { from: string; to: string } {
   const today = new Date();
@@ -71,6 +55,14 @@ export function AuditExportWizardPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Preview-State für Step 5
+  const [savedProfile, setSavedProfile] = useState<AuditExportProfile | null>(
+    null,
+  );
+  const [preview, setPreview] = useState<RunPreview | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState<string | null>(null);
+
   const toggleNorm = (norm: NormScope) => {
     setNormScope((prev) =>
       prev.includes(norm) ? prev.filter((n) => n !== norm) : [...prev, norm],
@@ -83,21 +75,58 @@ export function AuditExportWizardPage() {
     return true;
   })();
 
+  // Auto-Save + Preview wenn Step 5 erreicht wird (genau einmal pro Profile-Konfiguration)
+  useEffect(() => {
+    if (step !== 5) return;
+    if (savedProfile) return; // Bereits gespeichert
+    let cancelled = false;
+
+    (async () => {
+      setPreviewLoading(true);
+      setPreviewError(null);
+      try {
+        const profile = await createProfile({
+          name: name.trim(),
+          template,
+          norm_scope: normScope,
+          zeitraum_von: zeitraumVon,
+          zeitraum_bis: zeitraumBis,
+          evidence_mode: evidenceMode,
+          anonymisieren_pii: anonymisierenPii,
+          watermark_draft: watermarkDraft,
+        });
+        if (cancelled) return;
+        setSavedProfile(profile);
+        const pv = await previewRun(profile.id);
+        if (cancelled) return;
+        setPreview(pv);
+      } catch (e: unknown) {
+        if (cancelled) return;
+        const msg = e instanceof Error ? e.message : String(e);
+        setPreviewError(msg);
+      } finally {
+        if (!cancelled) setPreviewLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+    // Bewusst nur step + savedProfile als Trigger — Felder ändern sich nicht
+    // mehr nach Step 5 (Zurück-Button setzt savedProfile NICHT zurück, d. h.
+    // bei zurück+vor wird die alte Speicherung verwendet).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
+
   const submit = async () => {
+    if (!savedProfile) {
+      setError("Profile noch nicht gespeichert — bitte kurz warten.");
+      return;
+    }
     setSubmitting(true);
     setError(null);
     try {
-      const profile = await createProfile({
-        name: name.trim(),
-        template,
-        norm_scope: normScope,
-        zeitraum_von: zeitraumVon,
-        zeitraum_bis: zeitraumBis,
-        evidence_mode: evidenceMode,
-        anonymisieren_pii: anonymisierenPii,
-        watermark_draft: watermarkDraft,
-      });
-      const run = await startRun(profile.id);
+      const run = await startRun(savedProfile.id);
       navigate(`/audit-export/runs/${run.id}`);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
@@ -260,6 +289,56 @@ export function AuditExportWizardPage() {
                 {watermarkDraft ? "an" : "aus"}
               </li>
             </ul>
+
+            <div className="border-t pt-3">
+              <h4 className="text-sm font-semibold">Vorab-Schätzung</h4>
+              {previewLoading && (
+                <p className="text-sm text-muted-foreground">
+                  Berechne Vorschau …
+                </p>
+              )}
+              {previewError && (
+                <p className="text-sm text-destructive">
+                  Vorschau fehlgeschlagen: {previewError}
+                </p>
+              )}
+              {preview && (
+                <div className="text-sm space-y-1 mt-1">
+                  <p>
+                    <strong>Erwartete Belege:</strong> {preview.evidence_count}
+                  </p>
+                  <p>
+                    <strong>Geschätzte Bundle-Größe:</strong>{" "}
+                    {preview.geschaetzte_groesse_kb} KB
+                  </p>
+                  {preview.evidence_count === 0 && (
+                    <p className="rounded border-l-4 border-amber-500 bg-amber-50 p-2 text-amber-900">
+                      Achtung: Keine Belege im gewählten Zeitraum gefunden. Run
+                      würde eine leere Mappe erzeugen. Eventuell Zeitraum oder
+                      Norm-Scope anpassen.
+                    </p>
+                  )}
+                  {Object.keys(preview.counts_per_aggregator || {}).length >
+                    0 && (
+                    <details className="mt-1 text-xs">
+                      <summary className="cursor-pointer">
+                        Detail pro Aggregator
+                      </summary>
+                      <ul className="ml-4 mt-1 space-y-0.5">
+                        {Object.entries(preview.counts_per_aggregator).map(
+                          ([slug, cnt]) => (
+                            <li key={slug}>
+                              {slug}: {cnt}
+                            </li>
+                          ),
+                        )}
+                      </ul>
+                    </details>
+                  )}
+                </div>
+              )}
+            </div>
+
             {error && <p className="text-destructive text-sm">{error}</p>}
           </div>
         )}
@@ -278,8 +357,11 @@ export function AuditExportWizardPage() {
             </Button>
           )}
           {step === 5 && (
-            <Button disabled={submitting} onClick={submit}>
-              {submitting ? "Run wird gestartet …" : "Profile speichern & Run starten"}
+            <Button
+              disabled={submitting || previewLoading || !savedProfile}
+              onClick={submit}
+            >
+              {submitting ? "Run wird gestartet …" : "Run starten"}
             </Button>
           )}
         </div>

@@ -165,18 +165,22 @@ def _module_score_arbeitsschutz() -> ModuleScore:
         gbu_detail = f"{aktuelle}/{taetigkeiten_aktiv} Tätigkeiten mit aktueller GBU"
 
     # 2. Maßnahmen-Erledigung (30%)
+    # Maßnahmen mit `wirksam=False` werden NICHT als umgesetzt gezählt —
+    # eine ineffektive Maßnahme erfordert per ArbSchG §4 eine
+    # Folge-Maßnahme; wir behandeln sie wie "geplant".
     massnahmen_total = Schutzmassnahme.objects.exclude(
         status=MassnahmeStatus.VERWORFEN
     ).count()
     if massnahmen_total == 0:
         massn_score = 100.0
     else:
-        umgesetzt = Schutzmassnahme.objects.filter(
+        umgesetzt_qs = Schutzmassnahme.objects.filter(
             status__in=(
                 MassnahmeStatus.UMGESETZT,
                 MassnahmeStatus.WIRKSAMKEIT_GEPRUEFT,
             )
-        ).count()
+        ).exclude(wirksam=False)
+        umgesetzt = umgesetzt_qs.count()
         ueberfaellig = Schutzmassnahme.objects.filter(
             frist__lt=today,
             status__in=(MassnahmeStatus.GEPLANT,),

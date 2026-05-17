@@ -20,6 +20,7 @@ import re
 from dataclasses import dataclass, field
 
 from core.llm_client import LLMResponse, generate
+from core.llm_validator import validate_output
 
 logger = logging.getLogger(__name__)
 
@@ -138,12 +139,22 @@ strahlung (STRAHL-*), ergonomie (ERGO-*), psychisch (PSY-*), organisatorisch (OR
         static_fallback=STATIC_FALLBACK_GEFAEHRDUNGEN,
     )
 
-    try:
-        parsed = _extract_json(response.text)
-    except (json.JSONDecodeError, AttributeError) as exc:
-        logger.warning("Gefaehrdungs-LLM-Output nicht parsbar: %s", exc)
+    # RDG-Layer-2: Output gegen verbotene Phrasen prüfen.
+    validation = validate_output(response.text or "")
+    if not validation.is_valid:
+        logger.warning(
+            "Gefaehrdungs-LLM-Output enthielt verbotene Phrasen %s — static fallback",
+            validation.matched_phrases,
+        )
         parsed = json.loads(STATIC_FALLBACK_GEFAEHRDUNGEN)
         response = LLMResponse(text="", quelle="static", model=response.model)
+    else:
+        try:
+            parsed = _extract_json(response.text)
+        except (json.JSONDecodeError, AttributeError) as exc:
+            logger.warning("Gefaehrdungs-LLM-Output nicht parsbar: %s", exc)
+            parsed = json.loads(STATIC_FALLBACK_GEFAEHRDUNGEN)
+            response = LLMResponse(text="", quelle="static", model=response.model)
 
     codes_raw = parsed.get("codes", [])
     codes: list[str] = []
@@ -179,12 +190,22 @@ T=Technisch, O=Organisatorisch, P=Personenbezogen/PSA). Bevorzuge S/T vor O/P.
         static_fallback=STATIC_FALLBACK_MASSNAHMEN,
     )
 
-    try:
-        parsed = _extract_json(response.text)
-    except (json.JSONDecodeError, AttributeError) as exc:
-        logger.warning("Massnahmen-LLM-Output nicht parsbar: %s", exc)
+    # RDG-Layer-2: Output gegen verbotene Phrasen prüfen.
+    validation = validate_output(response.text or "")
+    if not validation.is_valid:
+        logger.warning(
+            "Massnahmen-LLM-Output enthielt verbotene Phrasen %s — static fallback",
+            validation.matched_phrases,
+        )
         parsed = json.loads(STATIC_FALLBACK_MASSNAHMEN)
         response = LLMResponse(text="", quelle="static", model=response.model)
+    else:
+        try:
+            parsed = _extract_json(response.text)
+        except (json.JSONDecodeError, AttributeError) as exc:
+            logger.warning("Massnahmen-LLM-Output nicht parsbar: %s", exc)
+            parsed = json.loads(STATIC_FALLBACK_MASSNAHMEN)
+            response = LLMResponse(text="", quelle="static", model=response.model)
 
     vorschlaege: list[MassnahmeVorschlag] = []
     for v in parsed.get("vorschlaege", []):
@@ -233,4 +254,13 @@ Erstelle Markdown-Entwurf der Betriebsanweisung nach DGUV-Vorlage.
         prompt=SYSTEM_PROMPT_BA + "\n\n" + prompt,
         static_fallback=static_fb,
     )
-    return response.text or static_fb, response.quelle
+    text = response.text or static_fb
+    # RDG-Layer-2: Output gegen verbotene Phrasen prüfen.
+    validation = validate_output(text)
+    if not validation.is_valid:
+        logger.warning(
+            "BA-Entwurf-LLM-Output enthielt verbotene Phrasen %s — static fallback",
+            validation.matched_phrases,
+        )
+        return static_fb, "static"
+    return text, response.quelle

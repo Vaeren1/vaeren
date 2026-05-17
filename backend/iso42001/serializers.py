@@ -121,6 +121,12 @@ class AiPolicySerializer(serializers.ModelSerializer):
         )
 
     def get_kenntnisnahmen_count(self, obj) -> int:
+        # Wenn ViewSet via .annotate(_kenntnisnahmen_count=...) annotiert hat,
+        # nutze den Count direkt (vermeidet N+1). Fallback für Direkt-
+        # Serialisierung ohne QuerySet-Annotation.
+        annotated = getattr(obj, "_kenntnisnahmen_count", None)
+        if annotated is not None:
+            return annotated
         return obj.kenntnisnahmen.count()
 
 

@@ -17,8 +17,8 @@ Phase-3-Modul. Spec: `docs/superpowers/specs/2026-05-17-phase3-arbeitsschutz-des
 | `fristen.py` | Werktag-Arithmetik für BG-Meldefristen |
 | `services/quoten.py` | Beauftragten-Quoten-Berechnung als reine Funktion |
 | `services/asa_scheduling.py` | Auto-Quartals-ASA-Termine |
-| `services/schulungs_brigde.py` | Tätigkeit↔Pflichtunterweisungs-Bridge (HITL) |
 | `services/betriebsanweisung_pdf.py` | WeasyPrint-PDF-Generator |
+| `tasks.py` | Celery: BA-Review-Check (24M) + Beauftragten-Ablauf (60d) |
 | `seed_data.py` + `data/gefaehrdungskatalog.json` | Standard-Katalog (~80 Einträge) |
 
 ## Compliance-Index-Integration

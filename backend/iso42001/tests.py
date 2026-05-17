@@ -334,6 +334,9 @@ def test_aiia_4_augen_blockiert_self_approval(iso_tenant, gf_user, ki_tool):
             titel="HR AIIA",
             zweck_beschreibung="Recruiting",
             betroffene_personen="Bewerber",
+            auswirkungs_kategorien=["grundrechte"],
+            mitigationen="Vier-Augen-Review jeder Bewerber-Bewertung.",
+            restrisiko="Vorschlag: Restrisiko mittel.",
         )
         # Bringe AIIA in APPROVAL_OFFEN.
         services.aiia_status_wechseln(
@@ -358,6 +361,9 @@ def test_aiia_freigabe_durch_zweite_person(iso_tenant, gf_user, cb_user, ki_tool
             titel="X",
             zweck_beschreibung="…",
             betroffene_personen="…",
+            auswirkungs_kategorien=["grundrechte"],
+            mitigationen="Mitigation X.",
+            restrisiko="Restrisiko Y.",
         )
         services.aiia_status_wechseln(
             user=cb_user, aiia=aiia, neuer_status=AIIAStatus.BEWERTUNG
@@ -830,3 +836,228 @@ def test_settings_api_toggles_iso42001(iso_tenant, settings):
     connection.set_schema_to_public()
     iso_tenant.refresh_from_db()
     assert iso_tenant.module_iso42001_aktiv is False
+
+
+# ============================================================================
+# Phase-B-Fixes — neue Tests
+# ============================================================================
+
+
+def test_policy_ratifizieren_setzt_mitarbeiter(iso_tenant, gf_user):
+    """Fix H3: `ratified_by` darf nach Ratifizierung NICHT None sein, wenn
+    Mitarbeiter explizit übergeben wird."""
+    from core.models import Mitarbeiter
+
+    with schema_context(iso_tenant.schema_name):
+        ma = Mitarbeiter.objects.create(
+            vorname="GF",
+            nachname="Chef",
+            email="gf-chef@iso-demo.de",
+            abteilung="GF",
+            rolle="Geschäftsführer",
+            eintritt=datetime.date(2024, 1, 1),
+        )
+        p = AiPolicy.objects.create(
+            geltungsbereich=AiPolicyGeltungsbereich.ALLGEMEIN,
+            titel="P", inhalt_markdown="x",
+        )
+        services.policy_ratifizieren(user=gf_user, policy=p, mitarbeiter=ma)
+        p.refresh_from_db()
+        assert p.ratified_by_id == ma.id
+        assert p.ratified_at is not None
+
+
+def test_api_policy_ratifizieren_setzt_mitarbeiter_via_email(authed_client, iso_tenant):
+    """Fix H3 (API-Pfad): View resolved Mitarbeiter via E-Mail-Match."""
+    from core.models import Mitarbeiter
+
+    email = f"gf-{iso_tenant.schema_name}@iso-demo.de"
+    with schema_context(iso_tenant.schema_name):
+        ma = Mitarbeiter.objects.create(
+            vorname="GF", nachname="Match",
+            email=email,
+            abteilung="GF", rolle="Geschäftsführer",
+            eintritt=datetime.date(2024, 1, 1),
+        )
+        p = AiPolicy.objects.create(
+            geltungsbereich=AiPolicyGeltungsbereich.ALLGEMEIN,
+            titel="P", inhalt_markdown="x",
+        )
+    resp = authed_client.post(
+        f"/api/iso42001/policies/{p.id}/ratifizieren/",
+        {}, content_type="application/json",
+    )
+    assert resp.status_code == 200, resp.content
+    with schema_context(iso_tenant.schema_name):
+        p.refresh_from_db()
+        assert p.ratified_by_id == ma.id
+
+
+def test_api_policy_kenntnisnahme_endpoint(authed_client, iso_tenant):
+    """Fix M3: Kenntnisnahme via API. Idempotent."""
+    from core.models import Mitarbeiter
+
+    with schema_context(iso_tenant.schema_name):
+        ma = Mitarbeiter.objects.create(
+            vorname="Kn", nachname="MA",
+            abteilung="P", rolle="Sachbearbeitung",
+            eintritt=datetime.date(2024, 1, 1),
+        )
+        p = AiPolicy.objects.create(
+            geltungsbereich=AiPolicyGeltungsbereich.ALLGEMEIN,
+            titel="P", inhalt_markdown="x", aktiv=True,
+        )
+    resp = authed_client.post(
+        f"/api/iso42001/policies/{p.id}/kenntnisnahme/",
+        {"mitarbeiter_id": ma.id}, content_type="application/json",
+    )
+    assert resp.status_code == 201, resp.content
+    # Idempotent
+    resp2 = authed_client.post(
+        f"/api/iso42001/policies/{p.id}/kenntnisnahme/",
+        {"mitarbeiter_id": ma.id}, content_type="application/json",
+    )
+    assert resp2.status_code == 201
+    with schema_context(iso_tenant.schema_name):
+        assert AiPolicyKenntnisnahme.objects.filter(
+            policy=p, mitarbeiter=ma
+        ).count() == 1
+
+
+def test_api_policy_kenntnisnahme_ohne_mitarbeiter_id_blockt(authed_client, iso_tenant):
+    with schema_context(iso_tenant.schema_name):
+        p = AiPolicy.objects.create(
+            geltungsbereich=AiPolicyGeltungsbereich.ALLGEMEIN,
+            titel="P", inhalt_markdown="x",
+        )
+    resp = authed_client.post(
+        f"/api/iso42001/policies/{p.id}/kenntnisnahme/",
+        {}, content_type="application/json",
+    )
+    assert resp.status_code == 400
+
+
+def test_aiia_approval_offen_blockiert_ohne_pflichtfelder(iso_tenant, gf_user, ki_tool):
+    """Fix H5: Übergang nach APPROVAL_OFFEN ohne Pflichtfelder muss fehlschlagen."""
+    with schema_context(iso_tenant.schema_name):
+        reg = services.ai_system_registrieren(
+            user=gf_user, ki_tool=ki_tool, risiko_aims=RisikoStufeAIMS.HOCH
+        )
+        aiia = services.aiia_anlegen(
+            user=gf_user, ai_system=reg,
+            titel="X", zweck_beschreibung="z", betroffene_personen="b",
+        )
+        services.aiia_status_wechseln(
+            user=gf_user, aiia=aiia, neuer_status=AIIAStatus.BEWERTUNG
+        )
+        with pytest.raises(AIIAValidationError) as exc:
+            services.aiia_status_wechseln(
+                user=gf_user, aiia=aiia, neuer_status=AIIAStatus.APPROVAL_OFFEN
+            )
+        msg = str(exc.value)
+        assert "auswirkungs_kategorien" in msg
+        assert "mitigationen" in msg
+        assert "restrisiko" in msg
+
+
+def test_aiia_approval_offen_ok_mit_pflichtfeldern(iso_tenant, gf_user, ki_tool):
+    """Fix H5: mit gefüllten Pflichtfeldern ist Übergang erlaubt."""
+    with schema_context(iso_tenant.schema_name):
+        reg = services.ai_system_registrieren(
+            user=gf_user, ki_tool=ki_tool, risiko_aims=RisikoStufeAIMS.HOCH
+        )
+        aiia = services.aiia_anlegen(
+            user=gf_user, ai_system=reg,
+            titel="X", zweck_beschreibung="z", betroffene_personen="b",
+            auswirkungs_kategorien=["informationell"],
+            mitigationen="Mitigation A.",
+            restrisiko="Restrisiko mittel.",
+        )
+        services.aiia_status_wechseln(
+            user=gf_user, aiia=aiia, neuer_status=AIIAStatus.BEWERTUNG
+        )
+        services.aiia_status_wechseln(
+            user=gf_user, aiia=aiia, neuer_status=AIIAStatus.APPROVAL_OFFEN
+        )
+        aiia.refresh_from_db()
+        assert aiia.status == AIIAStatus.APPROVAL_OFFEN
+
+
+def test_api_incident_abschliessen(authed_client, iso_tenant):
+    """Fix H2: Dedizierter Abschluss-Endpoint setzt Datum + Korrekturmaßnahme."""
+    with schema_context(iso_tenant.schema_name):
+        inc = AiIncident.objects.create(
+            titel="Offener Vorfall",
+            typ=AiIncidentTyp.DRIFT,
+            schweregrad=AiIncidentSchweregrad.MITTEL,
+            entdeckt_am=datetime.date(2026, 5, 1),
+            beschreibung="Drift entdeckt.",
+        )
+    resp = authed_client.post(
+        f"/api/iso42001/incidents/{inc.id}/abschliessen/",
+        {
+            "abgeschlossen_am": "2026-05-15",
+            "korrekturmassnahme": "Retraining + Bias-Test.",
+        },
+        content_type="application/json",
+    )
+    assert resp.status_code == 200, resp.content
+    with schema_context(iso_tenant.schema_name):
+        inc.refresh_from_db()
+        assert inc.abgeschlossen_am == datetime.date(2026, 5, 15)
+        assert "Retraining" in inc.korrekturmassnahme
+
+
+def test_api_incident_abschliessen_default_heute(authed_client, iso_tenant):
+    with schema_context(iso_tenant.schema_name):
+        inc = AiIncident.objects.create(
+            titel="X",
+            typ=AiIncidentTyp.SONSTIGES,
+            schweregrad=AiIncidentSchweregrad.NIEDRIG,
+            entdeckt_am=datetime.date(2026, 5, 1),
+            beschreibung="x",
+        )
+    resp = authed_client.post(
+        f"/api/iso42001/incidents/{inc.id}/abschliessen/",
+        {}, content_type="application/json",
+    )
+    assert resp.status_code == 200
+    with schema_context(iso_tenant.schema_name):
+        inc.refresh_from_db()
+        assert inc.abgeschlossen_am == datetime.date.today()
+
+
+def test_kitool_delete_blockiert_durch_ai_system_protect(iso_tenant, gf_user, ki_tool):
+    """Fix H1: KITool.delete() wirft ProtectedError, wenn AiSystemRegistration existiert."""
+    from django.db.models.deletion import ProtectedError
+
+    with schema_context(iso_tenant.schema_name):
+        services.ai_system_registrieren(
+            user=gf_user, ki_tool=ki_tool, risiko_aims=RisikoStufeAIMS.MITTEL
+        )
+        with pytest.raises(ProtectedError):
+            ki_tool.delete()
+
+
+def test_policy_serializer_kenntnisnahmen_count_annotation(authed_client, iso_tenant):
+    """Fix N6: List-Endpoint nutzt annotierten Count (1 Query statt N+1)."""
+    from core.models import Mitarbeiter
+
+    with schema_context(iso_tenant.schema_name):
+        p = AiPolicy.objects.create(
+            geltungsbereich=AiPolicyGeltungsbereich.ALLGEMEIN,
+            titel="P", inhalt_markdown="x",
+        )
+        for i in range(3):
+            ma = Mitarbeiter.objects.create(
+                vorname=f"M{i}", nachname="x",
+                abteilung="x", rolle="x",
+                eintritt=datetime.date(2024, 1, 1),
+            )
+            AiPolicyKenntnisnahme.objects.create(policy=p, mitarbeiter=ma)
+    resp = authed_client.get("/api/iso42001/policies/")
+    assert resp.status_code == 200
+    payload = resp.json()
+    # DRF default-Pagination → results-key. Falls keine Pagination: Liste.
+    rows = payload.get("results", payload)
+    assert any(r["id"] == p.id and r["kenntnisnahmen_count"] == 3 for r in rows)

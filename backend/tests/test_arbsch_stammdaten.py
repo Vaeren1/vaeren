@@ -37,15 +37,18 @@ def test_taetigkeit_unique_in_bereich(basis_stammdaten):
 
 
 def test_seed_katalog_loads_entries(arbsch_tenant):
+    """Standard-Katalog wird ab Migration `arbeitsschutz.0002_seed_katalog`
+    automatisch pro Tenant-Schema befüllt — `seed_katalog()` ist idempotent."""
     with schema_context(arbsch_tenant.schema_name):
+        # Migration 0002 hat bereits geseedet → erneuter Aufruf = 0 neue
         n1 = seed_katalog()
-        assert n1 > 0
-        # Idempotent: zweiter Aufruf erzeugt nichts neues.
+        assert n1 == 0
+        # Erneut idempotent
         n2 = seed_katalog()
         assert n2 == 0
         total = Gefaehrdung.objects.filter(eigentuemer_tenant="").count()
         assert total >= 50  # Mindestens 50 Standard-Einträge
-        # Alle 12 Kategorien vertreten
+        # Alle Kategorien vertreten
         kats = set(Gefaehrdung.objects.values_list("kategorie", flat=True).distinct())
         for k in GefaehrdungKategorie.values:
             assert k in kats, f"Kategorie {k} fehlt im Seed."

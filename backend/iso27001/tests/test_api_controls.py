@@ -44,6 +44,28 @@ def test_dashboard_returns_coverage(tenant_iso, authed_client):
     assert data["coverage"]["total"] == 93
 
 
+def test_dashboard_auto_init_uses_bulk_create_under_2s(tenant_iso, authed_client):
+    """Dashboard-Erst-Aufruf legt 93 Impls per bulk_create an.
+
+    Performance-Cap (2s) ist großzügig, schützt aber vor Re-Einführung
+    des alten N+1-`get_or_create`-Patterns.
+    """
+    import time
+
+    with schema_context(tenant_iso.schema_name):
+        # Sicherstellen, dass keine Impls existieren
+        ControlImplementation.objects.all().delete()
+
+    t0 = time.monotonic()
+    resp = authed_client.get("/api/iso27001/dashboard/")
+    elapsed = time.monotonic() - t0
+    assert resp.status_code == 200
+    assert elapsed < 2.0, f"Dashboard zu langsam: {elapsed:.2f}s"
+
+    with schema_context(tenant_iso.schema_name):
+        assert ControlImplementation.objects.count() == 93
+
+
 def test_controls_list_returns_93(tenant_iso, authed_client):
     resp = authed_client.get("/api/iso27001/controls/")
     assert resp.status_code == 200

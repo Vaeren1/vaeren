@@ -250,19 +250,92 @@ export async function getGbu(id: number): Promise<Gbu> {
 export async function createGbu(payload: {
   taetigkeit: number;
   titel: string;
-  verantwortlicher?: number;
+  verantwortlicher?: number | null;
+  bemerkung?: string;
 }): Promise<Gbu> {
   return api("/api/arbeitsschutz/gbu/", { method: "POST", json: payload });
+}
+
+export async function updateGbu(
+  id: number,
+  payload: Partial<{
+    taetigkeit: number;
+    titel: string;
+    verantwortlicher: number | null;
+    bemerkung: string;
+    status: GbuStatus;
+  }>,
+): Promise<Gbu> {
+  return api(`/api/arbeitsschutz/gbu/${id}/`, { method: "PATCH", json: payload });
+}
+
+export async function createGbuPosition(payload: {
+  gbu: number;
+  gefaehrdung: number;
+  wahrscheinlichkeit?: number;
+  schwere?: number;
+  relevant?: boolean;
+  freitext_ergaenzung?: string;
+}): Promise<GbuPosition> {
+  return api("/api/arbeitsschutz/gbu-positionen/", { method: "POST", json: payload });
+}
+
+export async function updateGbuPosition(
+  id: number,
+  payload: Partial<{
+    wahrscheinlichkeit: number;
+    schwere: number;
+    relevant: boolean;
+    freitext_ergaenzung: string;
+  }>,
+): Promise<GbuPosition> {
+  return api(`/api/arbeitsschutz/gbu-positionen/${id}/`, {
+    method: "PATCH",
+    json: payload,
+  });
+}
+
+export async function deleteGbuPosition(id: number): Promise<void> {
+  return api(`/api/arbeitsschutz/gbu-positionen/${id}/`, { method: "DELETE" });
 }
 
 export async function freigebenGbu(id: number): Promise<Gbu> {
   return api(`/api/arbeitsschutz/gbu/${id}/freigeben/`, { method: "POST", json: {} });
 }
 
-export async function suggestGefaehrdungen(gbuId: number): Promise<unknown> {
+export interface GbuVorschlag {
+  id: number;
+  taetigkeit: number;
+  gbu: number | null;
+  vorgeschlagene_codes: Array<{ code: string; score?: number }>;
+  begruendung: string;
+  llm_modell: string;
+  quelle: string;
+  status: "offen" | "akzeptiert" | "verworfen";
+  erstellt_am: string;
+  entschieden_am: string | null;
+}
+
+export async function suggestGefaehrdungen(gbuId: number): Promise<GbuVorschlag> {
   return api(`/api/arbeitsschutz/gbu/${gbuId}/suggest-gefaehrdungen/`, {
     method: "POST",
     json: {},
+  });
+}
+
+export interface AkzeptierenResult {
+  detail: string;
+  created: number;
+  skipped_unknown_codes: string[];
+}
+
+export async function akzeptierenVorschlag(
+  vorschlagId: number,
+  codes?: string[],
+): Promise<AkzeptierenResult> {
+  return api(`/api/arbeitsschutz/gbu-vorschlaege/${vorschlagId}/akzeptieren/`, {
+    method: "POST",
+    json: codes ? { codes } : {},
   });
 }
 
@@ -280,6 +353,16 @@ export async function getUnfall(id: number): Promise<Unfall> {
 
 export async function createUnfall(payload: Partial<Unfall>): Promise<Unfall> {
   return api("/api/arbeitsschutz/unfaelle/", { method: "POST", json: payload });
+}
+
+export async function bgGemeldet(
+  id: number,
+  payload: { bg_aktenzeichen?: string; bg_gemeldet_am?: string } = {},
+): Promise<Unfall> {
+  return api(`/api/arbeitsschutz/unfaelle/${id}/bg-gemeldet/`, {
+    method: "POST",
+    json: payload,
+  });
 }
 
 export async function unfallStatistik(): Promise<{

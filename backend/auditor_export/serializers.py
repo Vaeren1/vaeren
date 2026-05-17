@@ -100,8 +100,9 @@ class VerifyRequestSerializer(serializers.Serializer):
 
 
 class VerifyResponseSerializer(serializers.Serializer):
+    # Bewusst KEIN tenant-Feld: Public-Endpoint ohne Auth, Tenant-Schema
+    # darf nicht ausgegeben werden (Wettbewerber-Reconnaissance).
     verified = serializers.BooleanField()
     reason = serializers.CharField(required=False, allow_blank=True)
-    tenant = serializers.CharField(required=False, allow_blank=True)
     norm_scope = serializers.ListField(child=serializers.CharField(), required=False)
     generated_at = serializers.CharField(required=False, allow_blank=True)

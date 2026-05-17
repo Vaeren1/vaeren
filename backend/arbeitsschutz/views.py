@@ -223,9 +223,11 @@ class GbuVorschlagViewSet(viewsets.ModelViewSet):
             codes = [c for c in codes if c in akzeptierte_codes]
 
         created = 0
+        skipped_unknown_codes: list[str] = []
         for code in codes:
             gef = Gefaehrdung.objects.filter(code=code).first()
             if not gef:
+                skipped_unknown_codes.append(code)
                 continue
             _, was_created = GbuGefaehrdung.objects.get_or_create(
                 gbu=vorschlag.gbu,
@@ -238,8 +240,18 @@ class GbuVorschlagViewSet(viewsets.ModelViewSet):
         vorschlag.entschieden_am = timezone.now()
         vorschlag.entschieden_von = request.user
         vorschlag.save(update_fields=["status", "entschieden_am", "entschieden_von"])
+        detail = f"{created} Positionen übernommen."
+        if skipped_unknown_codes:
+            detail += (
+                f" {len(skipped_unknown_codes)} unbekannte(r) Code(s) übersprungen: "
+                f"{', '.join(skipped_unknown_codes)}."
+            )
         return Response(
-            {"detail": f"{created} Positionen übernommen.", "created": created}
+            {
+                "detail": detail,
+                "created": created,
+                "skipped_unknown_codes": skipped_unknown_codes,
+            }
         )
 
     @action(detail=True, methods=["post"], url_path="verwerfen")
@@ -383,12 +395,19 @@ class AsaKonfigViewSet(viewsets.ModelViewSet):
 
 
 class ArbeitsunfallViewSet(viewsets.ModelViewSet):
-    """Liste = anonymisiert; Detail = entschlüsselt mit Permission."""
+    """Liste = anonymisiert (UnfallListSerializer ohne Klarname/Beschreibung);
+    Detail/Create/Update = entschlüsselt, nur GF/QM/CB (UnfallPermission).
+    Liste bleibt für Read-Rollen lesbar, Detail wird beschränkt.
+    """
 
-    permission_classes: ClassVar = [IsAuthenticated, ArbeitsschutzPermission]
     queryset = Arbeitsunfall.objects.select_related("arbeitsbereich", "taetigkeit").all()
     filterset_fields = ("schwere", "arbeitsbereich", "bg_meldung_pflicht")
     ordering_fields = ("datum",)
+
+    def get_permissions(self):
+        if self.action == "list":
+            return [IsAuthenticated(), ArbeitsschutzPermission()]
+        return [IsAuthenticated(), UnfallPermission()]
 
     def get_serializer_class(self):
         if self.action == "list":

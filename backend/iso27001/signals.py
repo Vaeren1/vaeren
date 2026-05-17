@@ -72,7 +72,14 @@ def implementation_post_save(
     today = datetime.date.today()
 
     if created:
-        # Auto-Evidence-Mapping
+        # Auto-Evidence-Mapping.
+        #
+        # Determinismus: `mapping.SUGGESTORS` ist ein Python-dict (3.7+ also
+        # insertion-order stabil). Bei Mehrfach-Match einer Evidence über
+        # mehrere Module gewinnt der ERSTE Eintrag in `SUGGESTORS` (first-
+        # write-wins). `get_or_create` schreibt `defaults` nur beim Anlegen,
+        # spätere Treffer in der Schleife greifen über die unique-constraint
+        # (implementation, evidence) und ändern `quell_modul` nicht.
         try:
             from . import mapping
 
@@ -86,7 +93,7 @@ def implementation_post_save(
                         "auto_suggested": True,
                     },
                 )
-        except Exception as exc:  # pragma: no cover
+        except (ImportError, AttributeError) as exc:  # pragma: no cover
             logger.warning("Auto-Evidence-Mapping fehlgeschlagen: %s", exc)
 
     if instance.status in (

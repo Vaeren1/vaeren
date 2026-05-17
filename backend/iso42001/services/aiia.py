@@ -65,6 +65,25 @@ def aiia_status_wechseln(
             f"Ungültige State-Transition: {aiia.status} → {neuer_status}. "
             f"Erlaubt: {list(valid_targets)}"
         )
+
+    # Pflichtfeld-Validation beim Übergang nach APPROVAL_OFFEN: Ohne diese
+    # Felder kann eine Freigabe nicht sinnvoll erfolgen — der Vier-Augen-Approver
+    # braucht die Bewertungs-Substanz.
+    if neuer_status == AIIAStatus.APPROVAL_OFFEN:
+        fehlende: list[str] = []
+        if not aiia.auswirkungs_kategorien:
+            fehlende.append("auswirkungs_kategorien")
+        if not (aiia.mitigationen or "").strip():
+            fehlende.append("mitigationen")
+        if not (aiia.restrisiko or "").strip():
+            fehlende.append("restrisiko")
+        if fehlende:
+            raise AIIAValidationError(
+                "Pflichtfelder fehlen für Freigabe-Antrag: "
+                + ", ".join(fehlende)
+                + ". Bitte vor Statuswechsel ergänzen."
+            )
+
     aiia.status = neuer_status
     aiia.save(update_fields=["status", "updated_at"])
     return aiia

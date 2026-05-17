@@ -59,12 +59,6 @@ RDG_DISCLAIMER = (
 )
 
 
-def _get_or_create_impl(control: Iso27001Control) -> ControlImplementation:
-    """Lazy-Anlage einer Implementation für ein Control."""
-    impl, _ = ControlImplementation.objects.get_or_create(control=control)
-    return impl
-
-
 class ControlViewSet(viewsets.ReadOnlyModelViewSet):
     """ReadOnly-Liste aller 93 Controls + Implementation-Joinview."""
 
@@ -204,12 +198,48 @@ class IsmsRiskAssessmentViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"], url_path="akzeptieren")
     def akzeptieren(self, request, pk=None):
-        """HITL-Gate: Restrisiko-Akzeptanz durch Mitarbeiter (typ. GF)."""
+        """HITL-Gate: Restrisiko-Akzeptanz NUR durch GF.
+
+        Spec §5: dokumentiert eine Akzeptanz-Erklärung. Wenn ein IT-Leiter
+        sich oder den Hausmeister einträgt, ist das eine Audit-Lüge.
+
+        Zwei-fache Prüfung:
+        1. Der eingeloggte User MUSS tenant_role=GESCHAEFTSFUEHRER haben.
+        2. Restrisiko (likelihood+impact) muss vor Akzeptanz dokumentiert sein.
+
+        Der `mitarbeiter_id` wird als formaler Eintrag gespeichert (oft
+        derselbe Mitarbeiter wie User, kann aber abweichen — z. B. wenn
+        einer von zwei Geschäftsführern den Eintrag stellvertretend macht).
+        """
+        from core.models import Mitarbeiter, TenantRole
+
+        if request.user.tenant_role != TenantRole.GESCHAEFTSFUEHRER:
+            return Response(
+                {
+                    "detail": (
+                        "Restrisiko-Akzeptanz ist Geschäftsführungs-Verantwortung. "
+                        "Nur User mit Rolle 'Geschäftsführung' können akzeptieren."
+                    )
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
         risiko = self.get_object()
         mitarbeiter_id = request.data.get("mitarbeiter_id")
-        from core.models import Mitarbeiter
-
+        if not mitarbeiter_id:
+            return Response(
+                {"detail": "mitarbeiter_id ist erforderlich."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         mitarbeiter = get_object_or_404(Mitarbeiter, pk=mitarbeiter_id)
+        if risiko.restrisiko_likelihood is None or risiko.restrisiko_impact is None:
+            return Response(
+                {
+                    "detail": (
+                        "Restrisiko (likelihood + impact) muss vor Akzeptanz dokumentiert sein."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         risiko.akzeptiert_von = mitarbeiter
         risiko.akzeptiert_am = timezone.now()
         risiko.save(update_fields=["akzeptiert_von", "akzeptiert_am", "updated_at"])
@@ -237,6 +267,34 @@ class StatementOfApplicabilityViewSet(viewsets.ReadOnlyModelViewSet):
             StatementOfApplicabilitySerializer(soa).data,
             status=status.HTTP_201_CREATED,
         )
+
+    @action(detail=False, methods=["get"], url_path="next-version")
+    def next_version(self, request):
+        """Schlägt die nächste freie SoA-Version vor (max + 0.1).
+
+        Format `v?MAJOR.MINOR`. Wenn keine SoA existiert → '1.0'.
+        Nicht-parsebare Versionen werden ignoriert (Auditor-Robustheit).
+        """
+        max_major, max_minor = 0, 0
+        any_found = False
+        for v in StatementOfApplicability.objects.values_list("version", flat=True):
+            raw = v.strip().lstrip("vV")
+            parts = raw.split(".")
+            if len(parts) < 2:
+                continue
+            try:
+                major = int(parts[0])
+                minor = int(parts[1])
+            except (TypeError, ValueError):
+                continue
+            any_found = True
+            if (major, minor) > (max_major, max_minor):
+                max_major, max_minor = major, minor
+        if not any_found:
+            vorschlag = "1.0"
+        else:
+            vorschlag = f"{max_major}.{max_minor + 1}"
+        return Response({"vorschlag": vorschlag})
 
     @action(detail=True, methods=["get"], url_path="pdf")
     def pdf(self, request, pk=None):
@@ -318,15 +376,27 @@ class DashboardView(viewsets.ViewSet):
     def list(self, request):
         # Auto-init: alle 93 Controls bekommen leere Implementations, damit
         # die Liste in der UI sofort gefüllt ist. Idempotent.
-        controls = Iso27001Control.objects.all()
+        #
+        # Performance: ein einziger bulk_create statt 93 get_or_create-INSERTs.
+        # `ignore_conflicts=True` macht es race-safe (zweite Dashboard-Request
+        # in derselben ms verliert sauber). Signals laufen NICHT — wir wollen
+        # für leere NICHT_BEWERTET-Skeletons auch kein Auto-Evidence-Mapping.
+        controls = list(Iso27001Control.objects.all())
         existing = set(
             ControlImplementation.objects.values_list("control_id", flat=True)
         )
-        for c in controls:
-            if c.id not in existing:
-                ControlImplementation.objects.get_or_create(
-                    control=c, defaults={"anwendbar": c.applicability_default}
-                )
+        missing = [c for c in controls if c.id not in existing]
+        if missing:
+            ControlImplementation.objects.bulk_create(
+                [
+                    ControlImplementation(
+                        control=c,
+                        anwendbar=c.applicability_default,
+                    )
+                    for c in missing
+                ],
+                ignore_conflicts=True,
+            )
 
         readiness = calculate_readiness_score()
         modul = module_score()

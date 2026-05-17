@@ -18,6 +18,7 @@ import {
   INCIDENT_TYP_LABELS,
   createIncident,
   eskalierenAlsDatenpanne,
+  incidentAbschliessen,
   listAiSystems,
   listIncidents,
   type AiIncident,
@@ -52,6 +53,7 @@ export function Iso42001IncidentsPage() {
   });
   const [showForm, setShowForm] = useState(false);
   const [eskalate, setEskalate] = useState<AiIncident | null>(null);
+  const [abschliessen, setAbschliessen] = useState<AiIncident | null>(null);
 
   const createMut = useMutation({
     mutationFn: createIncident,
@@ -74,6 +76,28 @@ export function Iso42001IncidentsPage() {
     },
     onError: (e: unknown) => {
       const msg = e instanceof Error ? e.message : "Fehler bei Eskalation";
+      toast.error(msg);
+    },
+  });
+
+  const abschliessenMut = useMutation({
+    mutationFn: (vars: {
+      id: number;
+      abgeschlossen_am: string;
+      korrekturmassnahme: string;
+    }) =>
+      incidentAbschliessen(vars.id, {
+        abgeschlossen_am: vars.abgeschlossen_am,
+        korrekturmassnahme: vars.korrekturmassnahme,
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["iso42001-incidents"] });
+      qc.invalidateQueries({ queryKey: ["iso42001-dashboard"] });
+      toast.success("Vorfall abgeschlossen.");
+      setAbschliessen(null);
+    },
+    onError: (e: unknown) => {
+      const msg = e instanceof Error ? e.message : "Fehler beim Abschluss";
       toast.error(msg);
     },
   });
@@ -107,7 +131,7 @@ export function Iso42001IncidentsPage() {
                   <TableHead>Entdeckt</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Datenpanne</TableHead>
-                  <TableHead />
+                  <TableHead>Aktionen</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -142,7 +166,17 @@ export function Iso42001IncidentsPage() {
                         </Button>
                       )}
                     </TableCell>
-                    <TableCell />
+                    <TableCell>
+                      {i.offen && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setAbschliessen(i)}
+                        >
+                          Abschließen
+                        </Button>
+                      )}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -170,6 +204,82 @@ export function Iso42001IncidentsPage() {
           isPending={eskalateMut.isPending}
         />
       )}
+
+      {abschliessen && (
+        <AbschluessenDialog
+          incident={abschliessen}
+          onCancel={() => setAbschliessen(null)}
+          onConfirm={(datum, korrektur) =>
+            abschliessenMut.mutate({
+              id: abschliessen.id,
+              abgeschlossen_am: datum,
+              korrekturmassnahme: korrektur,
+            })
+          }
+          isPending={abschliessenMut.isPending}
+        />
+      )}
+    </div>
+  );
+}
+
+function AbschluessenDialog({
+  incident,
+  onCancel,
+  onConfirm,
+  isPending,
+}: {
+  incident: AiIncident;
+  onCancel: () => void;
+  onConfirm: (datum: string, korrektur: string) => void;
+  isPending: boolean;
+}) {
+  const [datum, setDatum] = useState(new Date().toISOString().slice(0, 10));
+  const [korrektur, setKorrektur] = useState(incident.korrekturmassnahme ?? "");
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+      <form
+        className="w-[560px] max-w-full rounded-md bg-white p-6 shadow-xl"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onConfirm(datum, korrektur);
+        }}
+      >
+        <h2 className="mb-2 text-lg font-semibold">Vorfall abschließen</h2>
+        <p className="text-sm text-muted-foreground">
+          Bestätigt, dass der Vorfall <strong>{incident.titel}</strong> bearbeitet
+          ist. Die Korrekturmaßnahme wird in der Akte dokumentiert.
+        </p>
+        <div className="mt-3 space-y-3">
+          <div>
+            <Label>Abgeschlossen am</Label>
+            <Input
+              type="date"
+              value={datum}
+              onChange={(e) => setDatum(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <Label>Korrekturmaßnahme</Label>
+            <textarea
+              className="w-full rounded border px-3 py-2 text-sm"
+              rows={4}
+              value={korrektur}
+              onChange={(e) => setKorrektur(e.target.value)}
+              placeholder="Was wurde dauerhaft geändert, damit der Vorfall sich nicht wiederholt?"
+            />
+          </div>
+        </div>
+        <div className="mt-4 flex justify-end gap-2">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Abbrechen
+          </Button>
+          <Button type="submit" disabled={isPending}>
+            Abschließen
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }

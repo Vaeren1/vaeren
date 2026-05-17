@@ -55,8 +55,11 @@ def test_verify_correct_hash_returns_verified(two_tenants_with_index):
     )
     assert http_status == 200
     assert result.verified is True
-    assert result.tenant_schema == "verify_a"
     assert result.norm_scope == ["iso_27001"]
+    # K-AE-2-Fix: tenant_schema wird NICHT mehr exposed (Anti-Reconnaissance)
+    assert not hasattr(result, "tenant_schema") or not getattr(
+        result, "tenant_schema", ""
+    )
 
 
 def test_verify_wrong_hash_returns_verified_false(two_tenants_with_index):
@@ -69,17 +72,23 @@ def test_verify_wrong_hash_returns_verified_false(two_tenants_with_index):
 
 
 def test_verify_no_pii_disclosure(two_tenants_with_index):
-    """Spec §10.3.3 — Response enthält keinen PII außer Schema-Name."""
+    """K-AE-2 Fix: Response enthält keinerlei Tenant-/User-Identifikation.
+
+    Public-Endpoint ohne Auth → ein Wettbewerber dürfte sonst Mappe-IDs
+    enumerieren um Firma↔Audit-Mappe-Zuordnungen zu lernen. Erlaubt sind
+    nur unkritische Felder: verified, reason, norm_scope, generated_at.
+    """
     result, _ = verify_mappe(
         mappe_id="VAE-2026-0517-AAAA", file_sha256="aa" * 32
     )
     response_dict = result.to_dict()
-    # Verboten: keine User-Emails, keine Mitarbeiter-Namen, kein File-Inhalt
     response_str = str(response_dict).lower()
     assert "email" not in response_str
     assert "mitarbeiter" not in response_str
-    # Erlaubt: Tenant-Schema-Name + Norm-Scope + generated_at
-    assert "tenant" in response_dict
+    # KEIN tenant-Feld mehr (Anti-Reconnaissance):
+    assert "tenant" not in response_dict
+    assert "verify_a" not in response_str  # Schema-Name darf nicht leaken
+    assert response_dict["verified"] is True
     assert "norm_scope" in response_dict
 
 

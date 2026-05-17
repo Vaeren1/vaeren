@@ -164,9 +164,14 @@ class OSCALGenerator:
     def generate_assessment_results(self) -> OscalAssessmentResults:
         meta = self._metadata(title=f"Vaeren Assessment Results — {self.run.mappe_id}")
         norm_scopes = list(self.run.profile.norm_scope or []) if self.run.profile else []
+        # OSCAL-1.1.2 verlangt für AssessmentResults ein import-ap (Assessment Plan).
+        # Wir haben (noch) keinen vollwertigen AP; verwenden eine stabile Stub-URL,
+        # damit NIST-Validatoren nicht meckern. Slug = primärer Norm-Scope (oder "default").
+        primary_norm = norm_scopes[0] if norm_scopes else "default"
         return OscalAssessmentResults(
             uuid=str(stable_uuid_v5(f"vaeren.ar.{self.run.mappe_id}")),
             metadata=meta,
+            import_ap={"href": f"https://vaeren.de/oscal/profiles/{primary_norm}"},
             results=self._result_per_norm(norm_scopes),
         )
 

@@ -21,6 +21,7 @@ from auditor_export.oscal import OSCALGenerator
 from auditor_export.pdf import PDFGenerator
 from auditor_export.zipbundle import ZIPBuilder
 
+from .anonymize import anonymize_records
 from .hash_chain import compute_audit_log_chain
 
 if TYPE_CHECKING:
@@ -116,6 +117,16 @@ def execute_run(run_id: int, *, tenant_schema: str | None = None) -> AuditExport
                 level="info",
                 aggregator=agg.slug,
                 message=f"{len(agg_records)} Records gesammelt",
+            )
+
+        # 1b. PII-Anonymisierung (nach Sammlung, vor OSCAL/PDF/ZIP)
+        if profile.anonymisieren_pii:
+            before = len(records)
+            records = anonymize_records(records)
+            run.log(
+                level="info",
+                aggregator="anonymize",
+                message=f"PII anonymisiert ({before} Records, Mitarbeiter-Namen → MA-NNN)",
             )
 
         run.evidence_count = len(records)
@@ -232,8 +243,35 @@ def execute_run(run_id: int, *, tenant_schema: str | None = None) -> AuditExport
         (out_dir / "assessment-results.json").write_bytes(
             _json.dumps(ar_json, indent=2, sort_keys=True, ensure_ascii=False).encode("utf-8")
         )
+        # Externes PDF (Direct-Download via /runs/:id/download/pdf/) wird mit der
+        # vollständigen Verify-URL (mappe + hash) neu gerendert. Im ZIP-Bundle steckt
+        # weiterhin das Original-PDF (sonst würden die ZIP-internen Hashes nicht stimmen).
         if pdf_bytes:
-            (out_dir / "audit-mappe.pdf").write_bytes(pdf_bytes)
+            try:
+                final_pdf_gen = PDFGenerator(
+                    run=run,
+                    tenant_schema=tenant_schema,
+                    tenant_firma=tenant_firma,
+                    records=records,
+                    audit_log_chain_head=chain_head,
+                    zip_sha256=zip_sha,
+                )
+                final_bytes, final_sha = final_pdf_gen.render_pdf_with_hash()
+                (out_dir / "audit-mappe.pdf").write_bytes(final_bytes)
+                run.pdf_hash_sha256 = final_sha
+                run.log(
+                    level="info",
+                    aggregator="pdf",
+                    message="Final-PDF mit vollständiger Verify-URL (mappe+hash) gerendert",
+                )
+            except RuntimeError as exc:
+                # libcairo war beim ersten Render erfolgreich → hier sollte nichts passieren.
+                run.log(
+                    level="warning",
+                    aggregator="pdf",
+                    message=f"Final-PDF mit Hash-URL fehlgeschlagen: {exc}",
+                )
+                (out_dir / "audit-mappe.pdf").write_bytes(pdf_bytes)
 
         run.status = ExportRunStatus.DONE
         run.finished_at = timezone.now()

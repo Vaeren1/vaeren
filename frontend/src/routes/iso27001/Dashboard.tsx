@@ -30,6 +30,14 @@ const STATUS_LABEL: Record<string, string> = {
   nicht_anwendbar: "Nicht anwendbar",
 };
 
+// Tailwind JIT erkennt KEINE dynamisch zusammengesetzten Klassen (`bg-${x}-500`).
+// Wir mappen statisch, damit die Klassen im final-CSS landen.
+const LEVEL_DOT_BG: Record<string, string> = {
+  green: "bg-emerald-500",
+  yellow: "bg-amber-500",
+  red: "bg-rose-500",
+};
+
 export function Iso27001Dashboard() {
   const { data, isLoading } = useQuery({
     queryKey: ["iso27001-dashboard"],
@@ -117,7 +125,7 @@ export function Iso27001Dashboard() {
               <span className="text-4xl font-bold">{data.module_score}</span>
               <span className="text-sm text-muted-foreground">/ 100</span>
               <span
-                className={`ml-2 inline-block h-3 w-3 rounded-full bg-${data.module_level === "green" ? "emerald" : data.module_level === "yellow" ? "amber" : "rose"}-500`}
+                className={`ml-2 inline-block h-3 w-3 rounded-full ${LEVEL_DOT_BG[data.module_level] ?? "bg-slate-300"}`}
               />
             </div>
           </CardContent>

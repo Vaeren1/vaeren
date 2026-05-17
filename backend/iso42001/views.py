@@ -137,6 +137,16 @@ class AiPolicyViewSet(Iso42001ModuleEnabledMixin, viewsets.ModelViewSet):
     serializer_class = AiPolicySerializer
     filterset_fields = ("geltungsbereich", "aktiv")
 
+    def get_queryset(self):
+        # N+1-Fix: kenntnisnahmen_count via Aggregation statt pro-Row-COUNT.
+        from django.db.models import Count
+
+        return (
+            super()
+            .get_queryset()
+            .annotate(_kenntnisnahmen_count=Count("kenntnisnahmen"))
+        )
+
     def perform_create(self, serializer):
         serializer.save(erstellt_von=self.request.user)
 
@@ -156,11 +166,60 @@ class AiPolicyViewSet(Iso42001ModuleEnabledMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=["post"], url_path="ratifizieren")
     def ratifizieren(self, request, pk=None):
         policy = self.get_object()
+        # Ermittle Mitarbeiter: entweder explizit per `mitarbeiter_id` mitgegeben,
+        # oder via E-Mail-Match aus dem User-Account (Mitarbeiter hat keine
+        # direkte User-FK — Email ist der natürliche Schlüssel).
+        mitarbeiter = self._resolve_ratifying_mitarbeiter(request)
         try:
-            services.policy_ratifizieren(user=request.user, policy=policy)
+            services.policy_ratifizieren(
+                user=request.user, policy=policy, mitarbeiter=mitarbeiter
+            )
         except PermissionDenied as exc:
             return Response({"detail": str(exc)}, status=403)
         return Response(AiPolicySerializer(policy).data)
+
+    def _resolve_ratifying_mitarbeiter(self, request):
+        """Mitarbeiter für `ratified_by` ermitteln.
+
+        Priorität: (1) POST-Param `mitarbeiter_id` (explizit), (2) Mitarbeiter mit
+        gleicher E-Mail wie eingeloggter User. Gibt None zurück wenn nichts passt
+        — dann bleibt `ratified_by=None` (akzeptabel, da User-Login bereits im
+        AuditLog steht).
+        """
+        from core.models import Mitarbeiter
+
+        ma_id = request.data.get("mitarbeiter_id")
+        if ma_id:
+            return Mitarbeiter.objects.filter(pk=ma_id).first()
+        user_email = (getattr(request.user, "email", "") or "").strip().lower()
+        if user_email:
+            return (
+                Mitarbeiter.objects.filter(email__iexact=user_email)
+                .order_by("pk")
+                .first()
+            )
+        return None
+
+    @action(detail=True, methods=["post"], url_path="kenntnisnahme")
+    def kenntnisnahme(self, request, pk=None):
+        """Mitarbeiter bestätigt Kenntnisnahme einer Policy. Idempotent."""
+        from core.models import Mitarbeiter
+
+        policy = self.get_object()
+        ma_id = request.data.get("mitarbeiter_id")
+        if not ma_id:
+            return Response(
+                {"detail": "Pflichtfeld 'mitarbeiter_id' fehlt."}, status=400
+            )
+        mitarbeiter = Mitarbeiter.objects.filter(pk=ma_id).first()
+        if mitarbeiter is None:
+            return Response(
+                {"detail": f"Mitarbeiter {ma_id} nicht gefunden."}, status=404
+            )
+        kn = services.kenntnisnahme_abgeben(mitarbeiter=mitarbeiter, policy=policy)
+        from iso42001.serializers import AiPolicyKenntnisnahmeSerializer
+
+        return Response(AiPolicyKenntnisnahmeSerializer(kn).data, status=201)
 
     @action(detail=False, methods=["get"], url_path="templates")
     def templates(self, request):
@@ -290,6 +349,36 @@ class AiIncidentViewSet(Iso42001ModuleEnabledMixin, viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(erfasser=self.request.user)
+
+    @action(detail=True, methods=["post"], url_path="abschliessen")
+    def abschliessen(self, request, pk=None):
+        """Schließt einen Incident ab.
+
+        Body: `abgeschlossen_am` (optional, default heute), `korrekturmassnahme`
+        (optional). Idempotent — erneuter Aufruf überschreibt die Felder.
+        """
+        import datetime as _dt
+
+        incident = self.get_object()
+        datum_raw = request.data.get("abgeschlossen_am")
+        if datum_raw:
+            try:
+                datum = _dt.date.fromisoformat(datum_raw)
+            except (TypeError, ValueError):
+                return Response(
+                    {"detail": "abgeschlossen_am: ungültiges Datum (YYYY-MM-DD)."},
+                    status=400,
+                )
+        else:
+            datum = _dt.date.today()
+        korrektur = request.data.get("korrekturmassnahme", "")
+        incident.abgeschlossen_am = datum
+        if korrektur:
+            incident.korrekturmassnahme = korrektur
+        incident.save(
+            update_fields=["abgeschlossen_am", "korrekturmassnahme", "updated_at"]
+        )
+        return Response(AiIncidentSerializer(incident).data)
 
     @action(detail=True, methods=["post"], url_path="eskaliere-als-datenpanne")
     def eskaliere(self, request, pk=None):

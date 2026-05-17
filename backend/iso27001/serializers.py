@@ -308,3 +308,16 @@ class TreatmentEntwurfResponseSerializer(serializers.Serializer):
 class SoaErzeugenRequestSerializer(serializers.Serializer):
     version = serializers.CharField(max_length=20)
     geltungsbereich = serializers.CharField(allow_blank=True, default="")
+
+    def validate_version(self, value: str) -> str:
+        """Verhindert Duplikat-Versionen mit klarem 400 statt 500-IntegrityError.
+
+        Vorschlag für nächste freie Version wird im View
+        `next-version`-Endpoint geliefert.
+        """
+        if StatementOfApplicability.objects.filter(version=value).exists():
+            raise serializers.ValidationError(
+                f"SoA-Version '{value}' existiert bereits. Bitte eine "
+                "neue Version wählen (siehe /soa/next-version/)."
+            )
+        return value

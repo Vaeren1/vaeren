@@ -54,12 +54,23 @@ def test_run_e2e_produces_zip_pdf_oscal(tenant, settings):
     run = AuditExportRun.objects.create(profile=profile)
     result = execute_run(run.pk, tenant_schema=tenant.schema_name)
 
-    assert result.status in (ExportRunStatus.DONE, ExportRunStatus.FAILED), (
+    # FAILED ist nur akzeptabel, wenn libcairo/libpango/WeasyPrint fehlt.
+    # Jeder andere Fehler ist ein echter Test-Failure.
+    if result.status == ExportRunStatus.FAILED:
+        err = (result.error or "").lower()
+        weasy_markers = ("libcairo", "libpango", "weasyprint", "cairo", "pango")
+        if not any(m in err for m in weasy_markers):
+            raise AssertionError(
+                f"Run FAILED ohne erkennbaren WeasyPrint/libcairo-Fehler: "
+                f"error={result.error!r}; log={result.generation_log}"
+            )
+        # FAILED akzeptiert wegen fehlender PDF-System-Libs → früh raus.
+        pytest.skip(f"WeasyPrint-Stack nicht verfügbar: {result.error}")
+
+    assert result.status == ExportRunStatus.DONE, (
         f"Unerwarteter Status: {result.status}; Log: {result.generation_log}"
     )
-    # Bei FAILED ist es vermutlich libcairo; wir akzeptieren das, aber ZIP-Path
-    # sollte trotzdem gefüllt sein bevor PDF-Schritt scheitert. Wenn DONE:
-    if result.status == ExportRunStatus.DONE:
+    if True:
         assert result.file_hash_sha256, "Bundle-Hash fehlt"
         assert result.file_size_bytes > 0
         assert result.zip_path

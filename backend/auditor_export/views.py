@@ -14,6 +14,7 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
 from core.permissions import RulesPermission
@@ -194,10 +195,14 @@ class VerifyView(APIView):
     """Public Verify-Endpoint — Tenant-Schema-übergreifend, kein Auth.
 
     POST /api/audit-export/verify/ {"mappe_id": ..., "file_sha256": ...}
+
+    Anti-Reconnaissance: Response enthält KEIN tenant_schema, nur verified +
+    norm_scope. Throttle 30/min per Anon-IP gegen mappe_id-Brute-Force.
     """
 
     permission_classes: ClassVar = [AllowAny]
     authentication_classes: ClassVar = []
+    throttle_classes: ClassVar = [AnonRateThrottle]
 
     @extend_schema(
         request=VerifyRequestSerializer,

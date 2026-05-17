@@ -38,14 +38,19 @@ class PflichtunterweisungAggregator(BaseAggregator):
             period_to, datetime.time.max, tzinfo=datetime.UTC
         )
 
-        qs = (
-            SchulungsTask.objects.filter(
-                abgeschlossen_am__gte=period_from_dt,
-                abgeschlossen_am__lte=period_to_dt,
-                bestanden=True,
-            )
-            .select_related("welle", "welle__kurs", "mitarbeiter")
-        )
+        sub_filter = (filter_dict or {}).get(self.slug) or {}
+        qs = SchulungsTask.objects.filter(
+            abgeschlossen_am__gte=period_from_dt,
+            abgeschlossen_am__lte=period_to_dt,
+        ).select_related("welle", "welle__kurs", "mitarbeiter")
+
+        # Default: nur bestandene. Override via filter_json={"pflichtunterweisung": {"only_bestanden": false}}.
+        if sub_filter.get("only_bestanden", True):
+            qs = qs.filter(bestanden=True)
+        # Optionaler Min-Score-Filter (Integer-Prozent)
+        min_score = sub_filter.get("min_richtig_prozent")
+        if isinstance(min_score, int) and min_score > 0:
+            qs = qs.filter(richtig_prozent__gte=min_score)
         records = []
         for task in qs:
             record = EvidenceRecord(

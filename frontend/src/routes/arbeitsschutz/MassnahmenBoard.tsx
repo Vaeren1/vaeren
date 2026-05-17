@@ -1,9 +1,18 @@
 /**
  * Maßnahmen-Board (Kanban-light) nach STOP-Hierarchie + Status.
+ *
+ * Banner-Warning: Wenn Gefährdungen nur O/P-Maßnahmen haben (keine
+ * Substitution oder technische Maßnahme), zeigen wir einen Hinweis
+ * im Sinne von ArbSchG §4 (S/T sind nach Möglichkeit zu bevorzugen).
  */
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { listMassnahmen, type MassnahmeStatus, type StopStufe } from "@/lib/api/arbeitsschutz";
+import {
+  listMassnahmen,
+  type MassnahmeStatus,
+  type Schutzmassnahme,
+  type StopStufe,
+} from "@/lib/api/arbeitsschutz";
 import { useQuery } from "@tanstack/react-query";
 
 const STOP_LABEL: Record<StopStufe, string> = {
@@ -27,6 +36,28 @@ const STATUS_COLOR: Record<MassnahmeStatus, string> = {
   verworfen: "bg-slate-50 border-slate-200",
 };
 
+/**
+ * Zählt, wie viele Gefährdungs-Positionen NUR durch O/P abgedeckt werden,
+ * ohne mindestens eine S- oder T-Maßnahme. Maßnahmen mit Status
+ * "verworfen" werden ignoriert.
+ */
+function countGefaehrdungenOhneST(massnahmen: Schutzmassnahme[]): number {
+  const positionToStop = new Map<number, Set<StopStufe>>();
+  for (const m of massnahmen) {
+    if (m.status === "verworfen") continue;
+    for (const gefId of m.gbu_gefaehrdungen) {
+      const existing = positionToStop.get(gefId) ?? new Set<StopStufe>();
+      existing.add(m.hierarchie_stufe);
+      positionToStop.set(gefId, existing);
+    }
+  }
+  let count = 0;
+  for (const stops of positionToStop.values()) {
+    if (!stops.has("S") && !stops.has("T")) count += 1;
+  }
+  return count;
+}
+
 export function MassnahmenBoardPage() {
   const { data, isLoading } = useQuery({ queryKey: ["as-massnahmen"], queryFn: listMassnahmen });
 
@@ -48,9 +79,26 @@ export function MassnahmenBoardPage() {
   }
 
   const cols: MassnahmeStatus[] = ["geplant", "umgesetzt", "wirksam_geprueft"];
+
+  // STOP-Hierarchie-Warnung: zähle Gefährdungs-Positionen, die nur
+  // O- oder P-Maßnahmen haben (keine Substitution / technische Maßnahme).
+  const gefaehrdungenOhneST = countGefaehrdungenOhneST(data.results);
+
   return (
     <div>
       <h2 className="text-lg font-semibold mb-3">Maßnahmen-Board (STOP)</h2>
+      {gefaehrdungenOhneST > 0 && (
+        <div
+          role="alert"
+          className="mb-4 border border-amber-300 bg-amber-50 text-amber-900 rounded p-3 text-sm"
+        >
+          <strong>Warnung:</strong> {gefaehrdungenOhneST}{" "}
+          Gefährdungs-Position(en) haben nur organisatorische oder
+          PSA-Maßnahmen — bitte STOP-Hierarchie prüfen. Nach ArbSchG §4
+          sind Substitution (S) und technische Maßnahmen (T) bevorzugt
+          zu prüfen, bevor O/P angesetzt werden.
+        </div>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {cols.map((status) => (
           <div key={status} className="space-y-2">

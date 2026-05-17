@@ -367,6 +367,34 @@ class StatementOfApplicability(models.Model):
     def __str__(self) -> str:
         return f"SoA v{self.version} ({self.erstellt_am:%Y-%m-%d})"
 
+    def save(self, *args, **kwargs):
+        """Snapshot-Immutability-Guard.
+
+        Auditor-Versprechen: SoA-PDF ist byte-identisch reproduzierbar.
+        Wir persistieren nicht die PDF-Bytes (wären 10× Speicher und Re-Render
+        ist schneller als Filesystem-Restore), sondern die `snapshot_data` —
+        die DARF danach nicht mehr verändert werden, sonst bricht die
+        Reproduzierbarkeit.
+
+        Andere Felder (z. B. `pdf_evidence`-Link, `geltungsbereich` über
+        Update-Endpoint) dürfen sich ändern; nur `snapshot_data` ist
+        nach Erst-Speicherung append-only.
+        """
+        from django.core.exceptions import ValidationError
+
+        if self.pk is not None:
+            try:
+                existing = type(self).objects.get(pk=self.pk)
+            except type(self).DoesNotExist:
+                existing = None
+            if existing is not None and existing.snapshot_data != self.snapshot_data:
+                raise ValidationError(
+                    "snapshot_data einer existierenden SoA-Version ist "
+                    "unveränderlich (Auditor-Reproduzierbarkeits-Garantie). "
+                    "Für inhaltliche Änderungen bitte eine neue Version anlegen."
+                )
+        super().save(*args, **kwargs)
+
 
 # --- Management-Review ----------------------------------------------------
 

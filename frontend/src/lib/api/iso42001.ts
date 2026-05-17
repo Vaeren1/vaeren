@@ -255,8 +255,24 @@ export async function policyNewVersion(
   });
 }
 
-export async function policyRatify(id: number): Promise<AiPolicy> {
-  return api(`${BASE}/policies/${id}/ratifizieren/`, { method: "POST", json: {} });
+export async function policyRatify(
+  id: number,
+  payload: { mitarbeiter_id?: number } = {},
+): Promise<AiPolicy> {
+  return api(`${BASE}/policies/${id}/ratifizieren/`, {
+    method: "POST",
+    json: payload,
+  });
+}
+
+export async function policyKenntnisnahme(
+  id: number,
+  mitarbeiter_id: number,
+): Promise<{ id: number; policy: number; mitarbeiter: number; bestaetigt_am: string }> {
+  return api(`${BASE}/policies/${id}/kenntnisnahme/`, {
+    method: "POST",
+    json: { mitarbeiter_id },
+  });
 }
 
 export async function listPolicyTemplates(): Promise<AiPolicyTemplate[]> {
@@ -366,6 +382,16 @@ export async function eskalierenAlsDatenpanne(
   return api(`${BASE}/incidents/${id}/eskaliere-als-datenpanne/`, {
     method: "POST",
     json: { force },
+  });
+}
+
+export async function incidentAbschliessen(
+  id: number,
+  payload: { abgeschlossen_am?: string; korrekturmassnahme?: string } = {},
+): Promise<AiIncident> {
+  return api(`${BASE}/incidents/${id}/abschliessen/`, {
+    method: "POST",
+    json: payload,
   });
 }
 
