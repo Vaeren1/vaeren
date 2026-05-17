@@ -46,20 +46,6 @@ www.vaeren.de {
 vaeren.de {
     encode gzip zstd
 
-    # Kontakt-Formular der Marketing-Site → Backend (same-origin, kein CORS nötig).
-    # YAGNI: nur dieser eine Endpoint. Wenn mehr Marketing-API-Endpoints kommen,
-    # auf /api/* erweitern oder django-cors-headers nachrüsten.
-    @kontakt_api path /api/kontakt/*
-    reverse_proxy @kontakt_api vaeren-django:8000 {
-        header_up X-Forwarded-Proto https
-        header_up X-Real-IP {remote_host}
-        header_up Host {host}
-    }
-
-    root * /srv/vaeren-marketing
-    file_server
-    try_files {path} {path}/index.html /404.html
-
     # Astro-Assets sind content-hashed → unendlich cachen
     @astro_assets path /_astro/*
     header @astro_assets Cache-Control "public, max-age=31536000, immutable"
@@ -72,6 +58,26 @@ vaeren.de {
     header X-Frame-Options "DENY"
     header Referrer-Policy "strict-origin-when-cross-origin"
     header Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+    # Kontakt-Formular der Marketing-Site → Backend (same-origin, kein CORS nötig).
+    # MUSS in handle-Block stehen, sonst greift try_files weiter unten und
+    # rewriteted POST /api/kontakt/ zu /404.html (file_server → 405).
+    # YAGNI: nur dieser eine Endpoint. Wenn mehr Marketing-API-Endpoints kommen,
+    # auf /api/* erweitern oder django-cors-headers nachrüsten.
+    handle /api/kontakt/* {
+        reverse_proxy vaeren-django:8000 {
+            header_up X-Forwarded-Proto https
+            header_up X-Real-IP {remote_host}
+            header_up Host {host}
+        }
+    }
+
+    # Alles andere: statische Marketing-Site
+    handle {
+        root * /srv/vaeren-marketing
+        try_files {path} {path}/index.html /404.html
+        file_server
+    }
 
     # Klassische Fehlerseite
     handle_errors {

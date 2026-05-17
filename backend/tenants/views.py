@@ -88,7 +88,13 @@ class KontaktRequestCreateView(APIView):
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
         recipient = getattr(settings, "VAEREN_KONTAKT_EMAIL", "vaeren1@outlook.de")
-        from_email = getattr(settings, "VAEREN_FROM_EMAIL", "noreply@vaeren.de")
+        # Eigene From-Adresse für Kontakt-Mails: kontakt@ statt noreply@ (wirkt
+        # menschlicher) + Display-Name (Outlook/Gmail werten das milder beim
+        # Spam-Filter). Bewusst getrennt von DEFAULT_FROM_EMAIL für andere
+        # transactional Mails (Zertifikate, Notifications).
+        from_email = getattr(
+            settings, "VAEREN_KONTAKT_FROM", "Vaeren Kontakt <kontakt@vaeren.de>"
+        )
         ip = _client_ip(request) or "-"
 
         body_lines = [
@@ -112,7 +118,9 @@ class KontaktRequestCreateView(APIView):
             body="\n".join(body_lines),
             from_email=from_email,
             to=[recipient],
-            reply_to=[data["email"]],
+            # Reply-To mit Display-Name: "Konrad Bizer <kb@firma.de>" statt nackt
+            # kb@firma.de — sieht weniger automatisiert aus, Spam-Filter milder.
+            reply_to=[f"{data['name']} <{data['email']}>"],
         )
         try:
             msg.send(fail_silently=False)

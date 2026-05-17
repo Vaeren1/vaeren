@@ -66,6 +66,13 @@ VAEREN_FROM_EMAIL = DEFAULT_FROM_EMAIL
 # werden ohnehin nach vaeren1@outlook.de geforwarded — wir mailen direkt dorthin.
 VAEREN_KONTAKT_EMAIL = os.environ.get("VAEREN_KONTAKT_EMAIL", "vaeren1@outlook.de")
 
+# Absender-Header für Kontakt-Form-Mails. Bewusst kontakt@ statt noreply@ +
+# Display-Name → bessere Outlook/Gmail-Deliverability (Spam-Filter werten
+# Display-Name + menschliche Local-Part milder).
+VAEREN_KONTAKT_FROM = os.environ.get(
+    "VAEREN_KONTAKT_FROM", "Vaeren Kontakt <kontakt@vaeren.de>"
+)
+
 # --- Sentry (optional) ---------------------------------------------------
 _SENTRY_DSN = os.environ.get("SENTRY_DSN", "")
 if _SENTRY_DSN:
