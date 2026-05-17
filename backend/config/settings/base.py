@@ -24,6 +24,7 @@ SHARED_APPS: list[str] = [
     "django.contrib.auth",
     "django.contrib.sites",
     "redaktion",
+    "iso42001_catalog",
 ]
 TENANT_APPS: list[str] = [
     "django.contrib.admin",
@@ -48,6 +49,7 @@ TENANT_APPS: list[str] = [
     "auftragsverarbeitung",
     "transparenzregister",
     "nis2",
+    "iso42001",
     "rest_framework",
     "drf_spectacular",
     "django_filters",

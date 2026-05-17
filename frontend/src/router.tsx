@@ -11,6 +11,13 @@ import { KIInventarListPage } from "@/routes/ki-inventar";
 import { KIToolDetailPage } from "@/routes/ki-tool-detail";
 import { KIToolFormPage } from "@/routes/ki-tool-form";
 import { NIS2Page } from "@/routes/nis2";
+import { Iso42001AIIAsPage } from "@/routes/iso42001/aiias";
+import { Iso42001AiSystemsPage } from "@/routes/iso42001/ai-systems";
+import { Iso42001ControlListPage } from "@/routes/iso42001/control-list";
+import { Iso42001DashboardPage } from "@/routes/iso42001/dashboard";
+import { Iso42001IncidentsPage } from "@/routes/iso42001/incidents";
+import { Iso42001ManagementReviewPage } from "@/routes/iso42001/management-review";
+import { Iso42001PoliciesPage } from "@/routes/iso42001/policies";
 import { KursDetailPage } from "@/routes/kurs-detail";
 import { KursFormPage } from "@/routes/kurs-form";
 import { KurseListPage } from "@/routes/kurse";
@@ -72,6 +79,13 @@ export const router = createBrowserRouter([
       { path: "/ki-inventar/:id", element: <KIToolDetailPage /> },
       { path: "/avv", element: <AVVListPage /> },
       { path: "/nis2", element: <NIS2Page /> },
+      { path: "/iso42001", element: <Iso42001DashboardPage /> },
+      { path: "/iso42001/controls", element: <Iso42001ControlListPage /> },
+      { path: "/iso42001/policies", element: <Iso42001PoliciesPage /> },
+      { path: "/iso42001/ki-systeme", element: <Iso42001AiSystemsPage /> },
+      { path: "/iso42001/aiias", element: <Iso42001AIIAsPage /> },
+      { path: "/iso42001/incidents", element: <Iso42001IncidentsPage /> },
+      { path: "/iso42001/management-review", element: <Iso42001ManagementReviewPage /> },
       { path: "/redaktion", element: <RedaktionPage /> },
       { path: "/settings", element: <SettingsPage /> },
       { path: "/mfa-setup", element: <MfaSetupPage /> },

@@ -62,6 +62,13 @@ class Tenant(TenantMixin):
             " NIEMALS rotieren ohne Re-Encrypt-Migration — Datenverlust."
         ),
     )
+    module_iso42001_aktiv = models.BooleanField(
+        default=False,
+        help_text=(
+            "Phase-3-Modul ISO 42001 (KI-Management-System). Default-off, GF aktiviert"
+            " in Settings. Plan-2-Feature-Flag."
+        ),
+    )
 
     auto_create_schema = True
     # PROD-Risiko: löscht das gesamte Postgres-Schema bei Tenant.delete().

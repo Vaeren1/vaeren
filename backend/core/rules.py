@@ -102,3 +102,17 @@ rules.add_rule("can_edit_transparenzregister", is_geschaeftsfuehrer)
 
 rules.add_rule("can_view_nis2", _read_all_but_view_only | is_view_only)
 rules.add_rule("can_edit_nis2", _compliance_write | is_it_leiter)
+
+# --- Phase 3: ISO-42001 AIMS ----------------------------------------------
+# Lesen: alle authentifizierten Rollen (auch View-Only). Bearbeiten: Compliance-Schreib.
+# AIIA-Freigabe: nur GF (4-Augen-Prinzip im Service-Layer enforced).
+# Incident erfassen: jeder Tenant-User (auch View-Only).
+rules.add_rule("can_view_iso42001", _read_all_but_view_only | is_view_only)
+rules.add_rule("can_edit_iso42001", _compliance_write)
+rules.add_rule("can_approve_aiia", is_geschaeftsfuehrer)
+rules.add_rule("can_ratify_ai_policy", is_geschaeftsfuehrer)
+rules.add_rule(
+    "can_report_ai_incident",
+    is_any_authenticated_role | is_view_only,
+)
+rules.add_rule("can_create_management_review", is_geschaeftsfuehrer)

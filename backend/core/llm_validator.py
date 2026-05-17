@@ -33,6 +33,18 @@ FORBIDDEN_PHRASES: tuple[str, ...] = (
     r"\byou\s+must\b",
 )
 
+# Phase-3 ISO-42001-spezifisch: AIMS-Vorschläge (AIIA, Policy, Incident) müssen
+# Vorschlags-Sprache verwenden, nicht absolute Aussagen.
+AIMS_FORBIDDEN_PHRASES: tuple[str, ...] = FORBIDDEN_PHRASES + (
+    r"\brechtssicher\b",
+    r"\bgarantiert\s+konform\b",
+    r"\bsicher\s+rechtskonform\b",
+    r"\bzweifelsfrei\s+konform\b",
+    r"\bist\s+verboten\b",
+    r"\bist\s+zulässig\b",
+    r"\bist\s+(eindeutig|definitiv)\s+ein\b",
+)
+
 
 _COMPILED = tuple(re.compile(p, re.IGNORECASE) for p in FORBIDDEN_PHRASES)
 
@@ -51,6 +63,19 @@ def validate_output(text: str) -> ValidationResult:
     """Prüft Text gegen verbotene Formeln. Beide Varianten — Vorschlag + final."""
     matches: list[str] = []
     for compiled in _COMPILED:
+        m = compiled.search(text)
+        if m:
+            matches.append(m.group(0))
+    return ValidationResult(is_valid=not matches, matched_phrases=tuple(matches))
+
+
+_AIMS_COMPILED = tuple(re.compile(p, re.IGNORECASE) for p in AIMS_FORBIDDEN_PHRASES)
+
+
+def validate_aims_output(text: str) -> ValidationResult:
+    """Phase-3: erweiterte Validierung für ISO-42001-AIMS-Vorschläge."""
+    matches: list[str] = []
+    for compiled in _AIMS_COMPILED:
         m = compiled.search(text)
         if m:
             matches.append(m.group(0))
