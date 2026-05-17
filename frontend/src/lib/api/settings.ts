@@ -8,6 +8,7 @@ export interface TenantSettings {
   plan: string;
   pilot: boolean;
   mfa_required: boolean;
+  module_iso42001_aktiv: boolean;
 }
 
 export function useTenantSettings() {

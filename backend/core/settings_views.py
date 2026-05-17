@@ -34,6 +34,7 @@ class TenantSettingsSerializer(serializers.Serializer):
     plan = serializers.CharField(read_only=True)
     pilot = serializers.BooleanField(read_only=True)
     mfa_required = serializers.BooleanField()
+    module_iso42001_aktiv = serializers.BooleanField(required=False)
 
 
 class TenantSettingsView(APIView):
@@ -53,14 +54,12 @@ class TenantSettingsView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         ser = TenantSettingsSerializer(data=request.data, partial=True)
         ser.is_valid(raise_exception=True)
-        for field in ("firma_name", "locale", "mfa_required"):
+        EDITABLE_FIELDS = ("firma_name", "locale", "mfa_required", "module_iso42001_aktiv")
+        for field in EDITABLE_FIELDS:
             if field in ser.validated_data:
                 setattr(tenant, field, ser.validated_data[field])
         tenant.save(
-            update_fields=[
-                f for f in ("firma_name", "locale", "mfa_required") if f in ser.validated_data
-            ]
-            or None
+            update_fields=[f for f in EDITABLE_FIELDS if f in ser.validated_data] or None
         )
         return Response(TenantSettingsSerializer(_to_dict(tenant)).data)
 
@@ -79,4 +78,5 @@ def _to_dict(tenant) -> dict:
         "plan": tenant.plan,
         "pilot": tenant.pilot,
         "mfa_required": tenant.mfa_required,
+        "module_iso42001_aktiv": getattr(tenant, "module_iso42001_aktiv", False),
     }

@@ -128,6 +128,13 @@ fi
 echo "[6/7] .env.production hochladen …"
 scp "$ENV_FILE" "$SERVER:$REMOTE_DIR/.env"
 
+# --- 6b. Caddyfile syncen --------------------------------------------------
+# Caddy läuft im /opt/caddy/-Stack mit Bind-Mount /opt/caddy/Caddyfile →
+# /etc/caddy/Caddyfile. Bei jedem Deploy ggf. neue Routes / on-demand-TLS-Updates
+# rüberschieben — sonst greifen Caddy-Änderungen im Repo nicht.
+echo "[6b] Caddyfile → /opt/caddy/Caddyfile syncen …"
+scp infrastructure/Caddyfile "$SERVER:/opt/caddy/Caddyfile"
+
 # --- 7. Build + up + Public-Domains + Caddy reload ---------------------
 echo "[7/7] Container bauen, starten, Public-Domains pflegen, Caddy reload …"
 ssh "$SERVER" "cd $REMOTE_DIR && docker compose -f $COMPOSE_FILE up -d $BUILD_FLAG --remove-orphans"

@@ -106,5 +106,15 @@ rules.add_rule("can_edit_nis2", _compliance_write | is_it_leiter)
 # --- Phase 3: ISO-27001-Evidence-Sammler ---
 rules.add_rule("can_view_iso27001", _read_all_but_view_only | is_view_only)
 rules.add_rule("can_edit_iso27001", _compliance_write | is_it_leiter)
-# Management-Review-Genehmigung nur GF.
 rules.add_rule("can_approve_iso_mgt_review", is_geschaeftsfuehrer)
+
+# --- Phase 3: ISO-42001 AIMS ----------------------------------------------
+rules.add_rule("can_view_iso42001", _read_all_but_view_only | is_view_only)
+rules.add_rule("can_edit_iso42001", _compliance_write)
+rules.add_rule("can_approve_aiia", is_geschaeftsfuehrer)
+rules.add_rule("can_ratify_ai_policy", is_geschaeftsfuehrer)
+rules.add_rule(
+    "can_report_ai_incident",
+    is_any_authenticated_role | is_view_only,
+)
+rules.add_rule("can_create_management_review", is_geschaeftsfuehrer)

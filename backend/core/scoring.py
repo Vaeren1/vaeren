@@ -143,7 +143,6 @@ def _module_score_iso27001() -> ModuleScore:
 
         return module_score()
     except Exception:
-        # iso27001 ist evtl. nicht migriert → Neutralwert 100.
         return ModuleScore(
             modul="iso27001",
             label="ISO 27001",
@@ -151,6 +150,43 @@ def _module_score_iso27001() -> ModuleScore:
             level="green",
             detail="Modul nicht aktiviert.",
         )
+
+
+def _module_score_iso42001() -> ModuleScore | None:
+    """ISO-42001 AIMS-Score, nur wenn Modul aktiv für aktuellen Tenant.
+
+    Liefert None wenn Modul inaktiv (dann erscheint es nicht im Modul-Mittelwert).
+    """
+    try:
+        from django.db import connection
+
+        from tenants.models import Tenant
+    except Exception:  # pragma: no cover
+        return None
+
+    tenant = Tenant.objects.filter(schema_name=connection.schema_name).first()
+    if tenant is None or not getattr(tenant, "module_iso42001_aktiv", False):
+        return None
+
+    from iso42001.scoring import berechne_iso42001_score
+
+    breakdown = berechne_iso42001_score()
+    # Normalisierung auf 0..100 für Modul-Score-Konsistenz
+    score = round(100 * breakdown.gesamt_punkte / breakdown.gesamt_punkte_max)
+    score = max(0, min(100, score))
+    return ModuleScore(
+        modul="iso42001",
+        label="ISO 42001 AIMS",
+        score=score,
+        level=score_to_level(score),
+        detail=(
+            f"Controls {breakdown.controls_anteil:.0%} · "
+            f"AIIAs {breakdown.aiia_anteil:.0%} · "
+            f"Policies {breakdown.policies_anteil:.0%} · "
+            f"Incidents {breakdown.incident_disziplin:.0%} · "
+            f"Review {breakdown.review_aktuell:.0%}"
+        ),
+    )
 
 
 def calculate_compliance_score() -> ComplianceScore:
@@ -178,6 +214,9 @@ def calculate_compliance_score() -> ComplianceScore:
         _module_score_hinschg(),
         _module_score_iso27001(),
     ]
+    iso42001_module = _module_score_iso42001()
+    if iso42001_module is not None:
+        modules.append(iso42001_module)
     score_module_avg = round(sum(m.score for m in modules) / len(modules))
 
     master = round(0.5 * score_pflichten + 0.2 * score_fristen + 0.3 * score_module_avg)

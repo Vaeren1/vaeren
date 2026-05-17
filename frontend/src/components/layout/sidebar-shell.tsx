@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import {
   AlertTriangle,
   BookOpen,
+  BrainCircuit,
   ChevronDown,
   Cpu,
   FileCheck2,
@@ -38,12 +39,15 @@ import {
 import { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 
-const NAV: Array<{
+type NavItem = {
   to: string;
   label: string;
   icon: LucideIcon;
   group?: "compliance" | "stamm" | "intern";
-}> = [
+  requiresModule?: "iso42001";
+};
+
+const NAV: Array<NavItem> = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, group: "compliance" },
   {
     to: "/schulungen",
@@ -60,6 +64,13 @@ const NAV: Array<{
   { to: "/meldungen", label: "HinSchG", icon: Inbox, group: "compliance" },
   { to: "/datenpannen", label: "Datenpannen", icon: AlertTriangle, group: "compliance" },
   { to: "/ki-inventar", label: "KI-Inventar", icon: Cpu, group: "compliance" },
+  {
+    to: "/iso42001",
+    label: "ISO 42001",
+    icon: BrainCircuit,
+    group: "compliance",
+    requiresModule: "iso42001",
+  },
   { to: "/avv", label: "Auftragsverarbeitung", icon: FileCheck2, group: "compliance" },
   { to: "/nis2", label: "NIS2", icon: Network, group: "compliance" },
   { to: "/iso27001", label: "ISO 27001", icon: ShieldCheck, group: "compliance" },
@@ -86,6 +97,13 @@ export function SidebarShell() {
   const score = dashboard.data?.score?.master;
   const level = dashboard.data?.score?.level ?? "green";
 
+  const visibleNav = NAV.filter((n) => {
+    if (n.requiresModule === "iso42001") {
+      return Boolean(tenant.data?.module_iso42001_aktiv);
+    }
+    return true;
+  });
+
   return (
     <div className="flex h-screen w-full bg-slate-50">
       {/* Sidebar */}
@@ -98,15 +116,15 @@ export function SidebarShell() {
         <nav className="flex-1 space-y-6 px-3 py-4 text-sm">
           <SidebarGroup
             label="Compliance"
-            items={NAV.filter((n) => n.group === "compliance")}
+            items={visibleNav.filter((n) => n.group === "compliance")}
           />
           <SidebarGroup
             label="Verwaltung"
-            items={NAV.filter((n) => n.group === "stamm")}
+            items={visibleNav.filter((n) => n.group === "stamm")}
           />
           <SidebarGroup
             label="Intern"
-            items={NAV.filter((n) => n.group === "intern")}
+            items={visibleNav.filter((n) => n.group === "intern")}
           />
         </nav>
 
@@ -216,7 +234,7 @@ function SidebarGroup({
   items,
 }: {
   label: string;
-  items: typeof NAV;
+  items: NavItem[];
 }) {
   return (
     <div>
