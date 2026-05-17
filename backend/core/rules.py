@@ -118,3 +118,12 @@ rules.add_rule(
     is_any_authenticated_role | is_view_only,
 )
 rules.add_rule("can_create_management_review", is_geschaeftsfuehrer)
+
+# --- Phase 3: Arbeitsschutz --------------------------------------------------
+rules.add_rule("can_view_arbeitsschutz", _read_all_but_view_only | is_view_only)
+rules.add_rule("can_edit_arbeitsschutz", _compliance_write)
+rules.add_rule(
+    "can_view_arbeitsunfall_detail",
+    is_geschaeftsfuehrer | is_qm_leiter | is_compliance_beauftragter,
+)
+rules.add_rule("can_edit_arbeitsunfall", _compliance_write)

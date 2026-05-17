@@ -51,6 +51,7 @@ TENANT_APPS: list[str] = [
     "nis2",
     "iso27001",
     "iso42001",
+    "arbeitsschutz",
     "rest_framework",
     "drf_spectacular",
     "django_filters",

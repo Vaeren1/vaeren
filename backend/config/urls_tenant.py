@@ -21,6 +21,7 @@ urlpatterns = [
     path("api/", include("nis2.urls")),
     path("api/", include("iso27001.urls")),
     path("api/", include("iso42001.urls")),
+    path("api/", include("arbeitsschutz.urls")),
     # Redaktion-Backend (auth-only, schema-switching auf public).
     path("api/", include("redaktion.urls_internal")),
     # Self-Service-Onboarding-Setup (Magic-Link-Einlösen).

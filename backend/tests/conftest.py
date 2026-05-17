@@ -50,6 +50,14 @@ def _patch_flush_allow_cascade(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(flush_mod.Command, "handle", patched_handle)
 
 
+# Phase-3: Arbeitsschutz-Fixtures aus arbsch_fixtures.py importieren.
+from tests.arbsch_fixtures import (  # noqa: F401, E402
+    arbsch_tenant,
+    authed_client,
+    basis_stammdaten,
+)
+
+
 @pytest.fixture
 def db(transactional_db):
     """Erzwingt transactional_db für alle `db`-Fixturen.

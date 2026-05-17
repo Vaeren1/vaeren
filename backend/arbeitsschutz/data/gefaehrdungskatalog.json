@@ -1,0 +1,97 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "stand": "2026-05-17",
+    "quelle": "DGUV-Faktoren-Kompendium (BAuA), vereinfacht. Pilot-Tenants ergänzen tenant-eigene Einträge.",
+    "fixme": "Vollkatalog (~100 Einträge) ist post-merge zu erweitern — aktuell ~80 Einträge mit Subset pro Kategorie."
+  },
+  "eintraege": [
+    {"code": "MECH-001", "kategorie": "mechanisch", "name": "Ungeschützte bewegliche Maschinenteile", "beschreibung": "Quetschen, Scheren, Schneiden durch ungesicherte Wellen, Walzen, Riemen, Ketten.", "rechtsgrundlage": "BetrSichV §8, DGUV V3", "hinweis_arbeitsbereich": "Werkstatt, Produktion"},
+    {"code": "MECH-002", "kategorie": "mechanisch", "name": "Stoßen / Anstoßen an Werkstücken", "beschreibung": "Verletzung durch Anstoßen an scharfen Kanten, herausstehenden Werkstücken oder Anlagen.", "rechtsgrundlage": "ArbStättV", "hinweis_arbeitsbereich": "Werkstatt, Lager"},
+    {"code": "MECH-003", "kategorie": "mechanisch", "name": "Sturz auf gleicher Ebene (Stolpern, Rutschen, Stürzen)", "beschreibung": "Häufigste Unfallursache. Boden uneben, verschmutzt, Kabel.", "rechtsgrundlage": "ArbStättV §3a", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "MECH-004", "kategorie": "mechanisch", "name": "Sturz aus der Höhe", "beschreibung": "Absturz von Leitern, Podesten, Gerüsten, Dächern.", "rechtsgrundlage": "BetrSichV Anhang 1 Nr. 3", "hinweis_arbeitsbereich": "Außenmontage, Werkstatt"},
+    {"code": "MECH-005", "kategorie": "mechanisch", "name": "Erfasstwerden durch Förderanlagen / Stapler", "beschreibung": "Anfahren oder Erfassen durch Flurförderzeuge, Krane, Förderbänder.", "rechtsgrundlage": "DGUV V68", "hinweis_arbeitsbereich": "Lager, Werkstatt"},
+    {"code": "MECH-006", "kategorie": "mechanisch", "name": "Schneiden an Werkzeugen oder scharfen Kanten", "beschreibung": "Verletzung durch Messer, Klingen, Bleche, Spannvorrichtungen.", "rechtsgrundlage": "DGUV V1", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "MECH-007", "kategorie": "mechanisch", "name": "Stoß durch wegfliegende Teile", "beschreibung": "Späne, Splitter, Werkstücke bei Bearbeitung; Schutzbrille-Pflicht.", "rechtsgrundlage": "DGUV R 192", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "MECH-008", "kategorie": "mechanisch", "name": "Aufprall durch unter Druck stehende Medien", "beschreibung": "Hydraulik-/Pneumatikleitungen, Hochdruck-Reiniger.", "rechtsgrundlage": "BetrSichV §15", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "MECH-009", "kategorie": "mechanisch", "name": "Erschlagenwerden durch fallende Lasten", "beschreibung": "Herabfallende Werkstücke aus Regalen, Kranlasten, Stapelgut.", "rechtsgrundlage": "DGUV V68", "hinweis_arbeitsbereich": "Lager, Werkstatt"},
+    {"code": "MECH-010", "kategorie": "mechanisch", "name": "Verletzung durch defektes Werkzeug", "beschreibung": "Bruch eines Hammers, einer Trennscheibe, eines Bohrers.", "rechtsgrundlage": "DGUV V3", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "MECH-011", "kategorie": "mechanisch", "name": "Aufprall an offener Tür / Schublade", "beschreibung": "Stoßen an aufgeklappten Türen / Schubladen.", "rechtsgrundlage": "ArbStättV", "hinweis_arbeitsbereich": "Büro, Werkstatt"},
+    {"code": "MECH-012", "kategorie": "mechanisch", "name": "Erfasstwerden durch automatische Fertigungslinien", "beschreibung": "Pressen, Robotern, automatisierten Förderbändern.", "rechtsgrundlage": "BetrSichV §8", "hinweis_arbeitsbereich": "Produktion"},
+
+    {"code": "ELEK-001", "kategorie": "elektrisch", "name": "Direktes Berühren spannungsführender Teile", "beschreibung": "Stromschlag bei Arbeiten an unter Spannung stehenden Anlagen.", "rechtsgrundlage": "DGUV V3 §3", "hinweis_arbeitsbereich": "Werkstatt, IT"},
+    {"code": "ELEK-002", "kategorie": "elektrisch", "name": "Indirektes Berühren (Körperschluss)", "beschreibung": "Stromschlag durch defekte Isolierung an Werkzeug oder Gehäuse.", "rechtsgrundlage": "DGUV V3", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "ELEK-003", "kategorie": "elektrisch", "name": "Lichtbogen / Funkenflug", "beschreibung": "Verbrennungen + Augenschädigung durch Kurzschluss / Schweißarbeiten.", "rechtsgrundlage": "DGUV I 209-052", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "ELEK-004", "kategorie": "elektrisch", "name": "Beschädigte Leitungen und Stecker", "beschreibung": "Mechanische Schäden an Kabeln führen zu Stromschlag / Brand.", "rechtsgrundlage": "DGUV V3", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "ELEK-005", "kategorie": "elektrisch", "name": "Elektrostatische Aufladung", "beschreibung": "Funkenbildung in EX-Bereichen, Schäden an Elektronik.", "rechtsgrundlage": "TRBS 2153", "hinweis_arbeitsbereich": "Produktion"},
+    {"code": "ELEK-006", "kategorie": "elektrisch", "name": "Arbeiten an Anlagen über 1000 V", "beschreibung": "Hochspannungsschaltanlagen — nur durch befähigtes Personal.", "rechtsgrundlage": "DGUV V3 §5", "hinweis_arbeitsbereich": "Werkstatt"},
+
+    {"code": "GEFS-001", "kategorie": "gefahrstoffe", "name": "Einatmen lösungsmittelhaltiger Dämpfe", "beschreibung": "Lacke, Klebstoffe, Reiniger; ZNS-Schäden, Atemwegsreizung.", "rechtsgrundlage": "GefStoffV §10, TRGS 900", "hinweis_arbeitsbereich": "Werkstatt, Lager"},
+    {"code": "GEFS-002", "kategorie": "gefahrstoffe", "name": "Hautkontakt mit ätzenden / reizenden Stoffen", "beschreibung": "Säuren, Laugen, Reinigungsmittel; Verätzungen, Allergien.", "rechtsgrundlage": "GefStoffV §6", "hinweis_arbeitsbereich": "Werkstatt, Labor"},
+    {"code": "GEFS-003", "kategorie": "gefahrstoffe", "name": "Verschlucken / Aerosol-Aufnahme", "beschreibung": "Spritzen / Sprays gelangen in Mund oder Augen.", "rechtsgrundlage": "TRGS 555", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "GEFS-004", "kategorie": "gefahrstoffe", "name": "Schweißrauche", "beschreibung": "Metalloxide (Mn, Cr, Ni) — Lungen- und Krebsrisiko.", "rechtsgrundlage": "TRGS 528", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "GEFS-005", "kategorie": "gefahrstoffe", "name": "Krebserzeugende Stoffe (Kat. 1A/1B)", "beschreibung": "Asbest, Hartholzstaub, Quarzstaub, einige Lösungsmittel.", "rechtsgrundlage": "GefStoffV §10, TRGS 906", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "GEFS-006", "kategorie": "gefahrstoffe", "name": "Reizende Stäube", "beschreibung": "Holzstaub, Metallstaub — Atemwegsreizung, Schleimhaut.", "rechtsgrundlage": "TRGS 553", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "GEFS-007", "kategorie": "gefahrstoffe", "name": "Schmierstoffe und Kühlmittel-Emulsionen", "beschreibung": "Hautreizung, Allergien, biologische Belastung.", "rechtsgrundlage": "TRGS 611", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "GEFS-008", "kategorie": "gefahrstoffe", "name": "Spritzgießanlagen-Dampf", "beschreibung": "Kunststoff-Abdampfung bei Verarbeitung von Thermoplasten.", "rechtsgrundlage": "DGUV I 209-072", "hinweis_arbeitsbereich": "Produktion"},
+
+    {"code": "BIO-001", "kategorie": "biologisch", "name": "Kontakt mit Schimmelpilzen / Sporen", "beschreibung": "Allergien, Atemwegsbeschwerden bei feuchten Räumen, Klimaanlagen.", "rechtsgrundlage": "BioStoffV §4", "hinweis_arbeitsbereich": "Lager, Werkstatt"},
+    {"code": "BIO-002", "kategorie": "biologisch", "name": "Stiche / Bisse durch Tiere oder Insekten", "beschreibung": "Wespen, Mücken, Zecken auf Außenarbeitsplätzen.", "rechtsgrundlage": "BioStoffV", "hinweis_arbeitsbereich": "Außenmontage"},
+    {"code": "BIO-003", "kategorie": "biologisch", "name": "Schnitt-/Stichverletzung an kontaminierten Werkzeugen", "beschreibung": "Risiko Hepatitis, Tetanus.", "rechtsgrundlage": "TRBA 250", "hinweis_arbeitsbereich": "Werkstatt"},
+
+    {"code": "BRAN-001", "kategorie": "brand_explosion", "name": "Brand durch heiße Arbeiten", "beschreibung": "Schweißen, Schleifen, Trennen — Funkenflug entzündet brennbare Materialien.", "rechtsgrundlage": "DGUV I 209-022", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "BRAN-002", "kategorie": "brand_explosion", "name": "Brand durch elektrische Anlagen", "beschreibung": "Überlastete Leitungen, defekte Steckdosen.", "rechtsgrundlage": "DGUV V3", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "BRAN-003", "kategorie": "brand_explosion", "name": "Explosion durch staubexplosionsfähige Atmosphäre", "beschreibung": "Holz-, Mehl-, Metallstäube in EX-Zone.", "rechtsgrundlage": "GefStoffV §11, TRGS 720", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "BRAN-004", "kategorie": "brand_explosion", "name": "Lagern entflammbarer Flüssigkeiten", "beschreibung": "Benzin, Lösungsmittel, Spraydosen — Lagerung im Gefahrstoff-Schrank.", "rechtsgrundlage": "TRGS 510", "hinweis_arbeitsbereich": "Lager"},
+    {"code": "BRAN-005", "kategorie": "brand_explosion", "name": "Brandlasten durch Verpackungsmaterial", "beschreibung": "Holz, Papier, Karton in Lagerflächen.", "rechtsgrundlage": "VdS 2046", "hinweis_arbeitsbereich": "Lager"},
+
+    {"code": "THER-001", "kategorie": "thermisch", "name": "Verbrennung an heißen Werkstücken / Oberflächen", "beschreibung": "Geschweißte / gegossene / geschmiedete Teile, Maschinenoberflächen.", "rechtsgrundlage": "DGUV V1", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "THER-002", "kategorie": "thermisch", "name": "Verbrühung durch heiße Medien", "beschreibung": "Dampf, heißes Wasser, Öl, Schmelzen.", "rechtsgrundlage": "DGUV R 100-500", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "THER-003", "kategorie": "thermisch", "name": "Auskühlung / Erfrierung", "beschreibung": "Arbeiten im Kühlhaus, Außenarbeit Winter, Trockeneis.", "rechtsgrundlage": "DGUV I 213-002", "hinweis_arbeitsbereich": "Lager, Außenmontage"},
+    {"code": "THER-004", "kategorie": "thermisch", "name": "Hitzebelastung am Arbeitsplatz", "beschreibung": "Sommer, Sonneneinstrahlung, ofennahe Plätze.", "rechtsgrundlage": "ASR A3.5", "hinweis_arbeitsbereich": "Werkstatt, Außenmontage"},
+
+    {"code": "LAERM-001", "kategorie": "laerm", "name": "Lärmexposition > 80 dB(A)", "beschreibung": "Hörschäden bei chronischer Exposition; Gehörschutz Pflicht ab 85.", "rechtsgrundlage": "LärmVibrationsArbSchV §6", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "LAERM-002", "kategorie": "laerm", "name": "Impulslärm > 135 dB(C)", "beschreibung": "Schussgeräusche, Druckluft-Werkzeuge, Pressen.", "rechtsgrundlage": "LärmVibrationsArbSchV", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "LAERM-003", "kategorie": "laerm", "name": "Belastung durch Hintergrundlärm Großraumbüro", "beschreibung": "Konzentrations-Minderung, psychische Belastung.", "rechtsgrundlage": "ASR A3.7", "hinweis_arbeitsbereich": "Büro"},
+
+    {"code": "VIB-001", "kategorie": "vibration", "name": "Hand-Arm-Vibration", "beschreibung": "Bohrmaschinen, Schlagschrauber, Trennschleifer — Durchblutungsstörungen.", "rechtsgrundlage": "LärmVibrationsArbSchV §9", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "VIB-002", "kategorie": "vibration", "name": "Ganzkörper-Vibration", "beschreibung": "Stapler-Fahrer, LKW-Fahrer, Maschinensitze — Wirbelsäulenbelastung.", "rechtsgrundlage": "LärmVibrationsArbSchV", "hinweis_arbeitsbereich": "Lager"},
+
+    {"code": "STRAHL-001", "kategorie": "strahlung", "name": "UV-Strahlung Schweißbogen", "beschreibung": "Verblitzen (Bindehautentzündung), langfristig Hautkrebs.", "rechtsgrundlage": "OStrV §3, DGUV I 209-049", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "STRAHL-002", "kategorie": "strahlung", "name": "Laserstrahlung", "beschreibung": "Augen- und Hautschäden bei Klasse 3R/4-Lasern.", "rechtsgrundlage": "OStrV", "hinweis_arbeitsbereich": "Werkstatt, Labor"},
+    {"code": "STRAHL-003", "kategorie": "strahlung", "name": "IR-Strahlung (Wärmestrahlung)", "beschreibung": "Schmelzöfen, Schmiedearbeiten — Augenlinsentrübung.", "rechtsgrundlage": "OStrV", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "STRAHL-004", "kategorie": "strahlung", "name": "Ionisierende Strahlung (Röntgen)", "beschreibung": "Materialprüfung, medizinische Geräte — Strahlenschutzbeauftragter Pflicht.", "rechtsgrundlage": "StrlSchG, RöV", "hinweis_arbeitsbereich": "Labor, Werkstatt"},
+    {"code": "STRAHL-005", "kategorie": "strahlung", "name": "UV-Strahlung Sonne", "beschreibung": "Hautkrebsrisiko bei Außenarbeiten ohne Schutz.", "rechtsgrundlage": "DGUV I 203-080", "hinweis_arbeitsbereich": "Außenmontage"},
+    {"code": "STRAHL-006", "kategorie": "strahlung", "name": "Elektromagnetische Felder", "beschreibung": "Hochfrequenz-Sender, Induktionsöfen — vor allem für Implantat-Träger.", "rechtsgrundlage": "EMFV", "hinweis_arbeitsbereich": "Werkstatt"},
+
+    {"code": "ERGO-001", "kategorie": "ergonomie", "name": "Heben + Tragen schwerer Lasten", "beschreibung": "Bandscheibenschäden, Wirbelsäulen-Verschleiß.", "rechtsgrundlage": "LasthandhabV §3", "hinweis_arbeitsbereich": "Lager, Werkstatt"},
+    {"code": "ERGO-002", "kategorie": "ergonomie", "name": "Zwangshaltung / einseitige Belastung", "beschreibung": "Über-Kopf-Arbeit, Knien, langes Stehen.", "rechtsgrundlage": "DGUV I 215-410", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "ERGO-003", "kategorie": "ergonomie", "name": "Bildschirmarbeit / RSI", "beschreibung": "Maus-Arm, Nackenverspannung, Augenbelastung.", "rechtsgrundlage": "ArbStättV Anhang Nr. 6", "hinweis_arbeitsbereich": "Büro"},
+    {"code": "ERGO-004", "kategorie": "ergonomie", "name": "Repetitive Bewegungen", "beschreibung": "Fließband, Verpackung — Sehnenscheidenentzündung.", "rechtsgrundlage": "DGUV R 105-002", "hinweis_arbeitsbereich": "Produktion"},
+    {"code": "ERGO-005", "kategorie": "ergonomie", "name": "Beleuchtungsmängel", "beschreibung": "Zu wenig Licht → Augen-Ermüdung, Fehlerquote.", "rechtsgrundlage": "ASR A3.4", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "ERGO-006", "kategorie": "ergonomie", "name": "Klima / Luftqualität", "beschreibung": "Trockene Luft, Zugluft, CO₂-Belastung.", "rechtsgrundlage": "ASR A3.6", "hinweis_arbeitsbereich": "Büro"},
+    {"code": "ERGO-007", "kategorie": "ergonomie", "name": "Stehen über lange Zeit", "beschreibung": "Krampfadern, Rückenschmerzen.", "rechtsgrundlage": "DGUV I 215-510", "hinweis_arbeitsbereich": "Werkstatt"},
+
+    {"code": "PSY-001", "kategorie": "psychisch", "name": "Zeitdruck / hohes Arbeitstempo", "beschreibung": "Burnout-Risiko, Erschöpfung, Konzentrationsmangel.", "rechtsgrundlage": "ArbSchG §5 Abs. 3", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "PSY-002", "kategorie": "psychisch", "name": "Soziale Spannungen / Konflikte", "beschreibung": "Konflikte im Team, Mobbing — Erkrankungsrisiko.", "rechtsgrundlage": "AGG, ArbSchG", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "PSY-003", "kategorie": "psychisch", "name": "Monotone Tätigkeiten", "beschreibung": "Fließband, gleichförmige Arbeit; Aufmerksamkeitsabfall.", "rechtsgrundlage": "BAuA-Empfehlung", "hinweis_arbeitsbereich": "Produktion"},
+    {"code": "PSY-004", "kategorie": "psychisch", "name": "Schichtarbeit / Nachtarbeit", "beschreibung": "Schlafstörungen, Herz-Kreislauf-Risiko.", "rechtsgrundlage": "ArbZG §6", "hinweis_arbeitsbereich": "Produktion"},
+    {"code": "PSY-005", "kategorie": "psychisch", "name": "Alleinarbeit ohne Sicherung", "beschreibung": "Verzögerte Hilfe bei Unfall.", "rechtsgrundlage": "DGUV R 100-001", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "PSY-006", "kategorie": "psychisch", "name": "Hohe emotionale Belastung", "beschreibung": "Kundenkontakt, Reklamationen, Lieferantenstreit.", "rechtsgrundlage": "BAuA", "hinweis_arbeitsbereich": "Büro"},
+    {"code": "PSY-007", "kategorie": "psychisch", "name": "Mangel an Pausen / Erholungszeiten", "beschreibung": "Verstoß gegen ArbZG, gesundheitliche Folgen.", "rechtsgrundlage": "ArbZG §4", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "PSY-008", "kategorie": "psychisch", "name": "Unklare Verantwortung / Rollenkonflikt", "beschreibung": "Stress, Unzufriedenheit, hohe Fluktuation.", "rechtsgrundlage": "BAuA", "hinweis_arbeitsbereich": "Alle"},
+
+    {"code": "ORG-001", "kategorie": "organisatorisch", "name": "Fehlende Unterweisung neuer Mitarbeitender", "beschreibung": "MA kennt Gefahren nicht — höhere Unfallquote.", "rechtsgrundlage": "ArbSchG §12, DGUV V1 §4", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "ORG-002", "kategorie": "organisatorisch", "name": "Fehlende oder veraltete Betriebsanweisung", "beschreibung": "Maschinen ohne BA, oder BA nicht ausgehängt.", "rechtsgrundlage": "BetrSichV §12", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "ORG-003", "kategorie": "organisatorisch", "name": "Unklare Zuständigkeiten im Notfall", "beschreibung": "Niemand weiß, wer Feuerwehr ruft, wer löscht.", "rechtsgrundlage": "ArbStättV §4 Abs. 4", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "ORG-004", "kategorie": "organisatorisch", "name": "Fehlende PSA-Bereitstellung", "beschreibung": "AG stellt nicht alle erforderlichen Schutzmittel.", "rechtsgrundlage": "PSA-BV §2", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "ORG-005", "kategorie": "organisatorisch", "name": "Mangelhafte Erste-Hilfe-Ausstattung", "beschreibung": "Verbandkasten unvollständig, fehlende Ersthelfer.", "rechtsgrundlage": "DGUV V1 §25-27", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "ORG-006", "kategorie": "organisatorisch", "name": "Fehlende Sicherheitsbeauftragte", "beschreibung": "Bei ≥21 MA Pflicht-Bestellung.", "rechtsgrundlage": "SGB VII §22", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "ORG-007", "kategorie": "organisatorisch", "name": "Wartungs-Mängel an Maschinen", "beschreibung": "Verspätete oder fehlende Prüfung sicherheitsrelevanter Teile.", "rechtsgrundlage": "BetrSichV §14, DGUV V3", "hinweis_arbeitsbereich": "Werkstatt"},
+    {"code": "ORG-008", "kategorie": "organisatorisch", "name": "Mangelhafte Kennzeichnung von Fluchtwegen", "beschreibung": "Fluchtwege nicht erkennbar / blockiert.", "rechtsgrundlage": "ASR A1.3, ASR A2.3", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "ORG-009", "kategorie": "organisatorisch", "name": "Fehlende Gefährdungsbeurteilung", "beschreibung": "Keine GBU dokumentiert — formaler Verstoß ArbSchG §5.", "rechtsgrundlage": "ArbSchG §5", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "ORG-010", "kategorie": "organisatorisch", "name": "Fehlende Brandschutz-Übung", "beschreibung": "Räumung im Ernstfall ungeübt.", "rechtsgrundlage": "ArbStättV §4 Abs. 4", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "ORG-011", "kategorie": "organisatorisch", "name": "Mangelnde Reinigung / Ordnung", "beschreibung": "Stolperfallen, Brandlasten, Hygienemängel.", "rechtsgrundlage": "ArbStättV §4", "hinweis_arbeitsbereich": "Alle"},
+    {"code": "ORG-012", "kategorie": "organisatorisch", "name": "Fehlende Wiederholungsunterweisung", "beschreibung": "Jährliche Unterweisung nicht durchgeführt.", "rechtsgrundlage": "DGUV V1 §4", "hinweis_arbeitsbereich": "Alle"}
+  ]
+}

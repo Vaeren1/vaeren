@@ -31,6 +31,11 @@ FORBIDDEN_PHRASES: tuple[str, ...] = (
     r"\bis\s+high[- ]risk\b",
     r"\bmust\s+be\s+reported\b",
     r"\byou\s+must\b",
+    # Phase 3 — arbeitsschutz-spezifische verbotene Formeln (Spec §7).
+    r"\bist\s+gesetzlich\s+pflicht\b",
+    r"\bist\s+haftungsrechtlich\b",
+    r"\bdroht\s+strafrechtliche\b",
+    r"\bSie\s+müssen\s+bestellen\b",
 )
 
 # Phase-3 ISO-42001-spezifisch: AIMS-Vorschläge (AIIA, Policy, Incident) müssen
