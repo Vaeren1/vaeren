@@ -132,8 +132,13 @@ scp "$ENV_FILE" "$SERVER:$REMOTE_DIR/.env"
 echo "[7/7] Container bauen, starten, Public-Domains pflegen, Caddy reload …"
 ssh "$SERVER" "cd $REMOTE_DIR && docker compose -f $COMPOSE_FILE up -d $BUILD_FLAG --remove-orphans"
 # ensure_public_domains nach jedem Deploy laufen lassen (idempotent, billig).
-ssh "$SERVER" "cd $REMOTE_DIR && docker compose -f $COMPOSE_FILE exec -T vaeren-django python manage.py ensure_public_domains || echo '  (warnung: ensure_public_domains failed, manuell prüfen)'"
-ssh "$SERVER" "systemctl reload caddy || systemctl restart caddy"
+# Service-Name im Compose ist `django` (Container-Name ist `vaeren-django` über
+# container_name:) — docker compose exec verlangt den Service-Namen.
+ssh "$SERVER" "cd $REMOTE_DIR && docker compose -f $COMPOSE_FILE exec -T django python manage.py ensure_public_domains || echo '  (warnung: ensure_public_domains failed, manuell prüfen)'"
+# Caddy läuft als eigener Container im /opt/caddy/-Stack (NICHT systemd-Unit) —
+# Reload erzwingt frische DNS-Resolution für die Backend-Container, die gerade
+# neu erstellt wurden (sonst kann Caddy auf alte IPs zeigen und 502 liefern).
+ssh "$SERVER" "docker exec caddy caddy reload --config /etc/caddy/Caddyfile || echo '  (warnung: caddy reload failed, manuell prüfen: docker logs caddy)'"
 
 echo ""
 echo "=== Deploy abgeschlossen ==="
