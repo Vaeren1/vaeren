@@ -179,6 +179,9 @@ stats.vaeren.de {
 # --- Vaeren Public-Hinweisgeber-Portal ------------------------------------
 hinweise.app.vaeren.de {
     encode gzip zstd
+    tls {
+        on_demand
+    }
 
     # Public-API für Meldung-Submit + Status
     @api {
