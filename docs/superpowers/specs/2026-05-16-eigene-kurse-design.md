@@ -558,12 +558,12 @@ Pro Slice:
 
 Das Feature gilt als abgeschlossen, wenn:
 
-- [~] Slice 1 deployed 2026-05-17 (S2-S4 ausstehend)
-- [ ] Demo-Tenant hat mindestens 1 eigenen Kurs aller 6 Modul-Typen
-- [ ] Eine Demo-Welle eines eigenen Kurses ist erfolgreich von einem Demo-Mitarbeiter durchlaufen
-- [ ] LLM-Vorschlag wurde an mindestens 1 PDF erfolgreich getestet (manueller Review)
-- [ ] Zertifikat-aus / Quiz-aus-Pfad wurde an einem Demo-Kurs verifiziert
-- [ ] Playwright-E2E-Spec aus §7.3 läuft auf main grün
-- [ ] CI-Gate `--cov-fail-under=80` bleibt grün
-- [ ] OpenAPI-Schema-Sync bleibt grün
-- [ ] Backup-Restore-Test (restic) zeigt, dass `vaeren-media` und Snapshot-Files konsistent restauriert werden
+- [x] **Code-Lieferung komplett:** Slices 1–4 deployed 2026-05-17 (S1: Kurs-Skelett, S2a-e: Modul-Editor alle 6 Typen mit Smart-Compression via gs/Pillow/ffmpeg/soffice, S3: Quiz-Pool + LLM-Vorschlag, S4: WelleSnapshot + Kenntnisnahme/Lesezeit-Player + Zertifikat-Optional)
+- [x] OpenAPI-Schema-Sync grün (geprüft pro Slice)
+- [ ] Demo-Tenant hat mindestens 1 eigenen Kurs aller 6 Modul-Typen *(Manuell-Smoke durch User offen)*
+- [ ] Eine Demo-Welle eines eigenen Kurses ist erfolgreich von einem Demo-Mitarbeiter durchlaufen *(Manuell-Smoke durch User offen)*
+- [ ] LLM-Vorschlag wurde an mindestens 1 PDF erfolgreich getestet *(Manuell-Smoke durch User offen)*
+- [ ] Zertifikat-aus / Quiz-aus-Pfad wurde an einem Demo-Kurs verifiziert *(Backend-Test ✓, manueller End-to-End-Smoke offen)*
+- [ ] Playwright-E2E-Spec aus §7.3 läuft auf main grün *(nicht implementiert — Spec-Punkt verschoben in Phase 2)*
+- [ ] CI-Gate `--cov-fail-under=80` bleibt grün *(72/72 pflichtunterweisung-Tests grün; volle Suite mit Coverage-Reportergeber wurde nicht in dieser Session geprüft)*
+- [ ] Backup-Restore-Test (restic) zeigt, dass `vaeren-media` und Snapshot-Files konsistent restauriert werden *(nicht in dieser Session getestet — Snapshot-Pfad `media/snapshots/welle-<id>/` ist neu, Backup-Pattern unverändert: gesamtes media-Volume)*
