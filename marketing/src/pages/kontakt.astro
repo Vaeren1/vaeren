@@ -15,26 +15,27 @@ import Layout from "../components/Layout.astro";
 
     <div class="grid md:grid-cols-2 gap-12">
       <form
+        id="kontakt-form"
         method="post"
-        action="mailto:kontakt@vaeren.de"
-        enctype="text/plain"
+        action="/api/kontakt/"
         class="space-y-5"
+        novalidate
       >
         <div>
           <label for="name" class="block text-sm text-ink-soft mb-2">Name</label>
-          <input id="name" name="Name" type="text" required class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
+          <input id="name" name="name" type="text" required class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
         </div>
         <div>
           <label for="firma" class="block text-sm text-ink-soft mb-2">Unternehmen</label>
-          <input id="firma" name="Firma" type="text" class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
+          <input id="firma" name="firma" type="text" class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
         </div>
         <div>
           <label for="email" class="block text-sm text-ink-soft mb-2">E-Mail</label>
-          <input id="email" name="Email" type="email" required class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
+          <input id="email" name="email" type="email" required class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
         </div>
         <div>
-          <label for="groesse" class="block text-sm text-ink-soft mb-2">Mitarbeitende</label>
-          <select id="groesse" name="Mitarbeitende" class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand">
+          <label for="mitarbeitende" class="block text-sm text-ink-soft mb-2">Mitarbeitende</label>
+          <select id="mitarbeitende" name="mitarbeitende" class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand">
             <option>unter 50</option>
             <option>50 bis 99</option>
             <option>100 bis 249</option>
@@ -44,10 +45,15 @@ import Layout from "../components/Layout.astro";
         </div>
         <div>
           <label for="anliegen" class="block text-sm text-ink-soft mb-2">Anliegen</label>
-          <textarea id="anliegen" name="Anliegen" required rows="5" class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand"></textarea>
+          <textarea id="anliegen" name="anliegen" required rows="5" class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand"></textarea>
         </div>
-        <button type="submit" class="px-6 py-3 bg-ink text-paper rounded-full hover:bg-brand">Anfrage senden</button>
-        <p class="text-xs text-ink-muted">Dieses Formular öffnet Ihren Standard-Mail-Client. Sie senden uns die Nachricht direkt, ohne dass Daten über uns laufen.</p>
+
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;" />
+
+        <button id="kontakt-submit" type="submit" class="px-6 py-3 bg-ink text-paper rounded-full hover:bg-brand disabled:opacity-50 disabled:cursor-not-allowed">Anfrage senden</button>
+
+        <p id="kontakt-status" class="text-sm" role="status" aria-live="polite"></p>
+        <p class="text-xs text-ink-muted">Wir antworten persönlich, in der Regel innerhalb eines Werktags. Keine automatischen Marketing-Mails.</p>
       </form>
 
       <aside class="space-y-8 text-ink-soft">
@@ -68,3 +74,56 @@ import Layout from "../components/Layout.astro";
     </div>
   </section>
 </Layout>
+
+<script>
+  const form = document.getElementById("kontakt-form") as HTMLFormElement | null;
+  const submitBtn = document.getElementById("kontakt-submit") as HTMLButtonElement | null;
+  const statusEl = document.getElementById("kontakt-status") as HTMLParagraphElement | null;
+  if (form && submitBtn && statusEl) {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      statusEl.className = "text-sm text-ink-soft";
+      statusEl.textContent = "Wird gesendet …";
+      submitBtn.disabled = true;
+
+      const fd = new FormData(form);
+      const payload = {
+        name: String(fd.get("name") ?? "").trim(),
+        firma: String(fd.get("firma") ?? "").trim(),
+        email: String(fd.get("email") ?? "").trim(),
+        mitarbeitende: String(fd.get("mitarbeitende") ?? "").trim(),
+        anliegen: String(fd.get("anliegen") ?? "").trim(),
+        website: String(fd.get("website") ?? ""),
+      };
+
+      try {
+        const res = await fetch("/api/kontakt/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          form.reset();
+          statusEl.className = "text-sm text-brand";
+          statusEl.textContent = "Vielen Dank, wir melden uns innerhalb von 1 Werktag.";
+        } else if (res.status === 429) {
+          statusEl.className = "text-sm text-red-600";
+          statusEl.textContent = "Zu viele Anfragen. Bitte versuchen Sie es in einer Stunde erneut.";
+        } else {
+          let detail = "Versand fehlgeschlagen. Bitte schreiben Sie direkt an kontakt@vaeren.de.";
+          try {
+            const data = await res.json();
+            if (typeof data?.detail === "string") detail = data.detail;
+          } catch {}
+          statusEl.className = "text-sm text-red-600";
+          statusEl.textContent = detail;
+        }
+      } catch {
+        statusEl.className = "text-sm text-red-600";
+        statusEl.textContent = "Netzwerkfehler. Bitte schreiben Sie direkt an kontakt@vaeren.de.";
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  }
+</script>

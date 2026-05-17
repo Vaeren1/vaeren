@@ -586,12 +586,19 @@ export interface PublicSchulungActive {
   kurs_beschreibung: string;
   deadline: string;
   einleitungs_text: string;
+  quiz_modus: QuizModus;
+  mindest_lesezeit_s: number;
   min_richtig_prozent: number;
+  zertifikat_aktiv: boolean;
   module: {
     id: number;
     titel: string;
-    inhalt_md: string;
     reihenfolge: number;
+    typ: ModulTyp;
+    inhalt_md: string;
+    youtube_url: string;
+    asset_id: number | null;
+    asset_url?: string | null;
   }[];
   fragen: PublicFrage[];
 }
@@ -649,14 +656,15 @@ export function usePublicAbschliessen(token: string) {
       richtig_prozent: number;
       zertifikat_id: string | null;
       ablauf_datum: string | null;
+      zertifikat_aktiv?: boolean;
     },
     ApiError,
-    void
+    { besuchte_module?: number[] } | void
   >({
-    mutationFn: () =>
+    mutationFn: (payload) =>
       api(`/api/public/schulung/${token}/abschliessen/`, {
         method: "POST",
-        json: {},
+        json: payload ?? {},
       }),
   });
 }

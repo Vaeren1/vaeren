@@ -969,7 +969,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Resolves Token -> Task + Kurs + Module + Fragen (ohne ist_korrekt). */
+        /** @description Resolves Token -> Task + Kurs + Module + Fragen (aus Snapshot wenn vorhanden). */
         get: operations["public_schulung_retrieve"];
         put?: never;
         post?: never;
@@ -1035,7 +1035,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description PDF-Download (oder HTML-Fallback wenn WeasyPrint fehlt). */
+        /**
+         * @description PDF-Download (oder HTML-Fallback wenn WeasyPrint fehlt).
+         *
+         *     Respektiert kurs.zertifikat_aktiv aus dem Snapshot — wenn deaktiviert,
+         *     kein PDF (selbst wenn der Kurs bestanden wurde).
+         */
         get: operations["public_schulung_zertifikat_retrieve"];
         put?: never;
         post?: never;
@@ -2325,6 +2330,7 @@ export interface components {
             task_id: number;
             status: string;
             kurs_titel?: string;
+            quiz_modus?: string;
         };
         PublicSchulungStartResponse: {
             status: string;

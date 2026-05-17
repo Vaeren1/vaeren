@@ -3265,7 +3265,7 @@
         "/api/public/schulung/{token}/": {
             "get": {
                 "operationId": "public_schulung_retrieve",
-                "description": "Resolves Token -> Task + Kurs + Module + Fragen (ohne ist_korrekt).",
+                "description": "Resolves Token -> Task + Kurs + Module + Fragen (aus Snapshot wenn vorhanden).",
                 "parameters": [
                     {
                         "in": "path",
@@ -3431,7 +3431,7 @@
         "/api/public/schulung/{token}/zertifikat/": {
             "get": {
                 "operationId": "public_schulung_zertifikat_retrieve",
-                "description": "PDF-Download (oder HTML-Fallback wenn WeasyPrint fehlt).",
+                "description": "PDF-Download (oder HTML-Fallback wenn WeasyPrint fehlt).\n\nRespektiert kurs.zertifikat_aktiv aus dem Snapshot — wenn deaktiviert,\nkein PDF (selbst wenn der Kurs bestanden wurde).",
                 "parameters": [
                     {
                         "in": "path",
@@ -7579,6 +7579,9 @@
                         "type": "string"
                     },
                     "kurs_titel": {
+                        "type": "string"
+                    },
+                    "quiz_modus": {
                         "type": "string"
                     }
                 },

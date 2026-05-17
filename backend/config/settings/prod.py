@@ -60,6 +60,11 @@ else:
 
 DEFAULT_FROM_EMAIL = os.environ.get("VAEREN_FROM_EMAIL", "noreply@vaeren.de")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
+VAEREN_FROM_EMAIL = DEFAULT_FROM_EMAIL
+
+# Empfänger für das Kontakt-Formular (vaeren.de/kontakt). Alle @vaeren-Mails
+# werden ohnehin nach vaeren1@outlook.de geforwarded — wir mailen direkt dorthin.
+VAEREN_KONTAKT_EMAIL = os.environ.get("VAEREN_KONTAKT_EMAIL", "vaeren1@outlook.de")
 
 # --- Sentry (optional) ---------------------------------------------------
 _SENTRY_DSN = os.environ.get("SENTRY_DSN", "")

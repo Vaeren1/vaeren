@@ -389,12 +389,41 @@ class SchulungsWelle(models.Model):
         return f"{self.titel} ({self.kurs.titel}, {self.get_status_display()})"
 
     def mark_sent(self) -> None:
-        """State-Transition DRAFT -> SENT."""
+        """State-Transition DRAFT -> SENT. Erzeugt vorher Snapshot."""
+        from django.db import transaction
         if self.status != SchulungsWelleStatus.DRAFT:
             raise ValueError(f"Welle {self.pk} ist nicht im Status DRAFT (aktuell: {self.status})")
-        self.status = SchulungsWelleStatus.SENT
-        self.versendet_am = timezone.now()
-        self.save(update_fields=("status", "versendet_am"))
+        with transaction.atomic():
+            from .snapshots import create_snapshot
+            create_snapshot(self)
+            self.status = SchulungsWelleStatus.SENT
+            self.versendet_am = timezone.now()
+            self.save(update_fields=("status", "versendet_am"))
+
+
+class WelleSnapshot(models.Model):
+    """JSON-Snapshot der Welle (Kurs+Module+Fragen) zum Versand-Zeitpunkt.
+
+    Player liest ausschliesslich hieraus, niemals aus Live-Kurs. Asset-
+    Dateien werden in einen separaten immutable-Pfad kopiert.
+    """
+
+    welle = models.OneToOneField(
+        "SchulungsWelle", on_delete=models.CASCADE, related_name="snapshot",
+    )
+    daten = models.JSONField(
+        help_text="Vollstaendige Struktur: kurs-felder, module (in Reihenfolge), "
+        "fragen + optionen. Self-contained ausser Asset-Dateien.",
+    )
+    asset_pfad_map = models.JSONField(
+        default=dict,
+        help_text="{asset_id: snapshot_pfad} — Storage-Pfade der eingefrorenen Dateien.",
+    )
+    erstellt_am = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Welle-Snapshot"
+        verbose_name_plural = "Welle-Snapshots"
 
 
 class SchulungsTask(ComplianceTask):
@@ -407,6 +436,7 @@ class SchulungsTask(ComplianceTask):
     mitarbeiter = models.ForeignKey(
         Mitarbeiter, on_delete=models.CASCADE, related_name="schulungs_tasks"
     )
+    gestartet_am = models.DateTimeField(null=True, blank=True)
     abgeschlossen_am = models.DateTimeField(null=True, blank=True)
     richtig_prozent = models.PositiveSmallIntegerField(null=True, blank=True)
     bestanden = models.BooleanField(null=True)

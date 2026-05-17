@@ -558,6 +558,63 @@ def _ensure_gezogene_fragen(task: SchulungsTask) -> list[Frage]:
     return sample
 
 
+def _snapshot_or_live(task):
+    """Gibt (kurs_dict, module_list, fragen_list, asset_map) zurueck.
+
+    Bei Wellen mit Snapshot (post-S4) wird der Snapshot genutzt. Bei
+    Alt-Wellen ohne Snapshot wird live aus Kurs gelesen (Backwards-compat).
+    """
+    snap = getattr(task.welle, "snapshot", None)
+    if snap and snap.daten:
+        data = snap.daten
+        return data["kurs"], data["module"], data.get("fragen", []), snap.asset_pfad_map or {}
+    # Live-Fallback
+    kurs = task.welle.kurs
+    module = [
+        {
+            "id": m.pk, "titel": m.titel, "reihenfolge": m.reihenfolge,
+            "typ": getattr(m, "typ", "text"),
+            "inhalt_md": m.inhalt_md or "",
+            "youtube_url": getattr(m, "youtube_url", "") or "",
+            "asset_id": m.asset_id,
+        }
+        for m in kurs.module.all().order_by("reihenfolge")
+    ]
+    fragen = [
+        {
+            "id": f.pk, "text": f.text, "erklaerung": f.erklaerung,
+            "reihenfolge": f.reihenfolge,
+            "optionen": [
+                {"id": o.pk, "text": o.text, "ist_korrekt": o.ist_korrekt,
+                 "reihenfolge": o.reihenfolge}
+                for o in f.optionen.all().order_by("reihenfolge", "id")
+            ],
+        }
+        for f in kurs.fragen.prefetch_related("optionen").order_by("reihenfolge")
+    ]
+    kurs_dict = {
+        "id": kurs.pk, "titel": kurs.titel, "beschreibung": kurs.beschreibung,
+        "kategorie": getattr(kurs, "kategorie", "sonstiges"),
+        "quiz_modus": kurs.quiz_modus, "mindest_lesezeit_s": kurs.mindest_lesezeit_s,
+        "fragen_pro_quiz": kurs.fragen_pro_quiz,
+        "min_richtig_prozent": kurs.min_richtig_prozent,
+        "gueltigkeit_monate": kurs.gueltigkeit_monate,
+        "zertifikat_aktiv": kurs.zertifikat_aktiv,
+    }
+    return kurs_dict, module, fragen, {}
+
+
+def _asset_url_from_map(asset_id, asset_map: dict) -> str | None:
+    """Snapshot-relativer Pfad → MEDIA_URL."""
+    from django.conf import settings as dj_settings
+    key_konv = f"konv_{asset_id}"
+    key_orig = f"orig_{asset_id}"
+    rel = asset_map.get(key_konv) or asset_map.get(key_orig)
+    if not rel:
+        return None
+    return f"{dj_settings.MEDIA_URL.rstrip('/')}/{rel}"
+
+
 @extend_schema(
     responses=inline_serializer(
         name="PublicSchulungResolveResponse",
@@ -565,13 +622,14 @@ def _ensure_gezogene_fragen(task: SchulungsTask) -> list[Frage]:
             "task_id": serializers.IntegerField(),
             "status": serializers.CharField(),
             "kurs_titel": serializers.CharField(required=False),
+            "quiz_modus": serializers.CharField(required=False),
         },
     )
 )
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def public_schulung_resolve(request, token: str):
-    """Resolves Token -> Task + Kurs + Module + Fragen (ohne ist_korrekt)."""
+    """Resolves Token -> Task + Kurs + Module + Fragen (aus Snapshot wenn vorhanden)."""
     task = _resolve_task(token)
     if task is None:
         return Response(
@@ -584,35 +642,40 @@ def public_schulung_resolve(request, token: str):
                 "status": "abgeschlossen",
                 "bestanden": task.bestanden,
                 "richtig_prozent": task.richtig_prozent,
-                "zertifikat_token": token if task.bestanden else None,
+                "zertifikat_token": token if (task.bestanden or task.bestanden is None) else None,
             }
         )
     welle = task.welle
-    kurs = welle.kurs
-    module = list(kurs.module.all().order_by("reihenfolge"))
-    gezogene = _ensure_gezogene_fragen(task)
-    fragen = FragePublicSerializer(gezogene, many=True).data
-    return Response(
-        {
-            "task_id": task.pk,
-            "kurs_titel": kurs.titel,
-            "kurs_beschreibung": kurs.beschreibung,
-            "deadline": welle.deadline,
-            "einleitungs_text": welle.einleitungs_text,
-            "min_richtig_prozent": kurs.min_richtig_prozent,
-            "module": [
-                {
-                    "id": m.pk,
-                    "titel": m.titel,
-                    "inhalt_md": m.inhalt_md,
-                    "reihenfolge": m.reihenfolge,
-                }
-                for m in module
-            ],
-            "fragen": fragen,
-            "status": task.status,
-        }
-    )
+    kurs_dict, module, snapshot_fragen, asset_map = _snapshot_or_live(task)
+
+    # Module mit aufgeloesten Asset-URLs anreichern
+    module_out = []
+    for m in module:
+        m_out = dict(m)
+        if m.get("asset_id"):
+            m_out["asset_url"] = _asset_url_from_map(m["asset_id"], asset_map)
+        module_out.append(m_out)
+
+    quiz_modus = kurs_dict.get("quiz_modus", "quiz")
+    response_data = {
+        "task_id": task.pk,
+        "kurs_titel": kurs_dict["titel"],
+        "kurs_beschreibung": kurs_dict["beschreibung"],
+        "deadline": welle.deadline,
+        "einleitungs_text": welle.einleitungs_text,
+        "quiz_modus": quiz_modus,
+        "mindest_lesezeit_s": kurs_dict.get("mindest_lesezeit_s", 0),
+        "min_richtig_prozent": kurs_dict.get("min_richtig_prozent", 0),
+        "zertifikat_aktiv": kurs_dict.get("zertifikat_aktiv", True),
+        "module": module_out,
+        "status": task.status,
+    }
+    if quiz_modus == "quiz":
+        gezogene = _ensure_gezogene_fragen(task)
+        response_data["fragen"] = FragePublicSerializer(gezogene, many=True).data
+    else:
+        response_data["fragen"] = []
+    return Response(response_data)
 
 
 @extend_schema(
@@ -630,7 +693,11 @@ def public_schulung_start(request, token: str):
         return Response({"detail": "Token ungültig."}, status=status.HTTP_404_NOT_FOUND)
     if task.status == ComplianceTaskStatus.OFFEN:
         task.status = ComplianceTaskStatus.IN_BEARBEITUNG
-        task.save(update_fields=("status",))
+        if task.gestartet_am is None:
+            task.gestartet_am = timezone.now()
+            task.save(update_fields=("status", "gestartet_am"))
+        else:
+            task.save(update_fields=("status",))
     if task.welle.status == SchulungsWelleStatus.SENT:
         task.welle.status = SchulungsWelleStatus.IN_PROGRESS
         task.welle.save(update_fields=("status",))
@@ -707,30 +774,71 @@ def public_schulung_abschliessen(request, token: str):
                 "richtig_prozent": task.richtig_prozent,
             }
         )
-    gezogene = _ensure_gezogene_fragen(task)
-    fragen_count = len(gezogene)
-    if fragen_count == 0:
-        return Response({"detail": "Kurs hat keine Fragen."}, status=status.HTTP_400_BAD_REQUEST)
-    gezogene_ids = {f.pk for f in gezogene}
-    antworten = task.antworten.filter(frage_id__in=gezogene_ids)
-    if antworten.count() < fragen_count:
-        return Response(
-            {
-                "detail": f"Nicht alle Fragen beantwortet ({antworten.count()}/{fragen_count}).",
-            },
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-    richtig = antworten.filter(war_korrekt=True).count()
-    prozent = round(100 * richtig / fragen_count)
-    schwelle = task.welle.kurs.min_richtig_prozent
-    bestanden = prozent >= schwelle
-    task.richtig_prozent = prozent
-    task.bestanden = bestanden
+    kurs_dict, module, _fragen, _amap = _snapshot_or_live(task)
+    quiz_modus = kurs_dict.get("quiz_modus", "quiz")
+
+    if quiz_modus == "quiz":
+        gezogene = _ensure_gezogene_fragen(task)
+        fragen_count = len(gezogene)
+        if fragen_count == 0:
+            return Response(
+                {"detail": "Kurs hat keine Fragen."}, status=status.HTTP_400_BAD_REQUEST,
+            )
+        gezogene_ids = {f.pk for f in gezogene}
+        antworten = task.antworten.filter(frage_id__in=gezogene_ids)
+        if antworten.count() < fragen_count:
+            return Response(
+                {"detail": f"Nicht alle Fragen beantwortet ({antworten.count()}/{fragen_count})."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        richtig = antworten.filter(war_korrekt=True).count()
+        prozent = round(100 * richtig / fragen_count)
+        schwelle = kurs_dict.get("min_richtig_prozent", 80)
+        bestanden = prozent >= schwelle
+        task.richtig_prozent = prozent
+        task.bestanden = bestanden
+    else:
+        # Kenntnisnahme / Kenntnisnahme+Lesezeit
+        besucht_raw = request.data.get("besuchte_module") or []
+        if not isinstance(besucht_raw, list):
+            return Response(
+                {"detail": "besuchte_module muss Liste sein."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        besucht = {int(x) for x in besucht_raw if str(x).isdigit()}
+        erwartet = {m["id"] for m in module}
+        if not erwartet.issubset(besucht):
+            return Response(
+                {"detail": "Nicht alle Module wurden bestätigt."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if quiz_modus == "kenntnisnahme_lesezeit":
+            from datetime import timedelta
+            min_lesezeit_s = int(kurs_dict.get("mindest_lesezeit_s", 0) or 0)
+            min_total = timedelta(seconds=min_lesezeit_s * max(1, len(module)))
+            started = task.gestartet_am if hasattr(task, "gestartet_am") else None
+            if started is None or (timezone.now() - started) < min_total:
+                return Response(
+                    {
+                        "detail": (
+                            f"Mindest-Lesezeit nicht erreicht "
+                            f"({min_lesezeit_s} s pro Modul × {len(module)} Module)."
+                        ),
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        task.richtig_prozent = 100  # Konvention: Kenntnisnahme = 100% "richtig"
+        task.bestanden = True
+        prozent = 100
+        bestanden = True
+
     task.abgeschlossen_am = timezone.now()
     task.status = ComplianceTaskStatus.ERLEDIGT
     if bestanden:
         task.zertifikat_id = secrets.token_urlsafe(24)
-        task.ablauf_datum = date.today() + relativedelta(months=task.welle.kurs.gueltigkeit_monate)
+        task.ablauf_datum = date.today() + relativedelta(
+            months=kurs_dict.get("gueltigkeit_monate", 12),
+        )
     task.save()
     if not task.welle.tasks.exclude(status=ComplianceTaskStatus.ERLEDIGT).exists():
         task.welle.status = SchulungsWelleStatus.COMPLETED
@@ -741,6 +849,7 @@ def public_schulung_abschliessen(request, token: str):
             "richtig_prozent": prozent,
             "zertifikat_id": task.zertifikat_id or None,
             "ablauf_datum": task.ablauf_datum.isoformat() if task.ablauf_datum else None,
+            "zertifikat_aktiv": kurs_dict.get("zertifikat_aktiv", True),
         }
     )
 
@@ -755,13 +864,23 @@ def public_schulung_abschliessen(request, token: str):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def public_schulung_zertifikat(request, token: str):
-    """PDF-Download (oder HTML-Fallback wenn WeasyPrint fehlt)."""
+    """PDF-Download (oder HTML-Fallback wenn WeasyPrint fehlt).
+
+    Respektiert kurs.zertifikat_aktiv aus dem Snapshot — wenn deaktiviert,
+    kein PDF (selbst wenn der Kurs bestanden wurde).
+    """
     task = _resolve_task(token)
     if task is None:
         return Response({"detail": "Token ungültig."}, status=status.HTTP_404_NOT_FOUND)
     if not task.bestanden:
         return Response(
             {"detail": "Kein Zertifikat — Schulung nicht bestanden."},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+    kurs_dict, _m, _f, _a = _snapshot_or_live(task)
+    if not kurs_dict.get("zertifikat_aktiv", True):
+        return Response(
+            {"detail": "Für diesen Kurs wird kein Zertifikat ausgestellt."},
             status=status.HTTP_403_FORBIDDEN,
         )
     tenant_firma = ""

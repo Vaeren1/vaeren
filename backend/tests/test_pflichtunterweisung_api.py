@@ -25,6 +25,7 @@ from tests.factories import (
     KursFactory,
     KursModulFactory,
     MitarbeiterFactory,
+    SchulungsTaskFactory,
     SchulungsWelleFactory,
     TenantDomainFactory,
     TenantFactory,
@@ -1317,3 +1318,164 @@ def test_generiere_task_returns_error_on_empty_material(tenant_setup):
     result = generiere_fragen_vorschlaege(tenant.schema_name, kurs.pk, user.pk, 5)
     assert result["status"] == "error"
     assert "Lehrtext" in result["reason"]
+
+
+# --- Slice 4: WelleSnapshot + Player-Modi ------------------------------
+
+
+def test_mark_sent_creates_snapshot(tenant_setup):
+    tenant, _ = tenant_setup
+    with schema_context(tenant.schema_name):
+        user = UserFactory(email="snap@x.de", tenant_role=TenantRole.QM_LEITER)
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user)
+        KursModulFactory(kurs=kurs, reihenfolge=0, titel="A", inhalt_md="x")
+        welle = SchulungsWelleFactory(kurs=kurs, erstellt_von=user)
+        welle.mark_sent()
+        welle.refresh_from_db()
+        assert welle.status == "sent"
+        assert hasattr(welle, "snapshot")
+        assert welle.snapshot.daten["kurs"]["titel"] == kurs.titel
+        assert len(welle.snapshot.daten["module"]) == 1
+
+
+def test_snapshot_immutability_after_kurs_edit(tenant_setup):
+    """Nach mark_sent darf eine Kurs-Aenderung den Snapshot nicht beeinflussen."""
+    tenant, _ = tenant_setup
+    with schema_context(tenant.schema_name):
+        user = UserFactory(email="snap2@x.de", tenant_role=TenantRole.QM_LEITER)
+        kurs = KursFactory(eigentuemer_tenant=tenant.schema_name, erstellt_von=user, titel="Orig")
+        KursModulFactory(kurs=kurs, reihenfolge=0, titel="M1", inhalt_md="alt")
+        welle = SchulungsWelleFactory(kurs=kurs, erstellt_von=user)
+        welle.mark_sent()
+        # Kurs nachträglich ändern
+        kurs.titel = "Geändert"
+        kurs.save()
+        kurs.module.first().inhalt_md = "neu"
+        kurs.module.first().save()
+        welle.refresh_from_db()
+        # Snapshot bleibt original
+        assert welle.snapshot.daten["kurs"]["titel"] == "Orig"
+        assert welle.snapshot.daten["module"][0]["inhalt_md"] == "alt"
+
+
+def test_player_kenntnisnahme_modus_no_quiz(tenant_setup):
+    tenant, domain = tenant_setup
+    with schema_context(tenant.schema_name):
+        user = UserFactory(email="kn@x.de", tenant_role=TenantRole.QM_LEITER)
+        kurs = KursFactory(
+            eigentuemer_tenant=tenant.schema_name, erstellt_von=user,
+            quiz_modus="kenntnisnahme", fragen_pro_quiz=0, min_richtig_prozent=0,
+        )
+        KursModulFactory(kurs=kurs, reihenfolge=0, titel="M1", inhalt_md="lesen")
+        welle = SchulungsWelleFactory(kurs=kurs, erstellt_von=user)
+        welle.mark_sent()
+        ma = MitarbeiterFactory()
+        task = SchulungsTaskFactory(welle=welle, mitarbeiter=ma, titel="x")
+        token = make_token(task.pk)
+
+    client = Client(HTTP_HOST=domain.domain)
+    # Resolve
+    resp = client.get(f"/api/public/schulung/{token}/")
+    assert resp.status_code == 200, resp.content
+    body = resp.json()
+    assert body["quiz_modus"] == "kenntnisnahme"
+    assert body["fragen"] == []
+    modul_id = body["module"][0]["id"]
+
+    # Start + Abschluss mit besuchten Modulen
+    client.post(f"/api/public/schulung/{token}/start/")
+    resp = client.post(
+        f"/api/public/schulung/{token}/abschliessen/",
+        {"besuchte_module": [modul_id]},
+        content_type="application/json",
+    )
+    assert resp.status_code == 200, resp.content
+    assert resp.json()["bestanden"] is True
+
+
+def test_player_kenntnisnahme_rejects_unvollstaendig(tenant_setup):
+    tenant, domain = tenant_setup
+    with schema_context(tenant.schema_name):
+        user = UserFactory(email="kn2@x.de", tenant_role=TenantRole.QM_LEITER)
+        kurs = KursFactory(
+            eigentuemer_tenant=tenant.schema_name, erstellt_von=user,
+            quiz_modus="kenntnisnahme", fragen_pro_quiz=0, min_richtig_prozent=0,
+        )
+        KursModulFactory(kurs=kurs, reihenfolge=0, titel="M1", inhalt_md="a")
+        KursModulFactory(kurs=kurs, reihenfolge=1, titel="M2", inhalt_md="b")
+        welle = SchulungsWelleFactory(kurs=kurs, erstellt_von=user)
+        welle.mark_sent()
+        ma = MitarbeiterFactory()
+        task = SchulungsTaskFactory(welle=welle, mitarbeiter=ma, titel="x")
+        token = make_token(task.pk)
+
+    client = Client(HTTP_HOST=domain.domain)
+    client.post(f"/api/public/schulung/{token}/start/")
+    resp = client.post(
+        f"/api/public/schulung/{token}/abschliessen/",
+        {"besuchte_module": []},
+        content_type="application/json",
+    )
+    assert resp.status_code == 400
+
+
+def test_player_kenntnisnahme_lesezeit_rejects_too_fast(tenant_setup):
+    """Sofortiger Abschluss mit Lesezeit 60s soll abgelehnt werden."""
+    tenant, domain = tenant_setup
+    with schema_context(tenant.schema_name):
+        user = UserFactory(email="kn3@x.de", tenant_role=TenantRole.QM_LEITER)
+        kurs = KursFactory(
+            eigentuemer_tenant=tenant.schema_name, erstellt_von=user,
+            quiz_modus="kenntnisnahme_lesezeit", mindest_lesezeit_s=60,
+            fragen_pro_quiz=0, min_richtig_prozent=0,
+        )
+        KursModulFactory(kurs=kurs, reihenfolge=0, titel="M1", inhalt_md="x")
+        welle = SchulungsWelleFactory(kurs=kurs, erstellt_von=user)
+        welle.mark_sent()
+        ma = MitarbeiterFactory()
+        task = SchulungsTaskFactory(welle=welle, mitarbeiter=ma, titel="x")
+        token = make_token(task.pk)
+        modul_id = kurs.module.first().pk
+
+    client = Client(HTTP_HOST=domain.domain)
+    client.post(f"/api/public/schulung/{token}/start/")
+    resp = client.post(
+        f"/api/public/schulung/{token}/abschliessen/",
+        {"besuchte_module": [modul_id]},
+        content_type="application/json",
+    )
+    assert resp.status_code == 400
+    assert "Lesezeit" in resp.json()["detail"]
+
+
+def test_zertifikat_blocked_when_aktiv_false(tenant_setup):
+    """zertifikat_aktiv=False → 403 selbst nach bestandenem Kurs."""
+    tenant, domain = tenant_setup
+    with schema_context(tenant.schema_name):
+        user = UserFactory(email="ze@x.de", tenant_role=TenantRole.QM_LEITER)
+        kurs = KursFactory(
+            eigentuemer_tenant=tenant.schema_name, erstellt_von=user,
+            quiz_modus="kenntnisnahme", fragen_pro_quiz=0, min_richtig_prozent=0,
+            zertifikat_aktiv=False,
+        )
+        KursModulFactory(kurs=kurs, reihenfolge=0, titel="M", inhalt_md="x")
+        welle = SchulungsWelleFactory(kurs=kurs, erstellt_von=user)
+        welle.mark_sent()
+        ma = MitarbeiterFactory()
+        task = SchulungsTaskFactory(welle=welle, mitarbeiter=ma, titel="x")
+        token = make_token(task.pk)
+        modul_id = kurs.module.first().pk
+
+    client = Client(HTTP_HOST=domain.domain)
+    client.post(f"/api/public/schulung/{token}/start/")
+    resp = client.post(
+        f"/api/public/schulung/{token}/abschliessen/",
+        {"besuchte_module": [modul_id]},
+        content_type="application/json",
+    )
+    assert resp.status_code == 200
+    assert resp.json()["bestanden"] is True
+    assert resp.json()["zertifikat_aktiv"] is False
+    # Zertifikat-Endpoint verweigern
+    resp_z = client.get(f"/api/public/schulung/{token}/zertifikat/")
+    assert resp_z.status_code == 403
