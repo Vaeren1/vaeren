@@ -23,6 +23,7 @@ from .llm_validator import LLMValidationError, validate_output
 logger = logging.getLogger(__name__)
 
 OPENROUTER_BASE = "https://openrouter.ai/api/v1"
+ANTHROPIC_BASE = "https://api.anthropic.com/v1"
 # 2026-Lineup auf OpenRouter:
 # - Fast: Gemma 4 26B (Google AI Studio, gut bei deutschem Instruct-Following)
 # - Reasoning: Nemotron 3 Super 120B (NVIDIA, größer für komplexe Tasks)
@@ -31,6 +32,16 @@ DEFAULT_MODEL_FAST = os.environ.get("OPENROUTER_MODEL_FAST", "google/gemma-4-26b
 DEFAULT_MODEL_REASONING = os.environ.get(
     "OPENROUTER_MODEL_REASONING", "nvidia/nemotron-3-super-120b-a12b:free"
 )
+
+# Phase-2-Switch: wenn `LLM_PROVIDER=anthropic` gesetzt ist + ANTHROPIC_API_KEY
+# vorhanden, nutzen wir Anthropic Claude statt OpenRouter. Spec §8.
+# Modelle: Haiku 4.5 (fast/billig) + Sonnet 4.6 (reasoning).
+LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "openrouter").lower()
+ANTHROPIC_MODEL_FAST = os.environ.get("ANTHROPIC_MODEL_FAST", "claude-haiku-4-5-20251001")
+ANTHROPIC_MODEL_REASONING = os.environ.get("ANTHROPIC_MODEL_REASONING", "claude-sonnet-4-6")
+
+# Tagesbudget pro Schema (€). Wenn überschritten → Static-Fallback.
+LLM_DAILY_BUDGET_EUR = float(os.environ.get("LLM_DAILY_BUDGET_EUR", "0"))
 
 SYSTEM_PROMPT_VAEREN = (
     "Du bist Vaerens Compliance-Assistent für deutsche Mittelstandsfirmen. "
@@ -57,7 +68,52 @@ class LLMResponse:
 
 
 def _has_api_key() -> bool:
+    if LLM_PROVIDER == "anthropic":
+        return bool(os.environ.get("ANTHROPIC_API_KEY"))
     return bool(os.environ.get("OPENROUTER_API_KEY"))
+
+
+def heutige_kosten_eur() -> float:
+    """Kosten-Summe der LLMCallLog-Einträge im aktuellen Tenant-Schema heute."""
+    from datetime import date
+
+    from .models import LLMCallLog  # Lazy: vermeidet Circular bei Import von core.llm_client
+
+    today = date.today()
+    qs = LLMCallLog.objects.filter(erstellt_am__date=today, erfolgreich=True)
+    total = sum(float(c.kosten_eur) for c in qs)
+    return round(total, 6)
+
+
+def _budget_exhausted() -> bool:
+    if LLM_DAILY_BUDGET_EUR <= 0:
+        return False
+    try:
+        return heutige_kosten_eur() >= LLM_DAILY_BUDGET_EUR
+    except Exception:  # pragma: no cover — z.B. Schema nicht migrated
+        return False
+
+
+def _call_anthropic(prompt: str, model: str) -> str:
+    """Echter HTTP-Call gegen Anthropic-API.
+
+    Trennt sich von _call_openrouter, weil das API-Schema etwas anders ist
+    (system-Prompt separates Feld, max_tokens Pflicht).
+    """
+    from anthropic import Anthropic  # type: ignore
+
+    client = Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"], base_url=ANTHROPIC_BASE)
+    resp = client.messages.create(
+        model=model,
+        max_tokens=1024,
+        system=SYSTEM_PROMPT_VAEREN,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    parts = []
+    for blk in resp.content:
+        if getattr(blk, "type", "") == "text":
+            parts.append(getattr(blk, "text", ""))
+    return "".join(parts).strip()
 
 
 def _call_openrouter(prompt: str, model: str) -> str:
@@ -98,14 +154,26 @@ def generate(
       System-Prompt; bei zweitem Fail → LLMValidationError
     - Bei Netzwerk-Fehler → static_fallback (graceful degradation)
     """
-    chosen_model = model or DEFAULT_MODEL_FAST
+    if LLM_PROVIDER == "anthropic":
+        chosen_model = model or ANTHROPIC_MODEL_FAST
+        caller = _call_anthropic
+    else:
+        chosen_model = model or DEFAULT_MODEL_FAST
+        caller = _call_openrouter
 
     if not _has_api_key():
-        logger.info("LLM static fallback (kein API-Key gesetzt)")
+        logger.info("LLM static fallback (kein API-Key gesetzt für provider=%s)", LLM_PROVIDER)
         return LLMResponse(text=static_fallback, quelle="static", model=None)
 
+    if _budget_exhausted():
+        logger.warning(
+            "LLM-Tagesbudget %.2f EUR aufgebraucht — Static-Fallback bis morgen",
+            LLM_DAILY_BUDGET_EUR,
+        )
+        return LLMResponse(text=static_fallback, quelle="static", model=chosen_model)
+
     try:
-        text = _call_openrouter(prompt, chosen_model)
+        text = caller(prompt, chosen_model)
     except Exception as exc:
         logger.warning("LLM-Call fehlgeschlagen (%s); fallback static", exc)
         return LLMResponse(text=static_fallback, quelle="static", model=chosen_model)
@@ -122,7 +190,7 @@ def generate(
         result.matched_phrases,
     )
     try:
-        text2 = _call_openrouter(prompt + STRICTER_RETRY_SUFFIX, chosen_model)
+        text2 = caller(prompt + STRICTER_RETRY_SUFFIX, chosen_model)
     except Exception as exc:
         logger.warning("LLM-Retry fehlgeschlagen (%s); fallback static", exc)
         return LLMResponse(text=static_fallback, quelle="static", model=chosen_model)

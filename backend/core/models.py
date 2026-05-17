@@ -326,3 +326,53 @@ class AuditLog(models.Model):
         if self.pk:
             raise ValidationError("AuditLog ist immutable — Updates verboten.")
         super().save(*args, **kwargs)
+
+
+class LLMCallLog(models.Model):
+    """Pro LLM-Call ein Eintrag — für Audit + Tagesbudget-Tracking (Phase 2).
+
+    Im Free-Tier-MVP: Beobachtung von Rate-Limits.
+    In Phase 2 mit Anthropic-Switch: Tagesbudget pro Tenant enforced.
+    """
+
+    erstellt_am = models.DateTimeField(auto_now_add=True, db_index=True)
+    modul = models.CharField(
+        max_length=50,
+        help_text="Welches Vaeren-Modul hat den Call ausgelöst (z. B. 'datenpannen').",
+    )
+    zweck = models.CharField(
+        max_length=80,
+        blank=True,
+        default="",
+        help_text="Konkreter Zweck: 'risiko_vorschlag', 'kursinhalt_generieren', ...",
+    )
+    modell = models.CharField(max_length=120)
+    prompt_hash = models.CharField(
+        max_length=64,
+        blank=True,
+        default="",
+        help_text="SHA-256 des Prompts — auditierbar, ohne Inhalt zu persistieren.",
+    )
+    tokens_input = models.PositiveIntegerField(default=0)
+    tokens_output = models.PositiveIntegerField(default=0)
+    kosten_eur = models.DecimalField(max_digits=10, decimal_places=6, default=0)
+    latenz_ms = models.PositiveIntegerField(default=0)
+    erfolgreich = models.BooleanField(default=True)
+    fehler = models.TextField(blank=True, default="")
+    quelle = models.CharField(
+        max_length=20,
+        default="llm",
+        help_text="'llm' bei echtem Call, 'static' bei Template-Fallback.",
+    )
+
+    class Meta:
+        ordering = ["-erstellt_am"]
+        verbose_name = "LLM-Call-Log"
+        verbose_name_plural = "LLM-Call-Logs"
+        indexes = [
+            models.Index(fields=["modul", "-erstellt_am"]),
+            models.Index(fields=["erstellt_am", "modell"]),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.erstellt_am:%Y-%m-%d %H:%M} {self.modul}/{self.zweck} {self.modell}"

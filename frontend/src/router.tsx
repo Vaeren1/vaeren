@@ -1,8 +1,16 @@
 import { ProtectedRoute } from "@/components/auth/protected-route";
 import { SidebarShell } from "@/components/layout/sidebar-shell";
 import { AuditLogPage } from "@/routes/audit-log";
+import { AVVListPage } from "@/routes/auftragsverarbeitung";
 import { DashboardPage } from "@/routes/dashboard";
+import { DatenpanneDetailPage } from "@/routes/datenpanne-detail";
+import { DatenpanneFormPage } from "@/routes/datenpanne-form";
+import { DatenpannenListPage } from "@/routes/datenpannen";
 import { DemoPage } from "@/routes/demo";
+import { KIInventarListPage } from "@/routes/ki-inventar";
+import { KIToolDetailPage } from "@/routes/ki-tool-detail";
+import { KIToolFormPage } from "@/routes/ki-tool-form";
+import { NIS2Page } from "@/routes/nis2";
 import { KursDetailPage } from "@/routes/kurs-detail";
 import { KursFormPage } from "@/routes/kurs-form";
 import { KurseListPage } from "@/routes/kurse";
@@ -13,6 +21,7 @@ import { MfaChallengePage } from "@/routes/mfa-challenge";
 import { MfaSetupPage } from "@/routes/mfa-setup";
 import { MitarbeiterListPage } from "@/routes/mitarbeiter";
 import { MitarbeiterFormPage } from "@/routes/mitarbeiter-form";
+import { OnboardingSetupPage } from "@/routes/onboarding-setup";
 import { PublicHinweisePage } from "@/routes/public-hinweise";
 import { PublicHinweiseStatusPage } from "@/routes/public-hinweise-status";
 import { PublicSchulungPage } from "@/routes/public-schulung";
@@ -30,6 +39,7 @@ export const router = createBrowserRouter([
   { path: "/schulung/:token", element: <PublicSchulungPage /> },
   { path: "/hinweise", element: <PublicHinweisePage /> },
   { path: "/hinweise/status/:token", element: <PublicHinweiseStatusPage /> },
+  { path: "/onboarding/setup", element: <OnboardingSetupPage /> },
   {
     element: (
       <ProtectedRoute>
@@ -54,6 +64,14 @@ export const router = createBrowserRouter([
       { path: "/meldungen", element: <MeldungenListPage /> },
       { path: "/meldungen/:id", element: <MeldungDetailPage /> },
       { path: "/audit", element: <AuditLogPage /> },
+      { path: "/datenpannen", element: <DatenpannenListPage /> },
+      { path: "/datenpannen/neu", element: <DatenpanneFormPage /> },
+      { path: "/datenpannen/:id", element: <DatenpanneDetailPage /> },
+      { path: "/ki-inventar", element: <KIInventarListPage /> },
+      { path: "/ki-inventar/neu", element: <KIToolFormPage /> },
+      { path: "/ki-inventar/:id", element: <KIToolDetailPage /> },
+      { path: "/avv", element: <AVVListPage /> },
+      { path: "/nis2", element: <NIS2Page /> },
       { path: "/redaktion", element: <RedaktionPage /> },
       { path: "/settings", element: <SettingsPage /> },
       { path: "/mfa-setup", element: <MfaSetupPage /> },

@@ -81,3 +81,24 @@ rules.add_rule(
     "can_manage_schulungswelle",
     is_geschaeftsfuehrer | is_qm_leiter | is_compliance_beauftragter,
 )
+
+# --- Phase 1.5+: Datenpannen-Register, KI-Inventar, AVV, Transparenzregister, NIS2 ---
+# Diese Module sind sicherheits-/compliance-kritisch — Read-Access für alle
+# berechtigten Rollen (View-Only ausgenommen), Write nur für GF + QM + Compliance.
+_read_all_but_view_only = is_any_authenticated_role
+_compliance_write = is_geschaeftsfuehrer | is_qm_leiter | is_compliance_beauftragter
+
+rules.add_rule("can_view_datenpanne", _read_all_but_view_only | is_view_only)
+rules.add_rule("can_edit_datenpanne", _compliance_write)
+
+rules.add_rule("can_view_ki_tool", _read_all_but_view_only | is_view_only)
+rules.add_rule("can_edit_ki_tool", _compliance_write | is_it_leiter)
+
+rules.add_rule("can_view_avv", _read_all_but_view_only | is_view_only)
+rules.add_rule("can_edit_avv", _compliance_write)
+
+rules.add_rule("can_view_transparenzregister", _read_all_but_view_only | is_view_only)
+rules.add_rule("can_edit_transparenzregister", is_geschaeftsfuehrer)
+
+rules.add_rule("can_view_nis2", _read_all_but_view_only | is_view_only)
+rules.add_rule("can_edit_nis2", _compliance_write | is_it_leiter)

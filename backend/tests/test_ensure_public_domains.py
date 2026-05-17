@@ -9,9 +9,11 @@ from tenants.models import TenantDomain
 @pytest.mark.django_db
 def test_command_creates_required_public_domains():
     call_command("ensure_public_domains")
+    # hinweise.app.vaeren.de bewusst NICHT public — gehört zum demo-Tenant
+    # (tenant-scoped urls_tenant.py „public/hinschg/..." Endpoint).
     assert TenantDomain.objects.filter(domain="api.vaeren.de").exists()
-    assert TenantDomain.objects.filter(domain="hinweise.app.vaeren.de").exists()
     assert TenantDomain.objects.filter(domain="vaeren.de").exists()
+    assert TenantDomain.objects.filter(domain="www.vaeren.de").exists()
 
 
 @pytest.mark.django_db

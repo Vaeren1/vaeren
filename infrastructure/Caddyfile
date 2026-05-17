@@ -16,8 +16,13 @@
 
 {
     email konradbizer@web.de
-    # On-demand-TLS aus, weil wir nur fixe Domains haben (sicherer).
-    # Auto-HTTPS-Redirect ist Default-on.
+    # On-demand-TLS für Self-Service-Tenants (Phase 1.5):
+    # Beim ersten Request auf `<tenant>.app.vaeren.de` fragt Caddy bei der
+    # `ask`-URL nach, ob der Subdomain bekannt ist. Nur dann wird ein
+    # Let's-Encrypt-Cert geholt. Schützt vor Cert-Spam durch unbekannte Hosts.
+    on_demand_tls {
+        ask http://vaeren-django:8000/api/internal/cert-allowed
+    }
 }
 
 # --- Sponty ---------------------------------------------------------------
@@ -59,12 +64,23 @@ vaeren.de {
     header Referrer-Policy "strict-origin-when-cross-origin"
     header Permissions-Policy "geolocation=(), microphone=(), camera=()"
 
-    # Kontakt-Formular der Marketing-Site → Backend (same-origin, kein CORS nötig).
-    # MUSS in handle-Block stehen, sonst greift try_files weiter unten und
-    # rewriteted POST /api/kontakt/ zu /404.html (file_server → 405).
-    # YAGNI: nur dieser eine Endpoint. Wenn mehr Marketing-API-Endpoints kommen,
-    # auf /api/* erweitern oder django-cors-headers nachrüsten.
+    # Marketing-Site-Endpoints (Kontakt + Self-Service-Onboarding) → Backend.
+    # Same-origin, kein CORS nötig.
     handle /api/kontakt/* {
+        reverse_proxy vaeren-django:8000 {
+            header_up X-Forwarded-Proto https
+            header_up X-Real-IP {remote_host}
+            header_up Host {host}
+        }
+    }
+    handle /api/onboarding/* {
+        reverse_proxy vaeren-django:8000 {
+            header_up X-Forwarded-Proto https
+            header_up X-Real-IP {remote_host}
+            header_up Host {host}
+        }
+    }
+    handle /api/tools/* {
         reverse_proxy vaeren-django:8000 {
             header_up X-Forwarded-Proto https
             header_up X-Real-IP {remote_host}
@@ -101,9 +117,16 @@ api.vaeren.de {
 }
 
 
-# --- Vaeren App-Frontend --------------------------------------------------
-app.vaeren.de {
+# --- Vaeren App-Frontend (Haupt-App + Self-Service-Tenants) -------------
+# Matched sowohl die statische `app.vaeren.de` (Demo + Marketing-Login)
+# als auch `*.app.vaeren.de` (Self-Service-Tenants seit Phase 1.5).
+# Wildcards bekommen on-demand-TLS — Caddy fragt das Backend, ob der Host
+# als TenantDomain registriert ist, bevor Let's Encrypt kontaktiert wird.
+app.vaeren.de, *.app.vaeren.de {
     encode gzip zstd
+    tls {
+        on_demand
+    }
 
     # API + Admin + Account-Flow → Backend (ASGI/Daphne)
     @api {

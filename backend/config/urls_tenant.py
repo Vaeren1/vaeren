@@ -5,6 +5,7 @@ from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from core.auth_views import MfaAwareLoginView
+from tenants.setup_views import OnboardingSetupView
 
 urlpatterns = [
     # Django-Admin für tenant-spezifische Models (Mitarbeiter, Schulungen,
@@ -13,8 +14,15 @@ urlpatterns = [
     path("api/", include("core.urls")),
     path("api/", include("pflichtunterweisung.urls")),
     path("api/", include("hinschg.urls")),
+    path("api/", include("datenpannen.urls")),
+    path("api/", include("ki_inventar.urls")),
+    path("api/", include("auftragsverarbeitung.urls")),
+    path("api/", include("transparenzregister.urls")),
+    path("api/", include("nis2.urls")),
     # Redaktion-Backend (auth-only, schema-switching auf public).
     path("api/", include("redaktion.urls_internal")),
+    # Self-Service-Onboarding-Setup (Magic-Link-Einlösen).
+    path("api/onboarding/setup/", OnboardingSetupView.as_view(), name="onboarding-setup"),
     # MFA-aware Login MUSS vor dj_rest_auth.urls stehen, sonst gewinnt der Default.
     path("api/auth/login/", MfaAwareLoginView.as_view(), name="rest_login"),
     path("api/auth/", include("dj_rest_auth.urls")),

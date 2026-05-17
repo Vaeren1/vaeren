@@ -1,4 +1,7 @@
-"""Public-Schema-Modelle. Spec §5."""
+"""Public-Schema-Modelle. Spec §5 + Phase-1.5 Self-Service-Onboarding."""
+
+import datetime
+import secrets
 
 from cryptography.fernet import Fernet
 from django.db import models
@@ -9,6 +12,17 @@ class Plan(models.TextChoices):
     STARTER = "starter", "Starter"
     PROFESSIONAL = "professional", "Professional"
     BUSINESS = "business", "Business"
+    TRIAL = "trial", "Trial (Self-Service)"
+
+
+class OnboardingSource(models.TextChoices):
+    MANUAL = "manual", "Manuell durch Vaeren-Admin"
+    SELF_SERVICE = "self_service", "Self-Service über vaeren.de/start"
+    PILOT = "pilot", "Pilot-Vertrag"
+
+
+def _default_trial_ends_at() -> datetime.date:
+    return datetime.date.today() + datetime.timedelta(days=30)
 
 
 class Tenant(TenantMixin):
@@ -21,6 +35,25 @@ class Tenant(TenantMixin):
     contract_start = models.DateField(null=True, blank=True)
     contract_end = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    onboarding_source = models.CharField(
+        max_length=20,
+        choices=OnboardingSource.choices,
+        default=OnboardingSource.MANUAL,
+        help_text="Wie ist der Tenant entstanden? Self-Service vs. manuell vs. Pilot.",
+    )
+    trial_ends_at = models.DateField(
+        null=True,
+        blank=True,
+        help_text=(
+            "Trial-Tenants laufen nach 30 Tagen ab. Nach Ablauf wird Login geblockt,"
+            " bis ein Pilot-/Bezahl-Plan zugewiesen wird. NULL = kein Trial."
+        ),
+    )
+    activated_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Erste erfolgreiche Anmeldung des GF nach Self-Service-Onboarding.",
+    )
     encryption_key = models.BinaryField(
         editable=False,
         default=b"",
@@ -88,3 +121,76 @@ class DemoRequest(models.Model):
 
     def __str__(self) -> str:
         return f"{self.firma} ({self.email}) — {self.erstellt_am:%Y-%m-%d}"
+
+
+class OnboardingStatus(models.TextChoices):
+    PENDING = "pending", "Eingereicht, Tenant-Bereitstellung läuft"
+    INVITATION_SENT = "invitation_sent", "Magic-Link-Mail versandt"
+    ACTIVATED = "activated", "GF hat Passwort gesetzt + eingeloggt"
+    FAILED = "failed", "Bereitstellung fehlgeschlagen"
+    EXPIRED = "expired", "Magic-Link 7d nicht eingelöst, Tenant pausiert"
+
+
+def _generate_invite_token() -> str:
+    return secrets.token_urlsafe(32)
+
+
+class OnboardingRequest(models.Model):
+    """Audit-Trail einer Self-Service-Anmeldung über vaeren.de/start.
+
+    Liegt im public-Schema, weil sie *vor* der Tenant-Erstellung entsteht
+    und das Ergebnis (Tenant) verlinkt, sobald die Bereitstellung erfolgreich
+    durchlief. Failure-Cases bleiben mit `status=FAILED` + `error` erhalten,
+    damit wir analysieren können, was bei Self-Service-Pannen schiefging.
+    """
+
+    firma_name = models.CharField(max_length=200)
+    schema_name = models.CharField(
+        max_length=63,
+        db_index=True,
+        help_text="Gewünschter Subdomain-Teil (`<schema>.app.vaeren.de`).",
+    )
+    vorname = models.CharField(max_length=80)
+    nachname = models.CharField(max_length=80)
+    email = models.EmailField(db_index=True)
+    telefon = models.CharField(max_length=40, blank=True, default="")
+    mitarbeiter_anzahl = models.CharField(
+        max_length=10, choices=MitarbeiterAnzahl.choices, blank=True, default=""
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=OnboardingStatus.choices,
+        default=OnboardingStatus.PENDING,
+    )
+    error = models.TextField(blank=True, default="")
+    tenant = models.ForeignKey(
+        "Tenant",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="onboarding_requests",
+    )
+
+    invite_token = models.CharField(
+        max_length=64,
+        unique=True,
+        default=_generate_invite_token,
+        editable=False,
+        help_text="Magic-Link-Token, 32 Bytes URL-safe. Einlösbar 7 Tage.",
+    )
+    invite_token_expires_at = models.DateTimeField(null=True, blank=True)
+    activated_at = models.DateTimeField(null=True, blank=True)
+
+    ip_adresse = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.CharField(max_length=500, blank=True, default="")
+    erstellt_am = models.DateTimeField(auto_now_add=True)
+    aktualisiert_am = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ("-erstellt_am",)
+        verbose_name = "Onboarding-Anfrage"
+        verbose_name_plural = "Onboarding-Anfragen"
+
+    def __str__(self) -> str:
+        return f"{self.schema_name} ({self.email}) — {self.status}"

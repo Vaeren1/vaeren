@@ -17,13 +17,17 @@ import { useTenantSettings } from "@/lib/api/settings";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { cn } from "@/lib/utils";
 import {
+  AlertTriangle,
   BookOpen,
   ChevronDown,
+  Cpu,
+  FileCheck2,
   FileSearch,
   Inbox,
   LayoutDashboard,
   LogOut,
   type LucideIcon,
+  Network,
   Newspaper,
   Settings,
   Shield,
@@ -54,6 +58,10 @@ const NAV: Array<{
     group: "compliance",
   },
   { to: "/meldungen", label: "HinSchG", icon: Inbox, group: "compliance" },
+  { to: "/datenpannen", label: "Datenpannen", icon: AlertTriangle, group: "compliance" },
+  { to: "/ki-inventar", label: "KI-Inventar", icon: Cpu, group: "compliance" },
+  { to: "/avv", label: "Auftragsverarbeitung", icon: FileCheck2, group: "compliance" },
+  { to: "/nis2", label: "NIS2", icon: Network, group: "compliance" },
   { to: "/audit", label: "Audit-Log", icon: FileSearch, group: "compliance" },
   { to: "/mitarbeiter", label: "Mitarbeiter", icon: Users, group: "stamm" },
   { to: "/settings", label: "Einstellungen", icon: Settings, group: "stamm" },

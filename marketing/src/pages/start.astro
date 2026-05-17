@@ -1,0 +1,226 @@
+---
+import Layout from "../components/Layout.astro";
+---
+
+<Layout
+  title="Vaeren starten"
+  description="In zwei Minuten zur eigenen Compliance-Suite. 30 Tage kostenlos testen, kein Vertrag, keine Kreditkarte."
+>
+  <section class="max-w-(--container-wide) mx-auto px-6 py-16">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Self-Service-Start</div>
+    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-4 max-w-3xl">In zwei Minuten zur eigenen Compliance-Suite.</h1>
+    <p class="text-lg text-ink-soft max-w-2xl leading-relaxed mb-12">
+      Sie legen jetzt einen eigenen Vaeren-Mandanten an und können sofort einrichten. 30 Tage kostenfrei, keine Kreditkarte, kein Auto-Abo. Nach Trial-Ende ist Ihr Mandant lesbar archiviert, bis Sie sich entscheiden.
+    </p>
+
+    <div class="grid md:grid-cols-[1fr_320px] gap-12">
+      <form
+        id="onboarding-form"
+        method="post"
+        action="/api/onboarding/"
+        class="space-y-5"
+        novalidate
+      >
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label for="firma_name" class="block text-sm text-ink-soft mb-2">Firmenname</label>
+            <input id="firma_name" name="firma_name" type="text" required class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
+          </div>
+          <div>
+            <label for="mitarbeiter_anzahl" class="block text-sm text-ink-soft mb-2">Mitarbeitende</label>
+            <select id="mitarbeiter_anzahl" name="mitarbeiter_anzahl" class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand">
+              <option value="">— bitte wählen —</option>
+              <option value="&lt;50">unter 50</option>
+              <option value="50-120">50 bis 120</option>
+              <option value="121-250">121 bis 250</option>
+              <option value="251-500">251 bis 500</option>
+              <option value="&gt;500">über 500</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="schema_name" class="block text-sm text-ink-soft mb-2">Subdomain</label>
+          <div class="flex items-center border border-line rounded bg-paper focus-within:border-brand">
+            <input id="schema_name" name="schema_name" type="text" required minlength="3" maxlength="32" pattern="[a-z][a-z0-9-]+" class="flex-1 px-4 py-2 bg-transparent focus:outline-none" />
+            <span class="px-3 text-sm text-ink-muted border-l border-line">.app.vaeren.de</span>
+          </div>
+          <p class="text-xs text-ink-muted mt-1">Nur Kleinbuchstaben, Ziffern, Bindestrich. Mindestens 3 Zeichen.</p>
+          <p id="subdomain-hint" class="text-xs mt-1" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label for="vorname" class="block text-sm text-ink-soft mb-2">Vorname</label>
+            <input id="vorname" name="vorname" type="text" required class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
+          </div>
+          <div>
+            <label for="nachname" class="block text-sm text-ink-soft mb-2">Nachname</label>
+            <input id="nachname" name="nachname" type="text" required class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
+          </div>
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm text-ink-soft mb-2">Ihre Geschäftsführer-E-Mail</label>
+          <input id="email" name="email" type="email" required class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
+          <p class="text-xs text-ink-muted mt-1">An diese Adresse senden wir den Aktivierungs-Link.</p>
+        </div>
+
+        <div>
+          <label for="telefon" class="block text-sm text-ink-soft mb-2">Telefon (optional)</label>
+          <input id="telefon" name="telefon" type="tel" class="w-full px-4 py-2 border border-line rounded bg-paper focus:outline-none focus:border-brand" />
+        </div>
+
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;" />
+
+        <div class="flex items-start gap-3 pt-2">
+          <input id="agb" name="agb" type="checkbox" required class="mt-1" />
+          <label for="agb" class="text-sm text-ink-soft">
+            Ich akzeptiere die <a href="/datenschutz" class="text-brand">Datenschutzerklärung</a> und stimme zu, dass meine Eingaben verarbeitet werden, um den Vaeren-Mandanten anzulegen. Pilot-AGB folgen vor Vertragsabschluss.
+          </label>
+        </div>
+
+        <button id="onboarding-submit" type="submit" class="px-6 py-3 bg-ink text-paper rounded-full hover:bg-brand disabled:opacity-50 disabled:cursor-not-allowed">Mandanten anlegen</button>
+
+        <p id="onboarding-status" class="text-sm" role="status" aria-live="polite"></p>
+      </form>
+
+      <aside class="space-y-6 text-ink-soft text-sm">
+        <div>
+          <h2 class="font-serif text-lg text-ink mb-2">Was Sie bekommen</h2>
+          <ul class="space-y-1.5">
+            <li>Eigene Subdomain mit isolierter Datenbank</li>
+            <li>Pflichtunterweisungs-Modul mit Kurs-Katalog</li>
+            <li>HinSchG-Hinweisgeberportal, verschlüsselt</li>
+            <li>Compliance-Cockpit + Audit-Log</li>
+            <li>KI-Tool-Inventar, Datenpannen-Register</li>
+            <li>30 Tage kostenfrei, danach Pilot-Konditionen</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="font-serif text-lg text-ink mb-2">Was wir nicht tun</h2>
+          <ul class="space-y-1.5">
+            <li>Keine Auto-Verlängerung</li>
+            <li>Kein Trial-zu-Abo-Cliff</li>
+            <li>Keine Daten verkaufen</li>
+            <li>Keine versteckte Telefon-Akquise</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="font-serif text-lg text-ink mb-2">Lieber persönlich?</h2>
+          <p>
+            Wenn Sie vor dem Selbst-Anlegen mit Konrad sprechen wollen: <a href="/kontakt" class="text-brand">kontakt@vaeren.de</a>.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const form = document.getElementById("onboarding-form") as HTMLFormElement | null;
+  const firmaInput = document.getElementById("firma_name") as HTMLInputElement | null;
+  const schemaInput = document.getElementById("schema_name") as HTMLInputElement | null;
+  const submitBtn = document.getElementById("onboarding-submit") as HTMLButtonElement | null;
+  const statusEl = document.getElementById("onboarding-status") as HTMLParagraphElement | null;
+  const hintEl = document.getElementById("subdomain-hint") as HTMLParagraphElement | null;
+
+  // --- Subdomain-Vorschlag aus Firmenname ---
+  let userEditedSchema = false;
+  let suggestTimer: ReturnType<typeof setTimeout> | null = null;
+
+  schemaInput?.addEventListener("input", () => {
+    userEditedSchema = true;
+    if (schemaInput) {
+      schemaInput.value = schemaInput.value
+        .toLowerCase()
+        .replace(/[^a-z0-9-]/g, "-")
+        .replace(/-+/g, "-")
+        .slice(0, 32);
+    }
+    if (hintEl) hintEl.textContent = "";
+  });
+
+  firmaInput?.addEventListener("input", () => {
+    if (userEditedSchema || !firmaInput || !schemaInput) return;
+    if (suggestTimer) clearTimeout(suggestTimer);
+    const firma = firmaInput.value.trim();
+    if (firma.length < 3) return;
+    suggestTimer = setTimeout(async () => {
+      try {
+        const res = await fetch("/api/onboarding/suggest/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ firma_name: firma }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (!userEditedSchema && schemaInput) {
+            schemaInput.value = data.schema_name;
+            if (hintEl) {
+              hintEl.className = "text-xs text-ink-muted mt-1";
+              hintEl.textContent = `Vorgeschlagen aus Firmennamen. Anpassbar.`;
+            }
+          }
+        }
+      } catch {}
+    }, 350);
+  });
+
+  // --- Submit-Handler ---
+  if (form && submitBtn && statusEl) {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      statusEl.className = "text-sm text-ink-soft";
+      statusEl.textContent = "Mandant wird angelegt — das dauert 5 bis 10 Sekunden …";
+      submitBtn.disabled = true;
+
+      const fd = new FormData(form);
+      const payload = {
+        firma_name: String(fd.get("firma_name") ?? "").trim(),
+        schema_name: String(fd.get("schema_name") ?? "").trim().toLowerCase(),
+        vorname: String(fd.get("vorname") ?? "").trim(),
+        nachname: String(fd.get("nachname") ?? "").trim(),
+        email: String(fd.get("email") ?? "").trim(),
+        telefon: String(fd.get("telefon") ?? "").trim(),
+        mitarbeiter_anzahl: String(fd.get("mitarbeiter_anzahl") ?? ""),
+        website: String(fd.get("website") ?? ""),
+      };
+
+      try {
+        const res = await fetch("/api/onboarding/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (res.status === 201) {
+          const data = await res.json();
+          statusEl.className = "text-sm text-brand";
+          statusEl.innerHTML = `Mandant <strong>${data.primary_domain}</strong> ist angelegt. Wir haben Ihnen einen Aktivierungs-Link an <strong>${payload.email}</strong> gesendet. Bitte Posteingang prüfen (auch Spam-Ordner).`;
+          form.reset();
+        } else if (res.status === 409) {
+          const data = await res.json();
+          statusEl.className = "text-sm text-red-600";
+          statusEl.textContent = data.detail ?? "Subdomain bereits vergeben. Bitte anderen Namen wählen.";
+          schemaInput?.focus();
+        } else if (res.status === 429) {
+          statusEl.className = "text-sm text-red-600";
+          statusEl.textContent = "Zu viele Anfragen. Bitte versuchen Sie es in einer Stunde erneut.";
+        } else {
+          let detail = "Anlage fehlgeschlagen. Bitte versuchen Sie es erneut oder schreiben Sie an kontakt@vaeren.de.";
+          try {
+            const data = await res.json();
+            if (typeof data?.detail === "string") detail = data.detail;
+          } catch {}
+          statusEl.className = "text-sm text-red-600";
+          statusEl.textContent = detail;
+        }
+      } catch {
+        statusEl.className = "text-sm text-red-600";
+        statusEl.textContent = "Netzwerkfehler. Bitte versuchen Sie es erneut.";
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  }
+</script>
