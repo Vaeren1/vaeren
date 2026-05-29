@@ -2,7 +2,9 @@
 
 > **Für künftige Claude-Sessions:** Diese Datei enthält die wichtigsten Architektur- und Konventions-Entscheidungen für das ai-act-Projekt. Sie ist die schnelle Referenz; die tiefe Wahrheit liegt in den Specs unter `docs/superpowers/specs/`.
 
-## Stand 2026-05-17 — Phase 3 implementiert (lokal, noch nicht deployed)
+## Stand 2026-05-18 — Phase 3 deployed in Production (nach Audit-Review-Pass)
+
+**Deploy erfolgt am 2026-05-18** (Commit `0778c36`). Vorher Audit-Review-Pass mit 4 parallelen Audit-Agenten: **6 Deploy-Blocker + 12 HOCH-Findings + 30 Mittel/Niedrig** gefunden, alle 6 Blocker + 12 HOCH gefixt + 5 Frontend-Skeletons ausgebaut. Compliance-Index Demo-Tenant: 89 → **91/100 green**. Tests: 102/102 Phase-3-Modul-Tests grün. Details (inkl. Blocker-Liste: DSGVO-Art.-9-Bruch bei Unfall-Gesundheitsdaten, inaktiver RDG-Layer-2-Validator, Aggregator-Stubs, tenant_schema-Leak) in `~/.claude/projects/-home-konrad-ai-act/memory/project_phase3_status.md`.
 
 **Phase-3-Module fertig integriert** (4 parallele Subagent-Worktrees → sequenziell gemerged):
 - `iso27001/` — ISO-27001-Evidence-Sammler (93 Annex-A-Controls, RDG-3-Layer, SoA-PDF, Risk-Register, 39 Tests / 92% Coverage)
@@ -14,7 +16,9 @@
 
 **Bekannter pre-existing Test-Break (NICHT durch Phase 3 verursacht):** `tests/test_redaktion_pipeline.py` mockt `redaktion.pipeline.curator.call_json` — wurde in Commit c6ff49a zu `call_json_with_fallback` umbenannt, Test-Mock blieb. Vor Phase 3 schon kaputt.
 
-**Deploy steht aus** (manuell via `./deploy.sh` von User). Vor Deploy: Migrations gegen Prod-DB testen (5 neue tenant-schema Migrations: iso27001/0001, iso27001/0002 seed, iso42001/0001, arbeitsschutz/0001, auditor_export/0001 + 2 tenants-Migrationen).
+**Migrations deployed** (5 tenant-schema: iso27001/0001, iso27001/0002 seed, iso42001/0001, arbeitsschutz/0001, auditor_export/0001 + tenants/0005_iso42001 + tenants/0006_audit_signing_key).
+
+**Backlog Phase 3b/4** (bewusst nicht gebaut): KI-Beauftragter als eigene Rolle, ISO-42001-Policy-Templates, Demo-Fixtures + Storybook/Playwright-E2E für die 4 neuen Module, Vollkatalog 120 Gefährdungen (aktuell 76), PDF/A-3-Konformität, OSCAL-Schema-Validation in CI, Policy-Kenntnisnahme-Reminder (Celery-Beat).
 
 ## Stand 2026-05-10 — Vaeren ist live in Production (MVP)
 
