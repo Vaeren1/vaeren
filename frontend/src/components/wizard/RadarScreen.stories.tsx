@@ -52,7 +52,6 @@ const mockRadar: RadarResult = {
       name: "Lieferkettensorgfaltspflichtengesetz",
       relevanz: "mittel",
       abdeckung: "basis_hinweis",
-      modul_key: null,
       begruendung:
         "Nach unserer Einschätzung könnten sich Sorgfaltspflichten in der Lieferkette ergeben. Bitte mit Ihrer Rechtsberatung bestätigen.",
     },
@@ -61,7 +60,6 @@ const mockRadar: RadarResult = {
       name: "Cyber Resilience Act",
       relevanz: "niedrig",
       abdeckung: "in_vorbereitung",
-      modul_key: null,
       begruendung:
         "Nach unserer Einschätzung könnte der CRA künftig relevant werden. Bitte mit Ihrer Rechtsberatung bestätigen.",
     },

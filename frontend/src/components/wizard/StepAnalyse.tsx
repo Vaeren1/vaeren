@@ -22,6 +22,8 @@ interface Props {
 }
 
 export function StepAnalyse({ profil, onNext }: Props) {
+  // Schema typisiert die List-Felder generisch (`unknown`); Runtime = string[].
+  const betriebsmerkmale = (profil.betriebsmerkmale ?? []) as string[];
   return (
     <Card>
       <CardHeader>
@@ -42,13 +44,13 @@ export function StepAnalyse({ profil, onNext }: Props) {
           <dt className="text-muted-foreground">NIS2-Sektor</dt>
           <dd>{profil.nis2_sektor || "—"}</dd>
         </dl>
-        {profil.betriebsmerkmale.length > 0 && (
+        {betriebsmerkmale.length > 0 && (
           <div>
             <p className="mb-1.5 text-muted-foreground">
               Erkannte Betriebsmerkmale
             </p>
             <div className="flex flex-wrap gap-1.5">
-              {profil.betriebsmerkmale.map((k) => (
+              {betriebsmerkmale.map((k) => (
                 <span
                   key={k}
                   className="rounded-full bg-secondary px-2.5 py-0.5 text-xs text-secondary-foreground"

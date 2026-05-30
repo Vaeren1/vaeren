@@ -12,6 +12,7 @@ import {
   KanzleiSiegel,
   type RadarProps,
   RdgDisclaimer,
+  RelevanzChip,
   StatusBadge,
   abdeckungMeta,
   empfehlungenFuerBefund,
@@ -75,6 +76,9 @@ export function RadarVarianteB({
               <p className="mt-0.5 text-sm text-muted-foreground">
                 {b.begruendung}
               </p>
+              <div className="mt-2">
+                <RelevanzChip relevanz={b.relevanz} />
+              </div>
               <EmpfehlungListe empfehlungen={empf} />
             </div>
           );

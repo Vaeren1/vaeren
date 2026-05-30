@@ -35,7 +35,8 @@ export function StepBestaetigen({ profil, onNext, laedt }: Props) {
     profil.verarbeitet_gesundheits_sozialdaten,
   );
   const [merkmale, setMerkmale] = useState<string[]>(
-    profil.betriebsmerkmale ?? [],
+    // Schema typisiert das List-Feld generisch (`unknown`); Runtime = string[].
+    (profil.betriebsmerkmale ?? []) as string[],
   );
   const [neuesMerkmal, setNeuesMerkmal] = useState("");
   const [freitext, setFreitext] = useState("");

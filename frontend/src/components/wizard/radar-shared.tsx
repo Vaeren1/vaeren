@@ -73,21 +73,58 @@ export function StatusBadge({ abdeckung }: { abdeckung: string }) {
   );
 }
 
+// --- Relevanz-Chip (hoch / mittel / niedrig) ---------------------------
+
+const RELEVANZ_META: Record<string, { label: string; chip: string }> = {
+  hoch: { label: "hoch", chip: "bg-rose-100 text-rose-800" },
+  mittel: { label: "mittel", chip: "bg-amber-100 text-amber-800" },
+  niedrig: { label: "niedrig", chip: "bg-slate-100 text-slate-600" },
+};
+
+/** Kleiner Chip "Relevanz: …" pro Befund — konsistent in allen Varianten. */
+export function RelevanzChip({ relevanz }: { relevanz: string }) {
+  const m = RELEVANZ_META[relevanz] ?? {
+    label: relevanz,
+    chip: "bg-slate-100 text-slate-600",
+  };
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium",
+        m.chip,
+      )}
+    >
+      Relevanz: {m.label}
+    </span>
+  );
+}
+
 // --- Empfehlungs-Zuordnung ---------------------------------------------
+
+/**
+ * `quelle`-Werte einer Empfehlung:
+ *  - `"katalog"`    — kuratierte Katalog-Empfehlung, regulär anzeigen.
+ *  - `"ki"`         — KI-Vorschlag, bereits validiert → regulär anzeigen
+ *                     (kein "bitte prüfen"-Label mehr nötig).
+ *  - `"ki_pending"` — KI-Vorschlag, noch nicht validiert → separat unter
+ *                     "KI-Einschätzung — bitte prüfen".
+ */
+const REGULAERE_QUELLEN: ReadonlySet<string> = new Set(["katalog", "ki"]);
 
 /**
  * Ordnet eine Empfehlung über `merkmal_key` einer Pflicht zu. Im aktuellen
  * Datenmodell trägt eine Empfehlung den Betriebsmerkmal-Key (z.B. "lager"),
  * nicht den Regulierungs-Code. Operative Betriebsmerkmal-Empfehlungen werden
- * deshalb der Arbeitsschutz-Pflicht (`arbschg`) zugeordnet; Freitext-/KI-
- * Empfehlungen (`ki_pending`) bleiben separat unter "KI-Einschätzung".
+ * deshalb der Arbeitsschutz-Pflicht (`arbschg`) zugeordnet; noch nicht
+ * validierte KI-Empfehlungen (`ki_pending`) bleiben separat unter
+ * "KI-Einschätzung".
  */
 export function empfehlungenFuerBefund(
   befund: Befund,
   empfehlungen: Empfehlung[],
 ): Empfehlung[] {
   if (befund.regulierung_code === "arbschg") {
-    return empfehlungen.filter((e) => e.quelle === "katalog");
+    return empfehlungen.filter((e) => REGULAERE_QUELLEN.has(e.quelle));
   }
   return [];
 }

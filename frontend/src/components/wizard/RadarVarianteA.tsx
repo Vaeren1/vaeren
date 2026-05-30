@@ -13,6 +13,7 @@ import {
   KanzleiSiegel,
   type RadarProps,
   RdgDisclaimer,
+  RelevanzChip,
   StatusBadge,
   abdeckungMeta,
   empfehlungenFuerBefund,
@@ -106,7 +107,10 @@ export function RadarVarianteA({
                     {b.begruendung}
                   </p>
                 </div>
-                <StatusBadge abdeckung={b.abdeckung} />
+                <div className="flex flex-col items-end gap-1.5">
+                  <StatusBadge abdeckung={b.abdeckung} />
+                  <RelevanzChip relevanz={b.relevanz} />
+                </div>
               </div>
               <EmpfehlungListe empfehlungen={empf} />
             </li>

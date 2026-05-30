@@ -12,6 +12,7 @@ import {
   KanzleiSiegel,
   type RadarProps,
   RdgDisclaimer,
+  RelevanzChip,
   StatusBadge,
   abdeckungMeta,
   empfehlungenFuerBefund,
@@ -50,7 +51,10 @@ export function RadarVarianteC({
                 key={b.regulierung_code}
                 className="rounded border border-rose-200 bg-white/70 px-3 py-2"
               >
-                <p className="text-sm font-medium text-rose-900">{b.name}</p>
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-sm font-medium text-rose-900">{b.name}</p>
+                  <RelevanzChip relevanz={b.relevanz} />
+                </div>
                 <p className="text-xs text-rose-700">noch nicht abgedeckt</p>
               </li>
             ))}

@@ -8,69 +8,30 @@
  */
 import { useMutation } from "@tanstack/react-query";
 import { type ApiError, api } from "./client";
+import type { components } from "./types.gen";
 
 // --- Typen --------------------------------------------------------------
+//
+// Single Source of Truth = das generierte OpenAPI-Schema (`types.gen.ts`).
+// Hier werden nur die Schema-Namen auf lokale, sprechende Aliase gemappt;
+// ein Backend-Feldbruch erzeugt damit direkt einen TS-Fehler im Wizard.
 
 export type Abdeckung = "voll_modul" | "basis_hinweis" | "in_vorbereitung";
-export type Relevanz = "hoch" | "mittel" | "niedrig";
+export type Relevanz = components["schemas"]["RelevanzEnum"];
 export type EmpfehlungQuelle = "katalog" | "ki" | "ki_pending";
 export type EmpfehlungArt = "kurs" | "gefaehrdung" | "massnahme";
 
-export interface Profil {
-  id: number;
-  firmenname: string;
-  website: string;
-  branche: string;
-  nace_code: string;
-  mitarbeiter_anzahl: number;
-  jahresumsatz_eur: number;
-  bilanzsumme_eur: number;
-  rechtsform: string;
-  standort_laender: string[];
-  nis2_sektor: string;
-  ist_automotive_zulieferer: boolean;
-  hat_oem_kunden: boolean;
-  stellt_produkte_her: boolean;
-  produkte_mit_digitalen_elementen: boolean;
-  verarbeitet_personenbezogene_daten: boolean;
-  verarbeitet_gesundheits_sozialdaten: boolean;
-  setzt_ki_ein: boolean;
-  drittland_transfer: boolean;
-  betriebsmerkmale: string[];
-  betriebsmerkmale_freitext: string[];
-  recherche_quelle: string;
-  bestaetigt_at: string | null;
-  erstellt_at: string;
-  // Engine ignoriert unbekannte Felder; offen für Schema-Erweiterungen.
-  [k: string]: unknown;
-}
+export type Profil = components["schemas"]["UnternehmensProfil"];
+export type Befund = components["schemas"]["RegulierungsBefund"];
+export type Empfehlung = components["schemas"]["OperativeEmpfehlung"];
 
-export interface Befund {
-  regulierung_code: string;
-  name: string;
-  relevanz: Relevanz | string;
-  abdeckung: Abdeckung | string;
-  modul_key: string | null;
-  begruendung: string;
-}
+/**
+ * Die `/radar/`-Antwort. Das Backend liefert sie als benanntes Schema
+ * `RadarResponse` — direkt übernommen, statt Felder erneut handzuschreiben.
+ */
+export type RadarResult = components["schemas"]["RadarResponse"];
 
-export interface Empfehlung {
-  merkmal_key: string;
-  art: EmpfehlungArt | string;
-  ziel: string;
-  quelle: EmpfehlungQuelle | string;
-  rechtsgrundlage: string;
-}
-
-export interface RadarResult {
-  befunde: Befund[];
-  empfehlungen: Empfehlung[];
-  empfohlene_module: string[];
-}
-
-export interface OsintStatus {
-  wizard_durchlaufen: boolean;
-}
+export type OsintStatus = components["schemas"]["OsintStatusResponse"];
 
 const BASE = "/api/onboarding-wizard";
 
