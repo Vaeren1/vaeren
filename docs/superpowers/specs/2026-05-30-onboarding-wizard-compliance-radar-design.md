@@ -141,7 +141,7 @@ class Betriebsmerkmal:
     empfohlene_massnahmen: list[str]     # z.B. "G25-Vorsorge", "GBU Lagerbereich"
     rechtsgrundlage: str           # z.B. "DGUV Vorschrift 68"
 ```
-Initial-Set u.a.: Lager/Flurförderzeuge, Maschinenproduktion, Schweißerei, Gefahrstofflager, Lärmbereiche, Fuhrpark, Nacht-/Schichtarbeit, Höhenarbeit, Druckbehälter, Krane, Pressen, Lackiererei, Kühlhaus, Labor/Reinraum.
+**Initial-Set: ~15 Merkmale** (breiter Katalog, deckt mehrere Branchen ab): Lager/Flurförderzeuge, Maschinenproduktion, Schweißerei, Gefahrstofflager, Lärmbereiche, Fuhrpark, Nacht-/Schichtarbeit, Höhenarbeit, Druckbehälter, Krane, Pressen, Lackiererei, Kühlhaus, Labor/Reinraum, PSA-pflichtige Bereiche.
 
 **Drei Erfassungs-Wege (Schritt 3):**
 1. **KI-vorbefüllt** — OSINT/LLM rät aus Branche+Größe wahrscheinliche Merkmale (Maschinenbau → Produktion, Maschinen, Lager, oft Schweißerei). Als abhakbare Chips.
@@ -238,4 +238,4 @@ Permissions: nur Geschäftsführer-Rolle darf Wizard durchlaufen + Module aktivi
 - `aktive_module`: JSON-Feld vs. einzelne Flags (Detail-Entscheidung im Plan).
 - Genaue OSINT-Recherche-Quellen + Prompt (Web-Search-Tool-Anbindung).
 - Finale Radar-UI-Variante (nach §11-Exploration).
-- Initial-Umfang des Betriebsmerkmal-Katalogs (§6.5) + exakte Kurs-/Gefährdungs-Mappings auf die bestehenden Kataloge (Pflichtunterweisung, Arbeitsschutz-76er-Katalog).
+- Exakte Kurs-/Gefährdungs-Mappings der ~15 Betriebsmerkmale (§6.5) auf die bestehenden Kataloge (Pflichtunterweisung, Arbeitsschutz-76er-Katalog) — Umfang ~15 ist entschieden, die konkreten Zuordnungen folgen im Plan.
