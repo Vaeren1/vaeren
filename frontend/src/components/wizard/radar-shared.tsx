@@ -1,3 +1,9 @@
+import type {
+  Abdeckung,
+  Befund,
+  Empfehlung,
+  RadarResult,
+} from "@/lib/api/onboarding";
 /**
  * Gemeinsame Bausteine der drei Radar-Varianten (Feature 1, §11).
  *
@@ -6,7 +12,6 @@
  * A/B/C teilen diese Logik, unterscheiden sich nur in der Inszenierung.
  */
 import { cn } from "@/lib/utils";
-import type { Abdeckung, Befund, Empfehlung, RadarResult } from "@/lib/api/onboarding";
 
 export interface RadarProps {
   radar: RadarResult;
@@ -87,7 +92,9 @@ export function empfehlungenFuerBefund(
   return [];
 }
 
-export function kiPendingEmpfehlungen(empfehlungen: Empfehlung[]): Empfehlung[] {
+export function kiPendingEmpfehlungen(
+  empfehlungen: Empfehlung[],
+): Empfehlung[] {
   return empfehlungen.filter((e) => e.quelle === "ki_pending");
 }
 
@@ -102,7 +109,9 @@ export function FirmenHeader({
 }) {
   return (
     <div className="space-y-1">
-      <p className="text-sm font-medium text-muted-foreground">Compliance-Radar</p>
+      <p className="text-sm font-medium text-muted-foreground">
+        Compliance-Radar
+      </p>
       <h1 className="text-2xl font-semibold tracking-tight">
         {firmenname || "Ihr Unternehmen"}
       </h1>

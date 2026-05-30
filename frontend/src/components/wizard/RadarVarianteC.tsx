@@ -18,14 +18,22 @@ import {
   kiPendingEmpfehlungen,
 } from "./radar-shared";
 
-export function RadarVarianteC({ radar, firmenname, kanzleiName, onNext }: RadarProps) {
+export function RadarVarianteC({
+  radar,
+  firmenname,
+  kanzleiName,
+  onNext,
+}: RadarProps) {
   const kiPending = kiPendingEmpfehlungen(radar.empfehlungen);
   const abgedeckt = radar.befunde.filter((b) => b.abdeckung === "voll_modul");
 
   return (
     <div className="space-y-5">
       <div className="flex items-start justify-between gap-4">
-        <FirmenHeader firmenname={firmenname} anzahlPflichten={radar.befunde.length} />
+        <FirmenHeader
+          firmenname={firmenname}
+          anzahlPflichten={radar.befunde.length}
+        />
         <KanzleiSiegel name={kanzleiName} />
       </div>
       <RdgDisclaimer />
@@ -76,8 +84,8 @@ export function RadarVarianteC({ radar, firmenname, kanzleiName, onNext }: Radar
       </div>
 
       <p className="text-center text-sm text-muted-foreground">
-        {abgedeckt.length} von {radar.befunde.length} Pflichten lassen sich direkt
-        mit einem Vaeren-Modul abdecken.
+        {abgedeckt.length} von {radar.befunde.length} Pflichten lassen sich
+        direkt mit einem Vaeren-Modul abdecken.
       </p>
 
       {kiPending.length > 0 && (

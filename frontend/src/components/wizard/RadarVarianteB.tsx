@@ -18,7 +18,12 @@ import {
   kiPendingEmpfehlungen,
 } from "./radar-shared";
 
-export function RadarVarianteB({ radar, firmenname, kanzleiName, onNext }: RadarProps) {
+export function RadarVarianteB({
+  radar,
+  firmenname,
+  kanzleiName,
+  onNext,
+}: RadarProps) {
   const [sichtbar, setSichtbar] = useState(0);
 
   useEffect(() => {
@@ -40,7 +45,10 @@ export function RadarVarianteB({ radar, firmenname, kanzleiName, onNext }: Radar
   return (
     <div className="space-y-5">
       <div className="flex items-start justify-between gap-4">
-        <FirmenHeader firmenname={firmenname} anzahlPflichten={radar.befunde.length} />
+        <FirmenHeader
+          firmenname={firmenname}
+          anzahlPflichten={radar.befunde.length}
+        />
         <KanzleiSiegel name={kanzleiName} />
       </div>
       <RdgDisclaimer />
@@ -64,7 +72,9 @@ export function RadarVarianteB({ radar, firmenname, kanzleiName, onNext }: Radar
                 <StatusBadge abdeckung={b.abdeckung} />
               </div>
               <p className="mt-2 font-medium">{b.name}</p>
-              <p className="mt-0.5 text-sm text-muted-foreground">{b.begruendung}</p>
+              <p className="mt-0.5 text-sm text-muted-foreground">
+                {b.begruendung}
+              </p>
               <EmpfehlungListe empfehlungen={empf} />
             </div>
           );

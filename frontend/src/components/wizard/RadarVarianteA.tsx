@@ -19,7 +19,12 @@ import {
   kiPendingEmpfehlungen,
 } from "./radar-shared";
 
-export function RadarVarianteA({ radar, firmenname, kanzleiName, onNext }: RadarProps) {
+export function RadarVarianteA({
+  radar,
+  firmenname,
+  kanzleiName,
+  onNext,
+}: RadarProps) {
   const [sichtbar, setSichtbar] = useState(0);
   const [score, setScore] = useState(0);
   const zielScore = Math.min(100, 40 + radar.befunde.length * 5);
@@ -57,7 +62,10 @@ export function RadarVarianteA({ radar, firmenname, kanzleiName, onNext }: Radar
   return (
     <div className="space-y-5">
       <div className="flex items-start justify-between gap-4">
-        <FirmenHeader firmenname={firmenname} anzahlPflichten={radar.befunde.length} />
+        <FirmenHeader
+          firmenname={firmenname}
+          anzahlPflichten={radar.befunde.length}
+        />
         <KanzleiSiegel name={kanzleiName} />
       </div>
       <RdgDisclaimer />
@@ -65,7 +73,9 @@ export function RadarVarianteA({ radar, firmenname, kanzleiName, onNext }: Radar
       <div className="flex items-center gap-6 rounded-lg border bg-card p-5">
         <div className="relative grid h-28 w-28 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-emerald-200 bg-emerald-50">
           <div className="radar-sweep absolute inset-0" aria-hidden />
-          <span className="relative text-2xl font-bold text-emerald-700">{score}</span>
+          <span className="relative text-2xl font-bold text-emerald-700">
+            {score}
+          </span>
         </div>
         <div>
           <p className="text-sm font-medium">Compliance-Scan läuft …</p>
@@ -84,13 +94,17 @@ export function RadarVarianteA({ radar, firmenname, kanzleiName, onNext }: Radar
             <li
               key={b.regulierung_code}
               className={`rounded-lg border p-4 transition-all duration-500 ${meta.ring} ${
-                istSichtbar ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+                istSichtbar
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-2 opacity-0"
               }`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="font-medium">{b.name}</p>
-                  <p className="mt-0.5 text-sm text-muted-foreground">{b.begruendung}</p>
+                  <p className="mt-0.5 text-sm text-muted-foreground">
+                    {b.begruendung}
+                  </p>
                 </div>
                 <StatusBadge abdeckung={b.abdeckung} />
               </div>
