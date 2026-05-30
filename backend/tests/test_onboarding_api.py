@@ -84,6 +84,33 @@ def test_mitarbeiter_darf_radar_nicht(tenant_client_mitarbeiter):
     assert r.status_code == 403
 
 
+# Permission-Matrix: Mitarbeiter-Rolle darf KEINE Wizard-Action (lesend/schreibend).
+# Die Permission greift class-level (NurGeschaeftsfuehrer) → 403 kommt VOR der
+# Profil-/Objekt-Logik, daher braucht es kein vorhandenes Profil (403 vor 404).
+_MITARBEITER_FORBIDDEN = [
+    ("post", "/api/onboarding-wizard/recherche/", {"firmenname": "X", "demo": True}),
+    ("patch", "/api/onboarding-wizard/profil/", {"setzt_ki_ein": True}),
+    ("get", "/api/onboarding-wizard/radar/", None),
+    ("post", "/api/onboarding-wizard/aktivieren/", {"modul_keys": ["hinschg"]}),
+    ("get", "/api/onboarding-wizard/osint_status/", None),
+    ("get", "/api/onboarding-wizard/hinweis/lksg/", None),
+]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("method,url,payload", _MITARBEITER_FORBIDDEN)
+def test_mitarbeiter_darf_keine_action(
+    tenant_client_mitarbeiter, method, url, payload
+):
+    c = tenant_client_mitarbeiter
+    fn = getattr(c, method)
+    if payload is None:
+        r = fn(url)
+    else:
+        r = fn(url, payload, content_type="application/json")
+    assert r.status_code == 403, (method, url, r.content)
+
+
 @pytest.mark.django_db
 def test_hinweis_endpunkt(tenant_client_gf, monkeypatch):
     # Mock LLM-Grenze, damit kein echter Call passiert (RDG-valider Text).

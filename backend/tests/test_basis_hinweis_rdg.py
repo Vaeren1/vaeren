@@ -9,6 +9,17 @@ import pytest
 from core.llm_validator import validate_output, LLMValidationError
 
 
+@pytest.fixture(autouse=True)
+def _clear_basis_hinweis_cache():
+    """Prozessweiter _CACHE leeren — sonst leaken Cache-Hits zwischen Tests
+    (latente Fragilität bei call_count-Assertions)."""
+    from core.basis_hinweis import _CACHE
+
+    _CACHE.clear()
+    yield
+    _CACHE.clear()
+
+
 # ── D1: Phrasen-Tests ─────────────────────────────────────────────────────────
 
 

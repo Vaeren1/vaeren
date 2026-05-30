@@ -48,7 +48,12 @@ export function StepBestaetigen({ profil, onNext, laedt }: Props) {
     profil.betriebsmerkmale ?? [],
   );
   const [neuesMerkmal, setNeuesMerkmal] = useState("");
-  const [freitext, setFreitext] = useState("");
+  // Aus dem gespeicherten Profil vorbefüllen (konsistent mit den übrigen
+  // States) — sonst überschreibt ein erneuter Wizard-Durchlauf das gespeicherte
+  // Freitext-Feld mit leer (Datenverlust beim Re-Run).
+  const [freitext, setFreitext] = useState(
+    (profil.betriebsmerkmale_freitext ?? []).join("\n"),
+  );
 
   const toggleMerkmal = (key: string) => {
     setMerkmale((cur) =>
@@ -66,7 +71,9 @@ export function StepBestaetigen({ profil, onNext, laedt }: Props) {
   const weiter = () => {
     const freitextListe = freitext
       .split("\n")
-      .map((z) => z.trim())
+      // Pro Eintrag auf 60 Zeichen kürzen — entspricht
+      // OperativeEmpfehlung.merkmal_key max_length=60 (verhindert 500 im Radar).
+      .map((z) => z.trim().slice(0, 60))
       .filter(Boolean);
     onNext({
       mitarbeiter_anzahl: Number(mitarbeiter) || 0,

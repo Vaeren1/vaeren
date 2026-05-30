@@ -39,6 +39,15 @@ def test_freitext_merkmale_separat_markiert():
     assert all(e["quelle"] == "ki_pending" for e in empf)
 
 
+def test_freitext_wird_auf_60_zeichen_gekuerzt():
+    """OperativeEmpfehlung.merkmal_key ist CharField(max_length=60) → Freitext
+    muss gekürzt werden, sonst DataError → 500 im radar-View."""
+    empf = bewerte_merkmale([], freitext=["x" * 200])
+    assert len(empf) == 1
+    assert len(empf[0]["merkmal"]) <= 60
+    assert len(empf[0]["ziel"]) <= 60
+
+
 def test_unbekannter_merkmal_key_wird_ignoriert():
     """Unbekannte Keys dürfen keine Empfehlungen produzieren (kein KeyError, keine Phantom-Einträge)."""
     assert bewerte_merkmale(["existiert_nicht"], freitext=[]) == []

@@ -48,6 +48,9 @@ def bewerte_merkmale(merkmal_keys: list[str], *, freitext: list[str]) -> list[di
             empfehlungen.append({"merkmal": key, "art": "massnahme", "ziel": massn,
                                 "quelle": "katalog", "rechtsgrundlage": m.rechtsgrundlage})
     for spez in freitext:
-        empfehlungen.append({"merkmal": spez, "art": "massnahme", "ziel": spez,
+        # merkmal_key ist CharField(max_length=60) → Freitext kürzen, sonst
+        # DataError → 500 im radar-View (innerhalb transaction.atomic()).
+        gekuerzt = spez[:60]
+        empfehlungen.append({"merkmal": gekuerzt, "art": "massnahme", "ziel": gekuerzt,
                             "quelle": "ki_pending", "rechtsgrundlage": ""})
     return empfehlungen

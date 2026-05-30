@@ -121,9 +121,7 @@ const REGULAERE_QUELLEN: ReadonlySet<string> = new Set(["katalog", "ki"]);
  * NICHT mehr an einen einzelnen Befund (z.B. `arbschg`) gekoppelt: fehlt der
  * Befund (etwa bei 0 Mitarbeitenden), gingen die Empfehlungen sonst verloren.
  */
-export function regulaereEmpfehlungen(
-  empfehlungen: Empfehlung[],
-): Empfehlung[] {
+function regulaereEmpfehlungen(empfehlungen: Empfehlung[]): Empfehlung[] {
   return empfehlungen.filter((e) => REGULAERE_QUELLEN.has(e.quelle));
 }
 
