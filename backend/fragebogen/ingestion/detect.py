@@ -24,7 +24,7 @@ def erkenne_format_und_tier(pfad: str) -> tuple[str, int]:
     if ext == ".docx":
         # docx → vorerst immer Tier 3 (Beiblatt). Tier-1-docx-Roundtrip (fill_docx.py)
         # ist Backlog; ohne Export-Backend würde Tier 1 hier ein Versprechen ohne
-        # Einlösung machen. _docx_hat_formularfelder bleibt für die spätere Aktivierung.
+        # Einlösung machen.
         return "docx", 3
     if ext == ".pdf":
         if _pdf_hat_acroform(pfad):
@@ -50,22 +50,5 @@ def _pdf_hat_text(pfad: str) -> bool:
     try:
         with pdfplumber.open(pfad) as pdf:
             return any((page.extract_text() or "").strip() for page in pdf.pages)
-    except Exception:
-        return False
-
-
-def _docx_hat_formularfelder(pfad: str) -> bool:
-    """Heuristik: enthält das Dokument Word-Content-Controls (SDT)?
-
-    Reine Tabellen/Absätze reichen NICHT — die werden in Tier 3 (Beiblatt)
-    behandelt. Nur echte Formularfelder erlauben einen Tier-1-Roundtrip.
-    """
-    from docx import Document
-    from docx.oxml.ns import qn
-
-    try:
-        doc = Document(pfad)
-        # iter() ist rekursiv und matcht auch verschachtelte SDTs (Content-Controls).
-        return any(el.tag == qn("w:sdt") for el in doc.element.body.iter())
     except Exception:
         return False

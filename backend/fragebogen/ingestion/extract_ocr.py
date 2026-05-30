@@ -30,12 +30,9 @@ import logging
 
 from pdf2image import convert_from_path
 
-logger = logging.getLogger(__name__)
+from ..bbox import RENDER_DPI, normalisiere_bbox
 
-# Standard-DPI für das PDF→Bild-Rendering. 200 DPI ist ein guter Kompromiss
-# zwischen OCR-Qualität und Speicher/Zeit. Bbox-Koordinaten beziehen sich auf
-# das gerenderte Bild bei dieser DPI.
-RENDER_DPI = 200
+logger = logging.getLogger(__name__)
 
 # Fallback-Schriftgröße, wenn das LLM keine plausible Größe liefert.
 DEFAULT_SCHRIFT_PT = 10.0
@@ -202,7 +199,7 @@ def _normalisiere_fragen(seiten_nr: int, roh_fragen: list[dict]) -> list[dict]:
         text = str(roh.get("text", "")).strip()
         if not text:
             continue
-        bbox = _normalisiere_bbox(roh.get("bbox"))
+        bbox = normalisiere_bbox(roh.get("bbox"))
         if bbox is None:
             continue
         schrift_pt = _normalisiere_schrift(roh.get("schrift_pt"))
@@ -220,16 +217,6 @@ def _normalisiere_fragen(seiten_nr: int, roh_fragen: list[dict]) -> list[dict]:
             }
         )
     return fragen
-
-
-def _normalisiere_bbox(roh) -> list[int] | None:
-    """Erwartet [x, y, w, h]; gibt int-Liste zurück oder None bei kaputten Daten."""
-    if not isinstance(roh, (list, tuple)) or len(roh) != 4:
-        return None
-    try:
-        return [round(float(v)) for v in roh]
-    except (ValueError, TypeError):
-        return None
 
 
 def _normalisiere_schrift(roh) -> float:

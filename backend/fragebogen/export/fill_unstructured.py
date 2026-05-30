@@ -28,6 +28,8 @@ import io
 import json
 import logging
 
+from ..bbox import RENDER_DPI, normalisiere_bbox
+
 logger = logging.getLogger(__name__)
 
 # Maximale Anzahl Review-Runden pro Frage, bevor wir aufgeben und die
@@ -38,8 +40,6 @@ MAX_REVIEW_RUNDEN = 3
 # platzierung_confidence-Werte.
 CONFIDENCE_OK = 0.9       # Vision-Review hat bestätigt
 CONFIDENCE_UNSICHER = 0.2  # nicht konvergiert → Mensch muss prüfen
-
-RENDER_DPI = 200
 
 
 # --------------------------------------------------------------------------- #
@@ -226,7 +226,7 @@ def platziere_mit_review(
             return aktuelles_pdf, CONFIDENCE_OK
 
         korrektur = urteil.get("korrektur_bbox")
-        neue_bbox = _normalisiere_bbox(korrektur)
+        neue_bbox = normalisiere_bbox(korrektur)
         if neue_bbox is None:
             # Kein konkreter Korrekturvorschlag → keine sinnvolle Nachjustierung.
             logger.info("Vision-Review Runde %d: nicht-ok ohne Korrektur-Bbox — Abbruch", runde)
@@ -240,12 +240,3 @@ def platziere_mit_review(
 
     logger.info("Vision-Review nicht konvergiert nach %d Runden — markiere unsicher", MAX_REVIEW_RUNDEN)
     return aktuelles_pdf, CONFIDENCE_UNSICHER
-
-
-def _normalisiere_bbox(roh) -> list[int] | None:
-    if not isinstance(roh, (list, tuple)) or len(roh) != 4:
-        return None
-    try:
-        return [round(float(v)) for v in roh]
-    except (ValueError, TypeError):
-        return None
