@@ -7,6 +7,7 @@
  */
 import { Button } from "@/components/ui/button";
 import {
+  BasisHinweisExpander,
   EmpfehlungListe,
   FirmenHeader,
   KanzleiSiegel,
@@ -80,6 +81,7 @@ export function RadarVarianteC({
                     <StatusBadge abdeckung={b.abdeckung} />
                   </div>
                   <EmpfehlungListe empfehlungen={empf} />
+                  <BasisHinweisExpander befund={b} />
                 </li>
               );
             })}

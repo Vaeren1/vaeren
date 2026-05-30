@@ -7,6 +7,7 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import {
+  BasisHinweisExpander,
   EmpfehlungListe,
   FirmenHeader,
   KanzleiSiegel,
@@ -80,6 +81,7 @@ export function RadarVarianteB({
                 <RelevanzChip relevanz={b.relevanz} />
               </div>
               <EmpfehlungListe empfehlungen={empf} />
+              <BasisHinweisExpander befund={b} />
             </div>
           );
         })}

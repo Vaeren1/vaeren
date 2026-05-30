@@ -22,8 +22,7 @@ interface Props {
 }
 
 export function StepAnalyse({ profil, onNext }: Props) {
-  // Schema typisiert die List-Felder generisch (`unknown`); Runtime = string[].
-  const betriebsmerkmale = (profil.betriebsmerkmale ?? []) as string[];
+  const betriebsmerkmale = profil.betriebsmerkmale ?? [];
   return (
     <Card>
       <CardHeader>

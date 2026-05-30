@@ -1,9 +1,3 @@
-import type {
-  Abdeckung,
-  Befund,
-  Empfehlung,
-  RadarResult,
-} from "@/lib/api/onboarding";
 /**
  * Gemeinsame Bausteine der drei Radar-Varianten (Feature 1, §11).
  *
@@ -11,7 +5,17 @@ import type {
  * Zuordnung der operativen Empfehlungen zu ihrer Pflicht. Die Varianten
  * A/B/C teilen diese Logik, unterscheiden sich nur in der Inszenierung.
  */
+import type { ApiError } from "@/lib/api/client";
+import {
+  type Abdeckung,
+  type Befund,
+  type Empfehlung,
+  type RadarResult,
+  onboarding,
+} from "@/lib/api/onboarding";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 export interface RadarProps {
   radar: RadarResult;
@@ -177,6 +181,57 @@ export function KanzleiSiegel({ name }: { name?: string }) {
       <span aria-hidden>⚖️</span>
       Rechtlich geprüft von {name}
     </span>
+  );
+}
+
+/**
+ * "Mehr erfahren"-Expander für 🟡-Basis-Hinweis-Befunde (Spec §6.3).
+ *
+ * Lädt den RDG-validierten Checklisten-Text erst beim Aufklappen
+ * (`onboarding.hinweis(code)`, lazy via `enabled`). Für andere Abdeckungs-
+ * Stufen rendert die Komponente nichts — die Varianten A/B/C können sie
+ * daher bedenkenlos unter jedem Befund einsetzen.
+ */
+export function BasisHinweisExpander({ befund }: { befund: Befund }) {
+  const [offen, setOffen] = useState(false);
+  const { data, isLoading, isError } = useQuery<
+    { code: string; hinweis: string },
+    ApiError
+  >({
+    queryKey: ["onboarding-hinweis", befund.regulierung_code],
+    queryFn: () => onboarding.hinweis(befund.regulierung_code),
+    enabled: offen,
+    staleTime: Number.POSITIVE_INFINITY,
+  });
+
+  if (befund.abdeckung !== "basis_hinweis") return null;
+
+  return (
+    <div className="mt-2">
+      <button
+        type="button"
+        onClick={() => setOffen((o) => !o)}
+        aria-expanded={offen}
+        className="inline-flex items-center gap-1 text-sm font-medium text-amber-800 hover:underline"
+      >
+        <span aria-hidden>{offen ? "▾" : "▸"}</span>
+        {offen ? "Weniger" : "Mehr erfahren"}
+      </button>
+      {offen && (
+        <div className="mt-2 rounded-md border border-amber-200 bg-amber-50/60 px-3 py-2 text-sm text-amber-900">
+          {isLoading && (
+            <p className="text-muted-foreground">Hinweis wird geladen …</p>
+          )}
+          {isError && (
+            <p className="text-rose-700">
+              Hinweis konnte nicht geladen werden. Bitte später erneut
+              versuchen.
+            </p>
+          )}
+          {data && <p className="whitespace-pre-line">{data.hinweis}</p>}
+        </div>
+      )}
+    </div>
   );
 }
 

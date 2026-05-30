@@ -8,6 +8,7 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import {
+  BasisHinweisExpander,
   EmpfehlungListe,
   FirmenHeader,
   KanzleiSiegel,
@@ -113,6 +114,7 @@ export function RadarVarianteA({
                 </div>
               </div>
               <EmpfehlungListe empfehlungen={empf} />
+              <BasisHinweisExpander befund={b} />
             </li>
           );
         })}
