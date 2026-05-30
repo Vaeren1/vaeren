@@ -148,14 +148,16 @@ def _vision_review(bild, frage: str, antwort: str) -> dict:
     )
     resp = vision_generate(prompt, png, static_fallback="")
     if not resp or not resp.text:
-        # Kein Urteil möglich → konservativ als "ok" werten, damit der Export nicht
-        # blockiert; Confidence bleibt durch die Loop-Logik moderat.
-        return {"ok": True, "korrektur_bbox": None}
+        # Kein Urteil möglich (kein Vision-Modell konfiguriert / Netzfehler) → FAIL-SAFE:
+        # als unsicher behandeln (ok=False ohne Korrektur → Loop markiert
+        # CONFIDENCE_UNSICHER → Mensch prüft im Review-Editor). Im RDG-Kontext darf
+        # eine ungeprüfte Platzierung NICHT blind als sicher gelten.
+        return {"ok": False, "korrektur_bbox": None}
     try:
         daten = json.loads(resp.text)
     except (ValueError, TypeError):
         logger.warning("Vision-Review-JSON nicht parsebar: %.120s", resp.text)
-        return {"ok": True, "korrektur_bbox": None}
+        return {"ok": False, "korrektur_bbox": None}
     return {
         "ok": bool(daten.get("ok", False)),
         "korrektur_bbox": daten.get("korrektur_bbox"),
