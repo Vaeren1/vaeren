@@ -95,6 +95,7 @@ const mockRadar: RadarResult = {
     },
   ],
   empfohlene_module: ["arbeitsschutz", "hinschg", "iso27001", "nis2"],
+  kanzlei_siegel: "",
 };
 
 const meta: Meta = {

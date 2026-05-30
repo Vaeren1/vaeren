@@ -12,6 +12,7 @@ import hashlib
 import json
 from typing import ClassVar
 
+from django.conf import settings
 from django.db import connection
 from django.utils import timezone
 from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
@@ -74,6 +75,10 @@ class RadarResponseSerializer(serializers.Serializer):
     befunde = RegulierungsBefundSerializer(many=True)
     empfehlungen = OperativeEmpfehlungSerializer(many=True)
     empfohlene_module = serializers.ListField(child=serializers.CharField())
+    kanzlei_siegel = serializers.CharField(
+        allow_blank=True,
+        help_text="Kanzlei-Name für das Radar-Siegel (settings.KANZLEI_SIEGEL_NAME). Leer = ausblenden.",
+    )
 
 
 class AktiveModuleResponseSerializer(serializers.Serializer):
@@ -173,6 +178,7 @@ class OnboardingWizardViewSet(ViewSet):
                     profil.empfehlungen.all(), many=True
                 ).data,
                 "empfohlene_module": sorted({b["modul_key"] for b in befunde if b["modul_key"]}),
+                "kanzlei_siegel": settings.KANZLEI_SIEGEL_NAME,
             }
         )
 

@@ -8088,6 +8088,8 @@ export interface components {
             befunde: components["schemas"]["RegulierungsBefund"][];
             empfehlungen: components["schemas"]["OperativeEmpfehlung"][];
             empfohlene_module: string[];
+            /** @description Kanzlei-Name für das Radar-Siegel (settings.KANZLEI_SIEGEL_NAME). Leer = ausblenden. */
+            kanzlei_siegel: string;
         };
         RechercheRequest: {
             /** @default  */

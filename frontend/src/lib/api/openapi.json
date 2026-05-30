@@ -30168,12 +30168,17 @@
                         "items": {
                             "type": "string"
                         }
+                    },
+                    "kanzlei_siegel": {
+                        "type": "string",
+                        "description": "Kanzlei-Name für das Radar-Siegel (settings.KANZLEI_SIEGEL_NAME). Leer = ausblenden."
                     }
                 },
                 "required": [
                     "befunde",
                     "empfehlungen",
-                    "empfohlene_module"
+                    "empfohlene_module",
+                    "kanzlei_siegel"
                 ]
             },
             "RechercheRequest": {

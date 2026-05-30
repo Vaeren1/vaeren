@@ -93,6 +93,7 @@ export function OnboardingWizardPage() {
         <RadarScreen
           radar={radar}
           firmenname={profil?.firmenname}
+          kanzleiName={radar.kanzlei_siegel}
           onNext={() => setSchritt(5)}
         />
       )}
