@@ -195,7 +195,7 @@ class FragebogenViewSet(viewsets.ModelViewSet):
 
             with transaction.atomic():
                 fb = Fragebogen.objects.create(
-                    dateiname=datei.name,
+                    dateiname=datei.name[:255],
                     format=format_,
                     tier=tier,
                     quelle_oem=request.data.get("quelle_oem", "")[:255],
@@ -207,10 +207,16 @@ class FragebogenViewSet(viewsets.ModelViewSet):
                     fb.original_datei.save(datei.name, File(fh), save=True)
 
                 for i, fd in enumerate(fragen_dicts, start=1):
+                    # Seitenzahl kann je nach Extraktor top-level (struktur) oder
+                    # in feld_referenz (OCR) liegen — beide Stellen lesen, damit
+                    # mehrseitige Scans nicht alle auf Seite 1 landen (F1).
+                    seite = fd.get("seite") or fd.get("feld_referenz", {}).get(
+                        "seite", 1
+                    )
                     Frage.objects.create(
                         fragebogen=fb,
                         reihenfolge=i,
-                        seite=fd.get("seite", 1) or 1,
+                        seite=seite or 1,
                         nummer=(fd.get("nummer") or "")[:40],
                         text=fd.get("text", ""),
                         feld_referenz=fd.get("feld_referenz", {}) or {},
@@ -373,12 +379,19 @@ class FragebogenViewSet(viewsets.ModelViewSet):
         if "bestaetigt_text" in request.data:
             neuer_text = request.data.get("bestaetigt_text", "") or ""
             antwort.bestaetigt_text = neuer_text
-            antwort.status = AntwortStatus.EDITIERT
-            # L1: RDG-Layer 2 auch auf dem Edit-Pfad. Der Mensch bleibt Autorität
-            # (kein hartes Blocken) — wir aktualisieren nur das rdg_ok-Flag, damit
-            # ein neu eingebauter Verstoß im Review-Editor sichtbar wird. Das Gate
-            # (ist_rdg_freigegeben) lässt EDITIERT-Antworten ohnehin durch.
-            antwort.rdg_ok = validate_output(neuer_text).is_valid
+            # F3: status=EDITIERT ist die menschliche RDG-Freigabe (ist_rdg_freigegeben
+            # lässt EDITIERT-Antworten trotz rdg_ok=False durch). Ein leerer
+            # bestaetigt_text ist KEINE Freigabe — sonst würde der ungeprüfte
+            # entwurf_text (via finaler_text-Fallback) am RDG-Gate vorbei exportiert.
+            # Daher: EDITIERT nur, wenn ein nicht-leerer, vom Entwurf abweichender
+            # Text übergeben wurde.
+            if neuer_text.strip() and neuer_text != antwort.entwurf_text:
+                antwort.status = AntwortStatus.EDITIERT
+            # L1/F3: RDG-Layer 2 auf dem Edit-Pfad — gegen den FINALEN Text
+            # validieren (nicht den rohen PATCH-Wert). Bei leerem bestaetigt_text
+            # fällt finaler_text auf entwurf_text zurück; so wird ein verbotener
+            # Entwurf nicht durch ein leeres PATCH auf rdg_ok=True „gewaschen".
+            antwort.rdg_ok = validate_output(antwort.finaler_text).is_valid
             antwort.save(update_fields=["bestaetigt_text", "status", "rdg_ok"])
 
         # Tier-2-Positionsänderung: feld_referenz der Frage aktualisieren.

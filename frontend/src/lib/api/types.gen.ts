@@ -5498,7 +5498,7 @@ export interface components {
             readonly feld_referenz: unknown;
             readonly kategorie: string;
             readonly extraktion_quelle: string;
-            readonly antwort: components["schemas"]["Antwort"];
+            readonly antwort: components["schemas"]["Antwort"] | null;
         };
         FrageVorschlag: {
             readonly id: number;

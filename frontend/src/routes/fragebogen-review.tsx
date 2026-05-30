@@ -72,7 +72,7 @@ function AntwortKarte({
   const qc = useQueryClient();
   const [text, setText] = useState(antwort.finaler_text ?? "");
   const [dirty, setDirty] = useState(false);
-  const conf = confidenceLabel(antwort.confidence);
+  const conf = confidenceLabel(antwort.confidence ?? 0);
 
   const patch = useMutation({
     mutationFn: () =>
@@ -159,18 +159,37 @@ function SeitenReview({
     onSuccess: () => qc.invalidateQueries({ queryKey: ["fragebogen", fb.id] }),
   });
 
-  const rdgWarnungen = fragen.filter((f) => !f.antwort.rdg_ok).length;
+  // RDG-Warnungen nur für bereits vorgeschlagene Antworten zählen — eine Frage
+  // ohne Antwort (vor `vorschlagen`) ist nicht „zu prüfen" und blockiert nicht.
+  const rdgWarnungen = fragen.filter(
+    (f) => f.antwort && !f.antwort.rdg_ok,
+  ).length;
 
   return (
     <div className="space-y-4">
-      {fragen.map((f) => (
-        <AntwortKarte
-          key={f.id}
-          frage={f}
-          antwort={f.antwort}
-          fragebogenId={fb.id}
-        />
-      ))}
+      {fragen.map((f) =>
+        f.antwort ? (
+          <AntwortKarte
+            key={f.id}
+            frage={f}
+            antwort={f.antwort}
+            fragebogenId={fb.id}
+          />
+        ) : (
+          <div
+            key={f.id}
+            className="rounded-lg border border-dashed p-4 text-sm text-muted-foreground"
+          >
+            <p className="font-medium text-foreground">
+              {f.nummer ? `${f.nummer}. ` : ""}
+              {f.text}
+            </p>
+            <p className="mt-1">
+              Noch kein Antwort-Vorschlag — bitte zuerst „Antworten vorschlagen".
+            </p>
+          </div>
+        ),
+      )}
 
       <div className="flex items-center justify-between border-t pt-4">
         <div className="text-sm">
@@ -280,7 +299,7 @@ export function FragebogenReviewPage() {
 
   // Noch keine Antwort-Entwürfe → Vorschlagen anbieten.
   const hatEntwuerfe = fb.fragen.some(
-    (f) => f.antwort.entwurf_text || f.antwort.bestaetigt_text,
+    (f) => f.antwort?.entwurf_text || f.antwort?.bestaetigt_text,
   );
 
   const aktuelleSeite = seiten[seitenIndex];

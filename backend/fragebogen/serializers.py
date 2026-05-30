@@ -47,7 +47,10 @@ class AntwortSerializer(serializers.ModelSerializer):
 
 
 class FrageSerializer(serializers.ModelSerializer):
-    antwort = AntwortSerializer(read_only=True)
+    # Reverse-OneToOne: vor `vorschlagen` existiert noch keine Antwort → null.
+    # required=False + allow_null=True erzwingt im generierten TS-Typ `Antwort | null`,
+    # damit das Frontend einen frisch hochgeladenen Fragebogen ohne NPE rendern kann (F2).
+    antwort = AntwortSerializer(read_only=True, required=False, allow_null=True)
 
     class Meta:
         model = Frage

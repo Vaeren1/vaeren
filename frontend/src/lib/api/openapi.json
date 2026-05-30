@@ -23591,7 +23591,8 @@
                                 "$ref": "#/components/schemas/Antwort"
                             }
                         ],
-                        "readOnly": true
+                        "readOnly": true,
+                        "nullable": true
                     }
                 },
                 "required": [

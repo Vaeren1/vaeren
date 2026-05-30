@@ -186,6 +186,43 @@ def test_upload_pdf_unstrukturiert_extrahiert_via_ocr(
     }
 
 
+@pytest.mark.django_db
+def test_upload_ocr_seiten_aus_feld_referenz(
+    tenant_client_gf, _pdf_unstrukturiert_upload, _media_tmp, monkeypatch
+):
+    """F1: Mehrseitiger OCR-Scan — die Seitenzahl liegt in feld_referenz['seite'],
+    nicht top-level. Die erzeugten Frage-Records müssen seite=1 bzw. seite=2
+    tragen (sonst landen alle Fragen auf Seite 1 → seiten-Review bricht)."""
+    from fragebogen import views as fb_views
+
+    fake_ocr = lambda pfad: [  # noqa: E731
+        {
+            "text": "Frage auf Seite 1?",
+            "feld_referenz": {"seite": 1, "bbox": [10, 20, 30, 40], "schrift_pt": 11},
+            "extraktion_quelle": "ocr",
+        },
+        {
+            "text": "Frage auf Seite 2?",
+            "feld_referenz": {"seite": 2, "bbox": [10, 60, 30, 40], "schrift_pt": 11},
+            "extraktion_quelle": "ocr",
+        },
+    ]
+    monkeypatch.setitem(fb_views._EXTRAKTOREN, "pdf_unstrukturiert", fake_ocr)
+
+    r = tenant_client_gf.post(
+        "/api/fragebogen/upload/", {"datei": _pdf_unstrukturiert_upload}
+    )
+    assert r.status_code == 201, r.content
+    fb_id = r.json()["id"]
+
+    from fragebogen.models import Frage
+
+    with schema_context(tenant_client_gf_schema(tenant_client_gf)):
+        seiten = {f.text: f.seite for f in Frage.objects.filter(fragebogen_id=fb_id)}
+    assert seiten["Frage auf Seite 1?"] == 1
+    assert seiten["Frage auf Seite 2?"] == 2
+
+
 def tenant_client_gf_schema(client):
     """Liest das Tenant-Schema aus dem Test-Client-Host (HTTP_HOST → Tenant)."""
     from django.db import connection
@@ -301,6 +338,62 @@ def test_final_attestieren_ohne_alle_seiten_409(
     assert 1 in r.json()["offene_seiten"]
 
 
+# --- M1-Guard (vorschlagen-Idempotenz / Schutz menschlicher Edits) --------
+
+
+@pytest.mark.django_db
+def test_vorschlagen_nach_attestierung_409(
+    tenant_client_gf, _xlsx_upload, _media_tmp, monkeypatch
+):
+    """L-b: Ein bereits final attestierter Fragebogen darf nicht erneut
+    vorgeschlagen werden (würde Attestierung + Edits zurücksetzen) → 409."""
+    _mock_engine(monkeypatch)
+    c = tenant_client_gf
+    r = c.post("/api/fragebogen/upload/", {"datei": _xlsx_upload})
+    fb_id = r.json()["id"]
+    c.post(f"/api/fragebogen/{fb_id}/vorschlagen/")
+    c.post(f"/api/fragebogen/{fb_id}/seite/1/bestaetigen/")
+    assert (
+        c.post(f"/api/fragebogen/{fb_id}/final-attestieren/").status_code == 200
+    )
+
+    r = c.post(f"/api/fragebogen/{fb_id}/vorschlagen/")
+    assert r.status_code == 409, r.content
+
+
+@pytest.mark.django_db
+def test_vorschlagen_rerun_ueberspringt_editiert(
+    tenant_client_gf, _xlsx_upload, _media_tmp, monkeypatch
+):
+    """L-b: Ein Re-Run von `vorschlagen` darf eine vom Menschen editierte Antwort
+    (status EDITIERT) NICHT überschreiben — der RDG-Override bleibt erhalten."""
+    _mock_engine(monkeypatch)
+    c = tenant_client_gf
+    schema = tenant_client_gf_schema(c)
+
+    r = c.post("/api/fragebogen/upload/", {"datei": _xlsx_upload})
+    fb_id = r.json()["id"]
+    detail = c.post(f"/api/fragebogen/{fb_id}/vorschlagen/").json()
+    aid = detail["fragen"][0]["antwort"]["id"]
+
+    c.patch(
+        f"/api/fragebogen/{fb_id}/antwort/{aid}/",
+        {"bestaetigt_text": "Menschlich editierte Antwort."},
+        content_type="application/json",
+    )
+
+    # Re-Run: darf die editierte Antwort nicht zurücksetzen.
+    r = c.post(f"/api/fragebogen/{fb_id}/vorschlagen/")
+    assert r.status_code == 200, r.content
+
+    from fragebogen.models import Antwort
+
+    with schema_context(schema):
+        antwort = Antwort.objects.get(pk=aid)
+        assert antwort.status == "editiert"
+        assert antwort.bestaetigt_text == "Menschlich editierte Antwort."
+
+
 # --- RDG-Layer-2-Gate (rdg_ok) --------------------------------------------
 
 
@@ -403,6 +496,41 @@ def test_rdg_verstoss_nach_editieren_normal_exportiert(
         wb = openpyxl.load_workbook(fb_obj.export_datei.path)
         ws = wb.active
         assert "Nach unserer Einschätzung" in str(ws["C2"].value)
+
+
+@pytest.mark.django_db
+def test_leerer_bestaetigt_text_kein_rdg_bypass(
+    tenant_client_gf, _xlsx_upload, _media_tmp, monkeypatch
+):
+    """F3: PATCH mit leerem bestaetigt_text auf eine rdg_ok=False-Antwort darf
+    sie NICHT exportierbar machen — status bleibt ENTWURF (keine menschliche
+    Freigabe) und rdg_ok bleibt False (gegen finaler_text=entwurf_text validiert)."""
+    _mock_engine_rdg_verstoss(monkeypatch)
+    c = tenant_client_gf
+    schema = tenant_client_gf_schema(c)
+
+    r = c.post("/api/fragebogen/upload/", {"datei": _xlsx_upload})
+    fb_id = r.json()["id"]
+    detail = c.post(f"/api/fragebogen/{fb_id}/vorschlagen/").json()
+    aid = detail["fragen"][0]["antwort"]["id"]
+
+    # Leerer bestaetigt_text → KEINE Freigabe.
+    r = c.patch(
+        f"/api/fragebogen/{fb_id}/antwort/{aid}/",
+        {"bestaetigt_text": ""},
+        content_type="application/json",
+    )
+    assert r.status_code == 200, r.content
+    frage0 = next(f for f in r.json()["fragen"] if f["antwort"]["id"] == aid)
+    # Nicht EDITIERT (leerer Text ist keine menschliche Freigabe) + rdg_ok bleibt False.
+    assert frage0["antwort"]["status"] != "editiert"
+    assert frage0["antwort"]["rdg_ok"] is False
+
+    from fragebogen.models import Antwort
+    from fragebogen.rdg import ist_rdg_freigegeben
+
+    with schema_context(schema):
+        assert ist_rdg_freigegeben(Antwort.objects.get(pk=aid)) is False
 
 
 # --- Upload-Sicherheit (Whitelist + Größe) --------------------------------
