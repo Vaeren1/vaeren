@@ -65,3 +65,11 @@ def test_kleinunternehmen_minimal():
     befunde = bewerte_regulierungen(profil)
     codes = {b["code"] for b in befunde}
     assert codes == {"dsgvo", "arbschg", "unterweisung", "geschgehg"}
+
+
+def test_dsgvo_art9_bei_gesundheitsdaten():
+    """verarbeitet_gesundheits_sozialdaten=True → dsgvo_art9 im Befund; sonst nicht."""
+    mit = ProfilData(mitarbeiter_anzahl=10, verarbeitet_gesundheits_sozialdaten=True)
+    ohne = ProfilData(mitarbeiter_anzahl=10, verarbeitet_gesundheits_sozialdaten=False)
+    assert "dsgvo_art9" in {b["code"] for b in bewerte_regulierungen(mit)}
+    assert "dsgvo_art9" not in {b["code"] for b in bewerte_regulierungen(ohne)}

@@ -144,7 +144,14 @@ KATALOG: list[Regulierung] = [
         code="csrd", name="CSRD-Nachhaltigkeitsberichterstattung",
         kurzbeschreibung="Nachhaltigkeitsbericht ab Größenklasse.",
         rechtsgrundlage="RL (EU) 2022/2464", schwere="niedrig",
-        applies=lambda p: p.mitarbeiter_anzahl >= 250 or p.jahresumsatz_eur >= 50_000_000 or p.hat_oem_kunden,
+        applies=lambda p: p.mitarbeiter_anzahl >= 250 or p.jahresumsatz_eur >= 50_000_000,
+        abdeckung="basis_hinweis", modul_key=None,
+    ),
+    Regulierung(
+        code="dsgvo_art9", name="Besondere Datenkategorien (DSGVO Art. 9)",
+        kurzbeschreibung="Erhöhte Anforderungen bei Gesundheits-/Sozialdaten.",
+        rechtsgrundlage="Art. 9 DSGVO", schwere="hoch",
+        applies=lambda p: p.verarbeitet_gesundheits_sozialdaten,
         abdeckung="basis_hinweis", modul_key=None,
     ),
     Regulierung(
