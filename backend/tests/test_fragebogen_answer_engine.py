@@ -94,3 +94,77 @@ def test_rdg_verstoss_mit_gesetzlich_verpflichtet():
         res = entwerfe_antwort("ISMS Pflicht?", snippets)
 
     assert res["rdg_ok"] is False
+
+
+# ---------------------------------------------------------------------------
+# Task C2: Bibliothek-Treffer als priorisierte Quelle
+# ---------------------------------------------------------------------------
+
+def test_bibliothek_treffer_hebt_confidence():
+    """Wenn ein Bibliothek-Treffer übergeben wird, ist die finale Confidence
+    mindestens so hoch wie die Confidence-Untergrenze (0.7).
+    """
+    from fragebogen.bibliothek import uebernehme_antwort  # noqa: import nur hier, kein DB
+    # Wir simulieren einen AntwortBibliothekEintrag als einfaches Objekt
+    bib_eintrag = type("BibEintrag", (), {
+        "id": 1,
+        "frage_kanonisch": "Haben Sie ein ISMS?",
+        "antwort_text": "Ja, seit 2025 ISO-27001-zertifiziert.",
+        "quelle_referenzen": ["A.5.1"],
+    })()
+
+    snippets = [EvidenzSnippet("iso27001", "A.5.1", "ISMS", "ISMS seit 2025")]
+    with patch("fragebogen.answer_engine._llm_antwort",
+               return_value={
+                   "text": "Nach unserer Einschätzung: Ja, ISMS seit 2025. Bitte prüfen.",
+                   "quellen_referenzen": ["A.5.1"],
+                   "confidence": 0.5,  # LLM gibt niedrige Confidence zurück
+               }):
+        res = entwerfe_antwort("Haben Sie ein ISMS?", snippets, bibliothek_treffer=bib_eintrag)
+
+    # Confidence muss auf Untergrenze angehoben worden sein
+    assert res["confidence"] >= 0.7
+    # Bibliotheks-Snippet erscheint in den Quellen
+    bib_quellen = [q for q in res["quellen"] if q.quelle_typ == "bibliothek"]
+    assert len(bib_quellen) == 1
+    # "ISMS" steht im Titel des Bibliotheks-Snippets (frage_kanonisch)
+    assert "ISMS" in bib_quellen[0].titel
+
+
+def test_bibliothek_treffer_landet_im_kontext():
+    """Das Bibliotheks-Snippet wird an _llm_antwort weitergegeben (erstes Element)."""
+    bib_eintrag = type("BibEintrag", (), {
+        "id": 2,
+        "frage_kanonisch": "ISMS vorhanden?",
+        "antwort_text": "Ja, zertifiziert.",
+        "quelle_referenzen": ["A.5.1"],
+    })()
+
+    captured = {}
+
+    def mock_llm(frage, snippets):
+        captured["snippets"] = snippets
+        return {"text": "Nach unserer Einschätzung: Ja. Bitte prüfen.",
+                "quellen_referenzen": [], "confidence": 0.8}
+
+    snippets = [EvidenzSnippet("iso27001", "A.5.1", "ISMS", "Eintrag")]
+    with patch("fragebogen.answer_engine._llm_antwort", side_effect=mock_llm):
+        entwerfe_antwort("ISMS vorhanden?", snippets, bibliothek_treffer=bib_eintrag)
+
+    assert captured["snippets"][0].quelle_typ == "bibliothek"
+    assert "zertifiziert" in captured["snippets"][0].text
+
+
+def test_ohne_bibliothek_treffer_unveraendert():
+    """Ohne bibliothek_treffer bleibt das Verhalten unverändert (Rückwärtskompatibilität)."""
+    snippets = [EvidenzSnippet("iso27001", "A.5.1", "ISMS", "ISMS seit 2025")]
+    with patch("fragebogen.answer_engine._llm_antwort",
+               return_value={
+                   "text": "Nach unserer Einschätzung: Ja, ISMS seit 2025. Bitte prüfen.",
+                   "quellen_referenzen": ["A.5.1"],
+                   "confidence": 0.5,
+               }):
+        res = entwerfe_antwort("Haben Sie ein ISMS?", snippets)
+
+    # Ohne Bibliothek-Treffer: LLM-Confidence bleibt 0.5 (keine Untergrenze)
+    assert res["confidence"] == 0.5

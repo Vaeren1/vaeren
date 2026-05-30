@@ -6,18 +6,28 @@ Wenn ein RDG-Verstoß gefunden wird, wird rdg_ok=False gesetzt — der Entwurf
 darf dann NICHT automatisch exportiert werden (Human-in-the-Loop-Gate).
 
 _llm_antwort ist die einzige mockbare Grenze für Tests (kein echter LLM-Call).
+
+C2: optionaler `bibliothek_treffer`-Parameter priorisiert Bibliotheks-Wissen:
+  - Wird als erstes Snippet in den LLM-Kontext eingefügt (höchste Priorität)
+  - Hebt die Confidence-Untergrenze auf 0.7 an (Bibliothek = bestätigtes Wissen)
 """
 
 from __future__ import annotations
 
 import json
 import logging
+from typing import Any
 
 from core.llm_validator import validate_output
 
 from .evidence_pool import EvidenzSnippet
 
 logger = logging.getLogger(__name__)
+
+# Confidence-Untergrenze wenn ein Bibliothek-Treffer vorliegt.
+# Begründung: Bibliotheks-Einträge sind human-bestätigt (via final-attestieren),
+# daher ist ihre Qualität höher als ein reiner LLM-Entwurf ohne Vorwissen.
+_BIBLIOTHEK_CONFIDENCE_MINIMUM = 0.7
 
 
 def _llm_antwort(frage: str, snippets: list[EvidenzSnippet]) -> dict | None:
@@ -54,8 +64,20 @@ def _llm_antwort(frage: str, snippets: list[EvidenzSnippet]) -> dict | None:
         return None
 
 
-def entwerfe_antwort(frage: str, snippets: list[EvidenzSnippet]) -> dict:
+def entwerfe_antwort(
+    frage: str,
+    snippets: list[EvidenzSnippet],
+    bibliothek_treffer: Any | None = None,
+) -> dict:
     """Erzeugt einen LLM-Antwort-Entwurf für eine Fragebogen-Frage.
+
+    Args:
+        frage: Der Fragetext aus dem Fragebogen.
+        snippets: Evidenz-Snippets aus dem Evidenz-Pool.
+        bibliothek_treffer: Optionaler AntwortBibliothekEintrag — wird als
+            priorisiertes erstes Snippet in den LLM-Kontext eingefügt und
+            hebt die Confidence-Untergrenze auf _BIBLIOTHEK_CONFIDENCE_MINIMUM an.
+            None = Standardverhalten ohne Bibliotheks-Priorisierung.
 
     Rückgabe:
         {
@@ -65,7 +87,21 @@ def entwerfe_antwort(frage: str, snippets: list[EvidenzSnippet]) -> dict:
             "rdg_ok": bool,        # False = verbotene Formulierung gefunden, kein Auto-Export
         }
     """
-    roh = _llm_antwort(frage, snippets)
+    # C2: Bibliotheks-Treffer als priorisiertes erstes Snippet einfügen.
+    # Das Snippet bekommt quelle_typ="bibliothek" und referenz=str(id), damit
+    # es als Quelle zurückgemeldet werden kann.
+    alle_snippets: list[EvidenzSnippet] = list(snippets)
+    if bibliothek_treffer is not None:
+        bib_snippet = EvidenzSnippet(
+            quelle_typ="bibliothek",
+            referenz=str(bibliothek_treffer.id),
+            titel=f"Bibliothek: {bibliothek_treffer.frage_kanonisch[:60]}",
+            text=bibliothek_treffer.antwort_text,
+        )
+        # Ganz vorne einfügen → erscheint als erstes im LLM-Kontext
+        alle_snippets = [bib_snippet, *alle_snippets]
+
+    roh = _llm_antwort(frage, alle_snippets)
 
     if roh is None:
         roh = {
@@ -81,6 +117,12 @@ def entwerfe_antwort(frage: str, snippets: list[EvidenzSnippet]) -> dict:
         confidence = float(roh.get("confidence", 0.0))
     except (ValueError, TypeError):
         confidence = 0.0
+
+    # C2: Confidence-Untergrenze anheben wenn Bibliotheks-Treffer vorlag.
+    # Bibliotheks-Einträge sind human-bestätigt → zuverlässiger als LLM allein.
+    if bibliothek_treffer is not None:
+        confidence = max(confidence, _BIBLIOTHEK_CONFIDENCE_MINIMUM)
+
     roh_ref = roh.get("quellen_referenzen", [])
     referenzen = set(roh_ref) if isinstance(roh_ref, (list, tuple, set)) else set()
 
@@ -96,8 +138,15 @@ def entwerfe_antwort(frage: str, snippets: list[EvidenzSnippet]) -> dict:
             rdg_result.matched_phrases,
         )
 
-    # Quellen: alle Snippets, deren Referenz vom LLM genannt wurde.
-    quellen = [s for s in snippets if s.referenz in referenzen]
+    # Quellen: alle Snippets (inkl. Bibliotheks-Snippet), deren Referenz vom LLM
+    # genannt wurde. Das Bibliotheks-Snippet wird immer zurückgemeldet wenn gesetzt.
+    quellen = [s for s in alle_snippets if s.referenz in referenzen]
+    if bibliothek_treffer is not None:
+        bib_ref = str(bibliothek_treffer.id)
+        if not any(s.referenz == bib_ref for s in quellen):
+            # Bibliotheks-Snippet immer als Quelle melden, auch wenn LLM es nicht
+            # explizit zitiert hat — es war im Kontext und hat die Confidence beeinflusst.
+            quellen = [alle_snippets[0], *quellen]
 
     return {
         "text": text,
