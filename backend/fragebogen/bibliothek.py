@@ -38,18 +38,18 @@ _AEHNLICHKEIT_SCHWELLE = 0.3
 # Lexikon, nur die in Fragebogen-Kontexten häufig auftauchenden Wörter.
 _STOPWOERTER: frozenset[str] = frozenset({
     # Deutsch strukturell
-    "haben", "sie", "ein", "einen", "einem", "einer", "einer", "eine",
+    "haben", "sie", "ein", "einen", "einem", "einer", "eine",
     "in", "ist", "sind", "gibt", "es", "bei", "ihnen", "ihr", "ihre",
     "ihrem", "ihren", "führen", "hat", "der", "die", "das", "den",
     "dem", "des", "und", "oder", "für", "auf", "mit", "von", "zu",
-    "an", "aus", "nach", "wie", "ob", "ob", "wird", "werden", "wurde",
-    "haben", "hatten", "haben", "haben", "über", "im", "zum", "zur",
+    "an", "aus", "nach", "wie", "ob", "wird", "werden", "wurde",
+    "hatten", "über", "im", "zum", "zur",
     "se", "sich", "wir", "uns", "unser", "unsere",
     # Fragebogen-spezifische Strukturwörter
     "bitte", "geben", "angeben", "beschreiben", "erläutern",
     # Englisch strukturell (für englischsprachige Fragebögen)
-    "do", "you", "have", "a", "an", "the", "is", "are", "has", "your",
-    "in", "at", "of", "for", "and", "or", "with", "on", "to", "be",
+    "do", "you", "have", "a", "the", "is", "are", "has", "your",
+    "at", "of", "for", "and", "or", "with", "on", "to", "be",
 })
 
 
