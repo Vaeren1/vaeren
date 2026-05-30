@@ -49,7 +49,7 @@ _NIS2_SEKTOREN = {
 }
 
 
-def _nis2_applies(p: "ProfilData") -> bool:
+def _nis2_applies(p: ProfilData) -> bool:
     if not p.nis2_sektor or p.nis2_sektor == "sonstiges":
         return False
     if p.nis2_sektor not in _NIS2_SEKTOREN:
@@ -107,6 +107,7 @@ KATALOG: list[Regulierung] = [
         applies=lambda p: p.ist_automotive_zulieferer or p.hat_oem_kunden,
         abdeckung="voll_modul", modul_key="iso27001",
     ),
+    # Annahme: rechtsform kommt aus normalisiertem Dropdown. Freitext-Varianten ("gGmbH", "GmbH & Co KG") werden hier bewusst nicht abgedeckt (YAGNI, Demo).
     Regulierung(
         code="gwg", name="Transparenzregister (GwG)",
         kurzbeschreibung="Eintragung wirtschaftlich Berechtigter.",

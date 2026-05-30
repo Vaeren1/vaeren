@@ -12,7 +12,7 @@ from core.regulierungen import KATALOG, ProfilData
 
 
 def bewerte_regulierungen(profil: ProfilData) -> list[dict]:
-    befunde = []
+    befunde: list[dict] = []
     for reg in KATALOG:
         if not reg.applies(profil):
             continue
