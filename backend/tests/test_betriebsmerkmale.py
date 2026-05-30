@@ -1,4 +1,4 @@
-from core.betriebsmerkmale import MERKMALE, Betriebsmerkmal, get_merkmal
+from core.betriebsmerkmale import MERKMALE, get_merkmal
 
 
 def test_mindestens_15_merkmale_eindeutig():

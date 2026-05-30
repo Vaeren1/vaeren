@@ -1,4 +1,4 @@
-from core.regulierungen import KATALOG, ProfilData, Regulierung, get_regulierung
+from core.regulierungen import KATALOG, ProfilData, get_regulierung
 
 
 def test_katalog_nicht_leer_und_eindeutige_codes():

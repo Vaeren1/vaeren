@@ -5,7 +5,8 @@ betriebsmerkmale werden gegen bekannte Keys gefiltert.
 """
 
 from unittest.mock import patch
-from core.unternehmens_osint import recherchiere, DEMO_FIXTURE
+
+from core.unternehmens_osint import DEMO_FIXTURE, recherchiere
 
 
 def _bekannte_keys():
@@ -62,7 +63,7 @@ def test_demo_fixture_merkmale_alle_bekannt():
 def test_demo_fixture_nis2_und_ai_act_im_radar():
     """M1+M2: gültiger nis2_sektor ('industrie') + setzt_ki_ein=True sorgen dafür,
     dass NIS2 UND AI Act für die Demofirma im Radar erscheinen."""
-    from core.regulierungen import ProfilData, _NIS2_SEKTOREN
+    from core.regulierungen import _NIS2_SEKTOREN, ProfilData
     from core.relevanz_engine import bewerte_regulierungen
 
     assert DEMO_FIXTURE["nis2_sektor"] in _NIS2_SEKTOREN

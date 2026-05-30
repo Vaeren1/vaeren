@@ -5,8 +5,12 @@ D1: VERBOTENE_PHRASEN_RADAR sind in FORBIDDEN_PHRASES integriert —
 D2: generiere_hinweis() kapselt das intern + wirft Fallback bei Verstoß.
 """
 
+from unittest.mock import patch
+
 import pytest
-from core.llm_validator import validate_output, LLMValidationError
+
+from core.basis_hinweis import generiere_hinweis
+from core.llm_validator import LLMValidationError, validate_output
 
 
 @pytest.fixture(autouse=True)
@@ -46,10 +50,6 @@ def test_vorschlagssprache_ist_ok():
 
 
 # ── D2: Basis-Hinweis-Generator ──────────────────────────────────────────────
-
-
-from unittest.mock import patch
-from core.basis_hinweis import generiere_hinweis
 
 
 def test_generiere_hinweis_validiert_und_cached():

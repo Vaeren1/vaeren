@@ -54,7 +54,8 @@ FORBIDDEN_PHRASES: tuple[str, ...] = (
 
 # Phase-3 ISO-42001-spezifisch: AIMS-Vorschläge (AIIA, Policy, Incident) müssen
 # Vorschlags-Sprache verwenden, nicht absolute Aussagen.
-AIMS_FORBIDDEN_PHRASES: tuple[str, ...] = FORBIDDEN_PHRASES + (
+AIMS_FORBIDDEN_PHRASES: tuple[str, ...] = (
+    *FORBIDDEN_PHRASES,
     r"\brechtssicher\b",
     r"\bgarantiert\s+konform\b",
     r"\bsicher\s+rechtskonform\b",
