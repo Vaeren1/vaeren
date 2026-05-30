@@ -27,7 +27,7 @@ OEM-Lieferanten-Fragebögen (VDA-ISA/TISAX, kundenspezifische Self-Assessments) 
 2. **Analyse** — Format-Erkennung + Tier-Routing + Frage-Extraktion. Status `analysiert`.
 3. **Vorschlag** — Antwort-Engine entwirft pro Frage eine Antwort aus Vaeren-Evidenz (Quelle + Confidence sichtbar). Status `vorgeschlagen`.
 4. **Review (visueller Seite-für-Seite-Editor)** — Kunde (GF oder Compliance) sieht den **fertig befüllten Fragebogen wie er aussieht**, Seite für Seite: gerenderte Original-Seiten mit überlagerten Antworten. Pro Antwort: Text editieren (immer), Position/Größe ziehen (nur Tier 2). Felder mit niedriger Confidence **hervorgehoben** → gezielte Aufmerksamkeit. Bestätigung **pro Seite** („Seite bestätigt"), Zurückblättern jederzeit möglich. **Kein Klick pro Antwort** — Zeitersparnis ist das Feature. Am Ende, wenn alle Seiten durchgeklickt+bestätigt: **finale Attestierung** („Antworten geprüft") → Download.
-5. **Export** — Tier-abhängig: Original befüllt (Tier 1), befülltes PDF mit den im Editor bestätigten Positionen (Tier 2), oder Antwort-Beiblatt (Tier 3). Download.
+5. **Export + Bibliothek-Rückfluss** — bei finaler Attestierung: bestätigte Antworten fließen in die **Antwort-Bibliothek** (§6.7, dedupliziert), dann Export Tier-abhängig (Original befüllt / Tier-2-PDF / Beiblatt) → Download.
 
 ## 4. Architektur-Überblick
 
@@ -58,7 +58,8 @@ Geteilt: core/llm_client, core/llm_validator (RDG), iso27001-Evidenz, onboarding
 - **`Fragebogen`**: `original_datei` (FileField), `dateiname`, `format` (xlsx/pdf_form/pdf_unstrukturiert/docx/…), `tier` (1/2/3), `status` (hochgeladen/analysiert/vorgeschlagen/in_review/exportiert/fehler), `quelle_oem` (Freitext, z.B. „VW VDA-ISA"), `hochgeladen_von` (FK User), `erstellt_at`, `export_datei` (FileField, nullable), `tier2_job_status` (nullable), **`bestaetigte_seiten`** (JSON-Liste der bestätigten Seitennummern), **`final_attestiert_at`** + **`final_attestiert_von`** (FK User) — die finale Attestierung, Export-Gate.
 - **`Frage`**: `fragebogen` (FK), `nummer`/`reihenfolge`, `text`, `feld_referenz` (JSON — Excel-Zelle, PDF-Feldname oder OCR-Bbox-Koordinaten), `kategorie` (optional, z.B. Control-Bereich), `extraktion_quelle` (struktur/ocr/llm).
 - **`Antwort`**: `frage` (FK), `entwurf_text` (LLM), `bestaetigt_text` (vom Menschen final), `status` (entwurf/bestaetigt/abgelehnt/leer), `confidence` (0–1), `bestaetigt_von` (FK User, nullable), `bestaetigt_at`.
-- **`AntwortQuelle`**: `antwort` (FK), `quelle_typ` (iso27001_control/soa/policy/profil/…), `referenz` (z.B. Control-Code „A.5.1"), `auszug` (kurzer Beleg-Text).
+- **`AntwortQuelle`**: `antwort` (FK), `quelle_typ` (bibliothek/iso27001_control/soa/policy/profil/…), `referenz` (z.B. Control-Code „A.5.1" oder Bibliotheks-Eintrag-ID), `auszug` (kurzer Beleg-Text).
+- **`AntwortBibliothekEintrag`** (§6.7, Tenant): `frage_kanonisch` (Text/Thema), `antwort_text`, `quelle_referenzen` (JSON — woher die Antwort ursprünglich stammt), `kategorie`/`tags`, `verwendungs_count` (int), `zuletzt_verwendet` (DateTime, nullable), `erstellt_von` (FK User), `erstellt_at`, `aktualisiert_at`. Editier-/vorbefüllbar.
 
 ## 6. Kern-Komponenten
 
@@ -71,10 +72,10 @@ Erkennt Dateityp + ob ausfüllbare Struktur vorhanden: `.xlsx` → Tier 1; PDF m
 
 ### 6.3 Antwort-Engine (`fragebogen/answer_engine.py`) — geteilt über alle Tiers
 
-**Evidenz-Pool = ALLE Daten, die wir über die Firma haben** (nicht nur ISO 27001 — viele KMU nutzen es nicht). Quellen, zu einem einheitlichen Evidenz-Snippet-Format aggregiert:
-1. **Modulübergreifende Aggregation** — das **bestehende `auditor_export/aggregators/`-Framework wiederverwenden/verallgemeinern** (es deckt bereits arbeitsschutz, auftragsverarbeitung/AVV, datenpannen, hinschg, iso27001, iso42001, ki_inventar, nis2, pflichtunterweisung, transparenzregister ab). Nur **aktive** Module liefern Evidenz.
-2. **`onboarding_wizard.UnternehmensProfil`** (Feature 1) — Firmen-Stammdaten.
-3. **Frühere bestätigte Fragebogen-Antworten** — vergangene `Antwort` (status bestätigt) aus anderen `Fragebogen` desselben Tenants. → Das System wird **mit jedem ausgefüllten Fragebogen schlauer**; bei ähnlicher Frage wird die geprüfte Vorantwort mit hoher Confidence vorgeschlagen.
+**Evidenz-Pool = ALLE Daten, die wir über die Firma haben** (nicht nur ISO 27001 — viele KMU nutzen es nicht). Quellen, zu einem einheitlichen Evidenz-Snippet-Format aggregiert, in Prioritäts-Reihenfolge:
+1. **Antwort-Bibliothek (§6.7)** — kuratierte, wiederverwendbare geprüfte Antworten desselben Tenants. **Höchste Priorität:** matcht eine Frage einen Bibliotheks-Eintrag, wird dessen Antwort mit hoher Confidence vorgeschlagen.
+2. **Modulübergreifende Aggregation** — das **bestehende `auditor_export/aggregators/`-Framework wiederverwenden/verallgemeinern** (deckt bereits arbeitsschutz, auftragsverarbeitung/AVV, datenpannen, hinschg, iso27001, iso42001, ki_inventar, nis2, pflichtunterweisung, transparenzregister ab). Nur **aktive** Module liefern Evidenz.
+3. **`onboarding_wizard.UnternehmensProfil`** (Feature 1) — Firmen-Stammdaten.
 4. Vom Nutzer erfasste freie Eingaben.
 
 **Retrieval pro Frage:** Keyword-/Control-Code-Match + Ähnlichkeit zu früheren Fragen (Token-Similarity wie redaktion-Curator; **Embeddings als Backlog**) → Kandidaten-Evidenz → LLM wählt + entwirft Antwort in **Vorschlagssprache**, mit `AntwortQuelle`-Belegen (Modul + Referenz) + `confidence`. Output durch `core.llm_validator.validate_output` (RDG-Layer-2); bei Verstoß → „Entwurf bitte prüfen", kein Auto-Export. Kein echter LLM-Call in Tests (gemockt). Hat ein Tenant kaum Module gepflegt → niedrige Confidence + ehrliche „keine Evidenz gefunden, bitte selbst ausfüllen"-Markierung statt Halluzination.
@@ -98,6 +99,13 @@ Seite-für-Seite-Canvas: server-seitig gerenderte Original-Seiten (`pdf2image`/E
 - Navigation Seite ‹ › + „Seite bestätigt"; am Ende „Fragebogen final bestätigen → Download".
 - Beim finalen Bestätigen: bestätigte Texte + (Tier-2-)Positionen werden ins Original geschrieben (Tier 1 Zelle/Feld, Tier 2 reportlab-Overlay an der menschlich bestätigten Position).
 - Tier 3 (kein Original-Layout): einfache Frage/Antwort-Liste statt Canvas.
+
+### 6.7 Antwort-Bibliothek (kuratierbarer Wissensspeicher, `fragebogen/bibliothek.py`)
+Wiederverwendbare, vom Kunden besessene Q&A-Sammlung pro Tenant — das Muster professioneller Fragebogen-Tools.
+- **Auto-Übernahme:** Bei finaler Attestierung eines Fragebogens werden die bestätigten Antworten in die Bibliothek übernommen — **dedupliziert** (Ähnlichkeit zur kanonischen Frage eines bestehenden Eintrags → bestehenden Eintrag aktualisieren statt neu anlegen; sonst neuer Eintrag). So entsteht keine Duplikat-Flut.
+- **Kuratierbar:** Kunde kann Einträge ansehen, editieren, löschen, **vorab anlegen** (auch ohne je einen Fragebogen hochgeladen zu haben) → die Bibliothek ist ein eigenständiges, wachsendes Asset.
+- **Verwendung:** Quelle Nr. 1 der Antwort-Engine (§6.3). `verwendungs_count` + `zuletzt_verwendet` für Relevanz/Sortierung.
+- **Demo-Story:** „Ihre Antwort-Bibliothek hat jetzt N geprüfte Antworten — der nächste Fragebogen füllt sich noch schneller."
 
 ## 7. RDG-Absicherung (strengster HITL der App)
 
@@ -133,6 +141,7 @@ Eine Fragebogen-Antwort ist eine **rechtsverbindliche Zusicherung an den OEM** (
 | POST | `/api/fragebogen/<id>/final-attestieren` | finale Attestierung (Wer/Wann); Export-Gate. Nur möglich, wenn alle Seiten bestätigt |
 | POST | `/api/fragebogen/<id>/export` | Export erzeugen (Tier 1/3 sync, Tier 2 async-Job) — setzt finale Attestierung voraus |
 | GET | `/api/fragebogen/<id>/export-status` | Tier-2-Job-Status / Download-Link |
+| GET/POST/PATCH/DELETE | `/api/antwort-bibliothek/` (+ `/<id>`) | Antwort-Bibliothek ansehen/anlegen/editieren/löschen (§6.7) |
 
 Permissions: GF + Compliance.
 
@@ -143,12 +152,13 @@ Permissions: GF + Compliance.
 4. **Tier-3-Beiblatt:** Antwort-Dokument generiert.
 5. **Tier-2** (Vision-Review gemockt): Job-Flow, Status, Nachjustier-Loop-Abbruch bei Nicht-Konvergenz → Feld als „unsicher" markiert.
 5b. **Editor-Persistenz:** PATCH speichert editierten Text + (Tier 2) neue Box-Position; finaler Export nutzt die menschlich bestätigte Position. Storybook für den Review-Canvas.
+5c. **Antwort-Bibliothek:** Auto-Übernahme bei Attestierung (neuer Eintrag vs. Dedup-Update bei ähnlicher kanonischer Frage); Retrieval bevorzugt Bibliotheks-Treffer (hohe Confidence); CRUD + Vorab-Anlage; Multi-Tenant-Isolation der Bibliothek.
 6. **RDG-Gate:** Export erst nach finaler Attestierung möglich (vorher 409/Fehler); Fragen auf nicht bestätigten Seiten bleiben im Export leer (nie LLM-Text ohne Prüfung exportiert). Seiten-Bestätigung + Attestierung protokolliert (Wer/Wann).
 7. **Multi-Tenant-Isolation** + **Permission-Matrix** (GF/Compliance erlaubt, Mitarbeiter 403).
 8. OpenAPI-Schema-Sync.
 
 ## 13. Migrations
-Neue App `fragebogen` (Tenant-side): `Fragebogen`, `Frage`, `Antwort`, `AntwortQuelle`. Rückwärtskompatibel.
+Neue App `fragebogen` (Tenant-side): `Fragebogen`, `Frage`, `Antwort`, `AntwortQuelle`, `AntwortBibliothekEintrag`. Rückwärtskompatibel.
 
 ## 14. Offene Punkte für den Plan
 - Exakter VDA-ISA-Demo-Workbook-Aufbau (Spalten/Sheet) + Mapping VDA-ISA-Fragen → ISO-27001-Controls für die Demo.
@@ -156,3 +166,4 @@ Neue App `fragebogen` (Tenant-side): `Fragebogen`, `Frage`, `Antwort`, `AntwortQ
 - Vision-Review-Modell (OpenRouter Vision-fähiges Modell) + Nachjustier-Loop-Abbruchkriterium (max Runden / Konfidenz).
 - Genaue Evidenz-Retrieval-Strategie pro Frage — Start: Keyword/Control-Code-Match + Token-Similarity zu früheren Fragen + LLM-Auswahl; **Embeddings/Vektor-Index als Backlog** (bessere Retrieval-Qualität, aber neue Infra).
 - Verallgemeinerung des `auditor_export/aggregators/`-Frameworks zu einer wiederverwendbaren Evidenz-Quelle (gemeinsame Schnittstelle für Auditor-Export *und* Fragebogen-Engine) — vs. dünner Adapter. Detail im Plan.
+- Dedup-Strategie der Antwort-Bibliothek (§6.7): Schwellwert der Frage-Ähnlichkeit für „bestehenden Eintrag aktualisieren vs. neu" — Start Token-Similarity, ggf. Embeddings (mit Retrieval-Backlog zusammen).
