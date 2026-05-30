@@ -7943,6 +7943,9 @@ export interface components {
         };
         PatchedUnternehmensProfil: {
             readonly id?: number;
+            standort_laender?: string[];
+            betriebsmerkmale?: string[];
+            betriebsmerkmale_freitext?: string[];
             firmenname?: string;
             /** Format: uri */
             website?: string;
@@ -7954,7 +7957,6 @@ export interface components {
             /** Format: int64 */
             bilanzsumme_eur?: number;
             rechtsform?: string;
-            standort_laender?: unknown;
             nis2_sektor?: string;
             ist_automotive_zulieferer?: boolean;
             hat_oem_kunden?: boolean;
@@ -7964,8 +7966,6 @@ export interface components {
             verarbeitet_gesundheits_sozialdaten?: boolean;
             setzt_ki_ein?: boolean;
             drittland_transfer?: boolean;
-            betriebsmerkmale?: unknown;
-            betriebsmerkmale_freitext?: unknown;
             recherche_quelle?: string;
             recherche_rohdaten?: unknown;
             /** Format: date-time */
@@ -8585,6 +8585,9 @@ export interface components {
         };
         UnternehmensProfil: {
             readonly id: number;
+            standort_laender?: string[];
+            betriebsmerkmale?: string[];
+            betriebsmerkmale_freitext?: string[];
             firmenname: string;
             /** Format: uri */
             website?: string;
@@ -8596,7 +8599,6 @@ export interface components {
             /** Format: int64 */
             bilanzsumme_eur?: number;
             rechtsform?: string;
-            standort_laender?: unknown;
             nis2_sektor?: string;
             ist_automotive_zulieferer?: boolean;
             hat_oem_kunden?: boolean;
@@ -8606,8 +8608,6 @@ export interface components {
             verarbeitet_gesundheits_sozialdaten?: boolean;
             setzt_ki_ein?: boolean;
             drittland_transfer?: boolean;
-            betriebsmerkmale?: unknown;
-            betriebsmerkmale_freitext?: unknown;
             recherche_quelle?: string;
             recherche_rohdaten?: unknown;
             /** Format: date-time */

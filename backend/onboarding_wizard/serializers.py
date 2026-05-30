@@ -8,6 +8,14 @@ from .models import OperativeEmpfehlung, RegulierungsBefund, UnternehmensProfil
 
 
 class UnternehmensProfilSerializer(serializers.ModelSerializer):
+    # JSON-Listenfelder explizit deklarieren, damit das generierte OpenAPI/TS-Schema
+    # `string[]` statt `unknown` liefert (ModelSerializer kann JSONField nicht typisieren).
+    standort_laender = serializers.ListField(child=serializers.CharField(), required=False)
+    betriebsmerkmale = serializers.ListField(child=serializers.CharField(), required=False)
+    betriebsmerkmale_freitext = serializers.ListField(
+        child=serializers.CharField(), required=False
+    )
+
     class Meta:
         model = UnternehmensProfil
         fields = "__all__"

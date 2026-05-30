@@ -63,6 +63,10 @@ KATALOG: list[Regulierung] = [
         kurzbeschreibung="Schutz personenbezogener Daten.",
         rechtsgrundlage="DSGVO / BDSG", schwere="hoch",
         applies=lambda p: p.verarbeitet_personenbezogene_daten,
+        # Spec §7 nannte datenpannen + auftragsverarbeitung; das Datenmodell erlaubt
+        # nur EIN modul_key. Bewusst datenpannen als primäres Modul gewählt
+        # (Art.-33-Meldepflicht ist das risikoreichste); auftragsverarbeitung ist
+        # separat aktivierbar.
         abdeckung="voll_modul", modul_key="datenpannen",
     ),
     Regulierung(

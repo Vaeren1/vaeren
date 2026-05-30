@@ -29763,6 +29763,24 @@
                         "type": "integer",
                         "readOnly": true
                     },
+                    "standort_laender": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "betriebsmerkmale": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "betriebsmerkmale_freitext": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
                     "firmenname": {
                         "type": "string",
                         "maxLength": 255
@@ -29801,7 +29819,6 @@
                         "type": "string",
                         "maxLength": 60
                     },
-                    "standort_laender": {},
                     "nis2_sektor": {
                         "type": "string",
                         "maxLength": 30
@@ -29830,8 +29847,6 @@
                     "drittland_transfer": {
                         "type": "boolean"
                     },
-                    "betriebsmerkmale": {},
-                    "betriebsmerkmale_freitext": {},
                     "recherche_quelle": {
                         "type": "string"
                     },
@@ -31298,6 +31313,24 @@
                         "type": "integer",
                         "readOnly": true
                     },
+                    "standort_laender": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "betriebsmerkmale": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "betriebsmerkmale_freitext": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
                     "firmenname": {
                         "type": "string",
                         "maxLength": 255
@@ -31336,7 +31369,6 @@
                         "type": "string",
                         "maxLength": 60
                     },
-                    "standort_laender": {},
                     "nis2_sektor": {
                         "type": "string",
                         "maxLength": 30
@@ -31365,8 +31397,6 @@
                     "drittland_transfer": {
                         "type": "boolean"
                     },
-                    "betriebsmerkmale": {},
-                    "betriebsmerkmale_freitext": {},
                     "recherche_quelle": {
                         "type": "string"
                     },

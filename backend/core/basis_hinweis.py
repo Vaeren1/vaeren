@@ -4,6 +4,12 @@ RDG: Vorschlagssprache erzwungen (System-Prompt in llm_client), Output gegen
 Validator geprüft, bei Verstoß deterministischer Fallback. Ergebnis gecacht pro
 (code, profil_hash) — kein Live-LLM bei Wiederholung/Demo.
 
+Wichtig: `profil_hash` MUSS tenant-eindeutig sein, da `_CACHE` modul-global ist
+(prozessweit geteilt über alle Tenants). Der Caller leitet den Hash aus dem
+serialisierten Profil ab (inkl. PK/Firmenname), wodurch zwei Tenants mit
+identischen Profil-Werten praktisch nicht kollidieren — sonst theoretischer
+Cross-Tenant-Cache-Talk.
+
 Wichtig: core.llm_client.generate() hat keinen separaten `system`-Parameter —
 der System-Prompt (SYSTEM_PROMPT_VAEREN) ist im LLM-Client fest hinterlegt.
 Wir steuern die Vorschlagssprache zusätzlich über den User-Prompt.

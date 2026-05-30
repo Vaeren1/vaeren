@@ -16,6 +16,18 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+# Phase-D — Onboarding-Radar-spezifische verbotene Formeln (Single Source).
+# Verhindert, dass Radar-Output absolute Rechtspflichten postuliert. Benannte
+# Konstante für Referenz aus anderen Modulen (analog VERBOTENE_PHRASEN_ARBEITSSCHUTZ
+# in arbeitsschutz/llm.py). Wird unten in FORBIDDEN_PHRASES einkonkateniert —
+# die Patterns stehen damit nur an dieser einen Stelle (kein Drift-Risiko).
+VERBOTENE_PHRASEN_RADAR: tuple[str, ...] = (
+    r"\bsind\s+gesetzlich\s+verpflichtet\b",
+    r"\bSie\s+müssen\s+(ein|eine|einen)\b",
+    r"\bist\s+zwingend\s+vorgeschrieben\b",
+    r"\bhaften\s+pers(?:ö|oe)nlich\b",
+)
+
 # Regex-Patterns: Wortgrenzen, case-insensitive
 FORBIDDEN_PHRASES: tuple[str, ...] = (
     r"\bist\s+Hochrisiko\b",
@@ -36,12 +48,8 @@ FORBIDDEN_PHRASES: tuple[str, ...] = (
     r"\bist\s+haftungsrechtlich\b",
     r"\bdroht\s+strafrechtliche\b",
     r"\bSie\s+müssen\s+bestellen\b",
-    # Phase D — Onboarding-Radar-spezifische verbotene Formeln.
-    # Verhindert, dass Radar-Output absolute Rechtspflichten postuliert.
-    r"\bsind\s+gesetzlich\s+verpflichtet\b",
-    r"\bSie\s+müssen\s+(ein|eine|einen)\b",
-    r"\bist\s+zwingend\s+vorgeschrieben\b",
-    r"\bhaften\s+pers(?:ö|oe)nlich\b",
+    # Phase D — Onboarding-Radar-Phrasen (Single Source oben, hier einkonkateniert).
+    *VERBOTENE_PHRASEN_RADAR,
 )
 
 # Phase-3 ISO-42001-spezifisch: AIMS-Vorschläge (AIIA, Policy, Incident) müssen
@@ -73,15 +81,6 @@ ISO_FORBIDDEN_PHRASES: tuple[str, ...] = (
     r"\bstuft\s+sich\s+ein\b",
 )
 
-
-# Benannte Konstante für Referenz aus anderen Modulen (analog VERBOTENE_PHRASEN_ARBEITSSCHUTZ
-# in arbeitsschutz/llm.py). Die Phrasen sind bereits in FORBIDDEN_PHRASES integriert.
-VERBOTENE_PHRASEN_RADAR: tuple[str, ...] = (
-    r"\bsind\s+gesetzlich\s+verpflichtet\b",
-    r"\bSie\s+müssen\s+(ein|eine|einen)\b",
-    r"\bist\s+zwingend\s+vorgeschrieben\b",
-    r"\bhaften\s+pers(?:ö|oe)nlich\b",
-)
 
 _COMPILED = tuple(
     re.compile(p, re.IGNORECASE) for p in (FORBIDDEN_PHRASES + ISO_FORBIDDEN_PHRASES)

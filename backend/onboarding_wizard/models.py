@@ -68,6 +68,10 @@ class RegulierungsBefund(models.Model):
     begruendung = models.TextField()
     abdeckung = models.CharField(max_length=20)
     modul_key = models.CharField(max_length=40, blank=True)
+    # Reserviert für spätere Versionierung der Befund-Snapshots. Aktuell bewusst
+    # immer default=1 (YAGNI): der radar-View löscht + erzeugt Befunde neu, eine
+    # Historie wird noch nicht gebraucht. Inkrementieren erst, wenn Versions-Diffs
+    # über die Zeit angezeigt werden sollen.
     profil_version = models.IntegerField(default=1)
     erstellt_at = models.DateTimeField(auto_now_add=True)
 
