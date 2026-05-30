@@ -69,6 +69,11 @@ class Tenant(TenantMixin):
             " in Settings. Plan-2-Feature-Flag."
         ),
     )
+    aktive_module = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Liste aktiver Modul-Keys (core.modules.MODULE). Ersetzt schrittweise die Einzel-Flags.",
+    )
     audit_signing_key = models.BinaryField(
         editable=False,
         default=b"",

@@ -23,6 +23,7 @@ urlpatterns = [
     path("api/", include("iso42001.urls")),
     path("api/", include("arbeitsschutz.urls")),
     path("api/", include("auditor_export.urls")),
+    path("api/", include("onboarding_wizard.urls")),
     # Redaktion-Backend (auth-only, schema-switching auf public).
     path("api/", include("redaktion.urls_internal")),
     # Self-Service-Onboarding-Setup (Magic-Link-Einlösen).

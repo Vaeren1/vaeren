@@ -1,38 +1,39 @@
 import { ProtectedRoute } from "@/components/auth/protected-route";
+import { RequireWizard } from "@/components/auth/require-wizard";
 import { SidebarShell } from "@/components/layout/sidebar-shell";
 import { AuditExportDashboard } from "@/routes/audit-export";
 import { AuditExportProfileEditPage } from "@/routes/audit-export-profile-edit";
 import { AuditExportRunDetailPage } from "@/routes/audit-export-run-detail";
 import { AuditExportWizardPage } from "@/routes/audit-export-wizard";
 import { AuditLogPage } from "@/routes/audit-log";
-import { VerifyPage } from "@/routes/verify";
 import { AVVListPage } from "@/routes/auftragsverarbeitung";
 import { DashboardPage } from "@/routes/dashboard";
 import { DatenpanneDetailPage } from "@/routes/datenpanne-detail";
 import { DatenpanneFormPage } from "@/routes/datenpanne-form";
 import { DatenpannenListPage } from "@/routes/datenpannen";
 import { DemoPage } from "@/routes/demo";
-import { KIInventarListPage } from "@/routes/ki-inventar";
-import { KIToolDetailPage } from "@/routes/ki-tool-detail";
-import { KIToolFormPage } from "@/routes/ki-tool-form";
-import { NIS2Page } from "@/routes/nis2";
-import { Iso27001Dashboard } from "@/routes/iso27001/Dashboard";
-import { Iso27001ControlList } from "@/routes/iso27001/ControlList";
-import { Iso27001ControlDetail } from "@/routes/iso27001/ControlDetail";
-import { Iso27001RiskRegister } from "@/routes/iso27001/RiskRegister";
-import { Iso27001SoaGenerator } from "@/routes/iso27001/SoaGenerator";
-import { Iso27001Audits } from "@/routes/iso27001/Audits";
 import { Iso27001AuditDetail } from "@/routes/iso27001/AuditDetail";
+import { Iso27001Audits } from "@/routes/iso27001/Audits";
+import { Iso27001ControlDetail } from "@/routes/iso27001/ControlDetail";
+import { Iso27001ControlList } from "@/routes/iso27001/ControlList";
+import { Iso27001Dashboard } from "@/routes/iso27001/Dashboard";
 import { Iso27001ManagementReview } from "@/routes/iso27001/ManagementReview";
 import { Iso27001ManagementReviewDetail } from "@/routes/iso27001/ManagementReviewDetail";
-import { Iso42001AIIAsPage } from "@/routes/iso42001/aiias";
+import { Iso27001RiskRegister } from "@/routes/iso27001/RiskRegister";
+import { Iso27001SoaGenerator } from "@/routes/iso27001/SoaGenerator";
 import { Iso42001AiSystemsPage } from "@/routes/iso42001/ai-systems";
+import { Iso42001AIIAsPage } from "@/routes/iso42001/aiias";
 import { Iso42001ControlListPage } from "@/routes/iso42001/control-list";
 import { Iso42001DashboardPage } from "@/routes/iso42001/dashboard";
 import { Iso42001IncidentsPage } from "@/routes/iso42001/incidents";
 import { Iso42001ManagementReviewPage } from "@/routes/iso42001/management-review";
 import { Iso42001PoliciesPage } from "@/routes/iso42001/policies";
-import { lazy, Suspense } from "react";
+import { KIInventarListPage } from "@/routes/ki-inventar";
+import { KIToolDetailPage } from "@/routes/ki-tool-detail";
+import { KIToolFormPage } from "@/routes/ki-tool-form";
+import { NIS2Page } from "@/routes/nis2";
+import { VerifyPage } from "@/routes/verify";
+import { Suspense, lazy } from "react";
 
 const ArbeitsschutzDashboardPage = lazy(() =>
   import("@/routes/arbeitsschutz/Dashboard").then((m) => ({
@@ -40,13 +41,19 @@ const ArbeitsschutzDashboardPage = lazy(() =>
   })),
 );
 const StrukturPage = lazy(() =>
-  import("@/routes/arbeitsschutz/Struktur").then((m) => ({ default: m.StrukturPage })),
+  import("@/routes/arbeitsschutz/Struktur").then((m) => ({
+    default: m.StrukturPage,
+  })),
 );
 const GbuListPage = lazy(() =>
-  import("@/routes/arbeitsschutz/GbuList").then((m) => ({ default: m.GbuListPage })),
+  import("@/routes/arbeitsschutz/GbuList").then((m) => ({
+    default: m.GbuListPage,
+  })),
 );
 const GbuWizardPage = lazy(() =>
-  import("@/routes/arbeitsschutz/GbuWizard").then((m) => ({ default: m.GbuWizardPage })),
+  import("@/routes/arbeitsschutz/GbuWizard").then((m) => ({
+    default: m.GbuWizardPage,
+  })),
 );
 const MassnahmenBoardPage = lazy(() =>
   import("@/routes/arbeitsschutz/MassnahmenBoard").then((m) => ({
@@ -54,10 +61,14 @@ const MassnahmenBoardPage = lazy(() =>
   })),
 );
 const AsaCalendarPage = lazy(() =>
-  import("@/routes/arbeitsschutz/AsaCalendar").then((m) => ({ default: m.AsaCalendarPage })),
+  import("@/routes/arbeitsschutz/AsaCalendar").then((m) => ({
+    default: m.AsaCalendarPage,
+  })),
 );
 const UnfallListPage = lazy(() =>
-  import("@/routes/arbeitsschutz/UnfallList").then((m) => ({ default: m.UnfallListPage })),
+  import("@/routes/arbeitsschutz/UnfallList").then((m) => ({
+    default: m.UnfallListPage,
+  })),
 );
 const BeauftragteRegisterPage = lazy(() =>
   import("@/routes/arbeitsschutz/BeauftragteRegister").then((m) => ({
@@ -84,6 +95,7 @@ import { MfaSetupPage } from "@/routes/mfa-setup";
 import { MitarbeiterListPage } from "@/routes/mitarbeiter";
 import { MitarbeiterFormPage } from "@/routes/mitarbeiter-form";
 import { OnboardingSetupPage } from "@/routes/onboarding-setup";
+import { OnboardingWizardPage } from "@/routes/onboarding-wizard";
 import { PublicHinweisePage } from "@/routes/public-hinweise";
 import { PublicHinweiseStatusPage } from "@/routes/public-hinweise-status";
 import { PublicSchulungPage } from "@/routes/public-schulung";
@@ -106,11 +118,14 @@ export const router = createBrowserRouter([
   {
     element: (
       <ProtectedRoute>
-        <SidebarShell />
+        <RequireWizard>
+          <SidebarShell />
+        </RequireWizard>
       </ProtectedRoute>
     ),
     children: [
       { path: "/", element: <DashboardPage /> },
+      { path: "/onboarding-wizard", element: <OnboardingWizardPage /> },
       { path: "/mitarbeiter", element: <MitarbeiterListPage /> },
       { path: "/mitarbeiter/neu", element: <MitarbeiterFormPage /> },
       {
@@ -129,7 +144,10 @@ export const router = createBrowserRouter([
       { path: "/audit", element: <AuditLogPage /> },
       { path: "/audit-export", element: <AuditExportDashboard /> },
       { path: "/audit-export/profil/neu", element: <AuditExportWizardPage /> },
-      { path: "/audit-export/profil/:id", element: <AuditExportProfileEditPage /> },
+      {
+        path: "/audit-export/profil/:id",
+        element: <AuditExportProfileEditPage />,
+      },
       { path: "/audit-export/runs/:id", element: <AuditExportRunDetailPage /> },
       { path: "/datenpannen", element: <DatenpannenListPage /> },
       { path: "/datenpannen/neu", element: <DatenpanneFormPage /> },
@@ -146,7 +164,10 @@ export const router = createBrowserRouter([
       { path: "/iso27001/soa", element: <Iso27001SoaGenerator /> },
       { path: "/iso27001/audits", element: <Iso27001Audits /> },
       { path: "/iso27001/audits/:id", element: <Iso27001AuditDetail /> },
-      { path: "/iso27001/management-review", element: <Iso27001ManagementReview /> },
+      {
+        path: "/iso27001/management-review",
+        element: <Iso27001ManagementReview />,
+      },
       {
         path: "/iso27001/management-review/:id",
         element: <Iso27001ManagementReviewDetail />,
@@ -157,17 +178,90 @@ export const router = createBrowserRouter([
       { path: "/iso42001/ki-systeme", element: <Iso42001AiSystemsPage /> },
       { path: "/iso42001/aiias", element: <Iso42001AIIAsPage /> },
       { path: "/iso42001/incidents", element: <Iso42001IncidentsPage /> },
-      { path: "/iso42001/management-review", element: <Iso42001ManagementReviewPage /> },
-      { path: "/arbeitsschutz", element: <Lazy><ArbeitsschutzDashboardPage /></Lazy> },
-      { path: "/arbeitsschutz/struktur", element: <Lazy><StrukturPage /></Lazy> },
-      { path: "/arbeitsschutz/gbu", element: <Lazy><GbuListPage /></Lazy> },
-      { path: "/arbeitsschutz/gbu/neu", element: <Lazy><GbuWizardPage /></Lazy> },
-      { path: "/arbeitsschutz/gbu/:id/bearbeiten", element: <Lazy><GbuWizardPage /></Lazy> },
-      { path: "/arbeitsschutz/massnahmen", element: <Lazy><MassnahmenBoardPage /></Lazy> },
-      { path: "/arbeitsschutz/asa", element: <Lazy><AsaCalendarPage /></Lazy> },
-      { path: "/arbeitsschutz/unfaelle", element: <Lazy><UnfallListPage /></Lazy> },
-      { path: "/arbeitsschutz/beauftragte", element: <Lazy><BeauftragteRegisterPage /></Lazy> },
-      { path: "/arbeitsschutz/betriebsanweisungen", element: <Lazy><BetriebsanweisungBibliothekPage /></Lazy> },
+      {
+        path: "/iso42001/management-review",
+        element: <Iso42001ManagementReviewPage />,
+      },
+      {
+        path: "/arbeitsschutz",
+        element: (
+          <Lazy>
+            <ArbeitsschutzDashboardPage />
+          </Lazy>
+        ),
+      },
+      {
+        path: "/arbeitsschutz/struktur",
+        element: (
+          <Lazy>
+            <StrukturPage />
+          </Lazy>
+        ),
+      },
+      {
+        path: "/arbeitsschutz/gbu",
+        element: (
+          <Lazy>
+            <GbuListPage />
+          </Lazy>
+        ),
+      },
+      {
+        path: "/arbeitsschutz/gbu/neu",
+        element: (
+          <Lazy>
+            <GbuWizardPage />
+          </Lazy>
+        ),
+      },
+      {
+        path: "/arbeitsschutz/gbu/:id/bearbeiten",
+        element: (
+          <Lazy>
+            <GbuWizardPage />
+          </Lazy>
+        ),
+      },
+      {
+        path: "/arbeitsschutz/massnahmen",
+        element: (
+          <Lazy>
+            <MassnahmenBoardPage />
+          </Lazy>
+        ),
+      },
+      {
+        path: "/arbeitsschutz/asa",
+        element: (
+          <Lazy>
+            <AsaCalendarPage />
+          </Lazy>
+        ),
+      },
+      {
+        path: "/arbeitsschutz/unfaelle",
+        element: (
+          <Lazy>
+            <UnfallListPage />
+          </Lazy>
+        ),
+      },
+      {
+        path: "/arbeitsschutz/beauftragte",
+        element: (
+          <Lazy>
+            <BeauftragteRegisterPage />
+          </Lazy>
+        ),
+      },
+      {
+        path: "/arbeitsschutz/betriebsanweisungen",
+        element: (
+          <Lazy>
+            <BetriebsanweisungBibliothekPage />
+          </Lazy>
+        ),
+      },
       { path: "/redaktion", element: <RedaktionPage /> },
       { path: "/settings", element: <SettingsPage /> },
       { path: "/mfa-setup", element: <MfaSetupPage /> },

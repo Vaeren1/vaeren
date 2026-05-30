@@ -57,6 +57,99 @@ from tests.arbsch_fixtures import (  # noqa: F401, E402
     basis_stammdaten,
 )
 
+# --- Onboarding-Wizard-Fixtures (Feature 1, Phase E) -------------------
+# Stil analog arbsch_fixtures: frischer Tenant pro Test, Rollen-Clients via
+# Login mit HTTP_HOST=primary-domain (TenantMainMiddleware setzt das Schema).
+
+
+def _make_tenant():
+    import uuid
+
+    from django.db import connection
+    from django_tenants.utils import schema_context
+
+    from tenants.models import Tenant, TenantDomain
+
+    schema = f"ow_{uuid.uuid4().hex[:8]}"
+    connection.set_schema_to_public()
+    with schema_context("public"):
+        t = Tenant.objects.create(schema_name=schema, firma_name=f"Onboarding {schema}")
+        TenantDomain.objects.create(
+            tenant=t,
+            domain=f"{schema.replace('_', '-')}.app.vaeren.local",
+            is_primary=True,
+        )
+    return t
+
+
+def _drop_tenant(schema: str) -> None:
+    from django.db import connection
+    from django_tenants.utils import schema_context
+
+    from tenants.models import Tenant
+
+    connection.set_schema_to_public()
+    with schema_context("public"):
+        obj = Tenant.objects.filter(schema_name=schema).first()
+        if obj is not None:
+            obj.delete(force_drop=True)
+
+
+def _role_client(tenant, *, email: str, role, settings):
+    from django.test import Client
+    from django_tenants.utils import schema_context
+
+    from core.models import User
+
+    settings.ALLOWED_HOSTS = ["*"]
+    domain = tenant.domains.first().domain
+    with schema_context(tenant.schema_name):
+        u = User.objects.create_user(
+            email=email, password="ow-test-1234!", tenant_role=role, is_active=True
+        )
+        u.save()
+        client = Client(HTTP_HOST=domain, enforce_csrf_checks=False)
+        # login() ruft authenticate() → core_user-Query; muss im Tenant-Schema laufen.
+        assert client.login(email=email, password="ow-test-1234!")
+    return client
+
+
+@pytest.fixture
+def onboarding_tenant(db):
+    t = _make_tenant()
+    yield t
+    _drop_tenant(t.schema_name)
+
+
+@pytest.fixture
+def tenant_client_gf(onboarding_tenant, settings):
+    from core.models import TenantRole
+
+    return _role_client(
+        onboarding_tenant, email="gf@ow.de", role=TenantRole.GESCHAEFTSFUEHRER, settings=settings
+    )
+
+
+@pytest.fixture
+def tenant_client_mitarbeiter(onboarding_tenant, settings):
+    from core.models import TenantRole
+
+    return _role_client(
+        onboarding_tenant,
+        email="ma@ow.de",
+        role=TenantRole.MITARBEITER_VIEW_ONLY,
+        settings=settings,
+    )
+
+
+@pytest.fixture
+def two_tenants(db):
+    t1 = _make_tenant()
+    t2 = _make_tenant()
+    yield t1, t2
+    _drop_tenant(t1.schema_name)
+    _drop_tenant(t2.schema_name)
+
 
 @pytest.fixture
 def db(transactional_db):

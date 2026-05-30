@@ -53,6 +53,7 @@ TENANT_APPS: list[str] = [
     "iso42001",
     "arbeitsschutz",
     "auditor_export",
+    "onboarding_wizard",
     "rest_framework",
     "drf_spectacular",
     "django_filters",
@@ -174,3 +175,8 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # allauth.mfa — TOTP-Issuer wird in der QR-URL angezeigt
 MFA_TOTP_ISSUER = "Vaeren"
+
+# Kanzlei-Siegel für den Compliance-Radar (Feature 1, Phase G).
+# Leer = Siegel im Radar ausgeblendet. Wird via radar-Response ans Frontend
+# ausgespielt (OnboardingWizardViewSet.radar -> kanzlei_siegel).
+KANZLEI_SIEGEL_NAME = env("KANZLEI_SIEGEL_NAME", default="")
