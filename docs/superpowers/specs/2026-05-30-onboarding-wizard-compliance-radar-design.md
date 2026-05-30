@@ -32,8 +32,8 @@ Dies ist der **erste Bildschirm, den ein neuer Kunde sieht** — der erste Eindr
 
 1. **Start** — „Willkommen bei Vaeren. Lassen Sie uns Ihr Unternehmen verstehen." Eingabe: Firmenname + Website (oder Adresse).
 2. **KI-Analyse** — Ladezustand mit sichtbarem Fortschritt („Wir analysieren Ihr Unternehmen…"). Im Hintergrund: `unternehmens_osint`-Service recherchiert Branche/NACE, Mitarbeiterzahl, Umsatz, Standorte, OEM-/Automotive-Bezug, Produktart. **Demo-Account: vorgecachte Antwort, kein Live-LLM-Risiko auf der Bühne.**
-3. **Bestätigen & ergänzen** — Die recherchierten Felder sind vorausgefüllt; Kunde korrigiert/bestätigt. Plus 2 nicht-recherchierbare Toggles: „Verarbeiten Sie Gesundheits-/Sozialdaten?" (DSGVO Art. 9) und „Setzen Sie KI in Produkten/Prozessen ein?" (AI Act).
-4. **Compliance-Radar (Wow-Screen)** — Liste der zutreffenden Pflichten, je mit Relevanz, Kurz-Begründung und Abdeckungs-Status (§6.3). Kanzlei-Siegel + RDG-Disclaimer sichtbar.
+3. **Bestätigen & ergänzen** — Die recherchierten Felder sind vorausgefüllt; Kunde korrigiert/bestätigt. Plus 2 nicht-recherchierbare Toggles: „Verarbeiten Sie Gesundheits-/Sozialdaten?" (DSGVO Art. 9) und „Setzen Sie KI in Produkten/Prozessen ein?" (AI Act). **Außerdem: Betriebsmerkmale** (Lager, Schweißerei, Gefahrstofflager …) als von der KI vorausgewählte Chips — Kunde prüft, korrigiert und ergänzt fehlende per Dropdown (Katalog) oder Freitext-Spezialität (§6.5).
+4. **Compliance-Radar (Wow-Screen)** — Liste der zutreffenden Pflichten, je mit Relevanz, Kurz-Begründung und Abdeckungs-Status (§6.3). Unter den passenden Pflichten erscheinen **operative Teaser-Empfehlungen** aus den bestätigten Betriebsmerkmalen (z.B. „Lager erkannt → Staplerfahrer-Unterweisung, G25-Vorsorge", §6.5). Kanzlei-Siegel + RDG-Disclaimer sichtbar.
 5. **Module aktivieren** — empfohlene Module vorausgewählt → ein Klick → Aktivierung → Weiterleitung ins Cockpit, das jetzt „seine" Module zeigt. Visuelles Payoff: Compliance-Index zählt sichtbar hoch.
 
 ## 4. Architektur-Überblick
@@ -51,8 +51,9 @@ Geteilte Bausteine (core/):
    unternehmens_osint.py   ← auch von Feature 2 (Vishing-OSINT) genutzt
    modules.py              ← Modul-Registry (Aktivierung + Reg→Modul-Mapping)
    regulierungen.py        ← Regulierungs-Katalog als Code (anwaltsfest, git-versioniert)
+   betriebsmerkmale.py     ← Merkmals-Katalog (Lager/Schweißen/…) → Kurse/Gefährdungen/Maßnahmen
    relevanz_engine.py      ← verallgemeinert nis2/models.py::klassifiziere_automatisch()
-   basis_hinweis.py        ← LLM-Generator für 🟡-Stufe, RDG-Layer-2-validiert
+   basis_hinweis.py        ← LLM-Generator für 🟡-Stufe + Freitext-Merkmale, RDG-Layer-2-validiert
 ```
 
 ## 5. Datenmodell
@@ -88,6 +89,8 @@ Felder (alle aus OSINT vorbefüllt, außer markierte):
 - **`verarbeitet_gesundheits_sozialdaten`** (bool) — *manuell bestätigt*
 - **`setzt_ki_ein`** (bool) — *manuell bestätigt*
 - `drittland_transfer` (bool)
+- **`betriebsmerkmale`** (Liste von Merkmal-Keys aus dem Katalog, §6.5) — KI-vorbefüllt, vom Kunden bestätigt/ergänzt
+- **`betriebsmerkmale_freitext`** (Liste von Strings) — Spezialitäten, die der Katalog nicht kennt → KI-Fallback
 - `recherche_quelle` (Text), `recherche_rohdaten` (JSON), `bestaetigt_at`, `bestaetigt_von` (FK User)
 
 ### 5.3 `RegulierungsBefund` (Tenant-Model)
@@ -123,6 +126,36 @@ MODULE = {
 ```
 Aktivierungs-Status pro Tenant: JSON-Feld `Tenant.aktive_module` (Liste von Keys) **oder** Beibehaltung der bestehenden Flags mit Registry-Wrapper — Detail im Plan. Migration: `module_iso42001_aktiv` in die Registry überführen, rückwärtskompatibel.
 
+### 6.5 Betriebsmerkmale & operative Teaser-Empfehlungen (Tiefen-Ebene „B+")
+
+Der Wizard bleibt auf Framework-Ebene **plus** einer konkreten Teaser-Tiefe — ohne zum Langformular zu werden und ohne die GBU-Logik des Arbeitsschutz-Moduls zu duplizieren.
+
+**Katalog `core/betriebsmerkmale.py`** (analog Regulierungs-Katalog, als Code):
+```python
+@dataclass(frozen=True)
+class Betriebsmerkmal:
+    key: str                      # "lager", "schweisserei", "gefahrstofflager", ...
+    name: str                     # "Lager / Flurförderzeuge"
+    empfohlene_kurse: list[str]    # Keys aus dem Pflichtunterweisungs-Katalog
+    empfohlene_gefaehrdungen: list[str]  # Keys aus dem Arbeitsschutz-Gefährdungs-Katalog
+    empfohlene_massnahmen: list[str]     # z.B. "G25-Vorsorge", "GBU Lagerbereich"
+    rechtsgrundlage: str           # z.B. "DGUV Vorschrift 68"
+```
+Initial-Set u.a.: Lager/Flurförderzeuge, Maschinenproduktion, Schweißerei, Gefahrstofflager, Lärmbereiche, Fuhrpark, Nacht-/Schichtarbeit, Höhenarbeit, Druckbehälter, Krane, Pressen, Lackiererei, Kühlhaus, Labor/Reinraum.
+
+**Drei Erfassungs-Wege (Schritt 3):**
+1. **KI-vorbefüllt** — OSINT/LLM rät aus Branche+Größe wahrscheinliche Merkmale (Maschinenbau → Produktion, Maschinen, Lager, oft Schweißerei). Als abhakbare Chips.
+2. **Dropdown** — voller Merkmals-Katalog zum Nachtragen, was die KI übersah.
+3. **Freitext-Spezialität** — für Merkmale außerhalb des Katalogs.
+
+**Verarbeitung (gleiches Hybrid-Muster wie Abdeckungs-Gradient + Fragebogen-Matching):**
+- **Katalog-Merkmale → strukturiert:** feste Mappings → präzise, verlässliche Teaser.
+- **Freitext → KI-Fallback:** LLM ordnet die Spezialität passenden Kursen/Pflichten zu, **RDG-Layer-2-validiert**, sichtbar markiert als „KI-Einschätzung — bitte prüfen".
+
+**Output am Radar:** unter der jeweiligen Pflicht (meist ArbSchG) erscheinen die abgeleiteten konkreten Empfehlungen als Teaser. Die **volle Tiefe** (komplette GBU, Kurs-Zuweisung an Mitarbeiter) passiert im **aktivierten Modul** — der Wizard teasert, das Modul liefert. Persistiert als `OperativeEmpfehlung`-Snapshot (Tenant-Model: `merkmal_key` | freitext, `art` [kurs/gefaehrdung/massnahme], `ziel_key`, `quelle` [katalog/ki], `erstellt_at`).
+
+**Vollständigkeits-Philosophie (bewusst):** Der Radar zielt **nicht** auf 100 % automatische Erfassung. KI errät den Großteil, Kunde ergänzt in Sekunden, Rahmung als „geführter Ausgangspunkt, kein abschließendes Gutachten" (§8). Ein Allwissenheits-Versprechen wäre haftungs- und RDG-rechtlich angreifbar.
+
 ## 7. Regulierungs-Katalog (Initial-Set, ~14 Pflichten)
 
 | Code | Name | applies-Regel (vereinfacht) | Abdeckung | Modul |
@@ -150,6 +183,7 @@ Aktivierungs-Status pro Tenant: JSON-Feld `Tenant.aktive_module` (Liste von Keys
 - **Layer 1 (Sprache):** Begründungen + Hinweise durchgängig in Vorschlags-Sprache („Nach unserer Einschätzung dürfte … auf Sie zutreffen"). Kein „Sie sind verpflichtet".
 - **Layer 2 (Validator):** `basis_hinweis`-LLM-Output durchläuft den bestehenden Output-Validator gegen verbotene Formeln (wie Pflichtunterweisung/Arbeitsschutz).
 - **Layer 3 (Human-Gate):** Diagnose ist ein Hinweis; Modul-Aktivierung ist die Handlung des Nutzers. Persistenter Disclaimer-Banner + „bitte mit Ihrer Rechtsberatung bestätigen".
+- **Rahmung „geführter Ausgangspunkt":** Der Radar wird explizit als nicht-abschließend dargestellt (kein „wir haben alle Ihre Pflichten erfasst"). Operative Teaser aus **Freitext-Spezialitäten** tragen sichtbar das Label „KI-Einschätzung — bitte prüfen".
 
 ## 9. Kanzlei-Qualitäts-Siegel
 
@@ -185,7 +219,7 @@ Permissions: nur Geschäftsführer-Rolle darf Wizard durchlaufen + Module aktivi
 
 ## 13. Tests (4-Schichten-Strategie)
 
-1. **Relevanz-Engine Unit-Tests:** je Regulierung ein Test (Firma trifft zu / trifft nicht zu) — Tabellen-getrieben. NIS2-Schwellenfälle abdecken.
+1. **Relevanz-Engine Unit-Tests:** je Regulierung ein Test (Firma trifft zu / trifft nicht zu) — Tabellen-getrieben. NIS2-Schwellenfälle abdecken. Plus: je Betriebsmerkmal → korrekte Kurs-/Gefährdungs-/Maßnahmen-Empfehlung; Freitext → KI-Fallback-Pfad (Mock-LLM).
 2. **Multi-Tenant-Isolation:** `UnternehmensProfil` + `RegulierungsBefund` strikt tenant-getrennt (kritischer CI-Gate).
 3. **RDG-Layer-2:** `basis_hinweis`-Output gegen verbotene Formeln (Mock-LLM).
 4. **API-Integration:** Wizard-Flow end-to-end (recherche → profil → radar → aktivieren), Permission-Matrix (nur GF).
@@ -194,7 +228,7 @@ Permissions: nur Geschäftsführer-Rolle darf Wizard durchlaufen + Module aktivi
 
 ## 14. Migrations
 
-- Neue App `onboarding_wizard` (Tenant-side): `UnternehmensProfil`, `RegulierungsBefund`.
+- Neue App `onboarding_wizard` (Tenant-side): `UnternehmensProfil`, `RegulierungsBefund`, `OperativeEmpfehlung`.
 - `Tenant.aktive_module` (JSON) — rückwärtskompatible Migration, überführt `module_iso42001_aktiv`.
 - Alle Migrations rückwärtskompatibel (Container-CMD `migrate_schemas`).
 
@@ -204,3 +238,4 @@ Permissions: nur Geschäftsführer-Rolle darf Wizard durchlaufen + Module aktivi
 - `aktive_module`: JSON-Feld vs. einzelne Flags (Detail-Entscheidung im Plan).
 - Genaue OSINT-Recherche-Quellen + Prompt (Web-Search-Tool-Anbindung).
 - Finale Radar-UI-Variante (nach §11-Exploration).
+- Initial-Umfang des Betriebsmerkmal-Katalogs (§6.5) + exakte Kurs-/Gefährdungs-Mappings auf die bestehenden Kataloge (Pflichtunterweisung, Arbeitsschutz-76er-Katalog).
