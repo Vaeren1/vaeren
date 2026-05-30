@@ -1,10 +1,8 @@
 /**
  * RadarScreen — der im Wizard gerenderte Compliance-Radar (Schritt 4).
  *
- * Rendert vorerst Variante A (animierter Scan) als Default. Die Varianten
- * B/C sind über `RadarScreen.stories.tsx` vergleichbar; die finale Auswahl
- * trifft ein Mensch (Konrad) im Storybook und tauscht hier ggf. die
- * importierte Komponente aus.
+ * Variante A (animierter Scan) wurde 2026-05-30 als finale UI-Variante
+ * gewählt (Spec §11). Die Explorations-Varianten B/C wurden danach entfernt.
  */
 import { RadarVarianteA } from "./RadarVarianteA";
 import type { RadarProps } from "./radar-shared";

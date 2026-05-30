@@ -1,13 +1,10 @@
 import type { RadarResult } from "@/lib/api/onboarding";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RadarVarianteA } from "./RadarVarianteA";
-import { RadarVarianteB } from "./RadarVarianteB";
-import { RadarVarianteC } from "./RadarVarianteC";
 
 /**
- * Vergleichs-Stories für die drei Radar-Varianten (Feature 1, §11).
- * Mensch wählt im Storybook die überzeugendste; RadarScreen rendert
- * aktuell Variante A.
+ * Stories für den Compliance-Radar (Feature 1, §11). Variante A (animierter
+ * Scan) wurde als finale UI-Variante gewählt; RadarScreen rendert sie.
  */
 const mockRadar: RadarResult = {
   befunde: [
@@ -105,21 +102,9 @@ const meta: Meta = {
 export default meta;
 
 type StoryA = StoryObj<typeof RadarVarianteA>;
-type StoryB = StoryObj<typeof RadarVarianteB>;
-type StoryC = StoryObj<typeof RadarVarianteC>;
 
-export const VarianteA_AnimierterScan: StoryA = {
+export const AnimierterScan: StoryA = {
   render: (args) => <RadarVarianteA {...args} />,
-  args: { radar: mockRadar, firmenname: "Müller Präzisionstechnik GmbH" },
-};
-
-export const VarianteB_KartenReveal: StoryB = {
-  render: (args) => <RadarVarianteB {...args} />,
-  args: { radar: mockRadar, firmenname: "Müller Präzisionstechnik GmbH" },
-};
-
-export const VarianteC_VorherNachher: StoryC = {
-  render: (args) => <RadarVarianteC {...args} />,
   args: { radar: mockRadar, firmenname: "Müller Präzisionstechnik GmbH" },
 };
 
