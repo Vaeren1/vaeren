@@ -4,8 +4,8 @@ LLM (_llm_antwort) wird gemockt. Kein echter LLM-Call, kein DB-Zugriff.
 """
 from unittest.mock import patch
 
-from fragebogen.evidence_pool import EvidenzSnippet
 from fragebogen.answer_engine import entwerfe_antwort
+from fragebogen.evidence_pool import EvidenzSnippet
 
 
 def test_entwurf_mit_quelle_und_confidence():
