@@ -351,6 +351,46 @@ def test_rdg_verstoss_nach_editieren_normal_exportiert(
         assert "Nach unserer Einschätzung" in str(ws["C2"].value)
 
 
+# --- Upload-Sicherheit (Whitelist + Größe) --------------------------------
+
+
+@pytest.mark.django_db
+def test_upload_exe_abgelehnt(tenant_client_gf, _media_tmp):
+    bad = SimpleUploadedFile(
+        "malware.exe", b"MZ\x90\x00", content_type="application/octet-stream"
+    )
+    r = tenant_client_gf.post("/api/fragebogen/upload/", {"datei": bad})
+    assert r.status_code == 400, r.content
+    assert "nicht erlaubt" in r.json()["detail"].lower()
+
+
+@pytest.mark.django_db
+def test_upload_zu_gross_abgelehnt(tenant_client_gf, _media_tmp):
+    # 26 MB > 25-MB-Limit. Endung .xlsx ist erlaubt — Größe muss greifen.
+    big = SimpleUploadedFile(
+        "gross.xlsx", b"\x00" * (26 * 1024 * 1024), content_type="application/octet-stream"
+    )
+    r = tenant_client_gf.post("/api/fragebogen/upload/", {"datei": big})
+    assert r.status_code == 400, r.content
+    assert "zu groß" in r.json()["detail"].lower()
+
+
+# --- Seiten-Nr-Validierung -------------------------------------------------
+
+
+@pytest.mark.django_db
+def test_unbekannte_seite_bestaetigen_404(
+    tenant_client_gf, _xlsx_upload, _media_tmp, monkeypatch
+):
+    _mock_engine(monkeypatch)
+    c = tenant_client_gf
+    r = c.post("/api/fragebogen/upload/", {"datei": _xlsx_upload})
+    fb_id = r.json()["id"]
+    # Fixture hat nur Seite 1 → Seite 99 existiert nicht.
+    r = c.post(f"/api/fragebogen/{fb_id}/seite/99/bestaetigen/")
+    assert r.status_code == 404, r.content
+
+
 # --- Permissions ----------------------------------------------------------
 
 

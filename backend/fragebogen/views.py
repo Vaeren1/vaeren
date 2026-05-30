@@ -57,6 +57,10 @@ _ERLAUBTE_ROLLEN = frozenset(
     {TenantRole.GESCHAEFTSFUEHRER, TenantRole.COMPLIANCE_BEAUFTRAGTER}
 )
 
+# Upload-Sicherheit: nur die tatsächlich unterstützten OEM-Fragebogen-Formate.
+_ERLAUBTE_UPLOAD_EXT = frozenset({".xlsx", ".pdf", ".docx"})
+_MAX_UPLOAD_BYTES = 25 * 1024 * 1024  # 25 MB
+
 
 class FragebogenPermission(BasePermission):
     """Nur Geschäftsführung + Compliance-Beauftragte. Sonst 403.
@@ -153,9 +157,33 @@ class FragebogenViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # Upload-Sicherheit: Endungs-Whitelist (kein .exe/Skript via Form).
+        suffix = os.path.splitext(datei.name)[1].lower()
+        if suffix not in _ERLAUBTE_UPLOAD_EXT:
+            return Response(
+                {
+                    "detail": (
+                        "Dateityp nicht erlaubt. Zulässig sind nur "
+                        f"{', '.join(sorted(_ERLAUBTE_UPLOAD_EXT))}."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Upload-Sicherheit: Größen-Limit (vor dem Tempfile-Schreiben prüfen).
+        if datei.size is not None and datei.size > _MAX_UPLOAD_BYTES:
+            return Response(
+                {
+                    "detail": (
+                        "Datei zu groß "
+                        f"(max. {_MAX_UPLOAD_BYTES // (1024 * 1024)} MB)."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         # Datei zuerst auf Disk speichern, damit Detect/Extract über einen Pfad
         # arbeiten können (alle Ingestion-Funktionen erwarten einen Pfad).
-        suffix = os.path.splitext(datei.name)[1].lower()
         with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
             for chunk in datei.chunks():
                 tmp.write(chunk)
@@ -341,6 +369,14 @@ class FragebogenViewSet(viewsets.ModelViewSet):
     def seite_bestaetigen(self, request, pk=None, n=None):
         fb = self.get_object()
         seite_nr = int(n)
+        if seite_nr not in self._alle_seiten(fb):
+            return Response(
+                {
+                    "detail": f"Seite {seite_nr} existiert in diesem Fragebogen nicht.",
+                    "verfuegbare_seiten": sorted(self._alle_seiten(fb)),
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
         bestaetigt = list(fb.bestaetigte_seiten or [])
         if seite_nr not in bestaetigt:
             bestaetigt.append(seite_nr)
