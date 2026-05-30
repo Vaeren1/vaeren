@@ -50,7 +50,7 @@ def test_beiblatt_pdf_enthaelt_inhalte(tmp_path):
     assert "ISMS seit 2025" in text
     assert "ISO 27001 A.5.1" in text
     assert "Datenpannen-Register" in text
-    assert "RDG" in text  # Disclaimer vorhanden
+    assert "ersetzt keine juristische Pruefung" in text  # eindeutige Disclaimer-Phrase
 
 
 def test_beiblatt_leere_liste(tmp_path):
@@ -65,4 +65,4 @@ def test_beiblatt_leere_liste(tmp_path):
 
     assert out.exists() and out.stat().st_size > 0
     text = _extrahiere_text(str(out))
-    assert "RDG" in text
+    assert "ersetzt keine juristische Pruefung" in text

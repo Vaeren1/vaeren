@@ -22,7 +22,10 @@ def erkenne_format_und_tier(pfad: str) -> tuple[str, int]:
     if ext == ".xlsx":
         return "xlsx", 1
     if ext == ".docx":
-        return ("docx", 1) if _docx_hat_formularfelder(pfad) else ("docx", 3)
+        # docx → vorerst immer Tier 3 (Beiblatt). Tier-1-docx-Roundtrip (fill_docx.py)
+        # ist Backlog; ohne Export-Backend würde Tier 1 hier ein Versprechen ohne
+        # Einlösung machen. _docx_hat_formularfelder bleibt für die spätere Aktivierung.
+        return "docx", 3
     if ext == ".pdf":
         if _pdf_hat_acroform(pfad):
             return "pdf_form", 1
