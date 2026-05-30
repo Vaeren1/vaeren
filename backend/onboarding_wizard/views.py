@@ -108,8 +108,9 @@ class OnboardingWizardViewSet(ViewSet):
     )
     @action(detail=False, methods=["post"])
     def recherche(self, request):
-        name = request.data.get("firmenname", "")
-        website = request.data.get("website", "")
+        # Truncation gegen DataError/500 (firmenname max_length=255, website URLField).
+        name = request.data.get("firmenname", "")[:255]
+        website = request.data.get("website", "")[:200]
         demo = bool(request.data.get("demo", False))
         fakten = recherchiere(firmenname=name, website=website, demo=demo)
         model_fields = {f.name for f in UnternehmensProfil._meta.fields}
