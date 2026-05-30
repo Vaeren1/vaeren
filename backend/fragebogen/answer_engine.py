@@ -18,7 +18,7 @@ import json
 import logging
 from typing import TYPE_CHECKING
 
-from core.llm_validator import validate_output
+from core.llm_validator import LLMValidationError, validate_output
 
 from .evidence_pool import EvidenzSnippet
 
@@ -56,7 +56,14 @@ def _llm_antwort(frage: str, snippets: list[EvidenzSnippet]) -> dict | None:
         f"Frage: {frage}\n\nEvidenz:\n{kontext or '(keine Evidenz vorhanden)'}"
     )
 
-    resp = generate(prompt, static_fallback="")
+    try:
+        resp = generate(prompt, static_fallback="")
+    except LLMValidationError:
+        # Layer-2-Reprompt scheiterte (Output blieb verboten) → kein Entwurf.
+        # Der Fallback in entwerfe_antwort greift; rdg_ok wird dort separat gesetzt.
+        # Kein 500 im vorschlagen-Endpoint.
+        logger.warning("LLM-Output blieb nach Reprompt RDG-verbotener — kein Entwurf.")
+        return None
     if not resp or not resp.text:
         return None
 
