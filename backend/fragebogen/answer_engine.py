@@ -75,8 +75,14 @@ def entwerfe_antwort(frage: str, snippets: list[EvidenzSnippet]) -> dict:
         }
 
     text = roh.get("text", "")
-    confidence = float(roh.get("confidence", 0.0))
-    referenzen = set(roh.get("quellen_referenzen", []))
+    # LLM-Output kann kaputt geformt sein (non-numerische confidence / kein Iterable),
+    # auch wenn das JSON parste — defensiv casten statt 500.
+    try:
+        confidence = float(roh.get("confidence", 0.0))
+    except (ValueError, TypeError):
+        confidence = 0.0
+    roh_ref = roh.get("quellen_referenzen", [])
+    referenzen = set(roh_ref) if isinstance(roh_ref, (list, tuple, set)) else set()
 
     # RDG-Layer-2: Prüfe den Entwurfstext gegen verbotene Formeln.
     # rdg_ok=False bedeutet: Mensch MUSS manuell prüfen + freigeben vor Export.
