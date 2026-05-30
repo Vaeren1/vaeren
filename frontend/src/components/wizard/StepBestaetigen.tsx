@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { Profil } from "@/lib/api/onboarding";
 import { useState } from "react";
-import { ALLE_MERKMALE, merkmalLabel } from "./constants";
+import { ALLE_MERKMALE, NIS2_SEKTOREN, merkmalLabel } from "./constants";
 
 interface Props {
   profil: Profil;
@@ -30,9 +30,19 @@ export function StepBestaetigen({ profil, onNext, laedt }: Props) {
     String(profil.mitarbeiter_anzahl || ""),
   );
   const [rechtsform, setRechtsform] = useState(profil.rechtsform || "");
-  const [setztKi, setSetztKi] = useState(profil.setzt_ki_ein);
+  const [setztKi, setSetztKi] = useState(profil.setzt_ki_ein ?? false);
   const [gesundheit, setGesundheit] = useState(
-    profil.verarbeitet_gesundheits_sozialdaten,
+    profil.verarbeitet_gesundheits_sozialdaten ?? false,
+  );
+  const [nis2Sektor, setNis2Sektor] = useState(profil.nis2_sektor ?? "");
+  const [hatOemKunden, setHatOemKunden] = useState(
+    profil.hat_oem_kunden ?? false,
+  );
+  const [istAutomotive, setIstAutomotive] = useState(
+    profil.ist_automotive_zulieferer ?? false,
+  );
+  const [stelltProdukte, setStelltProdukte] = useState(
+    profil.stellt_produkte_her ?? false,
   );
   const [merkmale, setMerkmale] = useState<string[]>(
     profil.betriebsmerkmale ?? [],
@@ -61,6 +71,10 @@ export function StepBestaetigen({ profil, onNext, laedt }: Props) {
     onNext({
       mitarbeiter_anzahl: Number(mitarbeiter) || 0,
       rechtsform,
+      nis2_sektor: nis2Sektor,
+      hat_oem_kunden: hatOemKunden,
+      ist_automotive_zulieferer: istAutomotive,
+      stellt_produkte_her: stelltProdukte,
       setzt_ki_ein: setztKi,
       verarbeitet_gesundheits_sozialdaten: gesundheit,
       betriebsmerkmale: merkmale,
@@ -100,6 +114,22 @@ export function StepBestaetigen({ profil, onNext, laedt }: Props) {
               placeholder="z. B. GmbH"
             />
           </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="nis2_sektor">NIS2-Sektor</Label>
+            <select
+              id="nis2_sektor"
+              value={nis2Sektor}
+              onChange={(e) => setNis2Sektor(e.target.value)}
+              className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
+            >
+              <option value="">Kein Sektor / unbekannt</option>
+              {NIS2_SEKTOREN.map((s) => (
+                <option key={s.value} value={s.value}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -120,6 +150,33 @@ export function StepBestaetigen({ profil, onNext, laedt }: Props) {
               className="h-4 w-4 rounded border-input"
             />
             Wir verarbeiten Gesundheits-/Sozialdaten
+          </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={hatOemKunden}
+              onChange={(e) => setHatOemKunden(e.target.checked)}
+              className="h-4 w-4 rounded border-input"
+            />
+            Wir beliefern OEM-Kunden
+          </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={istAutomotive}
+              onChange={(e) => setIstAutomotive(e.target.checked)}
+              className="h-4 w-4 rounded border-input"
+            />
+            Wir sind Automotive-Zulieferer
+          </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={stelltProdukte}
+              onChange={(e) => setStelltProdukte(e.target.checked)}
+              className="h-4 w-4 rounded border-input"
+            />
+            Wir stellen Produkte her
           </label>
         </div>
 

@@ -46,3 +46,27 @@ export const MODUL_LABEL: Record<string, string> = {
 export function modulLabel(key: string): string {
   return MODUL_LABEL[key] ?? key;
 }
+
+/**
+ * NIS2-Sektoren — `value` muss exakt den Backend-Keys entsprechen
+ * (`core/regulierungen.py::_NIS2_SEKTOREN` bzw. `nis2/models.py::NIS2Sektor`).
+ */
+export const NIS2_SEKTOREN: ReadonlyArray<{ value: string; label: string }> = [
+  { value: "energie", label: "Energie" },
+  { value: "verkehr", label: "Verkehr" },
+  { value: "bank", label: "Bankwesen" },
+  { value: "gesundheit", label: "Gesundheit" },
+  { value: "trinkwasser", label: "Trinkwasser" },
+  { value: "abwasser", label: "Abwasser" },
+  { value: "digital_infra", label: "Digitale Infrastruktur" },
+  { value: "oeff_verw", label: "Öffentliche Verwaltung" },
+  { value: "raumfahrt", label: "Raumfahrt" },
+  { value: "post_kurier", label: "Post / Kurier" },
+  { value: "abfall", label: "Abfallwirtschaft" },
+  { value: "chemie", label: "Chemie" },
+  { value: "lebensmittel", label: "Lebensmittel" },
+  { value: "industrie", label: "Industrie / verarbeitendes Gewerbe" },
+  { value: "digital_dienste", label: "Digitale Dienste" },
+  { value: "forschung", label: "Forschung" },
+  { value: "sonstiges", label: "Sonstiges / nicht betroffen" },
+];

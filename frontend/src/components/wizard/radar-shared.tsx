@@ -1,9 +1,8 @@
 /**
- * Gemeinsame Bausteine der drei Radar-Varianten (Feature 1, §11).
+ * Gemeinsame Bausteine der finalen Radar-UI (Variante A, Feature 1, §11).
  *
  * Status-Badges, RDG-Disclaimer, Firmen-Header, Kanzlei-Siegel und die
- * Zuordnung der operativen Empfehlungen zu ihrer Pflicht. Die Varianten
- * A/B/C teilen diese Logik, unterscheiden sich nur in der Inszenierung.
+ * Aufbereitung der operativen Empfehlungen.
  */
 import type { ApiError } from "@/lib/api/client";
 import {
@@ -16,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { merkmalLabel } from "./constants";
 
 export interface RadarProps {
   radar: RadarResult;
@@ -116,27 +116,41 @@ export function RelevanzChip({ relevanz }: { relevanz: string }) {
 const REGULAERE_QUELLEN: ReadonlySet<string> = new Set(["katalog", "ki"]);
 
 /**
- * Ordnet eine Empfehlung über `merkmal_key` einer Pflicht zu. Im aktuellen
- * Datenmodell trägt eine Empfehlung den Betriebsmerkmal-Key (z.B. "lager"),
- * nicht den Regulierungs-Code. Operative Betriebsmerkmal-Empfehlungen werden
- * deshalb der Arbeitsschutz-Pflicht (`arbschg`) zugeordnet; noch nicht
- * validierte KI-Empfehlungen (`ki_pending`) bleiben separat unter
- * "KI-Einschätzung".
+ * Alle regulären (validierten) operativen Empfehlungen — quelle `katalog`/`ki`.
+ * Werden im eigenständigen Block "Empfohlene operative Maßnahmen" gerendert,
+ * NICHT mehr an einen einzelnen Befund (z.B. `arbschg`) gekoppelt: fehlt der
+ * Befund (etwa bei 0 Mitarbeitenden), gingen die Empfehlungen sonst verloren.
  */
-export function empfehlungenFuerBefund(
-  befund: Befund,
+export function regulaereEmpfehlungen(
   empfehlungen: Empfehlung[],
 ): Empfehlung[] {
-  if (befund.regulierung_code === "arbschg") {
-    return empfehlungen.filter((e) => REGULAERE_QUELLEN.has(e.quelle));
-  }
-  return [];
+  return empfehlungen.filter((e) => REGULAERE_QUELLEN.has(e.quelle));
 }
 
 export function kiPendingEmpfehlungen(
   empfehlungen: Empfehlung[],
 ): Empfehlung[] {
   return empfehlungen.filter((e) => e.quelle === "ki_pending");
+}
+
+/** Gruppiert Empfehlungen nach Betriebsmerkmal-Label (stabile Reihenfolge). */
+function gruppiereNachMerkmal(
+  empfehlungen: Empfehlung[],
+): { label: string; items: Empfehlung[] }[] {
+  const reihenfolge: string[] = [];
+  const map = new Map<string, Empfehlung[]>();
+  for (const e of empfehlungen) {
+    const label = merkmalLabel(e.merkmal_key);
+    if (!map.has(label)) {
+      map.set(label, []);
+      reihenfolge.push(label);
+    }
+    map.get(label)?.push(e);
+  }
+  return reihenfolge.map((label) => ({
+    label,
+    items: map.get(label) ?? [],
+  }));
 }
 
 // --- Wiederverwendbare UI-Bausteine ------------------------------------
@@ -261,5 +275,40 @@ export function EmpfehlungListe({
         </li>
       ))}
     </ul>
+  );
+}
+
+/**
+ * Eigenständiger Block "Empfohlene operative Maßnahmen" — befund-unabhängig.
+ * Gruppiert die validierten Empfehlungen nach Betriebsmerkmal-Label, damit sie
+ * auch dann sichtbar bleiben, wenn kein passender Befund (z.B. `arbschg`)
+ * existiert. Die `ki_pending`-Freitext-Empfehlungen werden hier NICHT gerendert
+ * (separater violetter Block).
+ */
+export function OperativeMassnahmenBlock({
+  empfehlungen,
+}: {
+  empfehlungen: Empfehlung[];
+}) {
+  const regulaer = regulaereEmpfehlungen(empfehlungen);
+  if (regulaer.length === 0) return null;
+  const gruppen = gruppiereNachMerkmal(regulaer);
+  return (
+    <div className="rounded-lg border bg-card p-4">
+      <p className="text-sm font-medium">Empfohlene operative Maßnahmen</p>
+      <p className="mt-0.5 text-xs text-muted-foreground">
+        Abgeleitet aus Ihren Betriebsmerkmalen.
+      </p>
+      <div className="mt-3 space-y-3">
+        {gruppen.map((g) => (
+          <div key={g.label}>
+            <p className="text-xs font-medium text-muted-foreground">
+              {g.label}
+            </p>
+            <EmpfehlungListe empfehlungen={g.items} />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

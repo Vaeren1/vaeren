@@ -12,12 +12,12 @@ import {
   EmpfehlungListe,
   FirmenHeader,
   KanzleiSiegel,
+  OperativeMassnahmenBlock,
   type RadarProps,
   RdgDisclaimer,
   RelevanzChip,
   StatusBadge,
   abdeckungMeta,
-  empfehlungenFuerBefund,
   kiPendingEmpfehlungen,
 } from "./radar-shared";
 
@@ -91,7 +91,6 @@ export function RadarVarianteA({
         {radar.befunde.map((b, i) => {
           const meta = abdeckungMeta(b.abdeckung);
           const istSichtbar = i < sichtbar;
-          const empf = empfehlungenFuerBefund(b, radar.empfehlungen);
           return (
             <li
               key={b.regulierung_code}
@@ -113,12 +112,13 @@ export function RadarVarianteA({
                   <RelevanzChip relevanz={b.relevanz} />
                 </div>
               </div>
-              <EmpfehlungListe empfehlungen={empf} />
               <BasisHinweisExpander befund={b} />
             </li>
           );
         })}
       </ul>
+
+      <OperativeMassnahmenBlock empfehlungen={radar.empfehlungen} />
 
       {kiPending.length > 0 && (
         <div className="rounded-lg border border-violet-200 bg-violet-50 p-4">
