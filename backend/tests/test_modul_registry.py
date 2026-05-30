@@ -6,6 +6,7 @@ import pytest
 from django.db import connection
 from django_tenants.utils import schema_context
 
+from core.modules import MODULE, aktiviere_module, ist_aktiv
 from tenants.models import Tenant, TenantDomain
 
 
@@ -17,8 +18,6 @@ def test_aktive_module_default_leer():
 
 # --- B2: Modul-Registry ---
 
-from core.modules import MODULE, aktiviere_module, get_modul, ist_aktiv  # noqa: E402
-
 
 def test_registry_enthaelt_kernmodule():
     keys = set(MODULE.keys())
@@ -26,7 +25,7 @@ def test_registry_enthaelt_kernmodule():
 
 
 def test_jedes_modul_kennt_seine_regulierungen():
-    for key, modul in MODULE.items():
+    for _key, modul in MODULE.items():
         assert modul.name
         assert isinstance(modul.regulierungen, list)
 
@@ -65,3 +64,11 @@ def test_iso42001_legacy_flag_wird_gespiegelt(registry_tenant):
     aktiviere_module(registry_tenant, ["iso42001"])
     registry_tenant.refresh_from_db()
     assert registry_tenant.module_iso42001_aktiv is True  # Rückwärtskompatibilität
+
+
+@pytest.mark.django_db
+def test_aktiviere_module_filtert_unbekannten_key(registry_tenant):
+    aktiviere_module(registry_tenant, ["hinschg", "gibt_es_nicht"])
+    registry_tenant.refresh_from_db()
+    assert "hinschg" in registry_tenant.aktive_module
+    assert "gibt_es_nicht" not in registry_tenant.aktive_module

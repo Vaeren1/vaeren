@@ -68,6 +68,7 @@ class RegulierungsBefund(models.Model):
     begruendung = models.TextField()
     abdeckung = models.CharField(max_length=20)
     modul_key = models.CharField(max_length=40, blank=True)
+    profil_version = models.IntegerField(default=1)
     erstellt_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
