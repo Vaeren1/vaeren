@@ -25,7 +25,7 @@ import {
 } from "@/lib/api/fragebogen";
 import { cn } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // --- Hilfen --------------------------------------------------------------
@@ -226,15 +226,46 @@ export function FragebogenReviewPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["fragebogen", fbId] }),
   });
 
+  // Tier-2-Export läuft asynchron (202) — sobald der Job angestoßen ist,
+  // pollen wir den Export-Status, bis die Datei bereit ist, und laden dann
+  // automatisch herunter.
+  const [tier2Wartet, setTier2Wartet] = useState(false);
+
   const exportieren = useMutation({
     mutationFn: () => fragebogen.exportieren(fbId),
-    onSuccess: (fb) => {
+    onSuccess: (res) => {
       qc.invalidateQueries({ queryKey: ["fragebogen", fbId] });
-      if (fb.export_datei_url) {
-        window.open(fb.export_datei_url, "_blank", "noopener");
+      // Union: Tier 1/3 → FragebogenDetail mit export_datei_url; Tier 2 → 202-Ack.
+      if ("export_datei_url" in res && res.export_datei_url) {
+        window.open(res.export_datei_url, "_blank", "noopener");
+      } else if ("tier2_job_status" in res) {
+        // Async-Pfad: auf Fertigstellung warten (Polling unten).
+        setTier2Wartet(true);
       }
     },
   });
+
+  // Polling des Export-Status während ein Tier-2-Job läuft.
+  const exportStatus = useQuery({
+    queryKey: ["fragebogen-export-status", fbId],
+    queryFn: () => fragebogen.exportStatus(fbId),
+    enabled: tier2Wartet,
+    refetchInterval: (query) =>
+      query.state.data?.export_bereit ? false : 2500,
+  });
+
+  // Sobald der Job fertig ist: Polling stoppen + Datei öffnen.
+  useEffect(() => {
+    if (!tier2Wartet) return;
+    const s = exportStatus.data;
+    if (s?.export_bereit && s.export_datei_url) {
+      setTier2Wartet(false);
+      qc.invalidateQueries({ queryKey: ["fragebogen", fbId] });
+      window.open(s.export_datei_url, "_blank", "noopener");
+    } else if (s?.tier2_job_status === "fehler") {
+      setTier2Wartet(false);
+    }
+  }, [tier2Wartet, exportStatus.data, fbId, qc]);
 
   const fb = detail.data;
   const seiten = useMemo(() => (fb ? gruppiereNachSeite(fb.fragen) : []), [fb]);
@@ -371,17 +402,33 @@ export function FragebogenReviewPage() {
                     : "Fragebogen final bestätigen"}
                 </Button>
               ) : (
-                <Button
-                  type="button"
-                  disabled={exportieren.isPending}
-                  onClick={() => exportieren.mutate()}
-                >
-                  {exportieren.isPending
-                    ? "Erzeuge Export …"
-                    : fb.export_datei_url
-                      ? "Ausgefüllten Fragebogen herunterladen"
-                      : "Ausgefüllten Fragebogen exportieren"}
-                </Button>
+                <div className="flex flex-col items-end gap-2">
+                  <Button
+                    type="button"
+                    disabled={exportieren.isPending || tier2Wartet}
+                    onClick={() => exportieren.mutate()}
+                  >
+                    {exportieren.isPending
+                      ? "Erzeuge Export …"
+                      : tier2Wartet
+                        ? "Wird im Hintergrund erstellt …"
+                        : fb.export_datei_url
+                          ? "Ausgefüllten Fragebogen herunterladen"
+                          : "Ausgefüllten Fragebogen exportieren"}
+                  </Button>
+                  {tier2Wartet && (
+                    <span className="text-xs text-muted-foreground">
+                      Der ausgefüllte Fragebogen (Overlay) wird im Hintergrund
+                      erstellt — der Download startet automatisch, sobald er
+                      fertig ist.
+                    </span>
+                  )}
+                  {exportStatus.data?.tier2_job_status === "fehler" && (
+                    <span className="text-xs text-destructive">
+                      Der Export ist fehlgeschlagen. Bitte erneut versuchen.
+                    </span>
+                  )}
+                </div>
               )}
             </div>
           </CardContent>

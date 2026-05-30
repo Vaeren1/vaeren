@@ -21,6 +21,13 @@ export type FragebogenDetail = components["schemas"]["FragebogenDetail"];
 export type FragebogenSeiten = components["schemas"]["FragebogenSeiten"];
 export type FragebogenExportStatus =
   components["schemas"]["FragebogenExportStatus"];
+/** 202-Antwort des Export-Endpoints bei Tier 2 (async im Hintergrund). */
+export type FragebogenTier2ExportAccepted =
+  components["schemas"]["FragebogenTier2ExportAccepted"];
+/** Export liefert entweder den fertigen Fragebogen (Tier 1/3) ODER ein 202-Job-Ack (Tier 2). */
+export type FragebogenExportResult =
+  | FragebogenDetail
+  | FragebogenTier2ExportAccepted;
 export type Frage = components["schemas"]["Frage"];
 export type Antwort = components["schemas"]["Antwort"];
 export type AntwortQuelle = components["schemas"]["AntwortQuelle"];
@@ -89,7 +96,7 @@ export const fragebogen = {
     }),
 
   exportieren: (id: number) =>
-    api<FragebogenDetail>(`${BASE}/${id}/export/`, { method: "POST" }),
+    api<FragebogenExportResult>(`${BASE}/${id}/export/`, { method: "POST" }),
 
   exportStatus: (id: number) =>
     api<FragebogenExportStatus>(`${BASE}/${id}/export-status/`),
