@@ -17,7 +17,7 @@ import tempfile
 from typing import ClassVar
 
 from django.core.files import File
-from django.db import transaction
+from django.db import connection, transaction
 from django.utils import timezone
 from drf_spectacular.utils import OpenApiResponse, extend_schema, inline_serializer
 from rest_framework import serializers, status, viewsets
@@ -26,6 +26,7 @@ from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.response import Response
 
+from core.llm_validator import validate_output
 from core.models import TenantRole
 
 from . import bibliothek
@@ -36,6 +37,7 @@ from .export.fill_pdfform import fuelle_pdfform
 from .export.fill_xlsx import fuelle_xlsx
 from .ingestion.detect import erkenne_format_und_tier
 from .ingestion.extract_docx import extrahiere_fragen_docx
+from .ingestion.extract_ocr import extrahiere_fragen_ocr
 from .ingestion.extract_pdfform import extrahiere_fragen_pdfform
 from .ingestion.extract_xlsx import extrahiere_fragen_xlsx
 from .models import (
@@ -47,6 +49,7 @@ from .models import (
     Fragebogen,
     FragebogenStatus,
 )
+from .rdg import ist_rdg_freigegeben
 from .serializers import (
     AntwortBibliothekEintragSerializer,
     FragebogenDetailSerializer,
@@ -89,16 +92,13 @@ _EXTRAKTOREN = {
     "xlsx": extrahiere_fragen_xlsx,
     "pdf_form": extrahiere_fragen_pdfform,
     "docx": extrahiere_fragen_docx,
+    # Tier-2-OCR: unstrukturierte PDFs (Scan/Text ohne Felder) → OCR + LLM-Segmentierung.
+    "pdf_unstrukturiert": extrahiere_fragen_ocr,
 }
 
 
 def _extrahiere_fragen(format_: str, pfad: str) -> list[dict]:
-    """Wählt den passenden strukturierten Extraktor (Tier 1/3-struktur).
-
-    Tier-2-OCR (pdf_unstrukturiert) hat in Phase F noch keinen Extraktor —
-    es entsteht ein Fragebogen ohne Fragen, der via Beiblatt/Tier-2-Job
-    weiterbehandelt wird.
-    """
+    """Wählt den passenden Extraktor je Format (Tier 1/2/3)."""
     extraktor = _EXTRAKTOREN.get(format_)
     return extraktor(pfad) if extraktor else []
 
@@ -227,13 +227,40 @@ class FragebogenViewSet(viewsets.ModelViewSet):
 
     # --- F2: vorschlagen --------------------------------------------------
 
-    @extend_schema(responses={200: FragebogenDetailSerializer})
+    @extend_schema(
+        responses={
+            200: FragebogenDetailSerializer,
+            409: OpenApiResponse(
+                description="Bereits final attestiert — kein Reset möglich."
+            ),
+        }
+    )
     @action(detail=True, methods=["post"])
     def vorschlagen(self, request, pk=None):
         fb = self.get_object()
+
+        # M1-Guard: Ein bereits final attestierter Fragebogen darf NICHT
+        # zurückgesetzt werden — sonst gehen die finale Attestierung + die
+        # human-RDG-Overrides (EDITIERT) verloren.
+        if fb.final_attestiert_at is not None:
+            return Response(
+                {
+                    "detail": "Fragebogen ist bereits final attestiert — "
+                    "ein erneutes Vorschlagen würde die Attestierung und "
+                    "manuelle Korrekturen zurücksetzen."
+                },
+                status=status.HTTP_409_CONFLICT,
+            )
+
         snippets = sammle_evidenz()
 
         for frage in fb.fragen.all():
+            # M1: Menschliche Edits (status=EDITIERT) NICHT überschreiben —
+            # ein Re-Run darf den RDG-Override des Menschen nicht verwerfen.
+            bestehende = getattr(frage, "antwort", None)
+            if bestehende is not None and bestehende.status == AntwortStatus.EDITIERT:
+                continue
+
             treffer = bibliothek.finde_aehnlichen_eintrag(frage.text)
             res = entwerfe_antwort(frage.text, snippets, bibliothek_treffer=treffer)
 
@@ -344,9 +371,15 @@ class FragebogenViewSet(viewsets.ModelViewSet):
             )
 
         if "bestaetigt_text" in request.data:
-            antwort.bestaetigt_text = request.data.get("bestaetigt_text", "") or ""
+            neuer_text = request.data.get("bestaetigt_text", "") or ""
+            antwort.bestaetigt_text = neuer_text
             antwort.status = AntwortStatus.EDITIERT
-            antwort.save(update_fields=["bestaetigt_text", "status"])
+            # L1: RDG-Layer 2 auch auf dem Edit-Pfad. Der Mensch bleibt Autorität
+            # (kein hartes Blocken) — wir aktualisieren nur das rdg_ok-Flag, damit
+            # ein neu eingebauter Verstoß im Review-Editor sichtbar wird. Das Gate
+            # (ist_rdg_freigegeben) lässt EDITIERT-Antworten ohnehin durch.
+            antwort.rdg_ok = validate_output(neuer_text).is_valid
+            antwort.save(update_fields=["bestaetigt_text", "status", "rdg_ok"])
 
         # Tier-2-Positionsänderung: feld_referenz der Frage aktualisieren.
         if "feld_referenz" in request.data and isinstance(
@@ -393,21 +426,6 @@ class FragebogenViewSet(viewsets.ModelViewSet):
     def _alle_seiten(self, fb: Fragebogen) -> set[int]:
         return {(f.seite or 1) for f in fb.fragen.all()} or {1}
 
-    @staticmethod
-    def _rdg_freigegeben(antwort) -> bool:
-        """RDG-Layer-2-Gate: Darf der finale Text raus?
-
-        Eine Antwort mit rdg_ok=False (verbotene Rechtsformulierung erkannt) darf
-        nur exportiert/in die Bibliothek übernommen werden, wenn ein Mensch sie
-        aktiv umformuliert hat (status == EDITIERT). Andernfalls gilt sie wie eine
-        unbestätigte Antwort (Feld bleibt offen, keine Bibliothek-Übernahme).
-        """
-        if antwort is None:
-            return False
-        if antwort.rdg_ok:
-            return True
-        return antwort.status == AntwortStatus.EDITIERT
-
     @extend_schema(
         responses={
             200: FragebogenDetailSerializer,
@@ -443,7 +461,7 @@ class FragebogenViewSet(viewsets.ModelViewSet):
                 # RDG-Layer-2-Gate: nicht-editierte Antworten mit verbotener
                 # Formulierung gehen NICHT in die Bibliothek (sonst würde die
                 # verbotene Formel als bestätigtes Wissen recycelt).
-                if not self._rdg_freigegeben(antwort):
+                if not ist_rdg_freigegeben(antwort):
                     continue
                 antwort.bestaetigt_von = request.user
                 antwort.bestaetigt_at = now
@@ -460,6 +478,13 @@ class FragebogenViewSet(viewsets.ModelViewSet):
     @extend_schema(
         responses={
             200: FragebogenDetailSerializer,
+            202: inline_serializer(
+                "FragebogenTier2ExportAccepted",
+                {
+                    "detail": serializers.CharField(),
+                    "tier2_job_status": serializers.CharField(),
+                },
+            ),
             409: OpenApiResponse(description="Noch nicht final attestiert."),
         }
     )
@@ -484,7 +509,9 @@ class FragebogenViewSet(viewsets.ModelViewSet):
 
             fb.tier2_job_status = "pending"
             fb.save(update_fields=["tier2_job_status"])
-            fragebogen_tier2_export.delay(fb.pk)
+            # Schema-Name mitgeben — der Worker hat keinen Request-Kontext und
+            # setzt das Tenant-Schema selbst (siehe fragebogen.tasks).
+            fragebogen_tier2_export.delay(fb.pk, connection.schema_name)
             return Response(
                 {
                     "detail": "Tier-2-Export (Overlay) wird asynchron erstellt — "
@@ -528,7 +555,7 @@ class FragebogenViewSet(viewsets.ModelViewSet):
         for frage in fb.fragen.all():
             antwort = getattr(frage, "antwort", None)
             zelle = (frage.feld_referenz or {}).get("antwort_zelle")
-            if antwort and zelle and antwort.finaler_text and self._rdg_freigegeben(antwort):
+            if antwort and zelle and antwort.finaler_text and ist_rdg_freigegeben(antwort):
                 sheet = (frage.feld_referenz or {}).get("sheet")
                 ref = f"{sheet}!{zelle}" if sheet else zelle
                 zelle_zu_text[ref] = antwort.finaler_text
@@ -539,7 +566,7 @@ class FragebogenViewSet(viewsets.ModelViewSet):
         for frage in fb.fragen.all():
             antwort = getattr(frage, "antwort", None)
             feld = (frage.feld_referenz or {}).get("feldname")
-            if antwort and feld and antwort.finaler_text and self._rdg_freigegeben(antwort):
+            if antwort and feld and antwort.finaler_text and ist_rdg_freigegeben(antwort):
                 feld_zu_text[feld] = antwort.finaler_text
         fuelle_pdfform(fb.original_datei.path, out_pfad, feld_zu_text)
 
@@ -550,7 +577,7 @@ class FragebogenViewSet(viewsets.ModelViewSet):
             # RDG-Layer-2-Gate: nicht-freigegebene Antwort bleibt im Beiblatt leer.
             antwort_text = (
                 antwort.finaler_text
-                if antwort and self._rdg_freigegeben(antwort)
+                if antwort and ist_rdg_freigegeben(antwort)
                 else ""
             )
             fragen_antworten.append(

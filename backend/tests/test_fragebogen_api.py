@@ -48,6 +48,21 @@ def _xlsx_upload():
     )
 
 
+@pytest.fixture
+def _pdf_unstrukturiert_upload():
+    """Minimales Text-PDF ohne AcroForm → wird als pdf_unstrukturiert (Tier 2) erkannt."""
+    from reportlab.pdfgen import canvas
+
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=(595, 842))
+    c.drawString(72, 800, "Haben Sie ein ISMS? Antwort:")
+    c.showPage()
+    c.save()
+    return SimpleUploadedFile(
+        "oem-scan.pdf", buf.getvalue(), content_type="application/pdf"
+    )
+
+
 def _mock_engine(monkeypatch):
     """Patcht die LLM-Grenze der Antwort-Engine (RDG-valider Vorschlagstext)."""
     monkeypatch.setattr(
@@ -130,6 +145,45 @@ def test_voller_flow_xlsx(tenant_client_gf, _xlsx_upload, _media_tmp, monkeypatc
         ws = wb.active
         assert "Nach unserer Einschätzung" in str(ws["C2"].value)
         assert ws["B2"].value == "Haben Sie ein ISMS?"  # Original unverändert
+
+
+@pytest.mark.django_db
+def test_upload_pdf_unstrukturiert_extrahiert_via_ocr(
+    tenant_client_gf, _pdf_unstrukturiert_upload, _media_tmp, monkeypatch
+):
+    """C1: Ein unstrukturiertes PDF wird als Tier 2 erkannt und der OCR-Extraktor
+    (`extrahiere_fragen_ocr`) verdrahtet — Upload erzeugt Fragen statt 0."""
+    # OCR-Grenze mocken (kein echter pdf2image/tesseract/LLM-Call) → 2 Fragen.
+    # Der Extraktor wird über _EXTRAKTOREN (Dict) aufgelöst — daher den Dict-
+    # Eintrag patchen, nicht nur das Modul-Attribut.
+    from fragebogen import views as fb_views
+
+    fake_ocr = lambda pfad: [  # noqa: E731
+        {
+            "text": "Haben Sie ein ISMS?",
+            "feld_referenz": {"seite": 1, "bbox": [10, 20, 30, 40], "schrift_pt": 11},
+            "extraktion_quelle": "ocr",
+        },
+        {
+            "text": "Führen Sie ein Datenpannen-Register?",
+            "feld_referenz": {"seite": 1, "bbox": [10, 60, 30, 40], "schrift_pt": 11},
+            "extraktion_quelle": "ocr",
+        },
+    ]
+    monkeypatch.setitem(fb_views._EXTRAKTOREN, "pdf_unstrukturiert", fake_ocr)
+
+    r = tenant_client_gf.post(
+        "/api/fragebogen/upload/", {"datei": _pdf_unstrukturiert_upload}
+    )
+    assert r.status_code == 201, r.content
+    fb = r.json()
+    assert fb["format"] == "pdf_unstrukturiert"
+    assert fb["tier"] == 2
+    assert len(fb["fragen"]) == 2
+    assert {f["text"] for f in fb["fragen"]} == {
+        "Haben Sie ein ISMS?",
+        "Führen Sie ein Datenpannen-Register?",
+    }
 
 
 def tenant_client_gf_schema(client):

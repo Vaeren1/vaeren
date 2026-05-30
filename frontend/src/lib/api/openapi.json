@@ -8904,6 +8904,16 @@
                         },
                         "description": ""
                     },
+                    "202": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenTier2ExportAccepted"
+                                }
+                            }
+                        },
+                        "description": ""
+                    },
                     "409": {
                         "description": "Noch nicht final attestiert."
                     }
@@ -9160,6 +9170,9 @@
                             }
                         },
                         "description": ""
+                    },
+                    "409": {
+                        "description": "Bereits final attestiert — kein Reset möglich."
                     }
                 }
             }
@@ -23867,6 +23880,21 @@
                 },
                 "required": [
                     "seiten"
+                ]
+            },
+            "FragebogenTier2ExportAccepted": {
+                "type": "object",
+                "properties": {
+                    "detail": {
+                        "type": "string"
+                    },
+                    "tier2_job_status": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "detail",
+                    "tier2_job_status"
                 ]
             },
             "FragebogenUploadRequest": {

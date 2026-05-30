@@ -319,20 +319,29 @@ def _baue_tier2_fragebogen(settings, tmp_path):
 @pytest.mark.django_db
 def test_task_erfolg_status_und_notification(tier2_tenant, settings, tmp_path):
     """Erfolgs-Pfad: laeuft→fertig, export_datei gesetzt, Notification angelegt,
-    Platzierungs-Confidence auf der Antwort vermerkt."""
+    Platzierungs-Confidence auf der Antwort vermerkt.
+
+    C2: Der Task bekommt ``tenant_schema`` als Argument und setzt das Schema
+    SELBST. Der Fragebogen wird vorab im Tenant-Schema angelegt, der Task-Aufruf
+    selbst läuft OHNE umschließenden ``schema_context`` — verifiziert, dass der
+    Task den Tenant-Kontext eigenständig herstellt (Worker hat keinen Request)."""
     from core.models import Notification
     from fragebogen.models import FragebogenStatus
     from fragebogen.tasks import fragebogen_tier2_export
 
     with schema_context(tier2_tenant.schema_name):
         fb, _user = _baue_tier2_fragebogen(settings, tmp_path)
+        fb_pk = fb.pk
 
-        with patch.object(fill_unstructured, "_rendere_seite", return_value=object()), \
-             patch.object(fill_unstructured, "_vision_review",
-                          return_value={"ok": True, "korrektur_bbox": None}):
-            result = fragebogen_tier2_export(fb.pk)
+    # Task-Aufruf OHNE schema_context — der Task setzt das Schema selbst.
+    with patch.object(fill_unstructured, "_rendere_seite", return_value=object()), \
+         patch.object(fill_unstructured, "_vision_review",
+                      return_value={"ok": True, "korrektur_bbox": None}):
+        result = fragebogen_tier2_export(fb_pk, tier2_tenant.schema_name)
 
-        assert result == "fertig"
+    assert result == "fertig"
+
+    with schema_context(tier2_tenant.schema_name):
         fb.refresh_from_db()
         assert fb.tier2_job_status == "fertig"
         assert fb.status == FragebogenStatus.EXPORTIERT
@@ -352,15 +361,17 @@ def test_task_nicht_konvergenz_markiert_feld_unsicher(tier2_tenant, settings, tm
 
     with schema_context(tier2_tenant.schema_name):
         fb, _user = _baue_tier2_fragebogen(settings, tmp_path)
+        fb_pk = fb.pk
 
-        with patch.object(fill_unstructured, "_rendere_seite", return_value=object()), \
-             patch.object(
-                 fill_unstructured, "_vision_review",
-                 return_value={"ok": False, "korrektur_bbox": [10, 20, 30, 40]},
-             ):
-            result = fragebogen_tier2_export(fb.pk)
+    with patch.object(fill_unstructured, "_rendere_seite", return_value=object()), \
+         patch.object(
+             fill_unstructured, "_vision_review",
+             return_value={"ok": False, "korrektur_bbox": [10, 20, 30, 40]},
+         ):
+        result = fragebogen_tier2_export(fb_pk, tier2_tenant.schema_name)
 
-        assert result == "fertig"
+    assert result == "fertig"
+    with schema_context(tier2_tenant.schema_name):
         antwort = fb.fragen.first().antwort
         antwort.refresh_from_db()
         assert antwort.platzierung_confidence == CONFIDENCE_UNSICHER
@@ -374,14 +385,16 @@ def test_task_fehler_setzt_status_fehler(tier2_tenant, settings, tmp_path):
 
     with schema_context(tier2_tenant.schema_name):
         fb, _user = _baue_tier2_fragebogen(settings, tmp_path)
+        fb_pk = fb.pk
 
-        with patch(
-            "fragebogen.tasks.platziere_mit_review",
-            side_effect=RuntimeError("overlay kaputt"),
-        ):
-            result = fragebogen_tier2_export(fb.pk)
+    with patch(
+        "fragebogen.tasks.platziere_mit_review",
+        side_effect=RuntimeError("overlay kaputt"),
+    ):
+        result = fragebogen_tier2_export(fb_pk, tier2_tenant.schema_name)
 
-        assert result == "fehler"
+    assert result == "fehler"
+    with schema_context(tier2_tenant.schema_name):
         fb.refresh_from_db()
         assert fb.tier2_job_status == "fehler"
         assert fb.status == FragebogenStatus.FEHLER
@@ -391,5 +404,5 @@ def test_task_fehler_setzt_status_fehler(tier2_tenant, settings, tmp_path):
 def test_task_unbekannter_fragebogen_gibt_fehler(tier2_tenant):
     from fragebogen.tasks import fragebogen_tier2_export
 
-    with schema_context(tier2_tenant.schema_name):
-        assert fragebogen_tier2_export(999999) == "fehler"
+    # Task ohne umschließenden schema_context — setzt Schema selbst.
+    assert fragebogen_tier2_export(999999, tier2_tenant.schema_name) == "fehler"

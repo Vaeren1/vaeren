@@ -5565,6 +5565,10 @@ export interface components {
                 [key: string]: unknown;
             }[];
         };
+        FragebogenTier2ExportAccepted: {
+            detail: string;
+            tier2_job_status: string;
+        };
         FragebogenUploadRequest: {
             /** Format: uri */
             datei: string;
@@ -14036,6 +14040,14 @@ export interface operations {
                     "application/json": components["schemas"]["FragebogenDetail"];
                 };
             };
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenTier2ExportAccepted"];
+                };
+            };
             /** @description Noch nicht final attestiert. */
             409: {
                 headers: {
@@ -14178,6 +14190,13 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["FragebogenDetail"];
                 };
+            };
+            /** @description Bereits final attestiert — kein Reset möglich. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

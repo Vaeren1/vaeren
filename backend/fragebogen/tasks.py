@@ -4,7 +4,9 @@ Tier 2 = unstrukturierte PDF (Scan/Text ohne ausfüllbare Felder). Der Export
 ist schwergewichtig (OCR-Bbox → reportlab-Overlay → pdf2image-Render →
 Vision-Review-Loop), deshalb läuft er asynchron via Celery statt im Request.
 
-``fragebogen_tier2_export(fragebogen_id)``:
+``fragebogen_tier2_export(fragebogen_id, tenant_schema)``:
+0. Setzt das Tenant-Schema via ``schema_context(tenant_schema)`` (Worker hat
+   keinen Request-Kontext) — Muster auditor_export.tasks.run_export.
 1. Status `tier2_job_status="laeuft"`.
 2. Pro Frage: finalen (RDG-freigegebenen) Antworttext an die OCR-Antwort-Bbox
    platzieren + via Vision-Review-Loop nachjustieren (export.fill_unstructured).
@@ -14,9 +16,8 @@ Vision-Review-Loop), deshalb läuft er asynchron via Celery statt im Request.
 4. In-App-Benachrichtigung an den/die Attestierenden (core.notifications-Muster).
 5. Bei jedem Fehler: Status `FEHLER` + `tier2_job_status="fehler"`.
 
-WICHTIG: Läuft im AKTUELLEN Tenant-Schema. Der Caller (View/Worker-Routing) muss
-den Schema-Kontext setzen. Externe Grenzen (OCR/Render/Vision) sind in
-export.fill_unstructured gekapselt + in Tests gemockt.
+Externe Grenzen (OCR/Render/Vision) sind in export.fill_unstructured gekapselt
++ in Tests gemockt.
 """
 
 from __future__ import annotations
@@ -28,19 +29,9 @@ import tempfile
 from celery import shared_task
 
 from .export.fill_unstructured import platziere_mit_review
+from .rdg import ist_rdg_freigegeben
 
 logger = logging.getLogger(__name__)
-
-
-def _rdg_freigegeben(antwort) -> bool:
-    """RDG-Layer-2-Gate (identisch zur View): rdg_ok ODER human-editiert."""
-    from .models import AntwortStatus
-
-    if antwort is None:
-        return False
-    if antwort.rdg_ok:
-        return True
-    return antwort.status == AntwortStatus.EDITIERT
 
 
 def _benachrichtige_fertig(fb) -> None:
@@ -69,12 +60,24 @@ def _benachrichtige_fertig(fb) -> None:
 
 
 @shared_task(name="fragebogen.tier2_export")
-def fragebogen_tier2_export(fragebogen_id: int) -> str:
+def fragebogen_tier2_export(fragebogen_id: int, tenant_schema: str) -> str:
     """Erzeugt das befüllte Tier-2-PDF (Overlay + Vision-Review) asynchron.
 
+    Setzt das Tenant-Schema SELBST (Muster auditor_export.tasks.run_export) —
+    der Celery-Worker hat keinen Request-Kontext, also muss der Schema-Name als
+    Task-Argument durchgereicht und der Body in ``schema_context`` ausgeführt
+    werden. Andernfalls liefe die DB-Query im public-Schema → falsche/keine Daten.
+
     Returns: finaler ``tier2_job_status`` ("fertig" | "fehler").
-    Läuft im aktuellen Tenant-Schema.
     """
+    from django_tenants.utils import schema_context
+
+    with schema_context(tenant_schema):
+        return _fuehre_tier2_export_aus(fragebogen_id)
+
+
+def _fuehre_tier2_export_aus(fragebogen_id: int) -> str:
+    """Eigentlicher Export-Body — läuft im bereits gesetzten Tenant-Schema."""
     from django.core.files import File
 
     from .models import Fragebogen, FragebogenStatus
@@ -98,7 +101,7 @@ def fragebogen_tier2_export(fragebogen_id: int) -> str:
 
         for frage in fb.fragen.all():
             antwort = getattr(frage, "antwort", None)
-            if not _rdg_freigegeben(antwort) or not antwort.finaler_text.strip():
+            if not ist_rdg_freigegeben(antwort) or not antwort.finaler_text.strip():
                 continue
             aktuelles_pdf, platz_conf = platziere_mit_review(
                 aktuelles_pdf,
