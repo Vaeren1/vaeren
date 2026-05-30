@@ -36,6 +36,855 @@ export interface paths {
         patch: operations["antwort_optionen_partial_update"];
         trace?: never;
     };
+    "/api/arbeitsschutz/arbeitsbereiche/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_arbeitsbereiche_list"];
+        put?: never;
+        post: operations["arbeitsschutz_arbeitsbereiche_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/arbeitsbereiche/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_arbeitsbereiche_retrieve"];
+        put: operations["arbeitsschutz_arbeitsbereiche_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_arbeitsbereiche_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_arbeitsbereiche_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/asa-beschluesse/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_asa_beschluesse_list"];
+        put?: never;
+        post: operations["arbeitsschutz_asa_beschluesse_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/asa-beschluesse/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_asa_beschluesse_retrieve"];
+        put: operations["arbeitsschutz_asa_beschluesse_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_asa_beschluesse_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_asa_beschluesse_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/asa-konfig/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_asa_konfig_list"];
+        put?: never;
+        post: operations["arbeitsschutz_asa_konfig_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/asa-konfig/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_asa_konfig_retrieve"];
+        put: operations["arbeitsschutz_asa_konfig_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_asa_konfig_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_asa_konfig_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/asa-sitzungen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_asa_sitzungen_list"];
+        put?: never;
+        post: operations["arbeitsschutz_asa_sitzungen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/asa-sitzungen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_asa_sitzungen_retrieve"];
+        put: operations["arbeitsschutz_asa_sitzungen_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_asa_sitzungen_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_asa_sitzungen_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/aushaenge/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_aushaenge_list"];
+        put?: never;
+        post: operations["arbeitsschutz_aushaenge_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/aushaenge/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_aushaenge_retrieve"];
+        put: operations["arbeitsschutz_aushaenge_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_aushaenge_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_aushaenge_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/ba-versionen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_ba_versionen_list"];
+        put?: never;
+        post: operations["arbeitsschutz_ba_versionen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/ba-versionen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_ba_versionen_retrieve"];
+        put: operations["arbeitsschutz_ba_versionen_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_ba_versionen_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_ba_versionen_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/ba-versionen/{id}/pdf-generieren/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["arbeitsschutz_ba_versionen_pdf_generieren_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/beauftragte/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_beauftragte_list"];
+        put?: never;
+        post: operations["arbeitsschutz_beauftragte_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/beauftragte/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_beauftragte_retrieve"];
+        put: operations["arbeitsschutz_beauftragte_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_beauftragte_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_beauftragte_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/beauftragten-quoten/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_beauftragten_quoten_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/beauftragten-quoten/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_beauftragten_quoten_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/beauftragten-quoten/refresh/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["arbeitsschutz_beauftragten_quoten_refresh_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/betriebsanweisungen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_betriebsanweisungen_list"];
+        put?: never;
+        post: operations["arbeitsschutz_betriebsanweisungen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/betriebsanweisungen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_betriebsanweisungen_retrieve"];
+        put: operations["arbeitsschutz_betriebsanweisungen_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_betriebsanweisungen_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_betriebsanweisungen_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/betriebsanweisungen/{id}/entwurf/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description LLM-Entwurf einer neuen Version (Markdown). HITL-pending bis Mensch save. */
+        post: operations["arbeitsschutz_betriebsanweisungen_entwurf_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/gbu/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_gbu_list"];
+        put?: never;
+        post: operations["arbeitsschutz_gbu_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/gbu-positionen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_gbu_positionen_list"];
+        put?: never;
+        post: operations["arbeitsschutz_gbu_positionen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/gbu-positionen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_gbu_positionen_retrieve"];
+        put: operations["arbeitsschutz_gbu_positionen_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_gbu_positionen_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_gbu_positionen_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/gbu-vorschlaege/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_gbu_vorschlaege_list"];
+        put?: never;
+        post: operations["arbeitsschutz_gbu_vorschlaege_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/gbu-vorschlaege/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_gbu_vorschlaege_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/gbu-vorschlaege/{id}/akzeptieren/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Übernimmt vorgeschlagene Codes als echte GbuGefaehrdung-Einträge. */
+        post: operations["arbeitsschutz_gbu_vorschlaege_akzeptieren_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/gbu-vorschlaege/{id}/verwerfen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["arbeitsschutz_gbu_vorschlaege_verwerfen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/gbu/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_gbu_retrieve"];
+        put: operations["arbeitsschutz_gbu_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_gbu_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_gbu_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/gbu/{id}/freigeben/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["arbeitsschutz_gbu_freigeben_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/gbu/{id}/suggest-gefaehrdungen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["arbeitsschutz_gbu_suggest_gefaehrdungen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/gefaehrdungs-katalog/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Katalog: GET read-all, POST/PATCH nur für Tenant-eigene Einträge. */
+        get: operations["arbeitsschutz_gefaehrdungs_katalog_list"];
+        put?: never;
+        /** @description Katalog: GET read-all, POST/PATCH nur für Tenant-eigene Einträge. */
+        post: operations["arbeitsschutz_gefaehrdungs_katalog_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/gefaehrdungs-katalog/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Katalog: GET read-all, POST/PATCH nur für Tenant-eigene Einträge. */
+        get: operations["arbeitsschutz_gefaehrdungs_katalog_retrieve"];
+        /** @description Katalog: GET read-all, POST/PATCH nur für Tenant-eigene Einträge. */
+        put: operations["arbeitsschutz_gefaehrdungs_katalog_update"];
+        post?: never;
+        /** @description Katalog: GET read-all, POST/PATCH nur für Tenant-eigene Einträge. */
+        delete: operations["arbeitsschutz_gefaehrdungs_katalog_destroy"];
+        options?: never;
+        head?: never;
+        /** @description Katalog: GET read-all, POST/PATCH nur für Tenant-eigene Einträge. */
+        patch: operations["arbeitsschutz_gefaehrdungs_katalog_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/massnahmen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_massnahmen_list"];
+        put?: never;
+        post: operations["arbeitsschutz_massnahmen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/massnahmen-vorschlaege/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_massnahmen_vorschlaege_list"];
+        put?: never;
+        post: operations["arbeitsschutz_massnahmen_vorschlaege_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/massnahmen-vorschlaege/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_massnahmen_vorschlaege_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/massnahmen-vorschlaege/{id}/akzeptieren/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["arbeitsschutz_massnahmen_vorschlaege_akzeptieren_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/massnahmen-vorschlaege/{id}/verwerfen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["arbeitsschutz_massnahmen_vorschlaege_verwerfen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/massnahmen-vorschlaege/generieren/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description POST {gbu_gefaehrdung_id} → erzeugt LLM-Vorschlag. */
+        post: operations["arbeitsschutz_massnahmen_vorschlaege_generieren_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/massnahmen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_massnahmen_retrieve"];
+        put: operations["arbeitsschutz_massnahmen_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_massnahmen_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_massnahmen_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/massnahmen/{id}/umsetzen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["arbeitsschutz_massnahmen_umsetzen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/massnahmen/{id}/wirksamkeit-pruefen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["arbeitsschutz_massnahmen_wirksamkeit_pruefen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/mitarbeiter-taetigkeiten/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_mitarbeiter_taetigkeiten_list"];
+        put?: never;
+        post: operations["arbeitsschutz_mitarbeiter_taetigkeiten_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/mitarbeiter-taetigkeiten/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_mitarbeiter_taetigkeiten_retrieve"];
+        put: operations["arbeitsschutz_mitarbeiter_taetigkeiten_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_mitarbeiter_taetigkeiten_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_mitarbeiter_taetigkeiten_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/taetigkeiten/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_taetigkeiten_list"];
+        put?: never;
+        post: operations["arbeitsschutz_taetigkeiten_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/taetigkeiten/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["arbeitsschutz_taetigkeiten_retrieve"];
+        put: operations["arbeitsschutz_taetigkeiten_update"];
+        post?: never;
+        delete: operations["arbeitsschutz_taetigkeiten_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["arbeitsschutz_taetigkeiten_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/unfaelle/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Liste = anonymisiert (UnfallListSerializer ohne Klarname/Beschreibung);
+         *     Detail/Create/Update = entschlüsselt, nur GF/QM/CB (UnfallPermission).
+         *     Liste bleibt für Read-Rollen lesbar, Detail wird beschränkt.
+         */
+        get: operations["arbeitsschutz_unfaelle_list"];
+        put?: never;
+        /**
+         * @description Liste = anonymisiert (UnfallListSerializer ohne Klarname/Beschreibung);
+         *     Detail/Create/Update = entschlüsselt, nur GF/QM/CB (UnfallPermission).
+         *     Liste bleibt für Read-Rollen lesbar, Detail wird beschränkt.
+         */
+        post: operations["arbeitsschutz_unfaelle_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/unfaelle/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Liste = anonymisiert (UnfallListSerializer ohne Klarname/Beschreibung);
+         *     Detail/Create/Update = entschlüsselt, nur GF/QM/CB (UnfallPermission).
+         *     Liste bleibt für Read-Rollen lesbar, Detail wird beschränkt.
+         */
+        get: operations["arbeitsschutz_unfaelle_retrieve"];
+        /**
+         * @description Liste = anonymisiert (UnfallListSerializer ohne Klarname/Beschreibung);
+         *     Detail/Create/Update = entschlüsselt, nur GF/QM/CB (UnfallPermission).
+         *     Liste bleibt für Read-Rollen lesbar, Detail wird beschränkt.
+         */
+        put: operations["arbeitsschutz_unfaelle_update"];
+        post?: never;
+        /**
+         * @description Liste = anonymisiert (UnfallListSerializer ohne Klarname/Beschreibung);
+         *     Detail/Create/Update = entschlüsselt, nur GF/QM/CB (UnfallPermission).
+         *     Liste bleibt für Read-Rollen lesbar, Detail wird beschränkt.
+         */
+        delete: operations["arbeitsschutz_unfaelle_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Liste = anonymisiert (UnfallListSerializer ohne Klarname/Beschreibung);
+         *     Detail/Create/Update = entschlüsselt, nur GF/QM/CB (UnfallPermission).
+         *     Liste bleibt für Read-Rollen lesbar, Detail wird beschränkt.
+         */
+        patch: operations["arbeitsschutz_unfaelle_partial_update"];
+        trace?: never;
+    };
+    "/api/arbeitsschutz/unfaelle/{id}/bg-gemeldet/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Liste = anonymisiert (UnfallListSerializer ohne Klarname/Beschreibung);
+         *     Detail/Create/Update = entschlüsselt, nur GF/QM/CB (UnfallPermission).
+         *     Liste bleibt für Read-Rollen lesbar, Detail wird beschränkt.
+         */
+        post: operations["arbeitsschutz_unfaelle_bg_gemeldet_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/arbeitsschutz/unfaelle/statistik/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Liste = anonymisiert (UnfallListSerializer ohne Klarname/Beschreibung);
+         *     Detail/Create/Update = entschlüsselt, nur GF/QM/CB (UnfallPermission).
+         *     Liste bleibt für Read-Rollen lesbar, Detail wird beschränkt.
+         */
+        get: operations["arbeitsschutz_unfaelle_statistik_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/audit/": {
         parameters: {
             query?: never;
@@ -46,6 +895,217 @@ export interface paths {
         get: operations["audit_list"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit-export/profiles/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description CRUD für Audit-Export-Profile. */
+        get: operations["audit_export_profiles_list"];
+        put?: never;
+        /** @description CRUD für Audit-Export-Profile. */
+        post: operations["audit_export_profiles_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit-export/profiles/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description CRUD für Audit-Export-Profile. */
+        get: operations["audit_export_profiles_retrieve"];
+        /** @description CRUD für Audit-Export-Profile. */
+        put: operations["audit_export_profiles_update"];
+        post?: never;
+        /** @description CRUD für Audit-Export-Profile. */
+        delete: operations["audit_export_profiles_destroy"];
+        options?: never;
+        head?: never;
+        /** @description CRUD für Audit-Export-Profile. */
+        patch: operations["audit_export_profiles_partial_update"];
+        trace?: never;
+    };
+    "/api/audit-export/profiles/{id}/preview/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Liefert Schätzung für die Bundle-Größe ohne Run zu starten.
+         *
+         *     Best-Effort: Aggregator-Calls können langsam sein bei großen Datenmengen,
+         *     daher cap'pen wir auf 1000 Records.
+         */
+        post: operations["audit_export_profiles_preview_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit-export/profiles/{id}/runs/start/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Startet einen neuen Run für dieses Profile. */
+        post: operations["audit_export_profiles_runs_start_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit-export/runs/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Read-only Runs — Start läuft über Profile-Action. */
+        get: operations["audit_export_runs_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit-export/runs/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Read-only Runs — Start läuft über Profile-Action. */
+        get: operations["audit_export_runs_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit-export/runs/{id}/download/oscal-assessment/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Read-only Runs — Start läuft über Profile-Action. */
+        get: operations["audit_export_runs_download_oscal_assessment_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit-export/runs/{id}/download/oscal-ssp/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Read-only Runs — Start läuft über Profile-Action. */
+        get: operations["audit_export_runs_download_oscal_ssp_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit-export/runs/{id}/download/pdf/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Read-only Runs — Start läuft über Profile-Action. */
+        get: operations["audit_export_runs_download_pdf_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit-export/runs/{id}/download/zip/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Read-only Runs — Start läuft über Profile-Action. */
+        get: operations["audit_export_runs_download_zip_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit-export/verify/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Public Verify-Endpoint — Tenant-Schema-übergreifend, kein Auth.
+         *
+         *     POST /api/audit-export/verify/ {"mappe_id": ..., "file_sha256": ...}
+         *
+         *     Anti-Reconnaissance: Response enthält KEIN tenant_schema, nur verified +
+         *     norm_scope. Throttle 30/min per Anon-IP gegen mappe_id-Brute-Force.
+         */
+        get: operations["audit_export_verify_retrieve"];
+        put?: never;
+        /**
+         * @description Public Verify-Endpoint — Tenant-Schema-übergreifend, kein Auth.
+         *
+         *     POST /api/audit-export/verify/ {"mappe_id": ..., "file_sha256": ...}
+         *
+         *     Anti-Reconnaissance: Response enthält KEIN tenant_schema, nur verified +
+         *     norm_scope. Throttle 30/min per Anon-IP gegen mappe_id-Brute-Force.
+         */
+        post: operations["audit_export_verify_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -82,6 +1142,38 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/auftragsverarbeiter/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["auftragsverarbeiter_list"];
+        put?: never;
+        post: operations["auftragsverarbeiter_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auftragsverarbeiter/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["auftragsverarbeiter_retrieve"];
+        put: operations["auftragsverarbeiter_update"];
+        post?: never;
+        delete: operations["auftragsverarbeiter_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["auftragsverarbeiter_partial_update"];
         trace?: never;
     };
     "/api/auth/csrf/": {
@@ -389,6 +1481,132 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/datenpannen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description CRUD für Datenpannen + Status-Aktionen. */
+        get: operations["datenpannen_list"];
+        put?: never;
+        /** @description CRUD für Datenpannen + Status-Aktionen. */
+        post: operations["datenpannen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/datenpannen-massnahmen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["datenpannen_massnahmen_list"];
+        put?: never;
+        post: operations["datenpannen_massnahmen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/datenpannen-massnahmen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["datenpannen_massnahmen_retrieve"];
+        put: operations["datenpannen_massnahmen_update"];
+        post?: never;
+        delete: operations["datenpannen_massnahmen_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["datenpannen_massnahmen_partial_update"];
+        trace?: never;
+    };
+    "/api/datenpannen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description CRUD für Datenpannen + Status-Aktionen. */
+        get: operations["datenpannen_retrieve"];
+        /** @description CRUD für Datenpannen + Status-Aktionen. */
+        put: operations["datenpannen_update"];
+        post?: never;
+        /** @description CRUD für Datenpannen + Status-Aktionen. */
+        delete: operations["datenpannen_destroy"];
+        options?: never;
+        head?: never;
+        /** @description CRUD für Datenpannen + Status-Aktionen. */
+        patch: operations["datenpannen_partial_update"];
+        trace?: never;
+    };
+    "/api/datenpannen/{id}/abschliessen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description CRUD für Datenpannen + Status-Aktionen. */
+        post: operations["datenpannen_abschliessen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/datenpannen/{id}/behoerde-melden/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Mark als an Behörde gemeldet. Setzt behoerde_gemeldet_am + Status. */
+        post: operations["datenpannen_behoerde_melden_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/datenpannen/risiko-vorschlag/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description POST /api/datenpannen/risiko-vorschlag/ — LLM-Vorschlag (KEIN Auto-Apply).
+         *
+         *     RDG-Layer-3 HITL: liefert Vorschlag + Disclaimer. Frontend muss UI
+         *     anzeigen, dass Mensch entscheidet.
+         */
+        post: operations["datenpannen_risiko_vorschlag_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/fragen/": {
         parameters: {
             query?: never;
@@ -619,6 +1837,1286 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/iso27001/assets/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_assets_list"];
+        put?: never;
+        post: operations["iso27001_assets_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/assets/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_assets_retrieve"];
+        put: operations["iso27001_assets_update"];
+        post?: never;
+        delete: operations["iso27001_assets_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["iso27001_assets_partial_update"];
+        trace?: never;
+    };
+    "/api/iso27001/audits/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_audits_list"];
+        put?: never;
+        post: operations["iso27001_audits_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/audits/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_audits_retrieve"];
+        put: operations["iso27001_audits_update"];
+        post?: never;
+        delete: operations["iso27001_audits_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["iso27001_audits_partial_update"];
+        trace?: never;
+    };
+    "/api/iso27001/controls/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ReadOnly-Liste aller 93 Controls + Implementation-Joinview. */
+        get: operations["iso27001_controls_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/controls/{code}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ReadOnly-Liste aller 93 Controls + Implementation-Joinview. */
+        get: operations["iso27001_controls_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/dashboard/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dashboard-Aggregation für `/iso27001`-Übersicht. */
+        get: operations["iso27001_dashboard_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/evidence-links/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_evidence_links_list"];
+        put?: never;
+        post: operations["iso27001_evidence_links_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/evidence-links/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_evidence_links_retrieve"];
+        put: operations["iso27001_evidence_links_update"];
+        post?: never;
+        delete: operations["iso27001_evidence_links_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["iso27001_evidence_links_partial_update"];
+        trace?: never;
+    };
+    "/api/iso27001/evidence-links/{id}/confirm/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Bestätigt einen Auto-Vorschlag (Mensch → confirmed_by). */
+        post: operations["iso27001_evidence_links_confirm_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/findings/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_findings_list"];
+        put?: never;
+        post: operations["iso27001_findings_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/findings/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_findings_retrieve"];
+        put: operations["iso27001_findings_update"];
+        post?: never;
+        delete: operations["iso27001_findings_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["iso27001_findings_partial_update"];
+        trace?: never;
+    };
+    "/api/iso27001/implementations/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_implementations_list"];
+        put?: never;
+        post: operations["iso27001_implementations_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/implementations/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_implementations_retrieve"];
+        put: operations["iso27001_implementations_update"];
+        post?: never;
+        delete: operations["iso27001_implementations_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["iso27001_implementations_partial_update"];
+        trace?: never;
+    };
+    "/api/iso27001/implementations/{id}/evidence-suggestions/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Liste nicht-bestätigter Auto-Mapping-Vorschläge. */
+        get: operations["iso27001_implementations_evidence_suggestions_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/implementations/{id}/llm-entwurf/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Erzeugt LLM-Entwurf für `implementation_vorschlag`.
+         *
+         *     RDG-Layer-3: Output landet IMMER in `implementation_vorschlag`,
+         *     nie direkt in `implementation_beschreibung`.
+         */
+        post: operations["iso27001_implementations_llm_entwurf_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/implementations/{id}/verify/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description HITL-Gate: setzt Status=VERIFIZIERT + Username-Stamp. */
+        post: operations["iso27001_implementations_verify_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/management-reviews/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_management_reviews_list"];
+        put?: never;
+        post: operations["iso27001_management_reviews_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/management-reviews/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_management_reviews_retrieve"];
+        put: operations["iso27001_management_reviews_update"];
+        post?: never;
+        delete: operations["iso27001_management_reviews_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["iso27001_management_reviews_partial_update"];
+        trace?: never;
+    };
+    "/api/iso27001/management-reviews/{id}/inputs-vorbefuellen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["iso27001_management_reviews_inputs_vorbefuellen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/management-reviews/{id}/pdf/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_management_reviews_pdf_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/risiken/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_risiken_list"];
+        put?: never;
+        post: operations["iso27001_risiken_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/risiken/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_risiken_retrieve"];
+        put: operations["iso27001_risiken_update"];
+        post?: never;
+        delete: operations["iso27001_risiken_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["iso27001_risiken_partial_update"];
+        trace?: never;
+    };
+    "/api/iso27001/risiken/{id}/akzeptieren/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description HITL-Gate: Restrisiko-Akzeptanz NUR durch GF.
+         *
+         *     Spec §5: dokumentiert eine Akzeptanz-Erklärung. Wenn ein IT-Leiter
+         *     sich oder den Hausmeister einträgt, ist das eine Audit-Lüge.
+         *
+         *     Zwei-fache Prüfung:
+         *     1. Der eingeloggte User MUSS tenant_role=GESCHAEFTSFUEHRER haben.
+         *     2. Restrisiko (likelihood+impact) muss vor Akzeptanz dokumentiert sein.
+         *
+         *     Der `mitarbeiter_id` wird als formaler Eintrag gespeichert (oft
+         *     derselbe Mitarbeiter wie User, kann aber abweichen — z. B. wenn
+         *     einer von zwei Geschäftsführern den Eintrag stellvertretend macht).
+         */
+        post: operations["iso27001_risiken_akzeptieren_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/risiken/{id}/treatment-vorschlag/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["iso27001_risiken_treatment_vorschlag_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/soa/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_soa_list"];
+        put?: never;
+        post: operations["iso27001_soa_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/soa/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["iso27001_soa_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/soa/{id}/pdf/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Render PDF live aus snapshot_data (falls Evidence-Bytes nicht persistiert). */
+        get: operations["iso27001_soa_pdf_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso27001/soa/next-version/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Schlägt die nächste freie SoA-Version vor (max + 0.1).
+         *
+         *     Format `v?MAJOR.MINOR`. Wenn keine SoA existiert → '1.0'.
+         *     Nicht-parsebare Versionen werden ignoriert (Auditor-Robustheit).
+         */
+        get: operations["iso27001_soa_next_version_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/ai-systeme/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_ai_systeme_list"];
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_ai_systeme_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/ai-systeme/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_ai_systeme_retrieve"];
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        put: operations["iso42001_ai_systeme_update"];
+        post?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        delete: operations["iso42001_ai_systeme_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        patch: operations["iso42001_ai_systeme_partial_update"];
+        trace?: never;
+    };
+    "/api/iso42001/aiias/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_aiias_list"];
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_aiias_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/aiias/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_aiias_retrieve"];
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        put: operations["iso42001_aiias_update"];
+        post?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        delete: operations["iso42001_aiias_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        patch: operations["iso42001_aiias_partial_update"];
+        trace?: never;
+    };
+    "/api/iso42001/aiias/{id}/freigeben/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_aiias_freigeben_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/aiias/{id}/neue-version/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_aiias_neue_version_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/aiias/{id}/status/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_aiias_status_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/control-implementations/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description CRUD für ControlImplementation. List wird selten benutzt — UI nutzt /controls/. */
+        get: operations["iso42001_control_implementations_list"];
+        put?: never;
+        /** @description CRUD für ControlImplementation. List wird selten benutzt — UI nutzt /controls/. */
+        post: operations["iso42001_control_implementations_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/control-implementations/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description CRUD für ControlImplementation. List wird selten benutzt — UI nutzt /controls/. */
+        get: operations["iso42001_control_implementations_retrieve"];
+        /** @description CRUD für ControlImplementation. List wird selten benutzt — UI nutzt /controls/. */
+        put: operations["iso42001_control_implementations_update"];
+        post?: never;
+        /** @description CRUD für ControlImplementation. List wird selten benutzt — UI nutzt /controls/. */
+        delete: operations["iso42001_control_implementations_destroy"];
+        options?: never;
+        head?: never;
+        /** @description CRUD für ControlImplementation. List wird selten benutzt — UI nutzt /controls/. */
+        patch: operations["iso42001_control_implementations_partial_update"];
+        trace?: never;
+    };
+    "/api/iso42001/controls/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description GET `/api/iso42001/controls/` — joined Public-Catalog + Tenant-Status. */
+        get: operations["iso42001_controls_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/dashboard/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Aggregat-Endpoint für das Dashboard (KPIs + Score). */
+        get: operations["iso42001_dashboard_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/incidents/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_incidents_list"];
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_incidents_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/incidents/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_incidents_retrieve"];
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        put: operations["iso42001_incidents_update"];
+        post?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        delete: operations["iso42001_incidents_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        patch: operations["iso42001_incidents_partial_update"];
+        trace?: never;
+    };
+    "/api/iso42001/incidents/{id}/abschliessen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Schließt einen Incident ab.
+         *
+         *     Body: `abgeschlossen_am` (optional, default heute), `korrekturmassnahme`
+         *     (optional). Idempotent — erneuter Aufruf überschreibt die Felder.
+         */
+        post: operations["iso42001_incidents_abschliessen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/incidents/{id}/eskaliere-als-datenpanne/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_incidents_eskaliere_als_datenpanne_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/llm/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Sammlung der drei LLM-Vorschlags-Endpoints unter `/iso42001/llm/`. */
+        post: operations["iso42001_llm_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/management-reviews/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_management_reviews_list"];
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_management_reviews_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/management-reviews/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_management_reviews_retrieve"];
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        put: operations["iso42001_management_reviews_update"];
+        post?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        delete: operations["iso42001_management_reviews_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        patch: operations["iso42001_management_reviews_partial_update"];
+        trace?: never;
+    };
+    "/api/iso42001/policies/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_policies_list"];
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_policies_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/policies/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_policies_retrieve"];
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        put: operations["iso42001_policies_update"];
+        post?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        delete: operations["iso42001_policies_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        patch: operations["iso42001_policies_partial_update"];
+        trace?: never;
+    };
+    "/api/iso42001/policies/{id}/kenntnisnahme/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Mitarbeiter bestätigt Kenntnisnahme einer Policy. Idempotent. */
+        post: operations["iso42001_policies_kenntnisnahme_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/policies/{id}/neue-version/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_policies_neue_version_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/policies/{id}/ratifizieren/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_policies_ratifizieren_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/policies/aus-template/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_policies_aus_template_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/policies/templates/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_policies_templates_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/policy-kenntnisnahmen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_policy_kenntnisnahmen_list"];
+        put?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        post: operations["iso42001_policy_kenntnisnahmen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/iso42001/policy-kenntnisnahmen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_policy_kenntnisnahmen_retrieve"];
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        put: operations["iso42001_policy_kenntnisnahmen_update"];
+        post?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        delete: operations["iso42001_policy_kenntnisnahmen_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        patch: operations["iso42001_policy_kenntnisnahmen_partial_update"];
+        trace?: never;
+    };
+    "/api/iso42001/score/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Mixin: blockiert alle Requests wenn `Tenant.module_iso42001_aktiv=False`.
+         *
+         *     Wirft `PermissionDenied` mit klarer Fehlermeldung — UI kann darauf reagieren
+         *     und einen "Modul aktivieren"-Hinweis anzeigen.
+         */
+        get: operations["iso42001_score_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ki-tools/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ki_tools_list"];
+        put?: never;
+        post: operations["ki_tools_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ki-tools/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ki_tools_retrieve"];
+        put: operations["ki_tools_update"];
+        post?: never;
+        delete: operations["ki_tools_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["ki_tools_partial_update"];
+        trace?: never;
+    };
+    "/api/ki-tools/risiko-vorschlag/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description LLM-Vorschlag für AI-Act-Risikoklasse. KEIN Auto-Apply (RDG-Layer-3). */
+        post: operations["ki_tools_risiko_vorschlag_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/kurs-assets/": {
         parameters: {
             query?: never;
@@ -801,6 +3299,160 @@ export interface paths {
         patch: operations["mitarbeiter_partial_update"];
         trace?: never;
     };
+    "/api/nis2/assets/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["nis2_assets_list"];
+        put?: never;
+        post: operations["nis2_assets_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/nis2/assets/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["nis2_assets_retrieve"];
+        put: operations["nis2_assets_update"];
+        post?: never;
+        delete: operations["nis2_assets_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["nis2_assets_partial_update"];
+        trace?: never;
+    };
+    "/api/nis2/betroffenheit/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["nis2_betroffenheit_list"];
+        put?: never;
+        post: operations["nis2_betroffenheit_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/nis2/betroffenheit/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["nis2_betroffenheit_retrieve"];
+        put: operations["nis2_betroffenheit_update"];
+        post?: never;
+        delete: operations["nis2_betroffenheit_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["nis2_betroffenheit_partial_update"];
+        trace?: never;
+    };
+    "/api/nis2/kontrollen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Liste der 10 NIS2-Kontroll-Fragen mit aktueller Antwort.
+         *
+         *     Special: list() seeded fehlende Fragen aus der statischen Liste, damit
+         *     das Frontend immer alle 10 Items zeigt — auch bei initialem Mandanten.
+         */
+        get: operations["nis2_kontrollen_list"];
+        put?: never;
+        /**
+         * @description Liste der 10 NIS2-Kontroll-Fragen mit aktueller Antwort.
+         *
+         *     Special: list() seeded fehlende Fragen aus der statischen Liste, damit
+         *     das Frontend immer alle 10 Items zeigt — auch bei initialem Mandanten.
+         */
+        post: operations["nis2_kontrollen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/nis2/kontrollen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Liste der 10 NIS2-Kontroll-Fragen mit aktueller Antwort.
+         *
+         *     Special: list() seeded fehlende Fragen aus der statischen Liste, damit
+         *     das Frontend immer alle 10 Items zeigt — auch bei initialem Mandanten.
+         */
+        get: operations["nis2_kontrollen_retrieve"];
+        /**
+         * @description Liste der 10 NIS2-Kontroll-Fragen mit aktueller Antwort.
+         *
+         *     Special: list() seeded fehlende Fragen aus der statischen Liste, damit
+         *     das Frontend immer alle 10 Items zeigt — auch bei initialem Mandanten.
+         */
+        put: operations["nis2_kontrollen_update"];
+        post?: never;
+        /**
+         * @description Liste der 10 NIS2-Kontroll-Fragen mit aktueller Antwort.
+         *
+         *     Special: list() seeded fehlende Fragen aus der statischen Liste, damit
+         *     das Frontend immer alle 10 Items zeigt — auch bei initialem Mandanten.
+         */
+        delete: operations["nis2_kontrollen_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Liste der 10 NIS2-Kontroll-Fragen mit aktueller Antwort.
+         *
+         *     Special: list() seeded fehlende Fragen aus der statischen Liste, damit
+         *     das Frontend immer alle 10 Items zeigt — auch bei initialem Mandanten.
+         */
+        patch: operations["nis2_kontrollen_partial_update"];
+        trace?: never;
+    };
+    "/api/nis2/kontrollen/reife-score/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Liste der 10 NIS2-Kontroll-Fragen mit aktueller Antwort.
+         *
+         *     Special: list() seeded fehlende Fragen aus der statischen Liste, damit
+         *     das Frontend immer alle 10 Items zeigt — auch bei initialem Mandanten.
+         */
+        get: operations["nis2_kontrollen_reife_score_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/notifications/": {
         parameters: {
             query?: never;
@@ -905,6 +3557,121 @@ export interface paths {
         get: operations["notifications_unread_count_retrieve"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/onboarding-wizard/aktivieren/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Wizard-Endpunkte: recherche → profil → radar → aktivieren. */
+        post: operations["onboarding_wizard_aktivieren_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/onboarding-wizard/osint_status/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Wizard-Endpunkte: recherche → profil → radar → aktivieren. */
+        get: operations["onboarding_wizard_osint_status_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/onboarding-wizard/profil/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** @description Wizard-Endpunkte: recherche → profil → radar → aktivieren. */
+        patch: operations["onboarding_wizard_profil_partial_update"];
+        trace?: never;
+    };
+    "/api/onboarding-wizard/radar/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Wizard-Endpunkte: recherche → profil → radar → aktivieren. */
+        get: operations["onboarding_wizard_radar_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/onboarding-wizard/recherche/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Wizard-Endpunkte: recherche → profil → radar → aktivieren. */
+        post: operations["onboarding_wizard_recherche_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/onboarding/setup/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description GET zum Anzeigen der Setup-Form, POST zum Aktivieren.
+         *
+         *     GET = lightweight Info (Vorname, Firma, Status). Nutzt Schema-Switch, weil
+         *     OnboardingRequest im public-Schema liegt.
+         *     POST = setzt Passwort + aktiviert Tenant + initiale Session.
+         */
+        get: operations["onboarding_setup_retrieve"];
+        put?: never;
+        /**
+         * @description GET zum Anzeigen der Setup-Form, POST zum Aktivieren.
+         *
+         *     GET = lightweight Info (Vorname, Firma, Status). Nutzt Schema-Switch, weil
+         *     OnboardingRequest im public-Schema liegt.
+         *     POST = setzt Passwort + aktiviert Tenant + initiale Session.
+         */
+        post: operations["onboarding_setup_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1315,10 +4082,334 @@ export interface paths {
         patch: operations["tenant_settings_partial_update"];
         trace?: never;
     };
+    "/api/transparenzregister/berechtigte/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["transparenzregister_berechtigte_list"];
+        put?: never;
+        post: operations["transparenzregister_berechtigte_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/transparenzregister/berechtigte/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["transparenzregister_berechtigte_retrieve"];
+        put: operations["transparenzregister_berechtigte_update"];
+        post?: never;
+        delete: operations["transparenzregister_berechtigte_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["transparenzregister_berechtigte_partial_update"];
+        trace?: never;
+    };
+    "/api/transparenzregister/stammblatt/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Singleton-ViewSet — max. 1 Stammblatt pro Tenant.
+         *
+         *     `list`-Aufruf gibt das eine Stammblatt zurück. `create` legt es an, wenn
+         *     noch nicht da; sonst 409. `retrieve` per PK funktioniert ebenfalls.
+         */
+        get: operations["transparenzregister_stammblatt_list"];
+        put?: never;
+        /**
+         * @description Singleton-ViewSet — max. 1 Stammblatt pro Tenant.
+         *
+         *     `list`-Aufruf gibt das eine Stammblatt zurück. `create` legt es an, wenn
+         *     noch nicht da; sonst 409. `retrieve` per PK funktioniert ebenfalls.
+         */
+        post: operations["transparenzregister_stammblatt_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/transparenzregister/stammblatt/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Singleton-ViewSet — max. 1 Stammblatt pro Tenant.
+         *
+         *     `list`-Aufruf gibt das eine Stammblatt zurück. `create` legt es an, wenn
+         *     noch nicht da; sonst 409. `retrieve` per PK funktioniert ebenfalls.
+         */
+        get: operations["transparenzregister_stammblatt_retrieve"];
+        /**
+         * @description Singleton-ViewSet — max. 1 Stammblatt pro Tenant.
+         *
+         *     `list`-Aufruf gibt das eine Stammblatt zurück. `create` legt es an, wenn
+         *     noch nicht da; sonst 409. `retrieve` per PK funktioniert ebenfalls.
+         */
+        put: operations["transparenzregister_stammblatt_update"];
+        post?: never;
+        /**
+         * @description Singleton-ViewSet — max. 1 Stammblatt pro Tenant.
+         *
+         *     `list`-Aufruf gibt das eine Stammblatt zurück. `create` legt es an, wenn
+         *     noch nicht da; sonst 409. `retrieve` per PK funktioniert ebenfalls.
+         */
+        delete: operations["transparenzregister_stammblatt_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Singleton-ViewSet — max. 1 Stammblatt pro Tenant.
+         *
+         *     `list`-Aufruf gibt das eine Stammblatt zurück. `create` legt es an, wenn
+         *     noch nicht da; sonst 409. `retrieve` per PK funktioniert ebenfalls.
+         */
+        patch: operations["transparenzregister_stammblatt_partial_update"];
+        trace?: never;
+    };
+    "/api/transparenzregister/stammblatt/current/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Convenience: liefert das einzige Stammblatt oder 404. */
+        get: operations["transparenzregister_stammblatt_current_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/verarbeitungsschritte/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["verarbeitungsschritte_list"];
+        put?: never;
+        post: operations["verarbeitungsschritte_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/verarbeitungsschritte/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["verarbeitungsschritte_retrieve"];
+        put: operations["verarbeitungsschritte_update"];
+        post?: never;
+        delete: operations["verarbeitungsschritte_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["verarbeitungsschritte_partial_update"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AVVTaskMinimal: {
+            readonly id: number;
+            task_typ: components["schemas"]["AVVTaskMinimalTaskTypEnum"];
+            titel: string;
+            /** Format: date */
+            frist: string;
+            status?: components["schemas"]["StatusB1fEnum"];
+        };
+        /**
+         * @description * `avv_abschliessen` - AVV abschließen
+         *     * `avv_verlaengern` - AVV verlängern (Frist <30d)
+         *     * `drittland_pruefen` - Drittland-Status klären (SCC/BCR)
+         *     * `toms_pruefen` - TOMs-Dokumentation prüfen
+         * @enum {string}
+         */
+        AVVTaskMinimalTaskTypEnum: "avv_abschliessen" | "avv_verlaengern" | "drittland_pruefen" | "toms_pruefen";
+        AiImpactAssessment: {
+            readonly id: number;
+            ai_system: number;
+            titel: string;
+            zweck_beschreibung: string;
+            /** @description Wer ist Output-betroffen? Mitarbeiter, Kunden, Bewerber, Bürger ... */
+            betroffene_personen: string;
+            /** @description Liste der AuswirkungsKategorie-Werte. */
+            auswirkungs_kategorien?: unknown;
+            /** @description Liste {risiko, wahrscheinlichkeit, schweregrad}. */
+            risiken_identifiziert?: unknown;
+            mitigationen?: string;
+            restrisiko?: string;
+            restrisiko_akzeptabel?: boolean;
+            readonly status: components["schemas"]["AiImpactAssessmentStatusEnum"];
+            /** @description Wer hat den Entwurf angelegt? Wird für 4-Augen-Prüfung benötigt. */
+            readonly erstellt_von: number | null;
+            /** @description Wer hat freigegeben? MUSS ≠ erstellt_von sein (4-Augen-Prinzip). */
+            readonly approver: number | null;
+            /** Format: date-time */
+            readonly approved_at: string | null;
+            /** Format: date */
+            naechste_review?: string | null;
+            readonly version: number;
+            readonly parent: number | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `entwurf` - Entwurf
+         *     * `bewertung` - In Bewertung
+         *     * `approval_offen` - Wartet auf Freigabe
+         *     * `freigegeben` - Freigegeben
+         *     * `abgelehnt` - Abgelehnt
+         *     * `archiviert` - Archiviert (durch neuere Version ersetzt)
+         * @enum {string}
+         */
+        AiImpactAssessmentStatusEnum: "entwurf" | "bewertung" | "approval_offen" | "freigegeben" | "abgelehnt" | "archiviert";
+        AiIncident: {
+            readonly id: number;
+            ai_system?: number | null;
+            titel: string;
+            typ: components["schemas"]["AiIncidentTypEnum"];
+            schweregrad: components["schemas"]["AiIncidentSchweregradEnum"];
+            /** Format: date */
+            entdeckt_am: string;
+            beschreibung: string;
+            sofortmassnahme?: string;
+            korrekturmassnahme?: string;
+            /** Format: date */
+            abgeschlossen_am?: string | null;
+            gemeldet_an_bnetza?: boolean;
+            /** Format: date */
+            bnetza_meldung_datum?: string | null;
+            readonly datenpanne: number | null;
+            readonly erfasser: number | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+            readonly offen: boolean;
+            readonly offen_seit_tagen: number;
+        };
+        /**
+         * @description * `niedrig` - Niedrig
+         *     * `mittel` - Mittel
+         *     * `hoch` - Hoch
+         *     * `kritisch` - Kritisch (Meldung an Behörde nötig)
+         * @enum {string}
+         */
+        AiIncidentSchweregradEnum: "niedrig" | "mittel" | "hoch" | "kritisch";
+        /**
+         * @description * `bias_entdeckt` - Bias / Diskriminierung entdeckt
+         *     * `output_fehler` - Fehlerhafter Output / Halluzination mit Schaden
+         *     * `datenleck` - Datenleck via KI-System
+         *     * `drift` - Model-Drift / Performance-Verschlechterung
+         *     * `missbrauch` - Missbräuchliche Nutzung durch User
+         *     * `sonstiges` - Sonstiges
+         * @enum {string}
+         */
+        AiIncidentTypEnum: "bias_entdeckt" | "output_fehler" | "datenleck" | "drift" | "missbrauch" | "sonstiges";
+        AiPolicy: {
+            readonly id: number;
+            geltungsbereich: components["schemas"]["GeltungsbereichEnum"];
+            titel: string;
+            inhalt_markdown: string;
+            readonly version: number;
+            readonly parent: number | null;
+            /** Format: date */
+            readonly ratified_at: string | null;
+            readonly ratified_by: number | null;
+            readonly aktiv: boolean;
+            /** Format: date-time */
+            readonly erstellt_am: string;
+            readonly erstellt_von: number | null;
+            readonly kenntnisnahmen_count: number;
+        };
+        AiPolicyKenntnisnahme: {
+            readonly id: number;
+            policy: number;
+            mitarbeiter: number;
+            /** Format: date-time */
+            readonly bestaetigt_am: string;
+        };
+        AiSystemRegistration: {
+            readonly id: number;
+            /** @description PROTECT statt CASCADE: ISO-42001 Kap. 7.5 verlangt dokumentierte Information auch nach Decommissioning. Decommission-Workflow muss AiSystemRegistration explizit archivieren, bevor KITool löschbar ist. */
+            ki_tool: number;
+            readonly ki_tool_name: string;
+            readonly ki_tool_anbieter: string;
+            readonly ki_tool_risiko: string;
+            readonly ki_tool_sensibilitaet: string;
+            /**
+             * @description AIMS-Risiko (≠ AI-Act-Risiko). Treibt AIIA-Pflicht und Kompetenz-Schulungs-Trigger.
+             *
+             *     * `niedrig` - Niedrig
+             *     * `mittel` - Mittel
+             *     * `hoch` - Hoch
+             *     * `kritisch` - Kritisch
+             */
+            risiko_aims?: components["schemas"]["RisikoAimsEnum"];
+            /** @description AI Risk Owner (A.3.2). */
+            verantwortliche_rolle?: number | null;
+            /** @description A.7.4/A.7.5 — Herkunft und Lizenzlage der Trainingsdaten. */
+            trainings_daten_quelle?: string;
+            bias_tests_durchgefuehrt?: boolean;
+            /** Format: uri */
+            bias_tests_dokument_url?: string;
+            /** @description A.6.2.6 — Operation-Monitoring. */
+            monitoring_plan?: string;
+            /** @description A.6.2.8 — Decommissioning. */
+            decommissioning_plan?: string;
+            /** @description AVV-Eintrag (Auftragsverarbeiter) für KI-Drittanbieter, falls PII verarbeitet. */
+            drittpartei_avv?: number | null;
+            /** @description Wenn False, ist das KI-Tool zwar im KI-Inventar gelistet, aber nicht im AIMS-Geltungsbereich (z. B. Spielwiese). */
+            in_aims_scope?: boolean;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        AimsManagementReview: {
+            readonly id: number;
+            /** Format: date */
+            durchgefuehrt_am: string;
+            /** @description Freitext-Liste der Teilnehmer + Rollen. */
+            teilnehmer: string;
+            /** @description Incidents, AIIAs, Kennzahlen, externe Änderungen, Audit-Ergebnisse. */
+            inputs_zusammenfassung: string;
+            entscheidungen: string;
+            massnahmen?: unknown;
+            /** Format: date */
+            naechste_review_faellig_am: string;
+            freigegeben_von?: number | null;
+            /** Format: date-time */
+            readonly erstellt_am: string;
+        };
         /**
          * @description * `create` - Erstellt
          *     * `update` - Aktualisiert
@@ -1329,6 +4420,12 @@ export interface components {
          * @enum {string}
          */
         AktionEnum: "create" | "update" | "delete" | "login" | "logout" | "export";
+        AktiveModuleResponse: {
+            aktive_module: string[];
+        };
+        AktivierenRequest: {
+            modul_keys?: string[];
+        };
         AntwortOption: {
             readonly id: number;
             frage: number;
@@ -1336,6 +4433,228 @@ export interface components {
             ist_korrekt?: boolean;
             reihenfolge?: number;
         };
+        Arbeitsbereich: {
+            readonly id: number;
+            name: string;
+            typ?: components["schemas"]["ArbeitsbereichTypEnum"];
+            standort?: string;
+            /** @description Mitarbeiter:in, die für den Bereich operativ verantwortet. */
+            verantwortlicher?: number | null;
+            beschreibung?: string;
+            aktiv?: boolean;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `werkstatt` - Werkstatt
+         *     * `lager` - Lager
+         *     * `buero` - Büro
+         *     * `labor` - Labor
+         *     * `aussen` - Außenmontage / Baustelle
+         *     * `lieferung` - Lieferung / Logistik
+         *     * `sonstiges` - Sonstiges
+         * @enum {string}
+         */
+        ArbeitsbereichTypEnum: "werkstatt" | "lager" | "buero" | "labor" | "aussen" | "lieferung" | "sonstiges";
+        /**
+         * @description * `verlust_geraet` - Verlust/Diebstahl Endgerät
+         *     * `phishing` - Phishing/Social-Engineering
+         *     * `ransomware` - Ransomware/Malware
+         *     * `fehlversand` - Fehlversand (E-Mail/Brief)
+         *     * `unberechtigter_zugriff` - Unberechtigter Zugriff
+         *     * `konfigurationsfehler` - Konfigurations- oder Berechtigungs-Fehler
+         *     * `systemausfall` - Systemausfall mit Daten-Auswirkung
+         *     * `insider` - Insider-Vorfall (vorsätzlich)
+         *     * `sonstiges` - Sonstiges
+         * @enum {string}
+         */
+        ArtEnum: "verlust_geraet" | "phishing" | "ransomware" | "fehlversand" | "unberechtigter_zugriff" | "konfigurationsfehler" | "systemausfall" | "insider" | "sonstiges";
+        AsaBeschluss: {
+            readonly id: number;
+            sitzung: number;
+            titel: string;
+            beschluss_text: string;
+            verantwortlicher?: number | null;
+            /** Format: date */
+            frist?: string | null;
+            erledigt?: boolean;
+            /** Format: date */
+            erledigt_am?: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+        };
+        AsaKonfig: {
+            readonly id: number;
+            default_ort?: string;
+            /** @description 0=Mo, 6=So. Für Quartals-Auto-Generierung. */
+            default_wochentag?: number;
+            /** Format: time */
+            default_uhrzeit?: string;
+            /** @description Ab 21 MA Pflicht. Tenant kann manuell deaktivieren bei <21 MA. */
+            aktiv?: boolean;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        AsaSitzung: {
+            readonly id: number;
+            titel: string;
+            /** Format: date-time */
+            geplant_am: string;
+            ort?: string;
+            teilnehmer?: number[];
+            tagesordnung_md?: string;
+            protokoll_md?: string;
+            status?: components["schemas"]["AsaSitzungStatusEnum"];
+            /** Format: date-time */
+            durchgefuehrt_am?: string | null;
+            /** @description Format '2026-Q2' — für Pflicht-Tracking. */
+            quartal: string;
+            readonly beschluesse: components["schemas"]["AsaBeschluss"][];
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `geplant` - Geplant
+         *     * `durchgefuehrt` - Durchgeführt
+         *     * `ausgefallen` - Ausgefallen
+         * @enum {string}
+         */
+        AsaSitzungStatusEnum: "geplant" | "durchgefuehrt" | "ausgefallen";
+        Asset: {
+            readonly id: number;
+            name: string;
+            typ: components["schemas"]["AssetTypEnum"];
+            beschreibung?: string;
+            /** @description Person oder Team, das das Asset verantwortet. */
+            eigentuemer?: string;
+            kritikalitaet?: components["schemas"]["KritikalitaetEnum"];
+            /** @description z. B. ['vertraulichkeit','integritaet','verfuegbarkeit'] */
+            schutzziele?: unknown;
+            standort?: string;
+            /** @description Wenn Asset bei einem Drittanbieter läuft, hier benennen. */
+            externe_drittanbieter?: string;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `system` - IT-System / Server
+         *     * `app` - Anwendung / SaaS
+         *     * `netz` - Netzwerk-Segment
+         *     * `daten` - Daten-Sammlung
+         *     * `hardware` - Endgerät / Hardware
+         *     * `drittanbieter` - Drittanbieter-Dienst
+         * @enum {string}
+         */
+        AssetTypEnum: "system" | "app" | "netz" | "daten" | "hardware" | "drittanbieter";
+        AuditExportProfile: {
+            readonly id: number;
+            name: string;
+            /**
+             * @description Audit-Template aus AUDIT_TEMPLATES-Registry
+             *
+             *     * `iso_27001_audit` - ISO-27001 Annex-A Audit
+             *     * `gap_analyse` - GAP-Analyse (Lücken rot markiert)
+             *     * `tisax_light` - TISAX-Light (Automotive-Zulieferer)
+             *     * `ai_act_konformitaet` - AI-Act Konformitätsbericht
+             *     * `nis2_behoerden_vorlage` - NIS2 Behörden-Vorlage (BSI)
+             *     * `bfdi_template` - BfDI/LDA Datenschutz-Anfrage
+             *     * `geschaeftsfuehrer_mappe` - GF-Mappe (kurz, Executive Summary)
+             */
+            template?: components["schemas"]["TemplateEnum"];
+            /** @description Liste von NormScope-Strings, M:N als JSON-Array */
+            norm_scope?: unknown;
+            /** Format: date */
+            zeitraum_von: string;
+            /** Format: date */
+            zeitraum_bis: string;
+            /** @description Pro Modul Sub-Filter, z. B. {'hinschg': {'status': ['neu']}} */
+            filter_json?: unknown;
+            evidence_mode?: components["schemas"]["EvidenceModeEnum"];
+            /** @description Wenn True: Mitarbeiter-Namen werden zu MA-001/MA-002 maskiert. */
+            anonymisieren_pii?: boolean;
+            /** @description DRAFT-Wasserzeichen im PDF */
+            watermark_draft?: boolean;
+            readonly erstellt_von: number | null;
+            /** Format: date-time */
+            readonly erstellt_am: string;
+            /** Format: date-time */
+            readonly aktualisiert_am: string;
+        };
+        AuditExportRunDetail: {
+            readonly id: number;
+            /** @description Menschen-lesbare Run-ID, Format VAE-YYYY-MMDD-XXXX */
+            readonly mappe_id: string;
+            readonly profile: number;
+            readonly status: components["schemas"]["StatusB7bEnum"];
+            readonly started_by: number | null;
+            /** Format: date-time */
+            readonly started_at: string;
+            /** Format: date-time */
+            readonly finished_at: string | null;
+            readonly result_path: string;
+            readonly zip_path: string;
+            readonly pdf_path: string;
+            readonly oscal_ssp_path: string;
+            readonly oscal_assessment_path: string;
+            /** @description SHA-256 des fertigen ZIP-Bundles. */
+            readonly file_hash_sha256: string;
+            readonly pdf_hash_sha256: string;
+            readonly file_size_bytes: number;
+            readonly evidence_count: number;
+            /** @description Liste von {ts, level, aggregator, message}-Einträgen */
+            readonly generation_log: unknown;
+            readonly error: string;
+        };
+        /** @description Schmale Liste-Serializer für /runs/ */
+        AuditExportRunList: {
+            readonly id: number;
+            /** @description Menschen-lesbare Run-ID, Format VAE-YYYY-MMDD-XXXX */
+            readonly mappe_id: string;
+            readonly profile: number;
+            readonly status: components["schemas"]["StatusB7bEnum"];
+            /** Format: date-time */
+            readonly started_at: string;
+            /** Format: date-time */
+            readonly finished_at: string | null;
+            readonly evidence_count: number;
+            readonly file_size_bytes: number;
+            /** @description SHA-256 des fertigen ZIP-Bundles. */
+            readonly file_hash_sha256: string;
+            readonly error: string;
+        };
+        AuditFinding: {
+            readonly id: number;
+            audit: number;
+            betroffenes_control?: number | null;
+            schweregrad?: components["schemas"]["AuditFindingSchweregradEnum"];
+            beschreibung: string;
+            massnahme?: string;
+            verantwortlich?: number | null;
+            /** Format: date */
+            geplant_bis?: string | null;
+            /** Format: date-time */
+            erledigt_am?: string | null;
+            /** Format: date-time */
+            wirksamkeit_geprueft_am?: string | null;
+            wirksamkeit_bemerkung?: string;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `klein` - Nebenbefund (Hinweis)
+         *     * `gross` - Hauptbefund (Major)
+         *     * `kritisch` - Kritisch (Critical)
+         * @enum {string}
+         */
+        AuditFindingSchweregradEnum: "klein" | "gross" | "kritisch";
         AuditLog: {
             readonly id: number;
             readonly actor: number | null;
@@ -1348,6 +4667,79 @@ export interface components {
             /** Format: date-time */
             readonly timestamp: string;
         };
+        Auftragsverarbeiter: {
+            readonly id: number;
+            name: string;
+            rechtssitz_land?: string;
+            rechtssitz_adresse?: string;
+            /** @description Name + Mail des Datenschutzbeauftragten des Anbieters. */
+            kontakt_dsb?: string;
+            /** Format: uri */
+            website?: string;
+            drittland?: components["schemas"]["DrittlandEnum"];
+            status?: components["schemas"]["StatusC42Enum"];
+            /** Format: date */
+            avv_abgeschlossen_am?: string | null;
+            /**
+             * Format: date
+             * @description Befristete Verträge: Datum der Wieder-Erinnerung 30 Tage davor.
+             */
+            avv_endet_am?: string | null;
+            /**
+             * Format: uri
+             * @description Link zum AVV-Dokument (DMS/Sharepoint).
+             */
+            avv_link?: string;
+            /**
+             * Format: uri
+             * @description Link zur TOMs-Dokumentation (technisch-organisatorische Maßnahmen).
+             */
+            toms_link?: string;
+            notizen?: string;
+            readonly schritte: components["schemas"]["Verarbeitungsschritt"][];
+            readonly tasks: components["schemas"]["AVVTaskMinimal"][];
+            readonly benoetigt_handlung: boolean;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        AuftragsverarbeiterList: {
+            readonly id: number;
+            name: string;
+            rechtssitz_land?: string;
+            drittland?: components["schemas"]["DrittlandEnum"];
+            status?: components["schemas"]["StatusC42Enum"];
+            /** Format: date */
+            avv_abgeschlossen_am?: string | null;
+            /**
+             * Format: date
+             * @description Befristete Verträge: Datum der Wieder-Erinnerung 30 Tage davor.
+             */
+            avv_endet_am?: string | null;
+            readonly benoetigt_handlung: boolean;
+        };
+        Aushang: {
+            readonly id: number;
+            version: number;
+            /** @description z.B. "Halle 3, Maschine M-04" */
+            ort: string;
+            /** Format: date */
+            ausgehaengt_am: string;
+            ausgehaengt_von: number;
+            /** Format: date */
+            abgehaengt_am?: string | null;
+        };
+        AuswirkungsVorschlagRequest: {
+            kategorie: string;
+            datenkategorie_sensibilitaet: string;
+            zweck: string;
+        };
+        AuswirkungsVorschlagResponse: {
+            kategorien: string[];
+            begruendung: string;
+            rdg_disclaimer: string;
+        };
         BearbeitungsschrittIntern: {
             readonly id: number;
             /** @description z. B. 'klassifizierung', 'rueckmeldung', 'hinweisgeber_nachricht'. */
@@ -1359,6 +4751,102 @@ export interface components {
             readonly bearbeiter: number | null;
             readonly bearbeiter_email: string;
         };
+        BeauftragtenQuoteCheck: {
+            readonly id: number;
+            readonly typ: components["schemas"]["Typ1a0Enum"];
+            readonly soll: number;
+            readonly ist: number;
+            /** Format: date */
+            readonly pflicht_seit: string | null;
+            /** Format: date-time */
+            readonly berechnet_am: string;
+            readonly erfuellt: boolean;
+            readonly quote_prozent: number;
+        };
+        Beauftragter: {
+            readonly id: number;
+            typ: components["schemas"]["Typ1a0Enum"];
+            person: number;
+            readonly person_name: string;
+            /** Format: date */
+            bestellt_am: string;
+            /**
+             * Format: date
+             * @description Leer = unbefristet. Wenn gesetzt, Auto-Reminder 60 Tage vorher.
+             */
+            bestellt_bis?: string | null;
+            /** Format: uri */
+            bestellurkunde_pdf?: string | null;
+            /** @description Schulungskurse, die die Person für diese Rolle absolviert hat. */
+            schulungsnachweis_kurse?: number[];
+            bemerkung?: string;
+            aktiv?: boolean;
+            /** Format: date-time */
+            readonly created_at: string;
+        };
+        Betriebsanweisung: {
+            readonly id: number;
+            titel: string;
+            typ: components["schemas"]["BetriebsanweisungTypEnum"];
+            taetigkeit?: number | null;
+            aktuelle_version?: number | null;
+            aushang_pflicht?: boolean;
+            readonly versionen: components["schemas"]["BetriebsanweisungVersion"][];
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `maschine` - Maschine/Anlage
+         *     * `gefahrstoff` - Gefahrstoff
+         *     * `psa` - Persönliche Schutzausrüstung
+         *     * `taetigkeit` - Tätigkeit
+         * @enum {string}
+         */
+        BetriebsanweisungTypEnum: "maschine" | "gefahrstoff" | "psa" | "taetigkeit";
+        BetriebsanweisungVersion: {
+            readonly id: number;
+            betriebsanweisung: number;
+            version: number;
+            /** @description Strukturiert nach DGUV-Vorlage: Anwendungsbereich, Gefahren, Schutzmaßnahmen, Verhalten im Notfall, Erste Hilfe, Instandhaltung. */
+            inhalt_md: string;
+            /**
+             * Format: uri
+             * @description WeasyPrint-generiert.
+             */
+            pdf_file?: string | null;
+            erstellt_von: number;
+            /** Format: date-time */
+            readonly erstellt_am: string;
+            /** Format: date-time */
+            freigegeben_am?: string | null;
+            freigegeben_von?: number | null;
+            aenderungsgrund?: string;
+            readonly aushaenge: components["schemas"]["Aushang"][];
+        };
+        BetroffenheitsCheck: {
+            readonly id: number;
+            mitarbeiter_anzahl?: number | null;
+            /** Format: int64 */
+            jahresumsatz_eur?: number | null;
+            sektor?: components["schemas"]["SektorEnum"] | components["schemas"]["BlankEnum"];
+            erbringt_kritische_dienstleistung?: boolean;
+            klassifizierung?: components["schemas"]["BetroffenheitsCheckKlassifizierungEnum"];
+            begruendung?: string;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `nicht_betroffen` - Nicht NIS2-pflichtig
+         *     * `unklar` - Unklar — weitere Prüfung nötig
+         *     * `wichtig` - Wichtige Einrichtung
+         *     * `wesentlich` - Wesentliche Einrichtung
+         * @enum {string}
+         */
+        BetroffenheitsCheckKlassifizierungEnum: "nicht_betroffen" | "unklar" | "wichtig" | "wesentlich";
         /** @enum {unknown} */
         BlankEnum: "";
         /**
@@ -1395,6 +4883,69 @@ export interface components {
          * @enum {string}
          */
         CompressionStatusEnum: "not_needed" | "pending" | "done" | "skipped" | "failed";
+        ControlEvidenceLink: {
+            readonly id: number;
+            implementation: number;
+            evidence: number;
+            readonly evidence_titel: string;
+            /** @description ki_inventar | nis2 | avv | datenpannen | hinschg | pflichtunterweisung | manual */
+            quell_modul?: string;
+            readonly auto_suggested: boolean;
+            readonly confirmed_by: number | null;
+            /** Format: date-time */
+            readonly confirmed_at: string | null;
+            notiz?: string;
+            /** Format: date-time */
+            readonly created_at: string;
+        };
+        ControlImplementation: {
+            readonly id: number;
+            control: number;
+            readonly control_code: string;
+            readonly control_name: string;
+            readonly control_kategorie: string;
+            readonly control_description: string;
+            status?: components["schemas"]["ControlImplementationStatusEnum"];
+            anwendbar?: boolean;
+            nicht_anwendbar_begruendung?: string;
+            implementation_beschreibung?: string;
+            /** @description LLM-Entwurf — separat von implementation_beschreibung (RDG-Layer-3). */
+            readonly implementation_vorschlag: string;
+            verantwortlich?: number | null;
+            /** Format: date */
+            naechstes_review?: string | null;
+            readonly verifiziert_von: number | null;
+            /** Format: date-time */
+            readonly verifiziert_am: string | null;
+            readonly evidence_links: components["schemas"]["ControlEvidenceLink"][];
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `nicht_bewertet` - Nicht bewertet
+         *     * `nicht_anwendbar` - Nicht anwendbar (SoA-Begründung)
+         *     * `geplant` - Geplant
+         *     * `umgesetzt` - Umgesetzt
+         *     * `verifiziert` - Umgesetzt + verifiziert
+         * @enum {string}
+         */
+        ControlImplementationStatusEnum: "nicht_bewertet" | "nicht_anwendbar" | "geplant" | "umgesetzt" | "verifiziert";
+        /** @description Combined view: Control + ggf. Implementation-Status. */
+        ControlListItem: {
+            readonly id: number;
+            code: string;
+            name: string;
+            description_de: string;
+            kategorie: components["schemas"]["KategorieF2bEnum"];
+            iso_clause?: string;
+            sortier_index?: number;
+            readonly status: string;
+            readonly implementation_id: string;
+            readonly anwendbar: string;
+            readonly verantwortlich_id: string;
+        };
         CsrfTokenResponse: {
             csrf_token: string;
         };
@@ -1426,6 +4977,141 @@ export interface components {
             module_summary: unknown;
         };
         /**
+         * @description * `keine_personendaten` - Keine Personendaten
+         *     * `gewoehnlich` - Gewöhnliche Personendaten
+         *     * `besondere_kategorie` - Besondere Kategorien (Art. 9 DSGVO)
+         * @enum {string}
+         */
+        DatenkategorieSensibilitaetEnum: "keine_personendaten" | "gewoehnlich" | "besondere_kategorie";
+        /** @description Detail — inkl. entschlüsselter Inhalte. Nur für berechtigte User. */
+        Datenpanne: {
+            readonly id: number;
+            titel: string;
+            art: components["schemas"]["ArtEnum"];
+            beschreibung?: string;
+            /**
+             * Format: date-time
+             * @description Wann wurde die Panne entdeckt? Startet die 72-h-Frist Art. 33.
+             */
+            entdeckt_am: string;
+            /**
+             * Format: date-time
+             * @description Wann begann der Vorfall (falls bekannt)?
+             */
+            vorfall_zeitraum_von?: string | null;
+            /** Format: date-time */
+            vorfall_zeitraum_bis?: string | null;
+            /** @description Name oder Rolle der entdeckenden Person. */
+            entdeckt_durch?: string;
+            /** @description Wer kümmert sich operativ um die Bearbeitung? */
+            verantwortlicher_user?: number | null;
+            /**
+             * @description Bewertung NACH menschlicher Prüfung. LLM-Vorschlag liegt in risiko_vorschlag — DARF NICHT automatisch übernommen werden.
+             *
+             *     * `kein_risiko` - Kein Risiko
+             *     * `gering` - Geringes Risiko
+             *     * `hoch` - Hohes Risiko
+             */
+            risiko?: components["schemas"]["Risiko26bEnum"] | components["schemas"]["BlankEnum"];
+            /**
+             * @description LLM-Vorschlag (RDG-Layer-2 validiert). Nur Vorschlag.
+             *
+             *     * `kein_risiko` - Kein Risiko
+             *     * `gering` - Geringes Risiko
+             *     * `hoch` - Hohes Risiko
+             */
+            readonly risiko_vorschlag: components["schemas"]["RisikoVorschlag26bEnum"];
+            risiko_begruendung?: string;
+            /** @description Geschätzte Anzahl betroffener Personen. NULL = noch unklar. */
+            anzahl_betroffene_geschaetzt?: number | null;
+            /** @description Liste DSGVO-Datenkategorien, z. B. ['kontaktdaten','gesundheitsdaten','sozialversicherung']. */
+            datenkategorien?: unknown;
+            status?: components["schemas"]["Status3beEnum"];
+            /**
+             * Format: date-time
+             * @description 72 Stunden nach entdeckt_am. Auto-gesetzt bei Anlage.
+             */
+            frist_meldung_behoerde?: string;
+            /** Format: date-time */
+            behoerde_gemeldet_am?: string | null;
+            /** @description Aktenzeichen der Aufsichtsbehörde nach Meldung. */
+            behoerde_aktenzeichen?: string;
+            /** Format: date */
+            frist_benachrichtigung_betroffene?: string;
+            /** Format: date-time */
+            betroffene_benachrichtigt_am?: string | null;
+            /** Format: date-time */
+            abgeschlossen_am?: string | null;
+            /** Format: double */
+            readonly stunden_bis_meldefrist: number;
+            readonly meldepflichtig: boolean;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+            readonly massnahmen: components["schemas"]["Massnahme"][];
+            readonly tasks: components["schemas"]["DatenpannenTaskMinimal"][];
+        };
+        /** @description Liste — kompakt, ohne verschlüsselte Inhalte. */
+        DatenpanneList: {
+            readonly id: number;
+            titel: string;
+            art: components["schemas"]["ArtEnum"];
+            status?: components["schemas"]["Status3beEnum"];
+            /**
+             * @description Bewertung NACH menschlicher Prüfung. LLM-Vorschlag liegt in risiko_vorschlag — DARF NICHT automatisch übernommen werden.
+             *
+             *     * `kein_risiko` - Kein Risiko
+             *     * `gering` - Geringes Risiko
+             *     * `hoch` - Hohes Risiko
+             */
+            risiko?: components["schemas"]["Risiko26bEnum"] | components["schemas"]["BlankEnum"];
+            /**
+             * Format: date-time
+             * @description Wann wurde die Panne entdeckt? Startet die 72-h-Frist Art. 33.
+             */
+            entdeckt_am: string;
+            /**
+             * Format: date-time
+             * @description 72 Stunden nach entdeckt_am. Auto-gesetzt bei Anlage.
+             */
+            frist_meldung_behoerde?: string;
+            /** Format: date-time */
+            behoerde_gemeldet_am?: string | null;
+            /** @description Geschätzte Anzahl betroffener Personen. NULL = noch unklar. */
+            anzahl_betroffene_geschaetzt?: number | null;
+            /** Format: double */
+            readonly stunden_bis_meldefrist: number;
+            readonly meldepflichtig: boolean;
+            /** Format: date-time */
+            readonly created_at: string;
+        };
+        /** @description Reduzierte Task-Anzeige in der Panne-Detail-View. */
+        DatenpannenTaskMinimal: {
+            readonly id: number;
+            task_typ: components["schemas"]["DatenpannenTaskMinimalTaskTypEnum"];
+            titel: string;
+            /** Format: date */
+            frist: string;
+            status?: components["schemas"]["StatusB1fEnum"];
+        };
+        /**
+         * @description * `meldung_behoerde` - Meldung an Aufsichtsbehörde (72h)
+         *     * `benachrichtigung_betroffene` - Benachrichtigung Betroffener
+         *     * `abschlussdoku` - Abschluss-Dokumentation
+         * @enum {string}
+         */
+        DatenpannenTaskMinimalTaskTypEnum: "meldung_behoerde" | "benachrichtigung_betroffene" | "abschlussdoku";
+        /**
+         * @description * `eu_ewr` - EU/EWR
+         *     * `angemessenheit` - Drittland mit Angemessenheitsbeschluss
+         *     * `scc` - Drittland mit Standard-Vertragsklauseln (SCCs)
+         *     * `bcr` - Drittland mit Binding Corporate Rules (BCRs)
+         *     * `kritisch` - Drittland ohne SCC/BCR (kritisch — Art. 49?)
+         * @enum {string}
+         */
+        DrittlandEnum: "eu_ewr" | "angemessenheit" | "scc" | "bcr" | "kritisch";
+        /**
          * @description * `web_anonym` - Web (anonym)
          *     * `web_persoenlich` - Web (mit Kontakt)
          *     * `email` - E-Mail
@@ -1434,6 +5120,12 @@ export interface components {
          * @enum {string}
          */
         EingangsKanalEnum: "web_anonym" | "web_persoenlich" | "email" | "telefon" | "persoenlich";
+        /**
+         * @description * `embed` - Originalfiles im ZIP einbetten
+         *     * `reference` - Nur Hash-Referenzen (kleinere Bundle-Größe)
+         * @enum {string}
+         */
+        EvidenceModeEnum: "embed" | "reference";
         Frage: {
             readonly id: number;
             kurs: number;
@@ -1458,20 +5150,132 @@ export interface components {
             readonly llm_modell: string;
             /** @description SHA-256 des Prompts fuer Reproduzierbarkeit / Audit. */
             readonly llm_prompt_hash: string;
-            readonly status: components["schemas"]["FrageVorschlagStatusEnum"];
+            readonly status: components["schemas"]["StatusE84Enum"];
             /** Format: date-time */
             readonly entschieden_am: string | null;
             readonly entschieden_von: number | null;
             /** @description Bei status=AKZEPTIERT: Verweis auf die erzeugte Frage. */
             readonly akzeptiert_als: number | null;
         };
+        Gbu: {
+            readonly id: number;
+            taetigkeit: number;
+            titel: string;
+            status?: components["schemas"]["StatusC14Enum"];
+            verantwortlicher?: number | null;
+            readonly erstellt_von: number | null;
+            /** Format: date-time */
+            readonly erstellt_am: string;
+            /** Format: date-time */
+            readonly freigegeben_am: string | null;
+            readonly freigegeben_von: number | null;
+            /**
+             * Format: date
+             * @description Default: Freigabe-Datum + 12 Monate (BAuA-Empfehlung).
+             */
+            wirksamkeitspruefung_faellig_am?: string;
+            bemerkung?: string;
+            readonly positionen: components["schemas"]["GbuGefaehrdung"][];
+            readonly ist_aktuell: boolean;
+            readonly ist_ueberfaellig: boolean;
+        };
+        GbuGefaehrdung: {
+            readonly id: number;
+            gbu: number;
+            gefaehrdung: number;
+            readonly gefaehrdung_code: string;
+            readonly gefaehrdung_name: string;
+            /** @description Tenant-spezifische Erläuterung zur Standard-Gefährdung. */
+            freitext_ergaenzung?: string;
+            wahrscheinlichkeit?: components["schemas"]["WahrscheinlichkeitEnum"];
+            schwere?: components["schemas"]["Schwere203Enum"];
+            /** @description False = im Katalog, hier aber nicht zutreffend (mit Begründung). */
+            relevant?: boolean;
+            nicht_relevant_begruendung?: string;
+            readonly risiko_score: number;
+            readonly risiko_klasse: string;
+        };
+        GbuGefaehrdungVorschlag: {
+            readonly id: number;
+            taetigkeit: number;
+            /** @description Optional, wenn Vorschlag im Kontext einer konkreten GBU entstand. */
+            gbu?: number | null;
+            /** @description Liste {code, kurz_begruendung}. z.B. [{"code":"MECH-002","b":"..."}] */
+            readonly vorgeschlagene_codes: unknown;
+            readonly begruendung: string;
+            readonly llm_modell: string;
+            /** @description 'llm' oder 'static' (bei Fallback). */
+            readonly quelle: string;
+            readonly status: components["schemas"]["StatusE84Enum"];
+            /** Format: date-time */
+            readonly erstellt_am: string;
+            /** Format: date-time */
+            readonly entschieden_am: string | null;
+            readonly entschieden_von: number | null;
+        };
+        GbuList: {
+            readonly id: number;
+            taetigkeit: number;
+            readonly taetigkeit_name: string;
+            readonly arbeitsbereich_name: string;
+            titel: string;
+            status?: components["schemas"]["StatusC14Enum"];
+            /**
+             * Format: date
+             * @description Default: Freigabe-Datum + 12 Monate (BAuA-Empfehlung).
+             */
+            wirksamkeitspruefung_faellig_am?: string;
+            /** Format: date-time */
+            freigegeben_am?: string | null;
+            readonly ist_aktuell: boolean;
+            readonly ist_ueberfaellig: boolean;
+            /** Format: date-time */
+            readonly erstellt_am: string;
+        };
+        Gefaehrdung: {
+            readonly id: number;
+            /** @description z.B. MECH-002 (Standard) oder TENANT-XYZ-007 (Tenant-eigen). */
+            code: string;
+            name: string;
+            kategorie: components["schemas"]["GefaehrdungKategorieEnum"];
+            beschreibung: string;
+            /** @description Typischerweise vorkommend in: 'Werkstatt', 'Außenmontage' etc. */
+            hinweis_arbeitsbereich?: string;
+            /** @description z.B. 'DGUV V1 §4 Abs. 1' oder 'BetrSichV §3'. */
+            rechtsgrundlage?: string;
+            /**
+             * @description Schema-Name des Tenants, der die Gefährdung angelegt hat. Leer = Vaeren-Standardkatalog (read-only).
+             * @default
+             */
+            eigentuemer_tenant: string;
+            readonly ist_standardkatalog: boolean;
+            aktiv?: boolean;
+        };
         /**
-         * @description * `offen` - Offen
-         *     * `akzeptiert` - Akzeptiert
-         *     * `verworfen` - Verworfen
+         * @description * `mechanisch` - Mechanische Gefährdungen
+         *     * `elektrisch` - Elektrische Gefährdungen
+         *     * `gefahrstoffe` - Gefahrstoffe
+         *     * `biologisch` - Biologische Arbeitsstoffe
+         *     * `brand_explosion` - Brand- und Explosionsgefährdungen
+         *     * `thermisch` - Thermische Gefährdungen (Hitze/Kälte)
+         *     * `laerm` - Lärm
+         *     * `vibration` - Vibration
+         *     * `strahlung` - Strahlung (UV, IR, ionisierend)
+         *     * `ergonomie` - Ergonomie / physische Belastung
+         *     * `psychisch` - Psychische Belastung
+         *     * `organisatorisch` - Arbeitsorganisation
          * @enum {string}
          */
-        FrageVorschlagStatusEnum: "offen" | "akzeptiert" | "verworfen";
+        GefaehrdungKategorieEnum: "mechanisch" | "elektrisch" | "gefahrstoffe" | "biologisch" | "brand_explosion" | "thermisch" | "laerm" | "vibration" | "strahlung" | "ergonomie" | "psychisch" | "organisatorisch";
+        /**
+         * @description * `allgemein` - Allgemeine KI-Policy
+         *     * `akzeptable_nutzung` - Akzeptable Nutzung (Mitarbeiter)
+         *     * `incident` - Vorfall-Management-Policy
+         *     * `lifecycle` - KI-Lifecycle-Policy
+         *     * `drittpartei` - Drittpartei-KI-Policy
+         * @enum {string}
+         */
+        GeltungsbereichEnum: "allgemein" | "akzeptable_nutzung" | "incident" | "lifecycle" | "drittpartei";
         /**
          * @description * `EU` - EU
          *     * `DE` - DE
@@ -1479,13 +5283,227 @@ export interface components {
          * @enum {string}
          */
         GeoEnum: "EU" | "DE" | "EU_DE";
+        /**
+         * @description * `unbekannt` - Noch nicht geprüft
+         *     * `nein` - Nicht GwG-pflichtig
+         *     * `ja` - GwG-pflichtig
+         * @enum {string}
+         */
+        GwgPflichtEnum: "unbekannt" | "nein" | "ja";
         HealthResponse: {
             status: string;
             schema: string;
         };
+        /**
+         * @description * `S` - Substitution (Ersetzen)
+         *     * `T` - Technische Maßnahme
+         *     * `O` - Organisatorische Maßnahme
+         *     * `P` - Personenbezogene Maßnahme (PSA)
+         * @enum {string}
+         */
+        HierarchieStufeEnum: "S" | "T" | "O" | "P";
         HinweisgeberNachricht: {
             nachricht: string;
         };
+        InternesAudit: {
+            readonly id: number;
+            titel: string;
+            /** Format: date */
+            auditzeitraum_von: string;
+            /** Format: date */
+            auditzeitraum_bis: string;
+            /** @description Name (intern/extern), nicht zwingend Mitarbeiter. */
+            auditor: string;
+            geprueft_controls?: number[];
+            status?: components["schemas"]["InternesAuditStatusEnum"];
+            bericht_evidence?: number | null;
+            readonly findings_count: string;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `geplant` - Geplant
+         *     * `laufend` - Laufend
+         *     * `abgeschlossen` - Abgeschlossen
+         * @enum {string}
+         */
+        InternesAuditStatusEnum: "geplant" | "laufend" | "abgeschlossen";
+        IsmsAsset: {
+            readonly id: number;
+            name: string;
+            asset_typ: components["schemas"]["AssetTypEnum"];
+            beschreibung?: string;
+            eigentuemer?: number | null;
+            klassifizierung?: components["schemas"]["IsmsAssetKlassifizierungEnum"];
+            schutzziel_vertraulichkeit?: components["schemas"]["RestrisikoImpactEnum"];
+            schutzziel_integritaet?: components["schemas"]["RestrisikoImpactEnum"];
+            schutzziel_verfuegbarkeit?: components["schemas"]["RestrisikoImpactEnum"];
+            standort?: string;
+            drittanbieter?: string;
+            nis2_asset?: number | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `public` - Öffentlich
+         *     * `intern` - Intern
+         *     * `vertraulich` - Vertraulich
+         *     * `streng_vertraulich` - Streng vertraulich
+         * @enum {string}
+         */
+        IsmsAssetKlassifizierungEnum: "public" | "intern" | "vertraulich" | "streng_vertraulich";
+        IsmsRiskAssessment: {
+            readonly id: number;
+            asset: number;
+            titel: string;
+            /** @description Bedrohung */
+            threat: string;
+            /** @description Schwachstelle */
+            vulnerability: string;
+            likelihood?: components["schemas"]["RestrisikoImpactEnum"];
+            impact?: components["schemas"]["RestrisikoImpactEnum"];
+            readonly risk_score_brutto: number;
+            treatment?: components["schemas"]["TreatmentEnum"];
+            treatment_plan?: string;
+            /** @description LLM-Entwurf — RDG-Layer-3 HITL. */
+            readonly treatment_vorschlag: string;
+            mitigation_controls?: number[];
+            restrisiko_likelihood?: (components["schemas"]["RestrisikoImpactEnum"] | components["schemas"]["NullEnum"]) | null;
+            restrisiko_impact?: (components["schemas"]["RestrisikoImpactEnum"] | components["schemas"]["NullEnum"]) | null;
+            readonly risk_score_netto: number | null;
+            readonly akzeptiert_von: number | null;
+            /** Format: date-time */
+            readonly akzeptiert_am: string | null;
+            /** Format: date */
+            naechstes_review?: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        Iso27001Control: {
+            readonly id: number;
+            code: string;
+            name: string;
+            description_de: string;
+            kategorie: components["schemas"]["KategorieF2bEnum"];
+            applicability_default?: boolean;
+            iso_clause?: string;
+            sortier_index?: number;
+        };
+        Iso42001Score: {
+            /** Format: double */
+            controls_anteil: number;
+            /** Format: double */
+            aiia_anteil: number;
+            /** Format: double */
+            policies_anteil: number;
+            /** Format: double */
+            incident_disziplin: number;
+            /** Format: double */
+            review_aktuell: number;
+            /** Format: double */
+            gesamt_punkte: number;
+            gesamt_punkte_max: number;
+        };
+        KIRisikoVorschlagRequest: {
+            name: string;
+            anbieter: string;
+            kategorie: components["schemas"]["KategorieC2bEnum"];
+            zweck: string;
+            datenkategorie_sensibilitaet: components["schemas"]["DatenkategorieSensibilitaetEnum"];
+        };
+        KIRisikoVorschlagResponse: {
+            risiko_vorschlag: components["schemas"]["RisikoVorschlag5c4Enum"];
+            begruendung: string;
+            rdg_disclaimer: string;
+        };
+        KITool: {
+            readonly id: number;
+            name: string;
+            anbieter: string;
+            /** Format: uri */
+            url?: string;
+            kategorie?: components["schemas"]["KategorieC2bEnum"];
+            /** @description Wofür wird das Tool eingesetzt? Konkret, keine Marketing-Sätze. */
+            zweck: string;
+            status?: components["schemas"]["StatusC3fEnum"];
+            /** Format: date */
+            eingefuehrt_am?: string | null;
+            /** @description Anzahl Nutzer:innen im Unternehmen. */
+            nutzer_anzahl?: number | null;
+            datenkategorie_sensibilitaet?: components["schemas"]["DatenkategorieSensibilitaetEnum"];
+            /** @description Liste Datenkategorien (z. B. ['kontaktdaten','gesundheitsdaten']). */
+            datenkategorien?: unknown;
+            risiko?: components["schemas"]["Risiko5c4Enum"];
+            readonly risiko_vorschlag: components["schemas"]["RisikoVorschlag5c4Enum"];
+            /** @description Begründung der finalen Einstufung. */
+            risiko_begruendung?: string;
+            /**
+             * Format: uri
+             * @description Link zur Auftragsverarbeitungs-Vereinbarung (DPA).
+             */
+            avv_link?: string;
+            /**
+             * Format: uri
+             * @description Link zur Konformitätserklärung des Anbieters (Hochrisiko).
+             */
+            konformitaet_link?: string;
+            /**
+             * Format: uri
+             * @description Link zur Datenschutz-Folgenabschätzung (DSFA/DPIA).
+             */
+            dpia_link?: string;
+            /** @description Wurde Personal informiert, dass KI eingesetzt wird? (Art. 26 Abs. 7) */
+            transparenz_information?: boolean;
+            /** @description Ist menschliche Aufsicht/Override-Möglichkeit gewährleistet? (Art. 14) */
+            menschliche_aufsicht?: boolean;
+            readonly benoetigt_handlung: boolean;
+            readonly tasks: components["schemas"]["KIToolTaskMinimal"][];
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        KIToolList: {
+            readonly id: number;
+            name: string;
+            anbieter: string;
+            kategorie?: components["schemas"]["KategorieC2bEnum"];
+            status?: components["schemas"]["StatusC3fEnum"];
+            risiko?: components["schemas"]["Risiko5c4Enum"];
+            datenkategorie_sensibilitaet?: components["schemas"]["DatenkategorieSensibilitaetEnum"];
+            /** @description Anzahl Nutzer:innen im Unternehmen. */
+            nutzer_anzahl?: number | null;
+            /** @description Wurde Personal informiert, dass KI eingesetzt wird? (Art. 26 Abs. 7) */
+            transparenz_information?: boolean;
+            /** @description Ist menschliche Aufsicht/Override-Möglichkeit gewährleistet? (Art. 14) */
+            menschliche_aufsicht?: boolean;
+            readonly benoetigt_handlung: boolean;
+            /** Format: date-time */
+            readonly created_at: string;
+        };
+        KIToolTaskMinimal: {
+            readonly id: number;
+            task_typ: components["schemas"]["KIToolTaskMinimalTaskTypEnum"];
+            titel: string;
+            /** Format: date */
+            frist: string;
+            status?: components["schemas"]["StatusB1fEnum"];
+        };
+        /**
+         * @description * `klassifizierung` - Risiko-Klassifizierung abschließen
+         *     * `dpia` - Datenschutz-Folgenabschätzung (DPIA)
+         *     * `konformitaet` - Konformitäts-Doku einholen
+         *     * `transparenz` - Transparenz-Maßnahme umsetzen
+         *     * `stilllegung` - Stilllegung (unakzeptabel)
+         * @enum {string}
+         */
+        KIToolTaskMinimalTaskTypEnum: "klassifizierung" | "dpia" | "konformitaet" | "transparenz" | "stilllegung";
         /**
          * @description * `arbeitsschutz` - Arbeitsschutz
          *     * `brandschutz` - Brand- & Erste Hilfe
@@ -1497,6 +5515,39 @@ export interface components {
          * @enum {string}
          */
         Kategorie0bfEnum: "arbeitsschutz" | "brandschutz" | "gefahrstoffe" | "datenschutz" | "compliance" | "umwelt" | "sonstiges";
+        /**
+         * @description * `llm_chatbot` - LLM/Chatbot
+         *     * `bild_generierung` - Bild-Generierung
+         *     * `ocr_text` - OCR / Text-Erkennung
+         *     * `klassifizierung` - Klassifizierung / Predictive Analytics
+         *     * `empfehlung` - Empfehlung / Recommender
+         *     * `biometrie` - Biometrische Erkennung
+         *     * `hr_recruiting` - HR / Recruiting (Anhang III)
+         *     * `kredit_scoring` - Kredit-Scoring (Anhang III)
+         *     * `produktion` - Produktions-/Maschinen-Steuerung
+         *     * `sonstiges` - Sonstiges
+         * @enum {string}
+         */
+        KategorieC2bEnum: "llm_chatbot" | "bild_generierung" | "ocr_text" | "klassifizierung" | "empfehlung" | "biometrie" | "hr_recruiting" | "kredit_scoring" | "produktion" | "sonstiges";
+        /**
+         * @description * `A5` - A.5 Organisatorische Maßnahmen
+         *     * `A6` - A.6 Personelle Maßnahmen
+         *     * `A7` - A.7 Physische Maßnahmen
+         *     * `A8` - A.8 Technologische Maßnahmen
+         * @enum {string}
+         */
+        KategorieF2bEnum: "A5" | "A6" | "A7" | "A8";
+        KontrollAntwort: {
+            readonly id: number;
+            frage_id: string;
+            readonly titel: string;
+            readonly frage_text: string;
+            reife_stufe?: components["schemas"]["ReifeStufeEnum"];
+            /** @description Verweis auf Doku/Policy, optional. Kein Upload im MVP. */
+            nachweis?: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
         /**
          * @description * `not_needed` - Nicht noetig
          *     * `pending` - Pending
@@ -1513,6 +5564,13 @@ export interface components {
             was_geaendert: string;
             grund: string;
         };
+        /**
+         * @description * `niedrig` - Niedrig
+         *     * `mittel` - Mittel
+         *     * `hoch` - Hoch (Geschäfts-kritisch)
+         * @enum {string}
+         */
+        KritikalitaetEnum: "niedrig" | "mittel" | "hoch";
         Kurs: {
             readonly id: number;
             titel: string;
@@ -1639,7 +5697,7 @@ export interface components {
              *     * `video_upload` - Video-Upload
              *     * `video_youtube` - YouTube-Embed
              */
-            typ?: components["schemas"]["TypEnum"];
+            typ?: components["schemas"]["KursModulTypEnum"];
             /** @description Markdown-Lerninhalt. Befuellt nur bei typ=TEXT. */
             inhalt_md?: string;
             /**
@@ -1650,11 +5708,87 @@ export interface components {
             /** @description Datei-Asset. Befuellt bei pdf/bild/office/video_upload. */
             asset?: number | null;
         };
+        /**
+         * @description * `text` - Text/Markdown
+         *     * `pdf` - PDF
+         *     * `bild` - Bild (PNG/JPG)
+         *     * `office` - Office (DOCX/PPTX)
+         *     * `video_upload` - Video-Upload
+         *     * `video_youtube` - YouTube-Embed
+         * @enum {string}
+         */
+        KursModulTypEnum: "text" | "pdf" | "bild" | "office" | "video_upload" | "video_youtube";
         Login: {
             username?: string;
             /** Format: email */
             email?: string;
             password: string;
+        };
+        ManagementReview: {
+            readonly id: number;
+            review_jahr: number;
+            /** Format: date */
+            durchgefuehrt_am?: string | null;
+            /** @description Liste Teilnehmer + Rollen. */
+            teilnehmer?: string;
+            status?: components["schemas"]["ManagementReviewStatusEnum"];
+            inputs_audit_ergebnisse?: string;
+            inputs_findings_status?: string;
+            inputs_risiko_aenderungen?: string;
+            inputs_isms_performance?: string;
+            outputs_verbesserungen?: string;
+            outputs_ressourcen_bedarf?: string;
+            outputs_zielanpassungen?: string;
+            beschlossen_von?: number | null;
+            readonly pdf_evidence: number | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `entwurf` - Entwurf
+         *     * `durchgefuehrt` - Durchgeführt
+         *     * `genehmigt` - Genehmigt
+         * @enum {string}
+         */
+        ManagementReviewStatusEnum: "entwurf" | "durchgefuehrt" | "genehmigt";
+        Massnahme: {
+            readonly id: number;
+            datenpanne: number;
+            typ: components["schemas"]["MassnahmeTypEnum"];
+            beschreibung: string;
+            verantwortlich?: number | null;
+            /** Format: date */
+            geplant_bis?: string | null;
+            /** Format: date-time */
+            erledigt_am?: string | null;
+            /** Format: date-time */
+            readonly erstellt_am: string;
+            /** Format: date-time */
+            readonly aktualisiert_am: string;
+        };
+        /**
+         * @description * `sofort` - Sofortmaßnahme (Schadensbegrenzung)
+         *     * `dauerhaft` - Dauerhafte Maßnahme (Prävention)
+         *     * `kommunikation` - Kommunikation (intern/extern)
+         * @enum {string}
+         */
+        MassnahmeTypEnum: "sofort" | "dauerhaft" | "kommunikation";
+        MassnahmenVorschlag: {
+            readonly id: number;
+            gbu_gefaehrdung: number;
+            /** @description [{"titel":"...","beschreibung":"...","stop":"T"}] */
+            readonly vorschlaege: unknown;
+            readonly begruendung: string;
+            readonly llm_modell: string;
+            readonly quelle: string;
+            status?: components["schemas"]["StatusE84Enum"];
+            /** Format: date-time */
+            readonly erstellt_am: string;
+            /** Format: date-time */
+            readonly entschieden_am: string | null;
+            readonly entschieden_von: number | null;
         };
         /** @description Vollsicht für Bearbeiter — entschlüsselte Inhalte (server-side decrypted). */
         MeldungIntern: {
@@ -1672,7 +5806,7 @@ export interface components {
             readonly melder_kontakt_verschluesselt: string;
             /** @description Vom Bearbeiter klassifiziert (z. B. 'korruption', 'arbeitssicherheit'). */
             kategorie?: string;
-            schweregrad?: components["schemas"]["SchweregradEnum"] | components["schemas"]["BlankEnum"];
+            schweregrad?: components["schemas"]["Schweregrad584Enum"] | components["schemas"]["BlankEnum"];
             status?: components["schemas"]["Status697Enum"];
             readonly status_display: string;
             /** Format: date-time */
@@ -1699,7 +5833,7 @@ export interface components {
             readonly titel: string;
             /** @description Vom Bearbeiter klassifiziert (z. B. 'korruption', 'arbeitssicherheit'). */
             kategorie?: string;
-            schweregrad?: components["schemas"]["SchweregradEnum"] | components["schemas"]["BlankEnum"];
+            schweregrad?: components["schemas"]["Schweregrad584Enum"] | components["schemas"]["BlankEnum"];
             status?: components["schemas"]["Status697Enum"];
             readonly status_display: string;
             /** Format: date-time */
@@ -1711,7 +5845,7 @@ export interface components {
         MeldungPatch: {
             /** @description Vom Bearbeiter klassifiziert (z. B. 'korruption', 'arbeitssicherheit'). */
             kategorie?: string;
-            schweregrad?: components["schemas"]["SchweregradEnum"] | components["schemas"]["BlankEnum"];
+            schweregrad?: components["schemas"]["Schweregrad584Enum"] | components["schemas"]["BlankEnum"];
             status?: components["schemas"]["Status697Enum"];
         };
         /** @description Sanitized Status — keine Bearbeiter-Infos, keine entschlüsselten Notizen. */
@@ -1771,6 +5905,15 @@ export interface components {
             readonly created_at: string;
             /** Format: date-time */
             readonly updated_at: string;
+        };
+        MitarbeiterTaetigkeit: {
+            readonly id: number;
+            mitarbeiter: number;
+            taetigkeit: number;
+            /** Format: date */
+            seit: string;
+            /** Format: date */
+            bis?: string | null;
         };
         NewsPostInternal: {
             readonly id: number;
@@ -1856,6 +5999,108 @@ export interface components {
          * @enum {string}
          */
         NotificationStatusEnum: "geplant" | "versandt" | "geoeffnet" | "bounced" | "failed";
+        /** @enum {unknown} */
+        NullEnum: null;
+        OperativeEmpfehlung: {
+            merkmal_key: string;
+            art: string;
+            ziel: string;
+            quelle: string;
+            rechtsgrundlage?: string;
+        };
+        OsintStatusResponse: {
+            wizard_durchlaufen: boolean;
+        };
+        PaginatedAiImpactAssessmentList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AiImpactAssessment"][];
+        };
+        PaginatedAiIncidentList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AiIncident"][];
+        };
+        PaginatedAiPolicyKenntnisnahmeList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AiPolicyKenntnisnahme"][];
+        };
+        PaginatedAiPolicyList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AiPolicy"][];
+        };
+        PaginatedAiSystemRegistrationList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AiSystemRegistration"][];
+        };
+        PaginatedAimsManagementReviewList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AimsManagementReview"][];
+        };
         PaginatedAntwortOptionList: {
             /** @example 123 */
             count: number;
@@ -1870,6 +6115,126 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["AntwortOption"][];
+        };
+        PaginatedArbeitsbereichList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Arbeitsbereich"][];
+        };
+        PaginatedAsaBeschlussList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AsaBeschluss"][];
+        };
+        PaginatedAsaKonfigList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AsaKonfig"][];
+        };
+        PaginatedAsaSitzungList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AsaSitzung"][];
+        };
+        PaginatedAssetList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Asset"][];
+        };
+        PaginatedAuditExportProfileList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AuditExportProfile"][];
+        };
+        PaginatedAuditExportRunListList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AuditExportRunList"][];
+        };
+        PaginatedAuditFindingList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AuditFinding"][];
         };
         PaginatedAuditLogList: {
             /** @example 123 */
@@ -1886,6 +6251,111 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["AuditLog"][];
         };
+        PaginatedAuftragsverarbeiterListList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AuftragsverarbeiterList"][];
+        };
+        PaginatedAushangList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Aushang"][];
+        };
+        PaginatedBeauftragtenQuoteCheckList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["BeauftragtenQuoteCheck"][];
+        };
+        PaginatedBeauftragterList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Beauftragter"][];
+        };
+        PaginatedBetriebsanweisungList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Betriebsanweisung"][];
+        };
+        PaginatedBetriebsanweisungVersionList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["BetriebsanweisungVersion"][];
+        };
+        PaginatedBetroffenheitsCheckList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["BetroffenheitsCheck"][];
+        };
         PaginatedComplianceTaskList: {
             /** @example 123 */
             count: number;
@@ -1900,6 +6370,66 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["ComplianceTask"][];
+        };
+        PaginatedControlEvidenceLinkList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ControlEvidenceLink"][];
+        };
+        PaginatedControlImplementationList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ControlImplementation"][];
+        };
+        PaginatedControlListItemList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ControlListItem"][];
+        };
+        PaginatedDatenpanneListList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["DatenpanneList"][];
         };
         PaginatedFrageList: {
             /** @example 123 */
@@ -1930,6 +6460,126 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["FrageVorschlag"][];
+        };
+        PaginatedGbuGefaehrdungList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["GbuGefaehrdung"][];
+        };
+        PaginatedGbuGefaehrdungVorschlagList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["GbuGefaehrdungVorschlag"][];
+        };
+        PaginatedGbuListList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["GbuList"][];
+        };
+        PaginatedGefaehrdungList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Gefaehrdung"][];
+        };
+        PaginatedInternesAuditList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["InternesAudit"][];
+        };
+        PaginatedIsmsAssetList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["IsmsAsset"][];
+        };
+        PaginatedIsmsRiskAssessmentList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["IsmsRiskAssessment"][];
+        };
+        PaginatedKIToolListList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["KIToolList"][];
         };
         PaginatedKorrekturInternalList: {
             /** @example 123 */
@@ -1991,6 +6641,51 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["KursModul"][];
         };
+        PaginatedManagementReviewList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ManagementReview"][];
+        };
+        PaginatedMassnahmeList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Massnahme"][];
+        };
+        PaginatedMassnahmenVorschlagList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["MassnahmenVorschlag"][];
+        };
         PaginatedMeldungListList: {
             /** @example 123 */
             count: number;
@@ -2020,6 +6715,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["Mitarbeiter"][];
+        };
+        PaginatedMitarbeiterTaetigkeitList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["MitarbeiterTaetigkeit"][];
         };
         PaginatedNewsPostInternalList: {
             /** @example 123 */
@@ -2081,6 +6791,111 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["SchulungsWelle"][];
         };
+        PaginatedSchutzmassnahmeList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Schutzmassnahme"][];
+        };
+        PaginatedStatementOfApplicabilityList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["StatementOfApplicability"][];
+        };
+        PaginatedTaetigkeitList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Taetigkeit"][];
+        };
+        PaginatedUnfallListList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["UnfallList"][];
+        };
+        PaginatedUnternehmensstammblattList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Unternehmensstammblatt"][];
+        };
+        PaginatedVerarbeitungsschrittList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Verarbeitungsschritt"][];
+        };
+        PaginatedWirtschaftlichBerechtigterList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["WirtschaftlichBerechtigter"][];
+        };
         PasswordChange: {
             new_password1: string;
             new_password2: string;
@@ -2097,12 +6912,431 @@ export interface components {
             uid: string;
             token: string;
         };
+        PatchedAiImpactAssessment: {
+            readonly id?: number;
+            ai_system?: number;
+            titel?: string;
+            zweck_beschreibung?: string;
+            /** @description Wer ist Output-betroffen? Mitarbeiter, Kunden, Bewerber, Bürger ... */
+            betroffene_personen?: string;
+            /** @description Liste der AuswirkungsKategorie-Werte. */
+            auswirkungs_kategorien?: unknown;
+            /** @description Liste {risiko, wahrscheinlichkeit, schweregrad}. */
+            risiken_identifiziert?: unknown;
+            mitigationen?: string;
+            restrisiko?: string;
+            restrisiko_akzeptabel?: boolean;
+            readonly status?: components["schemas"]["AiImpactAssessmentStatusEnum"];
+            /** @description Wer hat den Entwurf angelegt? Wird für 4-Augen-Prüfung benötigt. */
+            readonly erstellt_von?: number | null;
+            /** @description Wer hat freigegeben? MUSS ≠ erstellt_von sein (4-Augen-Prinzip). */
+            readonly approver?: number | null;
+            /** Format: date-time */
+            readonly approved_at?: string | null;
+            /** Format: date */
+            naechste_review?: string | null;
+            readonly version?: number;
+            readonly parent?: number | null;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedAiIncident: {
+            readonly id?: number;
+            ai_system?: number | null;
+            titel?: string;
+            typ?: components["schemas"]["AiIncidentTypEnum"];
+            schweregrad?: components["schemas"]["AiIncidentSchweregradEnum"];
+            /** Format: date */
+            entdeckt_am?: string;
+            beschreibung?: string;
+            sofortmassnahme?: string;
+            korrekturmassnahme?: string;
+            /** Format: date */
+            abgeschlossen_am?: string | null;
+            gemeldet_an_bnetza?: boolean;
+            /** Format: date */
+            bnetza_meldung_datum?: string | null;
+            readonly datenpanne?: number | null;
+            readonly erfasser?: number | null;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+            readonly offen?: boolean;
+            readonly offen_seit_tagen?: number;
+        };
+        PatchedAiPolicy: {
+            readonly id?: number;
+            geltungsbereich?: components["schemas"]["GeltungsbereichEnum"];
+            titel?: string;
+            inhalt_markdown?: string;
+            readonly version?: number;
+            readonly parent?: number | null;
+            /** Format: date */
+            readonly ratified_at?: string | null;
+            readonly ratified_by?: number | null;
+            readonly aktiv?: boolean;
+            /** Format: date-time */
+            readonly erstellt_am?: string;
+            readonly erstellt_von?: number | null;
+            readonly kenntnisnahmen_count?: number;
+        };
+        PatchedAiPolicyKenntnisnahme: {
+            readonly id?: number;
+            policy?: number;
+            mitarbeiter?: number;
+            /** Format: date-time */
+            readonly bestaetigt_am?: string;
+        };
+        PatchedAiSystemRegistration: {
+            readonly id?: number;
+            /** @description PROTECT statt CASCADE: ISO-42001 Kap. 7.5 verlangt dokumentierte Information auch nach Decommissioning. Decommission-Workflow muss AiSystemRegistration explizit archivieren, bevor KITool löschbar ist. */
+            ki_tool?: number;
+            readonly ki_tool_name?: string;
+            readonly ki_tool_anbieter?: string;
+            readonly ki_tool_risiko?: string;
+            readonly ki_tool_sensibilitaet?: string;
+            /**
+             * @description AIMS-Risiko (≠ AI-Act-Risiko). Treibt AIIA-Pflicht und Kompetenz-Schulungs-Trigger.
+             *
+             *     * `niedrig` - Niedrig
+             *     * `mittel` - Mittel
+             *     * `hoch` - Hoch
+             *     * `kritisch` - Kritisch
+             */
+            risiko_aims?: components["schemas"]["RisikoAimsEnum"];
+            /** @description AI Risk Owner (A.3.2). */
+            verantwortliche_rolle?: number | null;
+            /** @description A.7.4/A.7.5 — Herkunft und Lizenzlage der Trainingsdaten. */
+            trainings_daten_quelle?: string;
+            bias_tests_durchgefuehrt?: boolean;
+            /** Format: uri */
+            bias_tests_dokument_url?: string;
+            /** @description A.6.2.6 — Operation-Monitoring. */
+            monitoring_plan?: string;
+            /** @description A.6.2.8 — Decommissioning. */
+            decommissioning_plan?: string;
+            /** @description AVV-Eintrag (Auftragsverarbeiter) für KI-Drittanbieter, falls PII verarbeitet. */
+            drittpartei_avv?: number | null;
+            /** @description Wenn False, ist das KI-Tool zwar im KI-Inventar gelistet, aber nicht im AIMS-Geltungsbereich (z. B. Spielwiese). */
+            in_aims_scope?: boolean;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedAimsManagementReview: {
+            readonly id?: number;
+            /** Format: date */
+            durchgefuehrt_am?: string;
+            /** @description Freitext-Liste der Teilnehmer + Rollen. */
+            teilnehmer?: string;
+            /** @description Incidents, AIIAs, Kennzahlen, externe Änderungen, Audit-Ergebnisse. */
+            inputs_zusammenfassung?: string;
+            entscheidungen?: string;
+            massnahmen?: unknown;
+            /** Format: date */
+            naechste_review_faellig_am?: string;
+            freigegeben_von?: number | null;
+            /** Format: date-time */
+            readonly erstellt_am?: string;
+        };
         PatchedAntwortOption: {
             readonly id?: number;
             frage?: number;
             text?: string;
             ist_korrekt?: boolean;
             reihenfolge?: number;
+        };
+        PatchedArbeitsbereich: {
+            readonly id?: number;
+            name?: string;
+            typ?: components["schemas"]["ArbeitsbereichTypEnum"];
+            standort?: string;
+            /** @description Mitarbeiter:in, die für den Bereich operativ verantwortet. */
+            verantwortlicher?: number | null;
+            beschreibung?: string;
+            aktiv?: boolean;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedAsaBeschluss: {
+            readonly id?: number;
+            sitzung?: number;
+            titel?: string;
+            beschluss_text?: string;
+            verantwortlicher?: number | null;
+            /** Format: date */
+            frist?: string | null;
+            erledigt?: boolean;
+            /** Format: date */
+            erledigt_am?: string | null;
+            /** Format: date-time */
+            readonly created_at?: string;
+        };
+        PatchedAsaKonfig: {
+            readonly id?: number;
+            default_ort?: string;
+            /** @description 0=Mo, 6=So. Für Quartals-Auto-Generierung. */
+            default_wochentag?: number;
+            /** Format: time */
+            default_uhrzeit?: string;
+            /** @description Ab 21 MA Pflicht. Tenant kann manuell deaktivieren bei <21 MA. */
+            aktiv?: boolean;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedAsaSitzung: {
+            readonly id?: number;
+            titel?: string;
+            /** Format: date-time */
+            geplant_am?: string;
+            ort?: string;
+            teilnehmer?: number[];
+            tagesordnung_md?: string;
+            protokoll_md?: string;
+            status?: components["schemas"]["AsaSitzungStatusEnum"];
+            /** Format: date-time */
+            durchgefuehrt_am?: string | null;
+            /** @description Format '2026-Q2' — für Pflicht-Tracking. */
+            quartal?: string;
+            readonly beschluesse?: components["schemas"]["AsaBeschluss"][];
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedAsset: {
+            readonly id?: number;
+            name?: string;
+            typ?: components["schemas"]["AssetTypEnum"];
+            beschreibung?: string;
+            /** @description Person oder Team, das das Asset verantwortet. */
+            eigentuemer?: string;
+            kritikalitaet?: components["schemas"]["KritikalitaetEnum"];
+            /** @description z. B. ['vertraulichkeit','integritaet','verfuegbarkeit'] */
+            schutzziele?: unknown;
+            standort?: string;
+            /** @description Wenn Asset bei einem Drittanbieter läuft, hier benennen. */
+            externe_drittanbieter?: string;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedAuditExportProfile: {
+            readonly id?: number;
+            name?: string;
+            /**
+             * @description Audit-Template aus AUDIT_TEMPLATES-Registry
+             *
+             *     * `iso_27001_audit` - ISO-27001 Annex-A Audit
+             *     * `gap_analyse` - GAP-Analyse (Lücken rot markiert)
+             *     * `tisax_light` - TISAX-Light (Automotive-Zulieferer)
+             *     * `ai_act_konformitaet` - AI-Act Konformitätsbericht
+             *     * `nis2_behoerden_vorlage` - NIS2 Behörden-Vorlage (BSI)
+             *     * `bfdi_template` - BfDI/LDA Datenschutz-Anfrage
+             *     * `geschaeftsfuehrer_mappe` - GF-Mappe (kurz, Executive Summary)
+             */
+            template?: components["schemas"]["TemplateEnum"];
+            /** @description Liste von NormScope-Strings, M:N als JSON-Array */
+            norm_scope?: unknown;
+            /** Format: date */
+            zeitraum_von?: string;
+            /** Format: date */
+            zeitraum_bis?: string;
+            /** @description Pro Modul Sub-Filter, z. B. {'hinschg': {'status': ['neu']}} */
+            filter_json?: unknown;
+            evidence_mode?: components["schemas"]["EvidenceModeEnum"];
+            /** @description Wenn True: Mitarbeiter-Namen werden zu MA-001/MA-002 maskiert. */
+            anonymisieren_pii?: boolean;
+            /** @description DRAFT-Wasserzeichen im PDF */
+            watermark_draft?: boolean;
+            readonly erstellt_von?: number | null;
+            /** Format: date-time */
+            readonly erstellt_am?: string;
+            /** Format: date-time */
+            readonly aktualisiert_am?: string;
+        };
+        PatchedAuditFinding: {
+            readonly id?: number;
+            audit?: number;
+            betroffenes_control?: number | null;
+            schweregrad?: components["schemas"]["AuditFindingSchweregradEnum"];
+            beschreibung?: string;
+            massnahme?: string;
+            verantwortlich?: number | null;
+            /** Format: date */
+            geplant_bis?: string | null;
+            /** Format: date-time */
+            erledigt_am?: string | null;
+            /** Format: date-time */
+            wirksamkeit_geprueft_am?: string | null;
+            wirksamkeit_bemerkung?: string;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedAuftragsverarbeiter: {
+            readonly id?: number;
+            name?: string;
+            rechtssitz_land?: string;
+            rechtssitz_adresse?: string;
+            /** @description Name + Mail des Datenschutzbeauftragten des Anbieters. */
+            kontakt_dsb?: string;
+            /** Format: uri */
+            website?: string;
+            drittland?: components["schemas"]["DrittlandEnum"];
+            status?: components["schemas"]["StatusC42Enum"];
+            /** Format: date */
+            avv_abgeschlossen_am?: string | null;
+            /**
+             * Format: date
+             * @description Befristete Verträge: Datum der Wieder-Erinnerung 30 Tage davor.
+             */
+            avv_endet_am?: string | null;
+            /**
+             * Format: uri
+             * @description Link zum AVV-Dokument (DMS/Sharepoint).
+             */
+            avv_link?: string;
+            /**
+             * Format: uri
+             * @description Link zur TOMs-Dokumentation (technisch-organisatorische Maßnahmen).
+             */
+            toms_link?: string;
+            notizen?: string;
+            readonly schritte?: components["schemas"]["Verarbeitungsschritt"][];
+            readonly tasks?: components["schemas"]["AVVTaskMinimal"][];
+            readonly benoetigt_handlung?: boolean;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedAushang: {
+            readonly id?: number;
+            version?: number;
+            /** @description z.B. "Halle 3, Maschine M-04" */
+            ort?: string;
+            /** Format: date */
+            ausgehaengt_am?: string;
+            ausgehaengt_von?: number;
+            /** Format: date */
+            abgehaengt_am?: string | null;
+        };
+        PatchedBeauftragter: {
+            readonly id?: number;
+            typ?: components["schemas"]["Typ1a0Enum"];
+            person?: number;
+            readonly person_name?: string;
+            /** Format: date */
+            bestellt_am?: string;
+            /**
+             * Format: date
+             * @description Leer = unbefristet. Wenn gesetzt, Auto-Reminder 60 Tage vorher.
+             */
+            bestellt_bis?: string | null;
+            /** Format: uri */
+            bestellurkunde_pdf?: string | null;
+            /** @description Schulungskurse, die die Person für diese Rolle absolviert hat. */
+            schulungsnachweis_kurse?: number[];
+            bemerkung?: string;
+            aktiv?: boolean;
+            /** Format: date-time */
+            readonly created_at?: string;
+        };
+        PatchedBetriebsanweisung: {
+            readonly id?: number;
+            titel?: string;
+            typ?: components["schemas"]["BetriebsanweisungTypEnum"];
+            taetigkeit?: number | null;
+            aktuelle_version?: number | null;
+            aushang_pflicht?: boolean;
+            readonly versionen?: components["schemas"]["BetriebsanweisungVersion"][];
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedBetriebsanweisungVersion: {
+            readonly id?: number;
+            betriebsanweisung?: number;
+            version?: number;
+            /** @description Strukturiert nach DGUV-Vorlage: Anwendungsbereich, Gefahren, Schutzmaßnahmen, Verhalten im Notfall, Erste Hilfe, Instandhaltung. */
+            inhalt_md?: string;
+            /**
+             * Format: uri
+             * @description WeasyPrint-generiert.
+             */
+            pdf_file?: string | null;
+            erstellt_von?: number;
+            /** Format: date-time */
+            readonly erstellt_am?: string;
+            /** Format: date-time */
+            freigegeben_am?: string | null;
+            freigegeben_von?: number | null;
+            aenderungsgrund?: string;
+            readonly aushaenge?: components["schemas"]["Aushang"][];
+        };
+        PatchedBetroffenheitsCheck: {
+            readonly id?: number;
+            mitarbeiter_anzahl?: number | null;
+            /** Format: int64 */
+            jahresumsatz_eur?: number | null;
+            sektor?: components["schemas"]["SektorEnum"] | components["schemas"]["BlankEnum"];
+            erbringt_kritische_dienstleistung?: boolean;
+            klassifizierung?: components["schemas"]["BetroffenheitsCheckKlassifizierungEnum"];
+            begruendung?: string;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedControlEvidenceLink: {
+            readonly id?: number;
+            implementation?: number;
+            evidence?: number;
+            readonly evidence_titel?: string;
+            /** @description ki_inventar | nis2 | avv | datenpannen | hinschg | pflichtunterweisung | manual */
+            quell_modul?: string;
+            readonly auto_suggested?: boolean;
+            readonly confirmed_by?: number | null;
+            /** Format: date-time */
+            readonly confirmed_at?: string | null;
+            notiz?: string;
+            /** Format: date-time */
+            readonly created_at?: string;
+        };
+        PatchedControlImplementation: {
+            readonly id?: number;
+            control?: number;
+            readonly control_code?: string;
+            readonly control_name?: string;
+            readonly control_kategorie?: string;
+            readonly control_description?: string;
+            status?: components["schemas"]["ControlImplementationStatusEnum"];
+            anwendbar?: boolean;
+            nicht_anwendbar_begruendung?: string;
+            implementation_beschreibung?: string;
+            /** @description LLM-Entwurf — separat von implementation_beschreibung (RDG-Layer-3). */
+            readonly implementation_vorschlag?: string;
+            verantwortlich?: number | null;
+            /** Format: date */
+            naechstes_review?: string | null;
+            readonly verifiziert_von?: number | null;
+            /** Format: date-time */
+            readonly verifiziert_am?: string | null;
+            readonly evidence_links?: components["schemas"]["ControlEvidenceLink"][];
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
         };
         /**
          * @description Erweitert dj_rest_auth's Default um unser Custom-Field `tenant_role`.
@@ -2124,6 +7358,75 @@ export interface components {
             readonly tenant_role?: components["schemas"]["TenantRoleEnum"];
             readonly mfa_enabled?: boolean;
         };
+        /** @description Detail — inkl. entschlüsselter Inhalte. Nur für berechtigte User. */
+        PatchedDatenpanne: {
+            readonly id?: number;
+            titel?: string;
+            art?: components["schemas"]["ArtEnum"];
+            beschreibung?: string;
+            /**
+             * Format: date-time
+             * @description Wann wurde die Panne entdeckt? Startet die 72-h-Frist Art. 33.
+             */
+            entdeckt_am?: string;
+            /**
+             * Format: date-time
+             * @description Wann begann der Vorfall (falls bekannt)?
+             */
+            vorfall_zeitraum_von?: string | null;
+            /** Format: date-time */
+            vorfall_zeitraum_bis?: string | null;
+            /** @description Name oder Rolle der entdeckenden Person. */
+            entdeckt_durch?: string;
+            /** @description Wer kümmert sich operativ um die Bearbeitung? */
+            verantwortlicher_user?: number | null;
+            /**
+             * @description Bewertung NACH menschlicher Prüfung. LLM-Vorschlag liegt in risiko_vorschlag — DARF NICHT automatisch übernommen werden.
+             *
+             *     * `kein_risiko` - Kein Risiko
+             *     * `gering` - Geringes Risiko
+             *     * `hoch` - Hohes Risiko
+             */
+            risiko?: components["schemas"]["Risiko26bEnum"] | components["schemas"]["BlankEnum"];
+            /**
+             * @description LLM-Vorschlag (RDG-Layer-2 validiert). Nur Vorschlag.
+             *
+             *     * `kein_risiko` - Kein Risiko
+             *     * `gering` - Geringes Risiko
+             *     * `hoch` - Hohes Risiko
+             */
+            readonly risiko_vorschlag?: components["schemas"]["RisikoVorschlag26bEnum"];
+            risiko_begruendung?: string;
+            /** @description Geschätzte Anzahl betroffener Personen. NULL = noch unklar. */
+            anzahl_betroffene_geschaetzt?: number | null;
+            /** @description Liste DSGVO-Datenkategorien, z. B. ['kontaktdaten','gesundheitsdaten','sozialversicherung']. */
+            datenkategorien?: unknown;
+            status?: components["schemas"]["Status3beEnum"];
+            /**
+             * Format: date-time
+             * @description 72 Stunden nach entdeckt_am. Auto-gesetzt bei Anlage.
+             */
+            frist_meldung_behoerde?: string;
+            /** Format: date-time */
+            behoerde_gemeldet_am?: string | null;
+            /** @description Aktenzeichen der Aufsichtsbehörde nach Meldung. */
+            behoerde_aktenzeichen?: string;
+            /** Format: date */
+            frist_benachrichtigung_betroffene?: string;
+            /** Format: date-time */
+            betroffene_benachrichtigt_am?: string | null;
+            /** Format: date-time */
+            abgeschlossen_am?: string | null;
+            /** Format: double */
+            readonly stunden_bis_meldefrist?: number;
+            readonly meldepflichtig?: boolean;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+            readonly massnahmen?: components["schemas"]["Massnahme"][];
+            readonly tasks?: components["schemas"]["DatenpannenTaskMinimal"][];
+        };
         PatchedFrage: {
             readonly id?: number;
             kurs?: number;
@@ -2132,6 +7435,186 @@ export interface components {
             erklaerung?: string;
             reihenfolge?: number;
             optionen?: components["schemas"]["_AntwortOptionNested"][];
+        };
+        PatchedGbu: {
+            readonly id?: number;
+            taetigkeit?: number;
+            titel?: string;
+            status?: components["schemas"]["StatusC14Enum"];
+            verantwortlicher?: number | null;
+            readonly erstellt_von?: number | null;
+            /** Format: date-time */
+            readonly erstellt_am?: string;
+            /** Format: date-time */
+            readonly freigegeben_am?: string | null;
+            readonly freigegeben_von?: number | null;
+            /**
+             * Format: date
+             * @description Default: Freigabe-Datum + 12 Monate (BAuA-Empfehlung).
+             */
+            wirksamkeitspruefung_faellig_am?: string;
+            bemerkung?: string;
+            readonly positionen?: components["schemas"]["GbuGefaehrdung"][];
+            readonly ist_aktuell?: boolean;
+            readonly ist_ueberfaellig?: boolean;
+        };
+        PatchedGbuGefaehrdung: {
+            readonly id?: number;
+            gbu?: number;
+            gefaehrdung?: number;
+            readonly gefaehrdung_code?: string;
+            readonly gefaehrdung_name?: string;
+            /** @description Tenant-spezifische Erläuterung zur Standard-Gefährdung. */
+            freitext_ergaenzung?: string;
+            wahrscheinlichkeit?: components["schemas"]["WahrscheinlichkeitEnum"];
+            schwere?: components["schemas"]["Schwere203Enum"];
+            /** @description False = im Katalog, hier aber nicht zutreffend (mit Begründung). */
+            relevant?: boolean;
+            nicht_relevant_begruendung?: string;
+            readonly risiko_score?: number;
+            readonly risiko_klasse?: string;
+        };
+        PatchedGefaehrdung: {
+            readonly id?: number;
+            /** @description z.B. MECH-002 (Standard) oder TENANT-XYZ-007 (Tenant-eigen). */
+            code?: string;
+            name?: string;
+            kategorie?: components["schemas"]["GefaehrdungKategorieEnum"];
+            beschreibung?: string;
+            /** @description Typischerweise vorkommend in: 'Werkstatt', 'Außenmontage' etc. */
+            hinweis_arbeitsbereich?: string;
+            /** @description z.B. 'DGUV V1 §4 Abs. 1' oder 'BetrSichV §3'. */
+            rechtsgrundlage?: string;
+            /**
+             * @description Schema-Name des Tenants, der die Gefährdung angelegt hat. Leer = Vaeren-Standardkatalog (read-only).
+             * @default
+             */
+            eigentuemer_tenant: string;
+            readonly ist_standardkatalog?: boolean;
+            aktiv?: boolean;
+        };
+        PatchedInternesAudit: {
+            readonly id?: number;
+            titel?: string;
+            /** Format: date */
+            auditzeitraum_von?: string;
+            /** Format: date */
+            auditzeitraum_bis?: string;
+            /** @description Name (intern/extern), nicht zwingend Mitarbeiter. */
+            auditor?: string;
+            geprueft_controls?: number[];
+            status?: components["schemas"]["InternesAuditStatusEnum"];
+            bericht_evidence?: number | null;
+            readonly findings_count?: string;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedIsmsAsset: {
+            readonly id?: number;
+            name?: string;
+            asset_typ?: components["schemas"]["AssetTypEnum"];
+            beschreibung?: string;
+            eigentuemer?: number | null;
+            klassifizierung?: components["schemas"]["IsmsAssetKlassifizierungEnum"];
+            schutzziel_vertraulichkeit?: components["schemas"]["RestrisikoImpactEnum"];
+            schutzziel_integritaet?: components["schemas"]["RestrisikoImpactEnum"];
+            schutzziel_verfuegbarkeit?: components["schemas"]["RestrisikoImpactEnum"];
+            standort?: string;
+            drittanbieter?: string;
+            nis2_asset?: number | null;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedIsmsRiskAssessment: {
+            readonly id?: number;
+            asset?: number;
+            titel?: string;
+            /** @description Bedrohung */
+            threat?: string;
+            /** @description Schwachstelle */
+            vulnerability?: string;
+            likelihood?: components["schemas"]["RestrisikoImpactEnum"];
+            impact?: components["schemas"]["RestrisikoImpactEnum"];
+            readonly risk_score_brutto?: number;
+            treatment?: components["schemas"]["TreatmentEnum"];
+            treatment_plan?: string;
+            /** @description LLM-Entwurf — RDG-Layer-3 HITL. */
+            readonly treatment_vorschlag?: string;
+            mitigation_controls?: number[];
+            restrisiko_likelihood?: (components["schemas"]["RestrisikoImpactEnum"] | components["schemas"]["NullEnum"]) | null;
+            restrisiko_impact?: (components["schemas"]["RestrisikoImpactEnum"] | components["schemas"]["NullEnum"]) | null;
+            readonly risk_score_netto?: number | null;
+            readonly akzeptiert_von?: number | null;
+            /** Format: date-time */
+            readonly akzeptiert_am?: string | null;
+            /** Format: date */
+            naechstes_review?: string | null;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedKITool: {
+            readonly id?: number;
+            name?: string;
+            anbieter?: string;
+            /** Format: uri */
+            url?: string;
+            kategorie?: components["schemas"]["KategorieC2bEnum"];
+            /** @description Wofür wird das Tool eingesetzt? Konkret, keine Marketing-Sätze. */
+            zweck?: string;
+            status?: components["schemas"]["StatusC3fEnum"];
+            /** Format: date */
+            eingefuehrt_am?: string | null;
+            /** @description Anzahl Nutzer:innen im Unternehmen. */
+            nutzer_anzahl?: number | null;
+            datenkategorie_sensibilitaet?: components["schemas"]["DatenkategorieSensibilitaetEnum"];
+            /** @description Liste Datenkategorien (z. B. ['kontaktdaten','gesundheitsdaten']). */
+            datenkategorien?: unknown;
+            risiko?: components["schemas"]["Risiko5c4Enum"];
+            readonly risiko_vorschlag?: components["schemas"]["RisikoVorschlag5c4Enum"];
+            /** @description Begründung der finalen Einstufung. */
+            risiko_begruendung?: string;
+            /**
+             * Format: uri
+             * @description Link zur Auftragsverarbeitungs-Vereinbarung (DPA).
+             */
+            avv_link?: string;
+            /**
+             * Format: uri
+             * @description Link zur Konformitätserklärung des Anbieters (Hochrisiko).
+             */
+            konformitaet_link?: string;
+            /**
+             * Format: uri
+             * @description Link zur Datenschutz-Folgenabschätzung (DSFA/DPIA).
+             */
+            dpia_link?: string;
+            /** @description Wurde Personal informiert, dass KI eingesetzt wird? (Art. 26 Abs. 7) */
+            transparenz_information?: boolean;
+            /** @description Ist menschliche Aufsicht/Override-Möglichkeit gewährleistet? (Art. 14) */
+            menschliche_aufsicht?: boolean;
+            readonly benoetigt_handlung?: boolean;
+            readonly tasks?: components["schemas"]["KIToolTaskMinimal"][];
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedKontrollAntwort: {
+            readonly id?: number;
+            frage_id?: string;
+            readonly titel?: string;
+            readonly frage_text?: string;
+            reife_stufe?: components["schemas"]["ReifeStufeEnum"];
+            /** @description Verweis auf Doku/Policy, optional. Kein Upload im MVP. */
+            nachweis?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
         };
         PatchedKorrekturInternal: {
             readonly id?: number;
@@ -2202,7 +7685,7 @@ export interface components {
              *     * `video_upload` - Video-Upload
              *     * `video_youtube` - YouTube-Embed
              */
-            typ?: components["schemas"]["TypEnum"];
+            typ?: components["schemas"]["KursModulTypEnum"];
             /** @description Markdown-Lerninhalt. Befuellt nur bei typ=TEXT. */
             inhalt_md?: string;
             /**
@@ -2213,11 +7696,48 @@ export interface components {
             /** @description Datei-Asset. Befuellt bei pdf/bild/office/video_upload. */
             asset?: number | null;
         };
+        PatchedManagementReview: {
+            readonly id?: number;
+            review_jahr?: number;
+            /** Format: date */
+            durchgefuehrt_am?: string | null;
+            /** @description Liste Teilnehmer + Rollen. */
+            teilnehmer?: string;
+            status?: components["schemas"]["ManagementReviewStatusEnum"];
+            inputs_audit_ergebnisse?: string;
+            inputs_findings_status?: string;
+            inputs_risiko_aenderungen?: string;
+            inputs_isms_performance?: string;
+            outputs_verbesserungen?: string;
+            outputs_ressourcen_bedarf?: string;
+            outputs_zielanpassungen?: string;
+            beschlossen_von?: number | null;
+            readonly pdf_evidence?: number | null;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedMassnahme: {
+            readonly id?: number;
+            datenpanne?: number;
+            typ?: components["schemas"]["MassnahmeTypEnum"];
+            beschreibung?: string;
+            verantwortlich?: number | null;
+            /** Format: date */
+            geplant_bis?: string | null;
+            /** Format: date-time */
+            erledigt_am?: string | null;
+            /** Format: date-time */
+            readonly erstellt_am?: string;
+            /** Format: date-time */
+            readonly aktualisiert_am?: string;
+        };
         /** @description Bearbeiter-Update: nur Klassifizierungsfelder + Status. */
         PatchedMeldungPatch: {
             /** @description Vom Bearbeiter klassifiziert (z. B. 'korruption', 'arbeitssicherheit'). */
             kategorie?: string;
-            schweregrad?: components["schemas"]["SchweregradEnum"] | components["schemas"]["BlankEnum"];
+            schweregrad?: components["schemas"]["Schweregrad584Enum"] | components["schemas"]["BlankEnum"];
             status?: components["schemas"]["Status697Enum"];
         };
         PatchedMitarbeiter: {
@@ -2239,6 +7759,15 @@ export interface components {
             readonly created_at?: string;
             /** Format: date-time */
             readonly updated_at?: string;
+        };
+        PatchedMitarbeiterTaetigkeit: {
+            readonly id?: number;
+            mitarbeiter?: number;
+            taetigkeit?: number;
+            /** Format: date */
+            seit?: string;
+            /** Format: date */
+            bis?: string | null;
         };
         PatchedNewsPostInternal: {
             readonly id?: number;
@@ -2298,6 +7827,45 @@ export interface components {
             readonly versendet_am?: string | null;
             readonly tasks?: components["schemas"]["SchulungsTaskSummary"][];
         };
+        PatchedSchutzmassnahme: {
+            readonly id?: number;
+            gbu_gefaehrdungen?: number[];
+            readonly gbu_gefaehrdung_ids?: number[];
+            titel?: string;
+            beschreibung?: string;
+            hierarchie_stufe?: components["schemas"]["HierarchieStufeEnum"];
+            verantwortlicher?: number | null;
+            /** Format: date */
+            frist?: string;
+            status?: components["schemas"]["SchutzmassnahmeStatusEnum"];
+            /** Format: date */
+            umgesetzt_am?: string | null;
+            /** Format: date */
+            wirksamkeitspruefung_am?: string | null;
+            wirksamkeit_kommentar?: string;
+            /** @description True = Maßnahme wirksam. False = nicht wirksam → Folge-Maßnahme nötig. */
+            wirksam?: boolean | null;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedTaetigkeit: {
+            readonly id?: number;
+            arbeitsbereich?: number;
+            readonly arbeitsbereich_name?: string;
+            name?: string;
+            beschreibung?: string;
+            verantwortlicher?: number | null;
+            /** @description Welche Pflichtunterweisungen müssen Mitarbeiter:innen dieser Tätigkeit haben? Bei MA-Zuordnung triggert Bridge ggf. DRAFT-Welle. */
+            benoetigt_kurse?: number[];
+            readonly benoetigt_kurse_ids?: number[];
+            aktiv?: boolean;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
         PatchedTenantSettings: {
             readonly schema_name?: string;
             firma_name?: string;
@@ -2305,6 +7873,152 @@ export interface components {
             readonly plan?: string;
             readonly pilot?: boolean;
             mfa_required?: boolean;
+            module_iso42001_aktiv?: boolean;
+        };
+        /** @description Detail — inkl. entschlüsselter Felder. Nur für berechtigte User. */
+        PatchedUnfall: {
+            readonly id?: number;
+            arbeitsbereich?: number;
+            taetigkeit?: number | null;
+            /** Format: date-time */
+            datum?: string;
+            schwere?: components["schemas"]["Schwere520Enum"];
+            betroffener_name?: string;
+            /** @description Optional — wenn betroffene Person interner MA. Sonst nur Klarname verschluesselt. */
+            betroffener_intern?: number | null;
+            beschreibung?: string;
+            verletzungsart?: string;
+            ausfalltage?: number;
+            /** @description True wenn aus HinSchG-Meldung abgeleitet. */
+            aus_hinschg?: boolean;
+            aus_hinschg_meldung?: number | null;
+            /** @description Auto-berechnet aus schwere+ausfalltage. */
+            readonly bg_meldung_pflicht?: boolean;
+            /**
+             * Format: date
+             * @description 3 Werktage bei meldepflichtig, today bei schwer/toedlich.
+             */
+            readonly bg_meldefrist?: string | null;
+            /** Format: date */
+            bg_gemeldet_am?: string | null;
+            bg_aktenzeichen?: string;
+            /** @description Sofort + dauerhaft. Kann zu Schutzmassnahme-Eintraegen verlinken. */
+            massnahmen_md?: string;
+            /** @description True wenn GBU der Tätigkeit nach Unfall aktualisiert wurde. */
+            abgeleitete_gbu_aktualisierung?: boolean;
+            readonly ist_meldepflichtig?: boolean;
+            erfasst_von?: number;
+            /** Format: date-time */
+            readonly erfasst_am?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedUnternehmensProfil: {
+            readonly id?: number;
+            firmenname?: string;
+            /** Format: uri */
+            website?: string;
+            branche?: string;
+            nace_code?: string;
+            mitarbeiter_anzahl?: number;
+            /** Format: int64 */
+            jahresumsatz_eur?: number;
+            /** Format: int64 */
+            bilanzsumme_eur?: number;
+            rechtsform?: string;
+            standort_laender?: unknown;
+            nis2_sektor?: string;
+            ist_automotive_zulieferer?: boolean;
+            hat_oem_kunden?: boolean;
+            stellt_produkte_her?: boolean;
+            produkte_mit_digitalen_elementen?: boolean;
+            verarbeitet_personenbezogene_daten?: boolean;
+            verarbeitet_gesundheits_sozialdaten?: boolean;
+            setzt_ki_ein?: boolean;
+            drittland_transfer?: boolean;
+            betriebsmerkmale?: unknown;
+            betriebsmerkmale_freitext?: unknown;
+            recherche_quelle?: string;
+            recherche_rohdaten?: unknown;
+            /** Format: date-time */
+            readonly bestaetigt_at?: string | null;
+            /** Format: date-time */
+            readonly erstellt_at?: string;
+            readonly bestaetigt_von?: number | null;
+        };
+        PatchedUnternehmensstammblatt: {
+            readonly id?: number;
+            firma_name?: string;
+            rechtsform?: components["schemas"]["RechtsformEnum"];
+            /** @description z. B. 'HRB 123456' (Amtsgericht). Format frei, wird normalisiert. */
+            handelsregister_nummer?: string;
+            /** @description z. B. 'AG München'. */
+            handelsregister_amtsgericht?: string;
+            /** @description z. B. 'DE123456789'. */
+            ust_id_nummer?: string;
+            steuer_nummer?: string;
+            /** @description Eintragungsnummer im Transparenzregister (TR). */
+            transparenzregister_id?: string;
+            strasse?: string;
+            plz?: string;
+            ort?: string;
+            land?: string;
+            /**
+             * @description GwG § 19 Pflicht zur Meldung wirtschaftlich Berechtigter.
+             *
+             *     * `unbekannt` - Noch nicht geprüft
+             *     * `nein` - Nicht GwG-pflichtig
+             *     * `ja` - GwG-pflichtig
+             */
+            gwg_pflicht?: components["schemas"]["GwgPflichtEnum"];
+            /** @description Wöchentliches Polling der Bundesanzeiger-Volltext-API auf Bekanntmachungen zu diesem HRB. */
+            bundesanzeiger_monitoring_aktiv?: boolean;
+            /** Format: date-time */
+            readonly last_polled_at?: string | null;
+            readonly berechtigte?: components["schemas"]["WirtschaftlichBerechtigter"][];
+            readonly bekanntmachungen?: components["schemas"]["RegisterBekanntmachung"][];
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedVerarbeitungsschritt: {
+            readonly id?: number;
+            verarbeiter?: number;
+            /** @description Was wird wozu verarbeitet? */
+            zweck?: string;
+            /** @description z. B. ['kontaktdaten','transaktionsdaten'] */
+            datenkategorien?: unknown;
+            /** @description z. B. ['kunden','interessenten','mitarbeitende'] */
+            betroffene_kategorien?: unknown;
+            /** @description Wie lange werden die Daten beim Verarbeiter gespeichert? */
+            speicherdauer_monate?: number | null;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedWirtschaftlichBerechtigter: {
+            readonly id?: number;
+            stammblatt?: number;
+            vorname?: string;
+            nachname?: string;
+            /** Format: date */
+            geburtsdatum?: string | null;
+            wohnort_land?: string;
+            /** @description z. B. 'Geschäftsanteile 30%', 'Stimmrechte 35%'. */
+            art_des_interesses?: string;
+            /**
+             * Format: decimal
+             * @description Prozentualer Anteil (≥ 25% löst Meldepflicht aus).
+             */
+            anteil_prozent?: string | null;
+            /** Format: date */
+            meldung_an_transparenzregister_am?: string | null;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
         };
         /**
          * @description * `bestaetigung_7d` - Eingangsbestätigung (7 Tage HinSchG §17 Abs. 2)
@@ -2342,6 +8056,32 @@ export interface components {
          * @enum {string}
          */
         QuizModusEnum: "quiz" | "kenntnisnahme" | "kenntnisnahme_lesezeit";
+        RadarResponse: {
+            befunde: components["schemas"]["RegulierungsBefund"][];
+            empfehlungen: components["schemas"]["OperativeEmpfehlung"][];
+            empfohlene_module: string[];
+        };
+        RechercheRequest: {
+            /** @default  */
+            firmenname: string;
+            /** @default  */
+            website: string;
+            /** @default false */
+            demo: boolean;
+        };
+        /**
+         * @description * `gmbh` - GmbH
+         *     * `ug` - UG (haftungsbeschränkt)
+         *     * `ag` - AG
+         *     * `kg` - KG / GmbH & Co. KG
+         *     * `ohg` - OHG
+         *     * `einzel` - Einzelunternehmen
+         *     * `se` - Societas Europaea
+         *     * `ev` - e.V.
+         *     * `sonstiges` - Sonstiges
+         * @enum {string}
+         */
+        RechtsformEnum: "gmbh" | "ug" | "ag" | "kg" | "ohg" | "einzel" | "se" | "ev" | "sonstiges";
         RedaktionRun: {
             readonly id: number;
             /** Format: date-time */
@@ -2358,6 +8098,35 @@ export interface components {
             cost_eur?: string;
             notes?: string;
         };
+        RegisterBekanntmachung: {
+            readonly id: number;
+            /** @description bundesanzeiger | transparenzregister */
+            readonly quelle: string;
+            readonly titel: string;
+            /** Format: date */
+            readonly veroeffentlicht_am: string;
+            /** Format: uri */
+            readonly url: string;
+            /** Format: date-time */
+            readonly created_at: string;
+        };
+        RegulierungsBefund: {
+            regulierung_code: string;
+            readonly name: string;
+            relevanz: string;
+            abdeckung: string;
+            modul_key?: string;
+            begruendung: string;
+        };
+        /**
+         * @description * `0` - Nicht etabliert
+         *     * `1` - Initial / ad-hoc
+         *     * `2` - Geplant / dokumentiert
+         *     * `3` - Umgesetzt / messbar
+         *     * `4` - Optimiert / kontinuierlich verbessert
+         * @enum {integer}
+         */
+        ReifeStufeEnum: 0 | 1 | 2 | 3 | 4;
         /**
          * @description * `hoch` - Hoch
          *     * `mittel` - Mittel
@@ -2367,6 +8136,72 @@ export interface components {
         RelevanzEnum: "hoch" | "mittel" | "niedrig";
         RestAuthDetail: {
             readonly detail: string;
+        };
+        /**
+         * @description * `1` - 1 - sehr niedrig
+         *     * `2` - 2 - niedrig
+         *     * `3` - 3 - mittel
+         *     * `4` - 4 - hoch
+         *     * `5` - 5 - sehr hoch
+         * @enum {integer}
+         */
+        RestrisikoImpactEnum: 1 | 2 | 3 | 4 | 5;
+        /**
+         * @description * `kein_risiko` - Kein Risiko
+         *     * `gering` - Geringes Risiko
+         *     * `hoch` - Hohes Risiko
+         * @enum {string}
+         */
+        Risiko26bEnum: "kein_risiko" | "gering" | "hoch";
+        /**
+         * @description * `unbekannt` - Unbekannt (noch zu klassifizieren)
+         *     * `minimal` - Minimales Risiko
+         *     * `begrenzt` - Begrenztes Risiko (Transparenzpflicht)
+         *     * `hoch` - Hochrisiko (Anhang III)
+         *     * `unakzeptabel` - Unakzeptables Risiko (verboten)
+         * @enum {string}
+         */
+        Risiko5c4Enum: "unbekannt" | "minimal" | "begrenzt" | "hoch" | "unakzeptabel";
+        /**
+         * @description * `niedrig` - Niedrig
+         *     * `mittel` - Mittel
+         *     * `hoch` - Hoch
+         *     * `kritisch` - Kritisch
+         * @enum {string}
+         */
+        RisikoAimsEnum: "niedrig" | "mittel" | "hoch" | "kritisch";
+        /**
+         * @description * `kein_risiko` - Kein Risiko
+         *     * `gering` - Geringes Risiko
+         *     * `hoch` - Hohes Risiko
+         * @enum {string}
+         */
+        RisikoVorschlag26bEnum: "kein_risiko" | "gering" | "hoch";
+        /**
+         * @description * `unbekannt` - Unbekannt (noch zu klassifizieren)
+         *     * `minimal` - Minimales Risiko
+         *     * `begrenzt` - Begrenztes Risiko (Transparenzpflicht)
+         *     * `hoch` - Hochrisiko (Anhang III)
+         *     * `unakzeptabel` - Unakzeptables Risiko (verboten)
+         * @enum {string}
+         */
+        RisikoVorschlag5c4Enum: "unbekannt" | "minimal" | "begrenzt" | "hoch" | "unakzeptabel";
+        /**
+         * @description Input für LLM-Risiko-Vorschlag.
+         *
+         *     User schickt die existing Beschreibung + Art + Anzahl + Datenkategorien;
+         *     Backend fragt LLM unter strengem RDG-Prompt-Layer + Output-Validator.
+         */
+        RisikoVorschlagRequest: {
+            art: components["schemas"]["ArtEnum"];
+            beschreibung: string;
+            anzahl_betroffene?: number | null;
+            datenkategorien?: string[];
+        };
+        RisikoVorschlagResponse: {
+            risiko_vorschlag: components["schemas"]["RisikoVorschlag26bEnum"];
+            begruendung: string;
+            rdg_disclaimer: string;
         };
         SchulungsTaskSummary: {
             readonly id: number;
@@ -2405,6 +8240,56 @@ export interface components {
          * @enum {string}
          */
         SchulungsWelleStatusEnum: "draft" | "sent" | "in_progress" | "completed";
+        Schutzmassnahme: {
+            readonly id: number;
+            gbu_gefaehrdungen: number[];
+            readonly gbu_gefaehrdung_ids: number[];
+            titel: string;
+            beschreibung?: string;
+            hierarchie_stufe: components["schemas"]["HierarchieStufeEnum"];
+            verantwortlicher?: number | null;
+            /** Format: date */
+            frist: string;
+            status?: components["schemas"]["SchutzmassnahmeStatusEnum"];
+            /** Format: date */
+            umgesetzt_am?: string | null;
+            /** Format: date */
+            wirksamkeitspruefung_am?: string | null;
+            wirksamkeit_kommentar?: string;
+            /** @description True = Maßnahme wirksam. False = nicht wirksam → Folge-Maßnahme nötig. */
+            wirksam?: boolean | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `geplant` - Geplant
+         *     * `umgesetzt` - Umgesetzt
+         *     * `wirksam_geprueft` - Wirksamkeit geprüft
+         *     * `verworfen` - Verworfen (nicht umsetzbar)
+         * @enum {string}
+         */
+        SchutzmassnahmeStatusEnum: "geplant" | "umgesetzt" | "wirksam_geprueft" | "verworfen";
+        /**
+         * @description * `1` - 1
+         *     * `2` - 2
+         *     * `3` - 3
+         *     * `4` - 4
+         *     * `5` - 5
+         * @enum {integer}
+         */
+        Schwere203Enum: 1 | 2 | 3 | 4 | 5;
+        /**
+         * @description * `bagatell` - Bagatell (keine AU)
+         *     * `leicht` - Leicht (AU ≤ 3 Tage)
+         *     * `meldepflichtig` - Meldepflichtig (AU > 3 Tage)
+         *     * `schwer` - Schwer
+         *     * `toedlich` - Tödlich
+         *     * `fast_unfall` - Beinahe-Unfall
+         * @enum {string}
+         */
+        Schwere520Enum: "bagatell" | "leicht" | "meldepflichtig" | "schwer" | "toedlich" | "fast_unfall";
         /**
          * @description * `niedrig` - Niedrig
          *     * `mittel` - Mittel
@@ -2412,7 +8297,54 @@ export interface components {
          *     * `kritisch` - Kritisch
          * @enum {string}
          */
-        SchweregradEnum: "niedrig" | "mittel" | "hoch" | "kritisch";
+        Schweregrad584Enum: "niedrig" | "mittel" | "hoch" | "kritisch";
+        /**
+         * @description * `energie` - Energie
+         *     * `verkehr` - Verkehr
+         *     * `bank` - Banken/Finanzmarkt
+         *     * `gesundheit` - Gesundheit
+         *     * `trinkwasser` - Trinkwasser
+         *     * `abwasser` - Abwasser
+         *     * `digital_infra` - Digitale Infrastruktur
+         *     * `oeff_verw` - Öffentliche Verwaltung
+         *     * `raumfahrt` - Raumfahrt
+         *     * `post_kurier` - Post & Kurier
+         *     * `abfall` - Abfallwirtschaft
+         *     * `chemie` - Chemie
+         *     * `lebensmittel` - Lebensmittel
+         *     * `industrie` - Verarbeitendes Gewerbe (Anhang II)
+         *     * `digital_dienste` - Digitale Dienste
+         *     * `forschung` - Forschung
+         *     * `sonstiges` - Sonstiges
+         * @enum {string}
+         */
+        SektorEnum: "energie" | "verkehr" | "bank" | "gesundheit" | "trinkwasser" | "abwasser" | "digital_infra" | "oeff_verw" | "raumfahrt" | "post_kurier" | "abfall" | "chemie" | "lebensmittel" | "industrie" | "digital_dienste" | "forschung" | "sonstiges";
+        SoaErzeugenRequest: {
+            version: string;
+            /** @default  */
+            geltungsbereich: string;
+        };
+        StatementOfApplicability: {
+            readonly id: number;
+            version: string;
+            readonly erstellt_von: number;
+            /** Format: date-time */
+            readonly erstellt_am: string;
+            /** @description Vollständiger Stand aller Controls zum Zeitpunkt. */
+            readonly snapshot_data: unknown;
+            /** @description Scope-Statement: welche Standorte/Prozesse/Systeme. */
+            geltungsbereich?: string;
+            readonly pdf_evidence: number | null;
+        };
+        /**
+         * @description * `entdeckt` - Entdeckt — Klassifizierung läuft
+         *     * `bewertet` - Bewertet — Maßnahmen geplant
+         *     * `gemeldet` - Aufsichtsbehörde informiert
+         *     * `abgeschlossen` - Abgeschlossen
+         *     * `nicht_meldepflichtig` - Dokumentiert, nicht meldepflichtig
+         * @enum {string}
+         */
+        Status3beEnum: "entdeckt" | "bewertet" | "gemeldet" | "abgeschlossen" | "nicht_meldepflichtig";
         /**
          * @description * `eingegangen` - Eingegangen
          *     * `bestaetigt` - Eingangsbestätigung versandt
@@ -2432,6 +8364,73 @@ export interface components {
          */
         StatusB1fEnum: "offen" | "in_bearbeitung" | "erledigt" | "ueberfaellig";
         /**
+         * @description * `queued` - Eingereiht
+         *     * `running` - Läuft
+         *     * `done` - Fertig
+         *     * `failed` - Fehlgeschlagen
+         *     * `cancelled` - Abgebrochen
+         * @enum {string}
+         */
+        StatusB7bEnum: "queued" | "running" | "done" | "failed" | "cancelled";
+        /**
+         * @description * `entwurf` - Entwurf
+         *     * `in_bewertung` - In Bewertung
+         *     * `freigegeben` - Freigegeben
+         *     * `zu_ueberarbeiten` - Zu überarbeiten
+         * @enum {string}
+         */
+        StatusC14Enum: "entwurf" | "in_bewertung" | "freigegeben" | "zu_ueberarbeiten";
+        /**
+         * @description * `aktiv` - Aktiv im Einsatz
+         *     * `pilot` - Pilot/Test
+         *     * `evaluation` - In Evaluation
+         *     * `stillgelegt` - Stillgelegt
+         * @enum {string}
+         */
+        StatusC3fEnum: "aktiv" | "pilot" | "evaluation" | "stillgelegt";
+        /**
+         * @description * `offen` - Offen — Vertrag noch nicht abgeschlossen
+         *     * `aktiv` - Aktiv — AVV unterschrieben
+         *     * `beendet` - Beendet — Verarbeitung eingestellt
+         *     * `pruefung` - In Prüfung
+         * @enum {string}
+         */
+        StatusC42Enum: "offen" | "aktiv" | "beendet" | "pruefung";
+        /**
+         * @description * `offen` - Offen
+         *     * `akzeptiert` - Akzeptiert
+         *     * `verworfen` - Verworfen
+         * @enum {string}
+         */
+        StatusE84Enum: "offen" | "akzeptiert" | "verworfen";
+        Taetigkeit: {
+            readonly id: number;
+            arbeitsbereich: number;
+            readonly arbeitsbereich_name: string;
+            name: string;
+            beschreibung?: string;
+            verantwortlicher?: number | null;
+            /** @description Welche Pflichtunterweisungen müssen Mitarbeiter:innen dieser Tätigkeit haben? Bei MA-Zuordnung triggert Bridge ggf. DRAFT-Welle. */
+            benoetigt_kurse?: number[];
+            readonly benoetigt_kurse_ids: number[];
+            aktiv?: boolean;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `iso_27001_audit` - ISO-27001 Annex-A Audit
+         *     * `gap_analyse` - GAP-Analyse (Lücken rot markiert)
+         *     * `tisax_light` - TISAX-Light (Automotive-Zulieferer)
+         *     * `ai_act_konformitaet` - AI-Act Konformitätsbericht
+         *     * `nis2_behoerden_vorlage` - NIS2 Behörden-Vorlage (BSI)
+         *     * `bfdi_template` - BfDI/LDA Datenschutz-Anfrage
+         *     * `geschaeftsfuehrer_mappe` - GF-Mappe (kurz, Executive Summary)
+         * @enum {string}
+         */
+        TemplateEnum: "iso_27001_audit" | "gap_analyse" | "tisax_light" | "ai_act_konformitaet" | "nis2_behoerden_vorlage" | "bfdi_template" | "geschaeftsfuehrer_mappe";
+        /**
          * @description * `geschaeftsfuehrer` - Geschäftsführer:in
          *     * `qm_leiter` - QM-Leiter:in
          *     * `it_leiter` - IT-Leiter:in
@@ -2447,6 +8446,7 @@ export interface components {
             readonly plan: string;
             readonly pilot: boolean;
             mfa_required: boolean;
+            module_iso42001_aktiv?: boolean;
         };
         TotpSetupResponse: {
             secret: string;
@@ -2456,15 +8456,26 @@ export interface components {
             code: string;
         };
         /**
-         * @description * `text` - Text/Markdown
-         *     * `pdf` - PDF
-         *     * `bild` - Bild (PNG/JPG)
-         *     * `office` - Office (DOCX/PPTX)
-         *     * `video_upload` - Video-Upload
-         *     * `video_youtube` - YouTube-Embed
+         * @description * `reduzieren` - Reduzieren (Maßnahme)
+         *     * `akzeptieren` - Akzeptieren (dokumentiertes Restrisiko)
+         *     * `uebertragen` - Übertragen (Versicherung/Vertrag)
+         *     * `vermeiden` - Vermeiden (Aktivität einstellen)
          * @enum {string}
          */
-        TypEnum: "text" | "pdf" | "bild" | "office" | "video_upload" | "video_youtube";
+        TreatmentEnum: "reduzieren" | "akzeptieren" | "uebertragen" | "vermeiden";
+        /**
+         * @description * `sibe` - Sicherheitsbeauftragter (SGB VII §22)
+         *     * `brandschutz` - Brandschutzbeauftragter
+         *     * `ersthelfer` - Ersthelfer
+         *     * `gefahrgut` - Gefahrgutbeauftragter
+         *     * `laser` - Laserschutzbeauftragter
+         *     * `strahlenschutz` - Strahlenschutzbeauftragter
+         *     * `datenschutz` - Datenschutzbeauftragter (Querverweis)
+         *     * `ki` - KI-Beauftragter (Querverweis)
+         *     * `sonstiges` - Sonstiges
+         * @enum {string}
+         */
+        Typ1a0Enum: "sibe" | "brandschutz" | "ersthelfer" | "gefahrgut" | "laser" | "strahlenschutz" | "datenschutz" | "ki" | "sonstiges";
         /**
          * @description * `gesetzgebung` - Gesetzgebung
          *     * `urteil` - Urteil
@@ -2474,8 +8485,199 @@ export interface components {
          * @enum {string}
          */
         TypeEnum: "gesetzgebung" | "urteil" | "leitlinie" | "konsultation" | "frist";
+        /** @description Detail — inkl. entschlüsselter Felder. Nur für berechtigte User. */
+        Unfall: {
+            readonly id: number;
+            arbeitsbereich: number;
+            taetigkeit?: number | null;
+            /** Format: date-time */
+            datum: string;
+            schwere: components["schemas"]["Schwere520Enum"];
+            betroffener_name?: string;
+            /** @description Optional — wenn betroffene Person interner MA. Sonst nur Klarname verschluesselt. */
+            betroffener_intern?: number | null;
+            beschreibung: string;
+            verletzungsart?: string;
+            ausfalltage?: number;
+            /** @description True wenn aus HinSchG-Meldung abgeleitet. */
+            aus_hinschg?: boolean;
+            aus_hinschg_meldung?: number | null;
+            /** @description Auto-berechnet aus schwere+ausfalltage. */
+            readonly bg_meldung_pflicht: boolean;
+            /**
+             * Format: date
+             * @description 3 Werktage bei meldepflichtig, today bei schwer/toedlich.
+             */
+            readonly bg_meldefrist: string | null;
+            /** Format: date */
+            bg_gemeldet_am?: string | null;
+            bg_aktenzeichen?: string;
+            /** @description Sofort + dauerhaft. Kann zu Schutzmassnahme-Eintraegen verlinken. */
+            massnahmen_md?: string;
+            /** @description True wenn GBU der Tätigkeit nach Unfall aktualisiert wurde. */
+            abgeleitete_gbu_aktualisierung?: boolean;
+            readonly ist_meldepflichtig: boolean;
+            erfasst_von: number;
+            /** Format: date-time */
+            readonly erfasst_am: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /** @description Liste — KEIN Klarname, KEINE Beschreibung. Statistik-Daten only. */
+        UnfallList: {
+            readonly id: number;
+            arbeitsbereich: number;
+            readonly arbeitsbereich_name: string;
+            taetigkeit?: number | null;
+            /** Format: date-time */
+            datum: string;
+            schwere: components["schemas"]["Schwere520Enum"];
+            ausfalltage?: number;
+            /** @description Auto-berechnet aus schwere+ausfalltage. */
+            bg_meldung_pflicht?: boolean;
+            /**
+             * Format: date
+             * @description 3 Werktage bei meldepflichtig, today bei schwer/toedlich.
+             */
+            bg_meldefrist?: string | null;
+            /** Format: date */
+            bg_gemeldet_am?: string | null;
+            /** @description True wenn aus HinSchG-Meldung abgeleitet. */
+            aus_hinschg?: boolean;
+            /** @description True wenn GBU der Tätigkeit nach Unfall aktualisiert wurde. */
+            abgeleitete_gbu_aktualisierung?: boolean;
+            readonly ist_meldepflichtig: boolean;
+            /** Format: date-time */
+            readonly erfasst_am: string;
+        };
         UnreadCountResponse: {
             unread: number;
+        };
+        UnternehmensProfil: {
+            readonly id: number;
+            firmenname: string;
+            /** Format: uri */
+            website?: string;
+            branche?: string;
+            nace_code?: string;
+            mitarbeiter_anzahl?: number;
+            /** Format: int64 */
+            jahresumsatz_eur?: number;
+            /** Format: int64 */
+            bilanzsumme_eur?: number;
+            rechtsform?: string;
+            standort_laender?: unknown;
+            nis2_sektor?: string;
+            ist_automotive_zulieferer?: boolean;
+            hat_oem_kunden?: boolean;
+            stellt_produkte_her?: boolean;
+            produkte_mit_digitalen_elementen?: boolean;
+            verarbeitet_personenbezogene_daten?: boolean;
+            verarbeitet_gesundheits_sozialdaten?: boolean;
+            setzt_ki_ein?: boolean;
+            drittland_transfer?: boolean;
+            betriebsmerkmale?: unknown;
+            betriebsmerkmale_freitext?: unknown;
+            recherche_quelle?: string;
+            recherche_rohdaten?: unknown;
+            /** Format: date-time */
+            readonly bestaetigt_at: string | null;
+            /** Format: date-time */
+            readonly erstellt_at: string;
+            readonly bestaetigt_von: number | null;
+        };
+        Unternehmensstammblatt: {
+            readonly id: number;
+            firma_name: string;
+            rechtsform?: components["schemas"]["RechtsformEnum"];
+            /** @description z. B. 'HRB 123456' (Amtsgericht). Format frei, wird normalisiert. */
+            handelsregister_nummer?: string;
+            /** @description z. B. 'AG München'. */
+            handelsregister_amtsgericht?: string;
+            /** @description z. B. 'DE123456789'. */
+            ust_id_nummer?: string;
+            steuer_nummer?: string;
+            /** @description Eintragungsnummer im Transparenzregister (TR). */
+            transparenzregister_id?: string;
+            strasse?: string;
+            plz?: string;
+            ort?: string;
+            land?: string;
+            /**
+             * @description GwG § 19 Pflicht zur Meldung wirtschaftlich Berechtigter.
+             *
+             *     * `unbekannt` - Noch nicht geprüft
+             *     * `nein` - Nicht GwG-pflichtig
+             *     * `ja` - GwG-pflichtig
+             */
+            gwg_pflicht?: components["schemas"]["GwgPflichtEnum"];
+            /** @description Wöchentliches Polling der Bundesanzeiger-Volltext-API auf Bekanntmachungen zu diesem HRB. */
+            bundesanzeiger_monitoring_aktiv?: boolean;
+            /** Format: date-time */
+            readonly last_polled_at: string | null;
+            readonly berechtigte: components["schemas"]["WirtschaftlichBerechtigter"][];
+            readonly bekanntmachungen: components["schemas"]["RegisterBekanntmachung"][];
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        Verarbeitungsschritt: {
+            readonly id: number;
+            verarbeiter: number;
+            /** @description Was wird wozu verarbeitet? */
+            zweck: string;
+            /** @description z. B. ['kontaktdaten','transaktionsdaten'] */
+            datenkategorien?: unknown;
+            /** @description z. B. ['kunden','interessenten','mitarbeitende'] */
+            betroffene_kategorien?: unknown;
+            /** @description Wie lange werden die Daten beim Verarbeiter gespeichert? */
+            speicherdauer_monate?: number | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        VerifyRequest: {
+            mappe_id: string;
+            file_sha256: string;
+        };
+        VerifyResponse: {
+            verified: boolean;
+            reason?: string;
+            norm_scope?: string[];
+            generated_at?: string;
+        };
+        /**
+         * @description * `1` - 1
+         *     * `2` - 2
+         *     * `3` - 3
+         *     * `4` - 4
+         *     * `5` - 5
+         * @enum {integer}
+         */
+        WahrscheinlichkeitEnum: 1 | 2 | 3 | 4 | 5;
+        WirtschaftlichBerechtigter: {
+            readonly id: number;
+            stammblatt: number;
+            vorname: string;
+            nachname: string;
+            /** Format: date */
+            geburtsdatum?: string | null;
+            wohnort_land?: string;
+            /** @description z. B. 'Geschäftsanteile 30%', 'Stimmrechte 35%'. */
+            art_des_interesses?: string;
+            /**
+             * Format: decimal
+             * @description Prozentualer Anteil (≥ 25% löst Meldepflicht aus).
+             */
+            anteil_prozent?: string | null;
+            /** Format: date */
+            meldung_an_transparenzregister_am?: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
         };
         /** @description Nested-Write-Variante: frage wird vom Parent gesetzt, nicht vom Body. */
         _AntwortOptionNested: {
@@ -2643,6 +8845,2934 @@ export interface operations {
             };
         };
     };
+    arbeitsschutz_arbeitsbereiche_list: {
+        parameters: {
+            query?: {
+                aktiv?: boolean;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `werkstatt` - Werkstatt
+                 *     * `lager` - Lager
+                 *     * `buero` - Büro
+                 *     * `labor` - Labor
+                 *     * `aussen` - Außenmontage / Baustelle
+                 *     * `lieferung` - Lieferung / Logistik
+                 *     * `sonstiges` - Sonstiges
+                 */
+                typ?: "aussen" | "buero" | "labor" | "lager" | "lieferung" | "sonstiges" | "werkstatt";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedArbeitsbereichList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_arbeitsbereiche_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Arbeitsbereich"];
+                "application/x-www-form-urlencoded": components["schemas"]["Arbeitsbereich"];
+                "multipart/form-data": components["schemas"]["Arbeitsbereich"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Arbeitsbereich"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_arbeitsbereiche_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Arbeitsbereich identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Arbeitsbereich"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_arbeitsbereiche_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Arbeitsbereich identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Arbeitsbereich"];
+                "application/x-www-form-urlencoded": components["schemas"]["Arbeitsbereich"];
+                "multipart/form-data": components["schemas"]["Arbeitsbereich"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Arbeitsbereich"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_arbeitsbereiche_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Arbeitsbereich identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_arbeitsbereiche_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Arbeitsbereich identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedArbeitsbereich"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedArbeitsbereich"];
+                "multipart/form-data": components["schemas"]["PatchedArbeitsbereich"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Arbeitsbereich"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_beschluesse_list: {
+        parameters: {
+            query?: {
+                erledigt?: boolean;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                sitzung?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAsaBeschlussList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_beschluesse_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AsaBeschluss"];
+                "application/x-www-form-urlencoded": components["schemas"]["AsaBeschluss"];
+                "multipart/form-data": components["schemas"]["AsaBeschluss"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsaBeschluss"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_beschluesse_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ASA-Beschluss identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsaBeschluss"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_beschluesse_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ASA-Beschluss identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AsaBeschluss"];
+                "application/x-www-form-urlencoded": components["schemas"]["AsaBeschluss"];
+                "multipart/form-data": components["schemas"]["AsaBeschluss"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsaBeschluss"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_beschluesse_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ASA-Beschluss identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_asa_beschluesse_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ASA-Beschluss identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAsaBeschluss"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAsaBeschluss"];
+                "multipart/form-data": components["schemas"]["PatchedAsaBeschluss"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsaBeschluss"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_konfig_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAsaKonfigList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_konfig_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["AsaKonfig"];
+                "application/x-www-form-urlencoded": components["schemas"]["AsaKonfig"];
+                "multipart/form-data": components["schemas"]["AsaKonfig"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsaKonfig"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_konfig_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ASA-Konfiguration identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsaKonfig"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_konfig_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ASA-Konfiguration identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["AsaKonfig"];
+                "application/x-www-form-urlencoded": components["schemas"]["AsaKonfig"];
+                "multipart/form-data": components["schemas"]["AsaKonfig"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsaKonfig"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_konfig_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ASA-Konfiguration identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_asa_konfig_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ASA-Konfiguration identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAsaKonfig"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAsaKonfig"];
+                "multipart/form-data": components["schemas"]["PatchedAsaKonfig"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsaKonfig"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_sitzungen_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                quartal?: string;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `geplant` - Geplant
+                 *     * `durchgefuehrt` - Durchgeführt
+                 *     * `ausgefallen` - Ausgefallen
+                 */
+                status?: "ausgefallen" | "durchgefuehrt" | "geplant";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAsaSitzungList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_sitzungen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AsaSitzung"];
+                "application/x-www-form-urlencoded": components["schemas"]["AsaSitzung"];
+                "multipart/form-data": components["schemas"]["AsaSitzung"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsaSitzung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_sitzungen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ASA-Sitzung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsaSitzung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_sitzungen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ASA-Sitzung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AsaSitzung"];
+                "application/x-www-form-urlencoded": components["schemas"]["AsaSitzung"];
+                "multipart/form-data": components["schemas"]["AsaSitzung"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsaSitzung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_asa_sitzungen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ASA-Sitzung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_asa_sitzungen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ASA-Sitzung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAsaSitzung"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAsaSitzung"];
+                "multipart/form-data": components["schemas"]["PatchedAsaSitzung"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsaSitzung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_aushaenge_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                version?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAushangList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_aushaenge_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Aushang"];
+                "application/x-www-form-urlencoded": components["schemas"]["Aushang"];
+                "multipart/form-data": components["schemas"]["Aushang"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Aushang"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_aushaenge_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Aushang identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Aushang"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_aushaenge_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Aushang identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Aushang"];
+                "application/x-www-form-urlencoded": components["schemas"]["Aushang"];
+                "multipart/form-data": components["schemas"]["Aushang"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Aushang"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_aushaenge_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Aushang identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_aushaenge_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Aushang identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAushang"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAushang"];
+                "multipart/form-data": components["schemas"]["PatchedAushang"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Aushang"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_ba_versionen_list: {
+        parameters: {
+            query?: {
+                betriebsanweisung?: number;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedBetriebsanweisungVersionList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_ba_versionen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BetriebsanweisungVersion"];
+                "application/x-www-form-urlencoded": components["schemas"]["BetriebsanweisungVersion"];
+                "multipart/form-data": components["schemas"]["BetriebsanweisungVersion"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BetriebsanweisungVersion"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_ba_versionen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der BA-Version identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BetriebsanweisungVersion"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_ba_versionen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der BA-Version identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BetriebsanweisungVersion"];
+                "application/x-www-form-urlencoded": components["schemas"]["BetriebsanweisungVersion"];
+                "multipart/form-data": components["schemas"]["BetriebsanweisungVersion"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BetriebsanweisungVersion"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_ba_versionen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der BA-Version identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_ba_versionen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der BA-Version identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedBetriebsanweisungVersion"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedBetriebsanweisungVersion"];
+                "multipart/form-data": components["schemas"]["PatchedBetriebsanweisungVersion"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BetriebsanweisungVersion"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_ba_versionen_pdf_generieren_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der BA-Version identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BetriebsanweisungVersion"];
+                "application/x-www-form-urlencoded": components["schemas"]["BetriebsanweisungVersion"];
+                "multipart/form-data": components["schemas"]["BetriebsanweisungVersion"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BetriebsanweisungVersion"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_beauftragte_list: {
+        parameters: {
+            query?: {
+                aktiv?: boolean;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `sibe` - Sicherheitsbeauftragter (SGB VII §22)
+                 *     * `brandschutz` - Brandschutzbeauftragter
+                 *     * `ersthelfer` - Ersthelfer
+                 *     * `gefahrgut` - Gefahrgutbeauftragter
+                 *     * `laser` - Laserschutzbeauftragter
+                 *     * `strahlenschutz` - Strahlenschutzbeauftragter
+                 *     * `datenschutz` - Datenschutzbeauftragter (Querverweis)
+                 *     * `ki` - KI-Beauftragter (Querverweis)
+                 *     * `sonstiges` - Sonstiges
+                 */
+                typ?: "brandschutz" | "datenschutz" | "ersthelfer" | "gefahrgut" | "ki" | "laser" | "sibe" | "sonstiges" | "strahlenschutz";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedBeauftragterList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_beauftragte_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Beauftragter"];
+                "application/x-www-form-urlencoded": components["schemas"]["Beauftragter"];
+                "multipart/form-data": components["schemas"]["Beauftragter"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Beauftragter"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_beauftragte_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Beauftragte:r identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Beauftragter"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_beauftragte_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Beauftragte:r identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Beauftragter"];
+                "application/x-www-form-urlencoded": components["schemas"]["Beauftragter"];
+                "multipart/form-data": components["schemas"]["Beauftragter"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Beauftragter"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_beauftragte_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Beauftragte:r identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_beauftragte_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Beauftragte:r identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedBeauftragter"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedBeauftragter"];
+                "multipart/form-data": components["schemas"]["PatchedBeauftragter"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Beauftragter"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_beauftragten_quoten_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedBeauftragtenQuoteCheckList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_beauftragten_quoten_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Beauftragten-Quoten-Check identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BeauftragtenQuoteCheck"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_beauftragten_quoten_refresh_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["BeauftragtenQuoteCheck"];
+                "application/x-www-form-urlencoded": components["schemas"]["BeauftragtenQuoteCheck"];
+                "multipart/form-data": components["schemas"]["BeauftragtenQuoteCheck"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BeauftragtenQuoteCheck"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_betriebsanweisungen_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                taetigkeit?: number;
+                /**
+                 * @description * `maschine` - Maschine/Anlage
+                 *     * `gefahrstoff` - Gefahrstoff
+                 *     * `psa` - Persönliche Schutzausrüstung
+                 *     * `taetigkeit` - Tätigkeit
+                 */
+                typ?: "gefahrstoff" | "maschine" | "psa" | "taetigkeit";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedBetriebsanweisungList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_betriebsanweisungen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Betriebsanweisung"];
+                "application/x-www-form-urlencoded": components["schemas"]["Betriebsanweisung"];
+                "multipart/form-data": components["schemas"]["Betriebsanweisung"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Betriebsanweisung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_betriebsanweisungen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Betriebsanweisung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Betriebsanweisung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_betriebsanweisungen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Betriebsanweisung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Betriebsanweisung"];
+                "application/x-www-form-urlencoded": components["schemas"]["Betriebsanweisung"];
+                "multipart/form-data": components["schemas"]["Betriebsanweisung"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Betriebsanweisung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_betriebsanweisungen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Betriebsanweisung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_betriebsanweisungen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Betriebsanweisung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedBetriebsanweisung"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedBetriebsanweisung"];
+                "multipart/form-data": components["schemas"]["PatchedBetriebsanweisung"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Betriebsanweisung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_betriebsanweisungen_entwurf_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Betriebsanweisung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Betriebsanweisung"];
+                "application/x-www-form-urlencoded": components["schemas"]["Betriebsanweisung"];
+                "multipart/form-data": components["schemas"]["Betriebsanweisung"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Betriebsanweisung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `entwurf` - Entwurf
+                 *     * `in_bewertung` - In Bewertung
+                 *     * `freigegeben` - Freigegeben
+                 *     * `zu_ueberarbeiten` - Zu überarbeiten
+                 */
+                status?: "entwurf" | "freigegeben" | "in_bewertung" | "zu_ueberarbeiten";
+                taetigkeit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedGbuListList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Gbu"];
+                "application/x-www-form-urlencoded": components["schemas"]["Gbu"];
+                "multipart/form-data": components["schemas"]["Gbu"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Gbu"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_positionen_list: {
+        parameters: {
+            query?: {
+                gbu?: number;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                relevant?: boolean;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedGbuGefaehrdungList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_positionen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GbuGefaehrdung"];
+                "application/x-www-form-urlencoded": components["schemas"]["GbuGefaehrdung"];
+                "multipart/form-data": components["schemas"]["GbuGefaehrdung"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GbuGefaehrdung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_positionen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der GBU-Position identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GbuGefaehrdung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_positionen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der GBU-Position identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GbuGefaehrdung"];
+                "application/x-www-form-urlencoded": components["schemas"]["GbuGefaehrdung"];
+                "multipart/form-data": components["schemas"]["GbuGefaehrdung"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GbuGefaehrdung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_positionen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der GBU-Position identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_gbu_positionen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der GBU-Position identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedGbuGefaehrdung"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedGbuGefaehrdung"];
+                "multipart/form-data": components["schemas"]["PatchedGbuGefaehrdung"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GbuGefaehrdung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_vorschlaege_list: {
+        parameters: {
+            query?: {
+                gbu?: number;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `offen` - Offen
+                 *     * `akzeptiert` - Akzeptiert
+                 *     * `verworfen` - Verworfen
+                 */
+                status?: "akzeptiert" | "offen" | "verworfen";
+                taetigkeit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedGbuGefaehrdungVorschlagList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_vorschlaege_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GbuGefaehrdungVorschlag"];
+                "application/x-www-form-urlencoded": components["schemas"]["GbuGefaehrdungVorschlag"];
+                "multipart/form-data": components["schemas"]["GbuGefaehrdungVorschlag"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GbuGefaehrdungVorschlag"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_vorschlaege_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der GBU-Gefährdungs-Vorschlag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GbuGefaehrdungVorschlag"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_vorschlaege_akzeptieren_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der GBU-Gefährdungs-Vorschlag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GbuGefaehrdungVorschlag"];
+                "application/x-www-form-urlencoded": components["schemas"]["GbuGefaehrdungVorschlag"];
+                "multipart/form-data": components["schemas"]["GbuGefaehrdungVorschlag"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GbuGefaehrdungVorschlag"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_vorschlaege_verwerfen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der GBU-Gefährdungs-Vorschlag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GbuGefaehrdungVorschlag"];
+                "application/x-www-form-urlencoded": components["schemas"]["GbuGefaehrdungVorschlag"];
+                "multipart/form-data": components["schemas"]["GbuGefaehrdungVorschlag"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GbuGefaehrdungVorschlag"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Gefährdungsbeurteilung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Gbu"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Gefährdungsbeurteilung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Gbu"];
+                "application/x-www-form-urlencoded": components["schemas"]["Gbu"];
+                "multipart/form-data": components["schemas"]["Gbu"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Gbu"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Gefährdungsbeurteilung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_gbu_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Gefährdungsbeurteilung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedGbu"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedGbu"];
+                "multipart/form-data": components["schemas"]["PatchedGbu"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Gbu"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_freigeben_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Gefährdungsbeurteilung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Gbu"];
+                "application/x-www-form-urlencoded": components["schemas"]["Gbu"];
+                "multipart/form-data": components["schemas"]["Gbu"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Gbu"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gbu_suggest_gefaehrdungen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Gefährdungsbeurteilung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Gbu"];
+                "application/x-www-form-urlencoded": components["schemas"]["Gbu"];
+                "multipart/form-data": components["schemas"]["Gbu"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Gbu"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gefaehrdungs_katalog_list: {
+        parameters: {
+            query?: {
+                aktiv?: boolean;
+                eigentuemer_tenant?: string;
+                /**
+                 * @description * `mechanisch` - Mechanische Gefährdungen
+                 *     * `elektrisch` - Elektrische Gefährdungen
+                 *     * `gefahrstoffe` - Gefahrstoffe
+                 *     * `biologisch` - Biologische Arbeitsstoffe
+                 *     * `brand_explosion` - Brand- und Explosionsgefährdungen
+                 *     * `thermisch` - Thermische Gefährdungen (Hitze/Kälte)
+                 *     * `laerm` - Lärm
+                 *     * `vibration` - Vibration
+                 *     * `strahlung` - Strahlung (UV, IR, ionisierend)
+                 *     * `ergonomie` - Ergonomie / physische Belastung
+                 *     * `psychisch` - Psychische Belastung
+                 *     * `organisatorisch` - Arbeitsorganisation
+                 */
+                kategorie?: "biologisch" | "brand_explosion" | "elektrisch" | "ergonomie" | "gefahrstoffe" | "laerm" | "mechanisch" | "organisatorisch" | "psychisch" | "strahlung" | "thermisch" | "vibration";
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedGefaehrdungList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gefaehrdungs_katalog_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Gefaehrdung"];
+                "application/x-www-form-urlencoded": components["schemas"]["Gefaehrdung"];
+                "multipart/form-data": components["schemas"]["Gefaehrdung"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Gefaehrdung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gefaehrdungs_katalog_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Gefährdung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Gefaehrdung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gefaehrdungs_katalog_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Gefährdung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Gefaehrdung"];
+                "application/x-www-form-urlencoded": components["schemas"]["Gefaehrdung"];
+                "multipart/form-data": components["schemas"]["Gefaehrdung"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Gefaehrdung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_gefaehrdungs_katalog_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Gefährdung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_gefaehrdungs_katalog_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Gefährdung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedGefaehrdung"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedGefaehrdung"];
+                "multipart/form-data": components["schemas"]["PatchedGefaehrdung"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Gefaehrdung"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_list: {
+        parameters: {
+            query?: {
+                /**
+                 * @description * `S` - Substitution (Ersetzen)
+                 *     * `T` - Technische Maßnahme
+                 *     * `O` - Organisatorische Maßnahme
+                 *     * `P` - Personenbezogene Maßnahme (PSA)
+                 */
+                hierarchie_stufe?: "O" | "P" | "S" | "T";
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `geplant` - Geplant
+                 *     * `umgesetzt` - Umgesetzt
+                 *     * `wirksam_geprueft` - Wirksamkeit geprüft
+                 *     * `verworfen` - Verworfen (nicht umsetzbar)
+                 */
+                status?: "geplant" | "umgesetzt" | "verworfen" | "wirksam_geprueft";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedSchutzmassnahmeList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Schutzmassnahme"];
+                "application/x-www-form-urlencoded": components["schemas"]["Schutzmassnahme"];
+                "multipart/form-data": components["schemas"]["Schutzmassnahme"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Schutzmassnahme"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_vorschlaege_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedMassnahmenVorschlagList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_vorschlaege_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MassnahmenVorschlag"];
+                "application/x-www-form-urlencoded": components["schemas"]["MassnahmenVorschlag"];
+                "multipart/form-data": components["schemas"]["MassnahmenVorschlag"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MassnahmenVorschlag"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_vorschlaege_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Maßnahmen-Vorschlag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MassnahmenVorschlag"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_vorschlaege_akzeptieren_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Maßnahmen-Vorschlag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MassnahmenVorschlag"];
+                "application/x-www-form-urlencoded": components["schemas"]["MassnahmenVorschlag"];
+                "multipart/form-data": components["schemas"]["MassnahmenVorschlag"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MassnahmenVorschlag"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_vorschlaege_verwerfen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Maßnahmen-Vorschlag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MassnahmenVorschlag"];
+                "application/x-www-form-urlencoded": components["schemas"]["MassnahmenVorschlag"];
+                "multipart/form-data": components["schemas"]["MassnahmenVorschlag"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MassnahmenVorschlag"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_vorschlaege_generieren_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MassnahmenVorschlag"];
+                "application/x-www-form-urlencoded": components["schemas"]["MassnahmenVorschlag"];
+                "multipart/form-data": components["schemas"]["MassnahmenVorschlag"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MassnahmenVorschlag"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schutzmaßnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Schutzmassnahme"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schutzmaßnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Schutzmassnahme"];
+                "application/x-www-form-urlencoded": components["schemas"]["Schutzmassnahme"];
+                "multipart/form-data": components["schemas"]["Schutzmassnahme"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Schutzmassnahme"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schutzmaßnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schutzmaßnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedSchutzmassnahme"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedSchutzmassnahme"];
+                "multipart/form-data": components["schemas"]["PatchedSchutzmassnahme"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Schutzmassnahme"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_umsetzen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schutzmaßnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Schutzmassnahme"];
+                "application/x-www-form-urlencoded": components["schemas"]["Schutzmassnahme"];
+                "multipart/form-data": components["schemas"]["Schutzmassnahme"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Schutzmassnahme"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_massnahmen_wirksamkeit_pruefen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Schutzmaßnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Schutzmassnahme"];
+                "application/x-www-form-urlencoded": components["schemas"]["Schutzmassnahme"];
+                "multipart/form-data": components["schemas"]["Schutzmassnahme"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Schutzmassnahme"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_mitarbeiter_taetigkeiten_list: {
+        parameters: {
+            query?: {
+                mitarbeiter?: number;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                taetigkeit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedMitarbeiterTaetigkeitList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_mitarbeiter_taetigkeiten_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MitarbeiterTaetigkeit"];
+                "application/x-www-form-urlencoded": components["schemas"]["MitarbeiterTaetigkeit"];
+                "multipart/form-data": components["schemas"]["MitarbeiterTaetigkeit"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MitarbeiterTaetigkeit"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_mitarbeiter_taetigkeiten_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Mitarbeiter-Tätigkeit identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MitarbeiterTaetigkeit"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_mitarbeiter_taetigkeiten_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Mitarbeiter-Tätigkeit identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MitarbeiterTaetigkeit"];
+                "application/x-www-form-urlencoded": components["schemas"]["MitarbeiterTaetigkeit"];
+                "multipart/form-data": components["schemas"]["MitarbeiterTaetigkeit"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MitarbeiterTaetigkeit"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_mitarbeiter_taetigkeiten_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Mitarbeiter-Tätigkeit identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_mitarbeiter_taetigkeiten_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Mitarbeiter-Tätigkeit identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedMitarbeiterTaetigkeit"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedMitarbeiterTaetigkeit"];
+                "multipart/form-data": components["schemas"]["PatchedMitarbeiterTaetigkeit"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MitarbeiterTaetigkeit"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_taetigkeiten_list: {
+        parameters: {
+            query?: {
+                aktiv?: boolean;
+                arbeitsbereich?: number;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedTaetigkeitList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_taetigkeiten_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Taetigkeit"];
+                "application/x-www-form-urlencoded": components["schemas"]["Taetigkeit"];
+                "multipart/form-data": components["schemas"]["Taetigkeit"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Taetigkeit"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_taetigkeiten_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Tätigkeit identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Taetigkeit"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_taetigkeiten_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Tätigkeit identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Taetigkeit"];
+                "application/x-www-form-urlencoded": components["schemas"]["Taetigkeit"];
+                "multipart/form-data": components["schemas"]["Taetigkeit"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Taetigkeit"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_taetigkeiten_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Tätigkeit identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_taetigkeiten_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Tätigkeit identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedTaetigkeit"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedTaetigkeit"];
+                "multipart/form-data": components["schemas"]["PatchedTaetigkeit"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Taetigkeit"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_unfaelle_list: {
+        parameters: {
+            query?: {
+                arbeitsbereich?: number;
+                bg_meldung_pflicht?: boolean;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /**
+                 * @description * `bagatell` - Bagatell (keine AU)
+                 *     * `leicht` - Leicht (AU ≤ 3 Tage)
+                 *     * `meldepflichtig` - Meldepflichtig (AU > 3 Tage)
+                 *     * `schwer` - Schwer
+                 *     * `toedlich` - Tödlich
+                 *     * `fast_unfall` - Beinahe-Unfall
+                 */
+                schwere?: "bagatell" | "fast_unfall" | "leicht" | "meldepflichtig" | "schwer" | "toedlich";
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedUnfallListList"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_unfaelle_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Unfall"];
+                "application/x-www-form-urlencoded": components["schemas"]["Unfall"];
+                "multipart/form-data": components["schemas"]["Unfall"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unfall"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_unfaelle_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Arbeitsunfall identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unfall"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_unfaelle_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Arbeitsunfall identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Unfall"];
+                "application/x-www-form-urlencoded": components["schemas"]["Unfall"];
+                "multipart/form-data": components["schemas"]["Unfall"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unfall"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_unfaelle_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Arbeitsunfall identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    arbeitsschutz_unfaelle_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Arbeitsunfall identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedUnfall"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedUnfall"];
+                "multipart/form-data": components["schemas"]["PatchedUnfall"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unfall"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_unfaelle_bg_gemeldet_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Arbeitsunfall identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Unfall"];
+                "application/x-www-form-urlencoded": components["schemas"]["Unfall"];
+                "multipart/form-data": components["schemas"]["Unfall"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unfall"];
+                };
+            };
+        };
+    };
+    arbeitsschutz_unfaelle_statistik_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unfall"];
+                };
+            };
+        };
+    };
     audit_list: {
         parameters: {
             query?: {
@@ -2665,6 +11795,400 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedAuditLogList"];
+                };
+            };
+        };
+    };
+    audit_export_profiles_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAuditExportProfileList"];
+                };
+            };
+        };
+    };
+    audit_export_profiles_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AuditExportProfile"];
+                "application/x-www-form-urlencoded": components["schemas"]["AuditExportProfile"];
+                "multipart/form-data": components["schemas"]["AuditExportProfile"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditExportProfile"];
+                };
+            };
+        };
+    };
+    audit_export_profiles_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Export-Profil identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditExportProfile"];
+                };
+            };
+        };
+    };
+    audit_export_profiles_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Export-Profil identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AuditExportProfile"];
+                "application/x-www-form-urlencoded": components["schemas"]["AuditExportProfile"];
+                "multipart/form-data": components["schemas"]["AuditExportProfile"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditExportProfile"];
+                };
+            };
+        };
+    };
+    audit_export_profiles_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Export-Profil identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    audit_export_profiles_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Export-Profil identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAuditExportProfile"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAuditExportProfile"];
+                "multipart/form-data": components["schemas"]["PatchedAuditExportProfile"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditExportProfile"];
+                };
+            };
+        };
+    };
+    audit_export_profiles_preview_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Export-Profil identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AuditExportProfile"];
+                "application/x-www-form-urlencoded": components["schemas"]["AuditExportProfile"];
+                "multipart/form-data": components["schemas"]["AuditExportProfile"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditExportProfile"];
+                };
+            };
+        };
+    };
+    audit_export_profiles_runs_start_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Export-Profil identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AuditExportProfile"];
+                "application/x-www-form-urlencoded": components["schemas"]["AuditExportProfile"];
+                "multipart/form-data": components["schemas"]["AuditExportProfile"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditExportProfile"];
+                };
+            };
+        };
+    };
+    audit_export_runs_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                profile?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `queued` - Eingereiht
+                 *     * `running` - Läuft
+                 *     * `done` - Fertig
+                 *     * `failed` - Fehlgeschlagen
+                 *     * `cancelled` - Abgebrochen
+                 */
+                status?: "cancelled" | "done" | "failed" | "queued" | "running";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAuditExportRunListList"];
+                };
+            };
+        };
+    };
+    audit_export_runs_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Export-Lauf identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditExportRunDetail"];
+                };
+            };
+        };
+    };
+    audit_export_runs_download_oscal_assessment_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Export-Lauf identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditExportRunDetail"];
+                };
+            };
+        };
+    };
+    audit_export_runs_download_oscal_ssp_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Export-Lauf identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditExportRunDetail"];
+                };
+            };
+        };
+    };
+    audit_export_runs_download_pdf_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Export-Lauf identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditExportRunDetail"];
+                };
+            };
+        };
+    };
+    audit_export_runs_download_zip_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Export-Lauf identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditExportRunDetail"];
+                };
+            };
+        };
+    };
+    audit_export_verify_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    audit_export_verify_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["VerifyRequest"];
+                "multipart/form-data": components["schemas"]["VerifyRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerifyResponse"];
                 };
             };
         };
@@ -2713,6 +12237,172 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    auftragsverarbeiter_list: {
+        parameters: {
+            query?: {
+                /**
+                 * @description * `eu_ewr` - EU/EWR
+                 *     * `angemessenheit` - Drittland mit Angemessenheitsbeschluss
+                 *     * `scc` - Drittland mit Standard-Vertragsklauseln (SCCs)
+                 *     * `bcr` - Drittland mit Binding Corporate Rules (BCRs)
+                 *     * `kritisch` - Drittland ohne SCC/BCR (kritisch — Art. 49?)
+                 */
+                drittland?: "angemessenheit" | "bcr" | "eu_ewr" | "kritisch" | "scc";
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                rechtssitz_land?: string;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `offen` - Offen — Vertrag noch nicht abgeschlossen
+                 *     * `aktiv` - Aktiv — AVV unterschrieben
+                 *     * `beendet` - Beendet — Verarbeitung eingestellt
+                 *     * `pruefung` - In Prüfung
+                 */
+                status?: "aktiv" | "beendet" | "offen" | "pruefung";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAuftragsverarbeiterListList"];
+                };
+            };
+        };
+    };
+    auftragsverarbeiter_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Auftragsverarbeiter"];
+                "application/x-www-form-urlencoded": components["schemas"]["Auftragsverarbeiter"];
+                "multipart/form-data": components["schemas"]["Auftragsverarbeiter"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Auftragsverarbeiter"];
+                };
+            };
+        };
+    };
+    auftragsverarbeiter_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Auftragsverarbeiter identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Auftragsverarbeiter"];
+                };
+            };
+        };
+    };
+    auftragsverarbeiter_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Auftragsverarbeiter identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Auftragsverarbeiter"];
+                "application/x-www-form-urlencoded": components["schemas"]["Auftragsverarbeiter"];
+                "multipart/form-data": components["schemas"]["Auftragsverarbeiter"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Auftragsverarbeiter"];
+                };
+            };
+        };
+    };
+    auftragsverarbeiter_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Auftragsverarbeiter identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    auftragsverarbeiter_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Auftragsverarbeiter identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAuftragsverarbeiter"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAuftragsverarbeiter"];
+                "multipart/form-data": components["schemas"]["PatchedAuftragsverarbeiter"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Auftragsverarbeiter"];
+                };
             };
         };
     };
@@ -3080,6 +12770,422 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DashboardResponse"];
+                };
+            };
+        };
+    };
+    datenpannen_list: {
+        parameters: {
+            query?: {
+                /**
+                 * @description * `verlust_geraet` - Verlust/Diebstahl Endgerät
+                 *     * `phishing` - Phishing/Social-Engineering
+                 *     * `ransomware` - Ransomware/Malware
+                 *     * `fehlversand` - Fehlversand (E-Mail/Brief)
+                 *     * `unberechtigter_zugriff` - Unberechtigter Zugriff
+                 *     * `konfigurationsfehler` - Konfigurations- oder Berechtigungs-Fehler
+                 *     * `systemausfall` - Systemausfall mit Daten-Auswirkung
+                 *     * `insider` - Insider-Vorfall (vorsätzlich)
+                 *     * `sonstiges` - Sonstiges
+                 */
+                art?: "fehlversand" | "insider" | "konfigurationsfehler" | "phishing" | "ransomware" | "sonstiges" | "systemausfall" | "unberechtigter_zugriff" | "verlust_geraet";
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /**
+                 * @description Bewertung NACH menschlicher Prüfung. LLM-Vorschlag liegt in risiko_vorschlag — DARF NICHT automatisch übernommen werden.
+                 *
+                 *     * `kein_risiko` - Kein Risiko
+                 *     * `gering` - Geringes Risiko
+                 *     * `hoch` - Hohes Risiko
+                 */
+                risiko?: "gering" | "hoch" | "kein_risiko";
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `entdeckt` - Entdeckt — Klassifizierung läuft
+                 *     * `bewertet` - Bewertet — Maßnahmen geplant
+                 *     * `gemeldet` - Aufsichtsbehörde informiert
+                 *     * `abgeschlossen` - Abgeschlossen
+                 *     * `nicht_meldepflichtig` - Dokumentiert, nicht meldepflichtig
+                 */
+                status?: "abgeschlossen" | "bewertet" | "entdeckt" | "gemeldet" | "nicht_meldepflichtig";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedDatenpanneListList"];
+                };
+            };
+        };
+    };
+    datenpannen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Datenpanne"];
+                "application/x-www-form-urlencoded": components["schemas"]["Datenpanne"];
+                "multipart/form-data": components["schemas"]["Datenpanne"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Datenpanne"];
+                };
+            };
+        };
+    };
+    datenpannen_massnahmen_list: {
+        parameters: {
+            query?: {
+                datenpanne?: number;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `sofort` - Sofortmaßnahme (Schadensbegrenzung)
+                 *     * `dauerhaft` - Dauerhafte Maßnahme (Prävention)
+                 *     * `kommunikation` - Kommunikation (intern/extern)
+                 */
+                typ?: "dauerhaft" | "kommunikation" | "sofort";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedMassnahmeList"];
+                };
+            };
+        };
+    };
+    datenpannen_massnahmen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Massnahme"];
+                "application/x-www-form-urlencoded": components["schemas"]["Massnahme"];
+                "multipart/form-data": components["schemas"]["Massnahme"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Massnahme"];
+                };
+            };
+        };
+    };
+    datenpannen_massnahmen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Maßnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Massnahme"];
+                };
+            };
+        };
+    };
+    datenpannen_massnahmen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Maßnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Massnahme"];
+                "application/x-www-form-urlencoded": components["schemas"]["Massnahme"];
+                "multipart/form-data": components["schemas"]["Massnahme"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Massnahme"];
+                };
+            };
+        };
+    };
+    datenpannen_massnahmen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Maßnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    datenpannen_massnahmen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Maßnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedMassnahme"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedMassnahme"];
+                "multipart/form-data": components["schemas"]["PatchedMassnahme"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Massnahme"];
+                };
+            };
+        };
+    };
+    datenpannen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Datenpanne identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Datenpanne"];
+                };
+            };
+        };
+    };
+    datenpannen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Datenpanne identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Datenpanne"];
+                "application/x-www-form-urlencoded": components["schemas"]["Datenpanne"];
+                "multipart/form-data": components["schemas"]["Datenpanne"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Datenpanne"];
+                };
+            };
+        };
+    };
+    datenpannen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Datenpanne identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    datenpannen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Datenpanne identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedDatenpanne"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedDatenpanne"];
+                "multipart/form-data": components["schemas"]["PatchedDatenpanne"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Datenpanne"];
+                };
+            };
+        };
+    };
+    datenpannen_abschliessen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Datenpanne identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Datenpanne"];
+                "application/x-www-form-urlencoded": components["schemas"]["Datenpanne"];
+                "multipart/form-data": components["schemas"]["Datenpanne"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Datenpanne"];
+                };
+            };
+        };
+    };
+    datenpannen_behoerde_melden_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Datenpanne identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Datenpanne"];
+                "application/x-www-form-urlencoded": components["schemas"]["Datenpanne"];
+                "multipart/form-data": components["schemas"]["Datenpanne"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Datenpanne"];
+                };
+            };
+        };
+    };
+    datenpannen_risiko_vorschlag_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RisikoVorschlagRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["RisikoVorschlagRequest"];
+                "multipart/form-data": components["schemas"]["RisikoVorschlagRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RisikoVorschlagResponse"];
                 };
             };
         };
@@ -3551,6 +13657,3196 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MeldungIntern"];
+                };
+            };
+        };
+    };
+    iso27001_assets_list: {
+        parameters: {
+            query?: {
+                /**
+                 * @description * `system` - IT-System / Server
+                 *     * `app` - Anwendung / SaaS
+                 *     * `netz` - Netzwerk-Segment
+                 *     * `daten` - Daten-Sammlung
+                 *     * `hardware` - Endgerät / Hardware
+                 *     * `drittanbieter` - Drittanbieter-Dienst
+                 *     * `dokument` - Dokument / Information
+                 */
+                asset_typ?: "app" | "daten" | "dokument" | "drittanbieter" | "hardware" | "netz" | "system";
+                eigentuemer?: number;
+                /**
+                 * @description * `public` - Öffentlich
+                 *     * `intern` - Intern
+                 *     * `vertraulich` - Vertraulich
+                 *     * `streng_vertraulich` - Streng vertraulich
+                 */
+                klassifizierung?: "intern" | "public" | "streng_vertraulich" | "vertraulich";
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedIsmsAssetList"];
+                };
+            };
+        };
+    };
+    iso27001_assets_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IsmsAsset"];
+                "application/x-www-form-urlencoded": components["schemas"]["IsmsAsset"];
+                "multipart/form-data": components["schemas"]["IsmsAsset"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IsmsAsset"];
+                };
+            };
+        };
+    };
+    iso27001_assets_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISMS-Asset identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IsmsAsset"];
+                };
+            };
+        };
+    };
+    iso27001_assets_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISMS-Asset identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IsmsAsset"];
+                "application/x-www-form-urlencoded": components["schemas"]["IsmsAsset"];
+                "multipart/form-data": components["schemas"]["IsmsAsset"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IsmsAsset"];
+                };
+            };
+        };
+    };
+    iso27001_assets_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISMS-Asset identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso27001_assets_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISMS-Asset identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedIsmsAsset"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedIsmsAsset"];
+                "multipart/form-data": components["schemas"]["PatchedIsmsAsset"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IsmsAsset"];
+                };
+            };
+        };
+    };
+    iso27001_audits_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `geplant` - Geplant
+                 *     * `laufend` - Laufend
+                 *     * `abgeschlossen` - Abgeschlossen
+                 */
+                status?: "abgeschlossen" | "geplant" | "laufend";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedInternesAuditList"];
+                };
+            };
+        };
+    };
+    iso27001_audits_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InternesAudit"];
+                "application/x-www-form-urlencoded": components["schemas"]["InternesAudit"];
+                "multipart/form-data": components["schemas"]["InternesAudit"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InternesAudit"];
+                };
+            };
+        };
+    };
+    iso27001_audits_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Internes Audit identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InternesAudit"];
+                };
+            };
+        };
+    };
+    iso27001_audits_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Internes Audit identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InternesAudit"];
+                "application/x-www-form-urlencoded": components["schemas"]["InternesAudit"];
+                "multipart/form-data": components["schemas"]["InternesAudit"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InternesAudit"];
+                };
+            };
+        };
+    };
+    iso27001_audits_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Internes Audit identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso27001_audits_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Internes Audit identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedInternesAudit"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedInternesAudit"];
+                "multipart/form-data": components["schemas"]["PatchedInternesAudit"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InternesAudit"];
+                };
+            };
+        };
+    };
+    iso27001_controls_list: {
+        parameters: {
+            query?: {
+                /**
+                 * @description * `A5` - A.5 Organisatorische Maßnahmen
+                 *     * `A6` - A.6 Personelle Maßnahmen
+                 *     * `A7` - A.7 Physische Maßnahmen
+                 *     * `A8` - A.8 Technologische Maßnahmen
+                 */
+                kategorie?: "A5" | "A6" | "A7" | "A8";
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedControlListItemList"];
+                };
+            };
+        };
+    };
+    iso27001_controls_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Iso27001Control"];
+                };
+            };
+        };
+    };
+    iso27001_dashboard_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso27001_evidence_links_list: {
+        parameters: {
+            query?: {
+                auto_suggested?: boolean;
+                implementation?: number;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                quell_modul?: string;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedControlEvidenceLinkList"];
+                };
+            };
+        };
+    };
+    iso27001_evidence_links_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ControlEvidenceLink"];
+                "application/x-www-form-urlencoded": components["schemas"]["ControlEvidenceLink"];
+                "multipart/form-data": components["schemas"]["ControlEvidenceLink"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlEvidenceLink"];
+                };
+            };
+        };
+    };
+    iso27001_evidence_links_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Control-Evidence-Verknüpfung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlEvidenceLink"];
+                };
+            };
+        };
+    };
+    iso27001_evidence_links_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Control-Evidence-Verknüpfung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ControlEvidenceLink"];
+                "application/x-www-form-urlencoded": components["schemas"]["ControlEvidenceLink"];
+                "multipart/form-data": components["schemas"]["ControlEvidenceLink"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlEvidenceLink"];
+                };
+            };
+        };
+    };
+    iso27001_evidence_links_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Control-Evidence-Verknüpfung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso27001_evidence_links_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Control-Evidence-Verknüpfung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedControlEvidenceLink"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedControlEvidenceLink"];
+                "multipart/form-data": components["schemas"]["PatchedControlEvidenceLink"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlEvidenceLink"];
+                };
+            };
+        };
+    };
+    iso27001_evidence_links_confirm_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Control-Evidence-Verknüpfung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ControlEvidenceLink"];
+                "application/x-www-form-urlencoded": components["schemas"]["ControlEvidenceLink"];
+                "multipart/form-data": components["schemas"]["ControlEvidenceLink"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlEvidenceLink"];
+                };
+            };
+        };
+    };
+    iso27001_findings_list: {
+        parameters: {
+            query?: {
+                audit?: number;
+                erledigt_am?: string;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /**
+                 * @description * `klein` - Nebenbefund (Hinweis)
+                 *     * `gross` - Hauptbefund (Major)
+                 *     * `kritisch` - Kritisch (Critical)
+                 */
+                schweregrad?: "gross" | "klein" | "kritisch";
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAuditFindingList"];
+                };
+            };
+        };
+    };
+    iso27001_findings_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AuditFinding"];
+                "application/x-www-form-urlencoded": components["schemas"]["AuditFinding"];
+                "multipart/form-data": components["schemas"]["AuditFinding"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditFinding"];
+                };
+            };
+        };
+    };
+    iso27001_findings_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Finding identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditFinding"];
+                };
+            };
+        };
+    };
+    iso27001_findings_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Finding identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AuditFinding"];
+                "application/x-www-form-urlencoded": components["schemas"]["AuditFinding"];
+                "multipart/form-data": components["schemas"]["AuditFinding"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditFinding"];
+                };
+            };
+        };
+    };
+    iso27001_findings_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Finding identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso27001_findings_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Audit-Finding identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAuditFinding"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAuditFinding"];
+                "multipart/form-data": components["schemas"]["PatchedAuditFinding"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditFinding"];
+                };
+            };
+        };
+    };
+    iso27001_implementations_list: {
+        parameters: {
+            query?: {
+                anwendbar?: boolean;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `nicht_bewertet` - Nicht bewertet
+                 *     * `nicht_anwendbar` - Nicht anwendbar (SoA-Begründung)
+                 *     * `geplant` - Geplant
+                 *     * `umgesetzt` - Umgesetzt
+                 *     * `verifiziert` - Umgesetzt + verifiziert
+                 */
+                status?: "geplant" | "nicht_anwendbar" | "nicht_bewertet" | "umgesetzt" | "verifiziert";
+                verantwortlich?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedControlImplementationList"];
+                };
+            };
+        };
+    };
+    iso27001_implementations_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ControlImplementation"];
+                "application/x-www-form-urlencoded": components["schemas"]["ControlImplementation"];
+                "multipart/form-data": components["schemas"]["ControlImplementation"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlImplementation"];
+                };
+            };
+        };
+    };
+    iso27001_implementations_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Control-Implementation identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlImplementation"];
+                };
+            };
+        };
+    };
+    iso27001_implementations_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Control-Implementation identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ControlImplementation"];
+                "application/x-www-form-urlencoded": components["schemas"]["ControlImplementation"];
+                "multipart/form-data": components["schemas"]["ControlImplementation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlImplementation"];
+                };
+            };
+        };
+    };
+    iso27001_implementations_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Control-Implementation identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso27001_implementations_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Control-Implementation identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedControlImplementation"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedControlImplementation"];
+                "multipart/form-data": components["schemas"]["PatchedControlImplementation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlImplementation"];
+                };
+            };
+        };
+    };
+    iso27001_implementations_evidence_suggestions_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Control-Implementation identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlImplementation"];
+                };
+            };
+        };
+    };
+    iso27001_implementations_llm_entwurf_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Control-Implementation identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ControlImplementation"];
+                "application/x-www-form-urlencoded": components["schemas"]["ControlImplementation"];
+                "multipart/form-data": components["schemas"]["ControlImplementation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlImplementation"];
+                };
+            };
+        };
+    };
+    iso27001_implementations_verify_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Control-Implementation identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ControlImplementation"];
+                "application/x-www-form-urlencoded": components["schemas"]["ControlImplementation"];
+                "multipart/form-data": components["schemas"]["ControlImplementation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlImplementation"];
+                };
+            };
+        };
+    };
+    iso27001_management_reviews_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                review_jahr?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `entwurf` - Entwurf
+                 *     * `durchgefuehrt` - Durchgeführt
+                 *     * `genehmigt` - Genehmigt
+                 */
+                status?: "durchgefuehrt" | "entwurf" | "genehmigt";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedManagementReviewList"];
+                };
+            };
+        };
+    };
+    iso27001_management_reviews_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ManagementReview"];
+                "application/x-www-form-urlencoded": components["schemas"]["ManagementReview"];
+                "multipart/form-data": components["schemas"]["ManagementReview"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ManagementReview"];
+                };
+            };
+        };
+    };
+    iso27001_management_reviews_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Management-Review identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ManagementReview"];
+                };
+            };
+        };
+    };
+    iso27001_management_reviews_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Management-Review identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ManagementReview"];
+                "application/x-www-form-urlencoded": components["schemas"]["ManagementReview"];
+                "multipart/form-data": components["schemas"]["ManagementReview"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ManagementReview"];
+                };
+            };
+        };
+    };
+    iso27001_management_reviews_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Management-Review identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso27001_management_reviews_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Management-Review identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedManagementReview"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedManagementReview"];
+                "multipart/form-data": components["schemas"]["PatchedManagementReview"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ManagementReview"];
+                };
+            };
+        };
+    };
+    iso27001_management_reviews_inputs_vorbefuellen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Management-Review identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ManagementReview"];
+                "application/x-www-form-urlencoded": components["schemas"]["ManagementReview"];
+                "multipart/form-data": components["schemas"]["ManagementReview"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ManagementReview"];
+                };
+            };
+        };
+    };
+    iso27001_management_reviews_pdf_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Management-Review identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ManagementReview"];
+                };
+            };
+        };
+    };
+    iso27001_risiken_list: {
+        parameters: {
+            query?: {
+                asset?: number;
+                /**
+                 * @description * `1` - 1 - sehr niedrig
+                 *     * `2` - 2 - niedrig
+                 *     * `3` - 3 - mittel
+                 *     * `4` - 4 - hoch
+                 *     * `5` - 5 - sehr hoch
+                 */
+                impact?: 1 | 2 | 3 | 4 | 5;
+                /**
+                 * @description * `1` - 1 - sehr niedrig
+                 *     * `2` - 2 - niedrig
+                 *     * `3` - 3 - mittel
+                 *     * `4` - 4 - hoch
+                 *     * `5` - 5 - sehr hoch
+                 */
+                likelihood?: 1 | 2 | 3 | 4 | 5;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `reduzieren` - Reduzieren (Maßnahme)
+                 *     * `akzeptieren` - Akzeptieren (dokumentiertes Restrisiko)
+                 *     * `uebertragen` - Übertragen (Versicherung/Vertrag)
+                 *     * `vermeiden` - Vermeiden (Aktivität einstellen)
+                 */
+                treatment?: "akzeptieren" | "reduzieren" | "uebertragen" | "vermeiden";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedIsmsRiskAssessmentList"];
+                };
+            };
+        };
+    };
+    iso27001_risiken_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IsmsRiskAssessment"];
+                "application/x-www-form-urlencoded": components["schemas"]["IsmsRiskAssessment"];
+                "multipart/form-data": components["schemas"]["IsmsRiskAssessment"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IsmsRiskAssessment"];
+                };
+            };
+        };
+    };
+    iso27001_risiken_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISMS-Risiko identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IsmsRiskAssessment"];
+                };
+            };
+        };
+    };
+    iso27001_risiken_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISMS-Risiko identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IsmsRiskAssessment"];
+                "application/x-www-form-urlencoded": components["schemas"]["IsmsRiskAssessment"];
+                "multipart/form-data": components["schemas"]["IsmsRiskAssessment"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IsmsRiskAssessment"];
+                };
+            };
+        };
+    };
+    iso27001_risiken_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISMS-Risiko identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso27001_risiken_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISMS-Risiko identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedIsmsRiskAssessment"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedIsmsRiskAssessment"];
+                "multipart/form-data": components["schemas"]["PatchedIsmsRiskAssessment"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IsmsRiskAssessment"];
+                };
+            };
+        };
+    };
+    iso27001_risiken_akzeptieren_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISMS-Risiko identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IsmsRiskAssessment"];
+                "application/x-www-form-urlencoded": components["schemas"]["IsmsRiskAssessment"];
+                "multipart/form-data": components["schemas"]["IsmsRiskAssessment"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IsmsRiskAssessment"];
+                };
+            };
+        };
+    };
+    iso27001_risiken_treatment_vorschlag_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISMS-Risiko identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IsmsRiskAssessment"];
+                "application/x-www-form-urlencoded": components["schemas"]["IsmsRiskAssessment"];
+                "multipart/form-data": components["schemas"]["IsmsRiskAssessment"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IsmsRiskAssessment"];
+                };
+            };
+        };
+    };
+    iso27001_soa_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedStatementOfApplicabilityList"];
+                };
+            };
+        };
+    };
+    iso27001_soa_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SoaErzeugenRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["SoaErzeugenRequest"];
+                "multipart/form-data": components["schemas"]["SoaErzeugenRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementOfApplicability"];
+                };
+            };
+        };
+    };
+    iso27001_soa_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Statement of Applicability identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementOfApplicability"];
+                };
+            };
+        };
+    };
+    iso27001_soa_pdf_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Statement of Applicability identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementOfApplicability"];
+                };
+            };
+        };
+    };
+    iso27001_soa_next_version_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementOfApplicability"];
+                };
+            };
+        };
+    };
+    iso42001_ai_systeme_list: {
+        parameters: {
+            query?: {
+                in_aims_scope?: boolean;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /**
+                 * @description AIMS-Risiko (≠ AI-Act-Risiko). Treibt AIIA-Pflicht und Kompetenz-Schulungs-Trigger.
+                 *
+                 *     * `niedrig` - Niedrig
+                 *     * `mittel` - Mittel
+                 *     * `hoch` - Hoch
+                 *     * `kritisch` - Kritisch
+                 */
+                risiko_aims?: "hoch" | "kritisch" | "mittel" | "niedrig";
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAiSystemRegistrationList"];
+                };
+            };
+        };
+    };
+    iso42001_ai_systeme_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiSystemRegistration"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiSystemRegistration"];
+                "multipart/form-data": components["schemas"]["AiSystemRegistration"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiSystemRegistration"];
+                };
+            };
+        };
+    };
+    iso42001_ai_systeme_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AI-System-Registrierung (AIMS) identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiSystemRegistration"];
+                };
+            };
+        };
+    };
+    iso42001_ai_systeme_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AI-System-Registrierung (AIMS) identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiSystemRegistration"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiSystemRegistration"];
+                "multipart/form-data": components["schemas"]["AiSystemRegistration"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiSystemRegistration"];
+                };
+            };
+        };
+    };
+    iso42001_ai_systeme_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AI-System-Registrierung (AIMS) identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso42001_ai_systeme_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AI-System-Registrierung (AIMS) identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAiSystemRegistration"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAiSystemRegistration"];
+                "multipart/form-data": components["schemas"]["PatchedAiSystemRegistration"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiSystemRegistration"];
+                };
+            };
+        };
+    };
+    iso42001_aiias_list: {
+        parameters: {
+            query?: {
+                ai_system?: number;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `entwurf` - Entwurf
+                 *     * `bewertung` - In Bewertung
+                 *     * `approval_offen` - Wartet auf Freigabe
+                 *     * `freigegeben` - Freigegeben
+                 *     * `abgelehnt` - Abgelehnt
+                 *     * `archiviert` - Archiviert (durch neuere Version ersetzt)
+                 */
+                status?: "abgelehnt" | "approval_offen" | "archiviert" | "bewertung" | "entwurf" | "freigegeben";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAiImpactAssessmentList"];
+                };
+            };
+        };
+    };
+    iso42001_aiias_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiImpactAssessment"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiImpactAssessment"];
+                "multipart/form-data": components["schemas"]["AiImpactAssessment"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiImpactAssessment"];
+                };
+            };
+        };
+    };
+    iso42001_aiias_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AI Impact Assessment (AIIA) identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiImpactAssessment"];
+                };
+            };
+        };
+    };
+    iso42001_aiias_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AI Impact Assessment (AIIA) identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiImpactAssessment"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiImpactAssessment"];
+                "multipart/form-data": components["schemas"]["AiImpactAssessment"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiImpactAssessment"];
+                };
+            };
+        };
+    };
+    iso42001_aiias_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AI Impact Assessment (AIIA) identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso42001_aiias_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AI Impact Assessment (AIIA) identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAiImpactAssessment"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAiImpactAssessment"];
+                "multipart/form-data": components["schemas"]["PatchedAiImpactAssessment"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiImpactAssessment"];
+                };
+            };
+        };
+    };
+    iso42001_aiias_freigeben_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AI Impact Assessment (AIIA) identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiImpactAssessment"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiImpactAssessment"];
+                "multipart/form-data": components["schemas"]["AiImpactAssessment"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiImpactAssessment"];
+                };
+            };
+        };
+    };
+    iso42001_aiias_neue_version_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AI Impact Assessment (AIIA) identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiImpactAssessment"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiImpactAssessment"];
+                "multipart/form-data": components["schemas"]["AiImpactAssessment"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiImpactAssessment"];
+                };
+            };
+        };
+    };
+    iso42001_aiias_status_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AI Impact Assessment (AIIA) identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiImpactAssessment"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiImpactAssessment"];
+                "multipart/form-data": components["schemas"]["AiImpactAssessment"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiImpactAssessment"];
+                };
+            };
+        };
+    };
+    iso42001_control_implementations_list: {
+        parameters: {
+            query?: {
+                anwendbar?: boolean;
+                control_code?: string;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `offen` - Offen
+                 *     * `geplant` - Geplant
+                 *     * `umgesetzt` - Umgesetzt
+                 *     * `abgeschlossen` - Abgeschlossen + dokumentiert
+                 *     * `nicht_anwendbar` - Nicht anwendbar (SoA-Ausschluss)
+                 */
+                status?: "abgeschlossen" | "geplant" | "nicht_anwendbar" | "offen" | "umgesetzt";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedControlImplementationList"];
+                };
+            };
+        };
+    };
+    iso42001_control_implementations_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ControlImplementation"];
+                "application/x-www-form-urlencoded": components["schemas"]["ControlImplementation"];
+                "multipart/form-data": components["schemas"]["ControlImplementation"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlImplementation"];
+                };
+            };
+        };
+    };
+    iso42001_control_implementations_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISO 42001 Control-Umsetzung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlImplementation"];
+                };
+            };
+        };
+    };
+    iso42001_control_implementations_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISO 42001 Control-Umsetzung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ControlImplementation"];
+                "application/x-www-form-urlencoded": components["schemas"]["ControlImplementation"];
+                "multipart/form-data": components["schemas"]["ControlImplementation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlImplementation"];
+                };
+            };
+        };
+    };
+    iso42001_control_implementations_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISO 42001 Control-Umsetzung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso42001_control_implementations_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der ISO 42001 Control-Umsetzung identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedControlImplementation"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedControlImplementation"];
+                "multipart/form-data": components["schemas"]["PatchedControlImplementation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlImplementation"];
+                };
+            };
+        };
+    };
+    iso42001_controls_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlListItem"][];
+                };
+            };
+        };
+    };
+    iso42001_dashboard_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso42001_incidents_list: {
+        parameters: {
+            query?: {
+                ai_system?: number;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /**
+                 * @description * `niedrig` - Niedrig
+                 *     * `mittel` - Mittel
+                 *     * `hoch` - Hoch
+                 *     * `kritisch` - Kritisch (Meldung an Behörde nötig)
+                 */
+                schweregrad?: "hoch" | "kritisch" | "mittel" | "niedrig";
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `bias_entdeckt` - Bias / Diskriminierung entdeckt
+                 *     * `output_fehler` - Fehlerhafter Output / Halluzination mit Schaden
+                 *     * `datenleck` - Datenleck via KI-System
+                 *     * `drift` - Model-Drift / Performance-Verschlechterung
+                 *     * `missbrauch` - Missbräuchliche Nutzung durch User
+                 *     * `sonstiges` - Sonstiges
+                 */
+                typ?: "bias_entdeckt" | "datenleck" | "drift" | "missbrauch" | "output_fehler" | "sonstiges";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAiIncidentList"];
+                };
+            };
+        };
+    };
+    iso42001_incidents_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiIncident"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiIncident"];
+                "multipart/form-data": components["schemas"]["AiIncident"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiIncident"];
+                };
+            };
+        };
+    };
+    iso42001_incidents_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Vorfall identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiIncident"];
+                };
+            };
+        };
+    };
+    iso42001_incidents_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Vorfall identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiIncident"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiIncident"];
+                "multipart/form-data": components["schemas"]["AiIncident"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiIncident"];
+                };
+            };
+        };
+    };
+    iso42001_incidents_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Vorfall identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso42001_incidents_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Vorfall identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAiIncident"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAiIncident"];
+                "multipart/form-data": components["schemas"]["PatchedAiIncident"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiIncident"];
+                };
+            };
+        };
+    };
+    iso42001_incidents_abschliessen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Vorfall identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiIncident"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiIncident"];
+                "multipart/form-data": components["schemas"]["AiIncident"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiIncident"];
+                };
+            };
+        };
+    };
+    iso42001_incidents_eskaliere_als_datenpanne_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Vorfall identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiIncident"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiIncident"];
+                "multipart/form-data": components["schemas"]["AiIncident"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiIncident"];
+                };
+            };
+        };
+    };
+    iso42001_llm_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AuswirkungsVorschlagRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["AuswirkungsVorschlagRequest"];
+                "multipart/form-data": components["schemas"]["AuswirkungsVorschlagRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuswirkungsVorschlagResponse"];
+                };
+            };
+        };
+    };
+    iso42001_management_reviews_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAimsManagementReviewList"];
+                };
+            };
+        };
+    };
+    iso42001_management_reviews_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AimsManagementReview"];
+                "application/x-www-form-urlencoded": components["schemas"]["AimsManagementReview"];
+                "multipart/form-data": components["schemas"]["AimsManagementReview"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AimsManagementReview"];
+                };
+            };
+        };
+    };
+    iso42001_management_reviews_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AIMS Management-Review identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AimsManagementReview"];
+                };
+            };
+        };
+    };
+    iso42001_management_reviews_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AIMS Management-Review identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AimsManagementReview"];
+                "application/x-www-form-urlencoded": components["schemas"]["AimsManagementReview"];
+                "multipart/form-data": components["schemas"]["AimsManagementReview"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AimsManagementReview"];
+                };
+            };
+        };
+    };
+    iso42001_management_reviews_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AIMS Management-Review identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso42001_management_reviews_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der AIMS Management-Review identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAimsManagementReview"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAimsManagementReview"];
+                "multipart/form-data": components["schemas"]["PatchedAimsManagementReview"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AimsManagementReview"];
+                };
+            };
+        };
+    };
+    iso42001_policies_list: {
+        parameters: {
+            query?: {
+                aktiv?: boolean;
+                /**
+                 * @description * `allgemein` - Allgemeine KI-Policy
+                 *     * `akzeptable_nutzung` - Akzeptable Nutzung (Mitarbeiter)
+                 *     * `incident` - Vorfall-Management-Policy
+                 *     * `lifecycle` - KI-Lifecycle-Policy
+                 *     * `drittpartei` - Drittpartei-KI-Policy
+                 */
+                geltungsbereich?: "akzeptable_nutzung" | "allgemein" | "drittpartei" | "incident" | "lifecycle";
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAiPolicyList"];
+                };
+            };
+        };
+    };
+    iso42001_policies_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiPolicy"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiPolicy"];
+                "multipart/form-data": components["schemas"]["AiPolicy"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicy"];
+                };
+            };
+        };
+    };
+    iso42001_policies_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Policy identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicy"];
+                };
+            };
+        };
+    };
+    iso42001_policies_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Policy identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiPolicy"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiPolicy"];
+                "multipart/form-data": components["schemas"]["AiPolicy"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicy"];
+                };
+            };
+        };
+    };
+    iso42001_policies_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Policy identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso42001_policies_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Policy identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAiPolicy"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAiPolicy"];
+                "multipart/form-data": components["schemas"]["PatchedAiPolicy"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicy"];
+                };
+            };
+        };
+    };
+    iso42001_policies_kenntnisnahme_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Policy identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiPolicy"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiPolicy"];
+                "multipart/form-data": components["schemas"]["AiPolicy"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicy"];
+                };
+            };
+        };
+    };
+    iso42001_policies_neue_version_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Policy identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiPolicy"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiPolicy"];
+                "multipart/form-data": components["schemas"]["AiPolicy"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicy"];
+                };
+            };
+        };
+    };
+    iso42001_policies_ratifizieren_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Policy identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiPolicy"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiPolicy"];
+                "multipart/form-data": components["schemas"]["AiPolicy"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicy"];
+                };
+            };
+        };
+    };
+    iso42001_policies_aus_template_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiPolicy"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiPolicy"];
+                "multipart/form-data": components["schemas"]["AiPolicy"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicy"];
+                };
+            };
+        };
+    };
+    iso42001_policies_templates_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicy"];
+                };
+            };
+        };
+    };
+    iso42001_policy_kenntnisnahmen_list: {
+        parameters: {
+            query?: {
+                mitarbeiter?: number;
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                policy?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAiPolicyKenntnisnahmeList"];
+                };
+            };
+        };
+    };
+    iso42001_policy_kenntnisnahmen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiPolicyKenntnisnahme"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiPolicyKenntnisnahme"];
+                "multipart/form-data": components["schemas"]["AiPolicyKenntnisnahme"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicyKenntnisnahme"];
+                };
+            };
+        };
+    };
+    iso42001_policy_kenntnisnahmen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Policy-Kenntnisnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicyKenntnisnahme"];
+                };
+            };
+        };
+    };
+    iso42001_policy_kenntnisnahmen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Policy-Kenntnisnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiPolicyKenntnisnahme"];
+                "application/x-www-form-urlencoded": components["schemas"]["AiPolicyKenntnisnahme"];
+                "multipart/form-data": components["schemas"]["AiPolicyKenntnisnahme"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicyKenntnisnahme"];
+                };
+            };
+        };
+    };
+    iso42001_policy_kenntnisnahmen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Policy-Kenntnisnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    iso42001_policy_kenntnisnahmen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Policy-Kenntnisnahme identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAiPolicyKenntnisnahme"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAiPolicyKenntnisnahme"];
+                "multipart/form-data": components["schemas"]["PatchedAiPolicyKenntnisnahme"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPolicyKenntnisnahme"];
+                };
+            };
+        };
+    };
+    iso42001_score_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Iso42001Score"];
+                };
+            };
+        };
+    };
+    ki_tools_list: {
+        parameters: {
+            query?: {
+                /**
+                 * @description * `keine_personendaten` - Keine Personendaten
+                 *     * `gewoehnlich` - Gewöhnliche Personendaten
+                 *     * `besondere_kategorie` - Besondere Kategorien (Art. 9 DSGVO)
+                 */
+                datenkategorie_sensibilitaet?: "besondere_kategorie" | "gewoehnlich" | "keine_personendaten";
+                /**
+                 * @description * `llm_chatbot` - LLM/Chatbot
+                 *     * `bild_generierung` - Bild-Generierung
+                 *     * `ocr_text` - OCR / Text-Erkennung
+                 *     * `klassifizierung` - Klassifizierung / Predictive Analytics
+                 *     * `empfehlung` - Empfehlung / Recommender
+                 *     * `biometrie` - Biometrische Erkennung
+                 *     * `hr_recruiting` - HR / Recruiting (Anhang III)
+                 *     * `kredit_scoring` - Kredit-Scoring (Anhang III)
+                 *     * `produktion` - Produktions-/Maschinen-Steuerung
+                 *     * `sonstiges` - Sonstiges
+                 */
+                kategorie?: "bild_generierung" | "biometrie" | "empfehlung" | "hr_recruiting" | "klassifizierung" | "kredit_scoring" | "llm_chatbot" | "ocr_text" | "produktion" | "sonstiges";
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /**
+                 * @description * `unbekannt` - Unbekannt (noch zu klassifizieren)
+                 *     * `minimal` - Minimales Risiko
+                 *     * `begrenzt` - Begrenztes Risiko (Transparenzpflicht)
+                 *     * `hoch` - Hochrisiko (Anhang III)
+                 *     * `unakzeptabel` - Unakzeptables Risiko (verboten)
+                 */
+                risiko?: "begrenzt" | "hoch" | "minimal" | "unakzeptabel" | "unbekannt";
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `aktiv` - Aktiv im Einsatz
+                 *     * `pilot` - Pilot/Test
+                 *     * `evaluation` - In Evaluation
+                 *     * `stillgelegt` - Stillgelegt
+                 */
+                status?: "aktiv" | "evaluation" | "pilot" | "stillgelegt";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedKIToolListList"];
+                };
+            };
+        };
+    };
+    ki_tools_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KITool"];
+                "application/x-www-form-urlencoded": components["schemas"]["KITool"];
+                "multipart/form-data": components["schemas"]["KITool"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KITool"];
+                };
+            };
+        };
+    };
+    ki_tools_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Tool identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KITool"];
+                };
+            };
+        };
+    };
+    ki_tools_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Tool identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KITool"];
+                "application/x-www-form-urlencoded": components["schemas"]["KITool"];
+                "multipart/form-data": components["schemas"]["KITool"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KITool"];
+                };
+            };
+        };
+    };
+    ki_tools_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Tool identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ki_tools_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der KI-Tool identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedKITool"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedKITool"];
+                "multipart/form-data": components["schemas"]["PatchedKITool"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KITool"];
+                };
+            };
+        };
+    };
+    ki_tools_risiko_vorschlag_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KIRisikoVorschlagRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["KIRisikoVorschlagRequest"];
+                "multipart/form-data": components["schemas"]["KIRisikoVorschlagRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KIRisikoVorschlagResponse"];
                 };
             };
         };
@@ -4102,6 +17398,488 @@ export interface operations {
             };
         };
     };
+    nis2_assets_list: {
+        parameters: {
+            query?: {
+                /**
+                 * @description * `niedrig` - Niedrig
+                 *     * `mittel` - Mittel
+                 *     * `hoch` - Hoch (Geschäfts-kritisch)
+                 */
+                kritikalitaet?: "hoch" | "mittel" | "niedrig";
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                /**
+                 * @description * `system` - IT-System / Server
+                 *     * `app` - Anwendung / SaaS
+                 *     * `netz` - Netzwerk-Segment
+                 *     * `daten` - Daten-Sammlung
+                 *     * `hardware` - Endgerät / Hardware
+                 *     * `drittanbieter` - Drittanbieter-Dienst
+                 */
+                typ?: "app" | "daten" | "drittanbieter" | "hardware" | "netz" | "system";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAssetList"];
+                };
+            };
+        };
+    };
+    nis2_assets_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Asset"];
+                "application/x-www-form-urlencoded": components["schemas"]["Asset"];
+                "multipart/form-data": components["schemas"]["Asset"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Asset"];
+                };
+            };
+        };
+    };
+    nis2_assets_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Asset identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Asset"];
+                };
+            };
+        };
+    };
+    nis2_assets_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Asset identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Asset"];
+                "application/x-www-form-urlencoded": components["schemas"]["Asset"];
+                "multipart/form-data": components["schemas"]["Asset"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Asset"];
+                };
+            };
+        };
+    };
+    nis2_assets_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Asset identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    nis2_assets_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Asset identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAsset"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAsset"];
+                "multipart/form-data": components["schemas"]["PatchedAsset"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Asset"];
+                };
+            };
+        };
+    };
+    nis2_betroffenheit_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedBetroffenheitsCheckList"];
+                };
+            };
+        };
+    };
+    nis2_betroffenheit_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["BetroffenheitsCheck"];
+                "application/x-www-form-urlencoded": components["schemas"]["BetroffenheitsCheck"];
+                "multipart/form-data": components["schemas"]["BetroffenheitsCheck"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BetroffenheitsCheck"];
+                };
+            };
+        };
+    };
+    nis2_betroffenheit_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der NIS2-Betroffenheits-Check identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BetroffenheitsCheck"];
+                };
+            };
+        };
+    };
+    nis2_betroffenheit_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der NIS2-Betroffenheits-Check identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["BetroffenheitsCheck"];
+                "application/x-www-form-urlencoded": components["schemas"]["BetroffenheitsCheck"];
+                "multipart/form-data": components["schemas"]["BetroffenheitsCheck"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BetroffenheitsCheck"];
+                };
+            };
+        };
+    };
+    nis2_betroffenheit_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der NIS2-Betroffenheits-Check identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    nis2_betroffenheit_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der NIS2-Betroffenheits-Check identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedBetroffenheitsCheck"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedBetroffenheitsCheck"];
+                "multipart/form-data": components["schemas"]["PatchedBetroffenheitsCheck"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BetroffenheitsCheck"];
+                };
+            };
+        };
+    };
+    nis2_kontrollen_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KontrollAntwort"][];
+                };
+            };
+        };
+    };
+    nis2_kontrollen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KontrollAntwort"];
+                "application/x-www-form-urlencoded": components["schemas"]["KontrollAntwort"];
+                "multipart/form-data": components["schemas"]["KontrollAntwort"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KontrollAntwort"];
+                };
+            };
+        };
+    };
+    nis2_kontrollen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der NIS2-Kontroll-Antwort identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KontrollAntwort"];
+                };
+            };
+        };
+    };
+    nis2_kontrollen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der NIS2-Kontroll-Antwort identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KontrollAntwort"];
+                "application/x-www-form-urlencoded": components["schemas"]["KontrollAntwort"];
+                "multipart/form-data": components["schemas"]["KontrollAntwort"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KontrollAntwort"];
+                };
+            };
+        };
+    };
+    nis2_kontrollen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der NIS2-Kontroll-Antwort identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    nis2_kontrollen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der NIS2-Kontroll-Antwort identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedKontrollAntwort"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedKontrollAntwort"];
+                "multipart/form-data": components["schemas"]["PatchedKontrollAntwort"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KontrollAntwort"];
+                };
+            };
+        };
+    };
+    nis2_kontrollen_reife_score_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KontrollAntwort"];
+                };
+            };
+        };
+    };
     notifications_list: {
         parameters: {
             query?: {
@@ -4219,6 +17997,155 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["UnreadCountResponse"];
                 };
+            };
+        };
+    };
+    onboarding_wizard_aktivieren_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["AktivierenRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["AktivierenRequest"];
+                "multipart/form-data": components["schemas"]["AktivierenRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AktiveModuleResponse"];
+                };
+            };
+        };
+    };
+    onboarding_wizard_osint_status_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OsintStatusResponse"];
+                };
+            };
+        };
+    };
+    onboarding_wizard_profil_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedUnternehmensProfil"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedUnternehmensProfil"];
+                "multipart/form-data": components["schemas"]["PatchedUnternehmensProfil"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnternehmensProfil"];
+                };
+            };
+        };
+    };
+    onboarding_wizard_radar_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RadarResponse"];
+                };
+            };
+        };
+    };
+    onboarding_wizard_recherche_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["RechercheRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["RechercheRequest"];
+                "multipart/form-data": components["schemas"]["RechercheRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnternehmensProfil"];
+                };
+            };
+        };
+    };
+    onboarding_setup_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onboarding_setup_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -5163,6 +19090,477 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TenantSettings"];
+                };
+            };
+        };
+    };
+    transparenzregister_berechtigte_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                stammblatt?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedWirtschaftlichBerechtigterList"];
+                };
+            };
+        };
+    };
+    transparenzregister_berechtigte_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WirtschaftlichBerechtigter"];
+                "application/x-www-form-urlencoded": components["schemas"]["WirtschaftlichBerechtigter"];
+                "multipart/form-data": components["schemas"]["WirtschaftlichBerechtigter"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WirtschaftlichBerechtigter"];
+                };
+            };
+        };
+    };
+    transparenzregister_berechtigte_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Wirtschaftlich Berechtigter identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WirtschaftlichBerechtigter"];
+                };
+            };
+        };
+    };
+    transparenzregister_berechtigte_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Wirtschaftlich Berechtigter identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WirtschaftlichBerechtigter"];
+                "application/x-www-form-urlencoded": components["schemas"]["WirtschaftlichBerechtigter"];
+                "multipart/form-data": components["schemas"]["WirtschaftlichBerechtigter"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WirtschaftlichBerechtigter"];
+                };
+            };
+        };
+    };
+    transparenzregister_berechtigte_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Wirtschaftlich Berechtigter identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    transparenzregister_berechtigte_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Wirtschaftlich Berechtigter identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedWirtschaftlichBerechtigter"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedWirtschaftlichBerechtigter"];
+                "multipart/form-data": components["schemas"]["PatchedWirtschaftlichBerechtigter"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WirtschaftlichBerechtigter"];
+                };
+            };
+        };
+    };
+    transparenzregister_stammblatt_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedUnternehmensstammblattList"];
+                };
+            };
+        };
+    };
+    transparenzregister_stammblatt_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Unternehmensstammblatt"];
+                "application/x-www-form-urlencoded": components["schemas"]["Unternehmensstammblatt"];
+                "multipart/form-data": components["schemas"]["Unternehmensstammblatt"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unternehmensstammblatt"];
+                };
+            };
+        };
+    };
+    transparenzregister_stammblatt_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Unternehmensstammblatt identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unternehmensstammblatt"];
+                };
+            };
+        };
+    };
+    transparenzregister_stammblatt_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Unternehmensstammblatt identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Unternehmensstammblatt"];
+                "application/x-www-form-urlencoded": components["schemas"]["Unternehmensstammblatt"];
+                "multipart/form-data": components["schemas"]["Unternehmensstammblatt"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unternehmensstammblatt"];
+                };
+            };
+        };
+    };
+    transparenzregister_stammblatt_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Unternehmensstammblatt identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    transparenzregister_stammblatt_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Unternehmensstammblatt identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedUnternehmensstammblatt"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedUnternehmensstammblatt"];
+                "multipart/form-data": components["schemas"]["PatchedUnternehmensstammblatt"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unternehmensstammblatt"];
+                };
+            };
+        };
+    };
+    transparenzregister_stammblatt_current_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unternehmensstammblatt"];
+                };
+            };
+        };
+    };
+    verarbeitungsschritte_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+                verarbeiter?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedVerarbeitungsschrittList"];
+                };
+            };
+        };
+    };
+    verarbeitungsschritte_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Verarbeitungsschritt"];
+                "application/x-www-form-urlencoded": components["schemas"]["Verarbeitungsschritt"];
+                "multipart/form-data": components["schemas"]["Verarbeitungsschritt"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Verarbeitungsschritt"];
+                };
+            };
+        };
+    };
+    verarbeitungsschritte_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Verarbeitungsschritt identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Verarbeitungsschritt"];
+                };
+            };
+        };
+    };
+    verarbeitungsschritte_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Verarbeitungsschritt identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Verarbeitungsschritt"];
+                "application/x-www-form-urlencoded": components["schemas"]["Verarbeitungsschritt"];
+                "multipart/form-data": components["schemas"]["Verarbeitungsschritt"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Verarbeitungsschritt"];
+                };
+            };
+        };
+    };
+    verarbeitungsschritte_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Verarbeitungsschritt identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    verarbeitungsschritte_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der Verarbeitungsschritt identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedVerarbeitungsschritt"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedVerarbeitungsschritt"];
+                "multipart/form-data": components["schemas"]["PatchedVerarbeitungsschritt"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Verarbeitungsschritt"];
                 };
             };
         };
