@@ -53,6 +53,7 @@ TENANT_APPS: list[str] = [
     "iso42001",
     "arbeitsschutz",
     "auditor_export",
+    "onboarding_wizard",
     "rest_framework",
     "drf_spectacular",
     "django_filters",
