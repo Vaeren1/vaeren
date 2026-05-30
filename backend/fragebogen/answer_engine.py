@@ -16,11 +16,14 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Any
+from typing import TYPE_CHECKING
 
 from core.llm_validator import validate_output
 
 from .evidence_pool import EvidenzSnippet
+
+if TYPE_CHECKING:
+    from .models import AntwortBibliothekEintrag
 
 logger = logging.getLogger(__name__)
 
@@ -67,7 +70,7 @@ def _llm_antwort(frage: str, snippets: list[EvidenzSnippet]) -> dict | None:
 def entwerfe_antwort(
     frage: str,
     snippets: list[EvidenzSnippet],
-    bibliothek_treffer: Any | None = None,
+    bibliothek_treffer: AntwortBibliothekEintrag | None = None,
 ) -> dict:
     """Erzeugt einen LLM-Antwort-Entwurf für eine Fragebogen-Frage.
 

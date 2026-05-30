@@ -104,7 +104,6 @@ def test_bibliothek_treffer_hebt_confidence():
     """Wenn ein Bibliothek-Treffer übergeben wird, ist die finale Confidence
     mindestens so hoch wie die Confidence-Untergrenze (0.7).
     """
-    from fragebogen.bibliothek import uebernehme_antwort  # noqa: import nur hier, kein DB
     # Wir simulieren einen AntwortBibliothekEintrag als einfaches Objekt
     bib_eintrag = type("BibEintrag", (), {
         "id": 1,
