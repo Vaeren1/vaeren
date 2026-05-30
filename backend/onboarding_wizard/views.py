@@ -14,13 +14,14 @@ from typing import ClassVar
 
 from django.db import connection
 from django.utils import timezone
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
 from rest_framework import serializers, status
 from rest_framework.decorators import action
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
+from core.basis_hinweis import generiere_hinweis
 from core.models import TenantRole
 from core.modules import aktiviere_module
 from core.relevanz_engine import bewerte_merkmale, bewerte_regulierungen
@@ -81,6 +82,11 @@ class AktiveModuleResponseSerializer(serializers.Serializer):
 
 class OsintStatusResponseSerializer(serializers.Serializer):
     wizard_durchlaufen = serializers.BooleanField()
+
+
+class HinweisResponseSerializer(serializers.Serializer):
+    code = serializers.CharField()
+    hinweis = serializers.CharField()
 
 
 class OnboardingWizardViewSet(ViewSet):
@@ -186,3 +192,46 @@ class OnboardingWizardViewSet(ViewSet):
     def osint_status(self, request):
         durchlaufen = UnternehmensProfil.objects.filter(bestaetigt_at__isnull=False).exists()
         return Response({"wizard_durchlaufen": durchlaufen})
+
+    @extend_schema(
+        responses={
+            200: HinweisResponseSerializer,
+            404: OpenApiResponse(description="Unbekannte Regulierung oder kein Profil vorhanden."),
+        },
+        examples=[
+            OpenApiExample(
+                "Basis-Hinweis (🟡)",
+                value={
+                    "code": "lksg",
+                    "hinweis": (
+                        "Nach unserer Einschätzung wäre zu prüfen: A, B, C. "
+                        "Bitte mit Ihrer Rechtsberatung bestätigen."
+                    ),
+                },
+                response_only=True,
+            )
+        ],
+    )
+    @action(detail=False, methods=["get"], url_path="hinweis/(?P<code>[a-z0-9_]+)")
+    def hinweis(self, request, code: str | None = None):
+        """RDG-validierter Basis-Hinweis (🟡-Stufe) zu einer Regulierung.
+
+        Spec §12 #4 verlangt `GET /api/regulierungen/<code>/hinweis`. Pragmatisch
+        als ViewSet-Action am bestehenden Router umgesetzt — gewählte URL:
+        `GET /api/onboarding-wizard/hinweis/<code>/` (greift so auf Permission +
+        Tenant-Kontext des ViewSets zurück, kein eigener Router nötig).
+        """
+        profil = self._latest_profil()
+        if profil is None:
+            return Response(
+                {"detail": "Kein Unternehmensprofil vorhanden. Bitte zuerst Recherche starten."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        try:
+            text = generiere_hinweis(code, profil_hash=_profil_hash(profil))
+        except KeyError:
+            return Response(
+                {"detail": "Unbekannte Regulierung"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        return Response({"code": code, "hinweis": text})

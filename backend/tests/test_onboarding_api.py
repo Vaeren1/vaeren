@@ -85,6 +85,48 @@ def test_mitarbeiter_darf_radar_nicht(tenant_client_mitarbeiter):
 
 
 @pytest.mark.django_db
+def test_hinweis_endpunkt(tenant_client_gf, monkeypatch):
+    # Mock LLM-Grenze, damit kein echter Call passiert (RDG-valider Text).
+    monkeypatch.setattr(
+        "core.basis_hinweis._llm_text",
+        lambda prompt: (
+            "Nach unserer Einschätzung wäre zu prüfen: A, B, C. "
+            "Bitte mit Ihrer Rechtsberatung bestätigen."
+        ),
+    )
+    c = tenant_client_gf
+    c.post(
+        "/api/onboarding-wizard/recherche/",
+        {"firmenname": "Hinweis GmbH", "demo": True},
+        content_type="application/json",
+    )
+    c.patch(
+        "/api/onboarding-wizard/profil/",
+        {"branche": "Maschinenbau"},
+        content_type="application/json",
+    )
+
+    r = c.get("/api/onboarding-wizard/hinweis/lksg/")
+    assert r.status_code == 200, r.content
+    data = r.json()
+    assert data["code"] == "lksg"
+    assert "hinweis" in data
+    assert data["hinweis"].strip()
+
+
+@pytest.mark.django_db
+def test_hinweis_unbekannter_code_404(tenant_client_gf):
+    c = tenant_client_gf
+    c.post(
+        "/api/onboarding-wizard/recherche/",
+        {"firmenname": "Hinweis GmbH", "demo": True},
+        content_type="application/json",
+    )
+    r = c.get("/api/onboarding-wizard/hinweis/quatsch/")
+    assert r.status_code == 404, r.content
+
+
+@pytest.mark.django_db
 def test_osint_status_vor_und_nach_wizard(tenant_client_gf):
     c = tenant_client_gf
     r = c.get("/api/onboarding-wizard/osint_status/")

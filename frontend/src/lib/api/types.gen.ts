@@ -3580,6 +3580,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/onboarding-wizard/hinweis/{code}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description RDG-validierter Basis-Hinweis (🟡-Stufe) zu einer Regulierung.
+         *
+         *     Spec §12 #4 verlangt `GET /api/regulierungen/<code>/hinweis`. Pragmatisch
+         *     als ViewSet-Action am bestehenden Router umgesetzt — gewählte URL:
+         *     `GET /api/onboarding-wizard/hinweis/<code>/` (greift so auf Permission +
+         *     Tenant-Kontext des ViewSets zurück, kein eigener Router nötig).
+         */
+        get: operations["onboarding_wizard_hinweis_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/onboarding-wizard/osint_status/": {
         parameters: {
             query?: never;
@@ -5302,6 +5326,10 @@ export interface components {
          * @enum {string}
          */
         HierarchieStufeEnum: "S" | "T" | "O" | "P";
+        HinweisResponse: {
+            code: string;
+            hinweis: string;
+        };
         HinweisgeberNachricht: {
             nachricht: string;
         };
@@ -18022,6 +18050,34 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["AktiveModuleResponse"];
                 };
+            };
+        };
+    };
+    onboarding_wizard_hinweis_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HinweisResponse"];
+                };
+            };
+            /** @description Unbekannte Regulierung oder kein Profil vorhanden. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

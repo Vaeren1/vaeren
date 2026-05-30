@@ -17093,6 +17093,55 @@
                 }
             }
         },
+        "/api/onboarding-wizard/hinweis/{code}/": {
+            "get": {
+                "operationId": "onboarding_wizard_hinweis_retrieve",
+                "description": "RDG-validierter Basis-Hinweis (🟡-Stufe) zu einer Regulierung.\n\nSpec §12 #4 verlangt `GET /api/regulierungen/<code>/hinweis`. Pragmatisch\nals ViewSet-Action am bestehenden Router umgesetzt — gewählte URL:\n`GET /api/onboarding-wizard/hinweis/<code>/` (greift so auf Permission +\nTenant-Kontext des ViewSets zurück, kein eigener Router nötig).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "code",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[a-z0-9_]+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "onboarding-wizard"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HinweisResponse"
+                                },
+                                "examples": {
+                                    "Basis-Hinweis(🟡)": {
+                                        "value": {
+                                            "code": "lksg",
+                                            "hinweis": "Nach unserer Einschätzung wäre zu prüfen: A, B, C. Bitte mit Ihrer Rechtsberatung bestätigen."
+                                        },
+                                        "summary": "Basis-Hinweis (🟡)"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    },
+                    "404": {
+                        "description": "Unbekannte Regulierung oder kein Profil vorhanden."
+                    }
+                }
+            }
+        },
         "/api/onboarding-wizard/osint_status/": {
             "get": {
                 "operationId": "onboarding_wizard_osint_status_retrieve",
@@ -22898,6 +22947,21 @@
                 ],
                 "type": "string",
                 "description": "* `S` - Substitution (Ersetzen)\n* `T` - Technische Maßnahme\n* `O` - Organisatorische Maßnahme\n* `P` - Personenbezogene Maßnahme (PSA)"
+            },
+            "HinweisResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string"
+                    },
+                    "hinweis": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "code",
+                    "hinweis"
+                ]
             },
             "HinweisgeberNachricht": {
                 "type": "object",
