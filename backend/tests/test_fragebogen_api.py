@@ -247,6 +247,110 @@ def test_final_attestieren_ohne_alle_seiten_409(
     assert 1 in r.json()["offene_seiten"]
 
 
+# --- RDG-Layer-2-Gate (rdg_ok) --------------------------------------------
+
+
+def _mock_engine_rdg_verstoss(monkeypatch):
+    """Patcht die LLM-Grenze mit einem Text, der RDG-Layer-2 verletzt."""
+    monkeypatch.setattr(
+        "fragebogen.answer_engine._llm_antwort",
+        lambda frage, snippets: {
+            # 'rechtlich verpflichtet' ist eine verbotene Pflichtformulierung.
+            "text": "Sie sind rechtlich verpflichtet, ein ISMS zu betreiben.",
+            "quellen_referenzen": [],
+            "confidence": 0.8,
+        },
+    )
+    monkeypatch.setattr("fragebogen.views.sammle_evidenz", lambda: [])
+
+
+@pytest.mark.django_db
+def test_rdg_verstoss_nicht_exportiert_nicht_uebernommen(
+    tenant_client_gf, _xlsx_upload, _media_tmp, monkeypatch
+):
+    """rdg_ok=False + status ENTWURF → NICHT in Bibliothek + Export leer."""
+    _mock_engine_rdg_verstoss(monkeypatch)
+    c = tenant_client_gf
+    schema = tenant_client_gf_schema(c)
+
+    r = c.post("/api/fragebogen/upload/", {"datei": _xlsx_upload})
+    fb_id = r.json()["id"]
+
+    detail = c.post(f"/api/fragebogen/{fb_id}/vorschlagen/").json()
+    # Engine hat RDG-Verstoß erkannt → rdg_ok=False auf allen Antworten.
+    assert all(f["antwort"]["rdg_ok"] is False for f in detail["fragen"])
+
+    # seiten-Action gibt rdg_ok ebenfalls aus.
+    seiten = c.get(f"/api/fragebogen/{fb_id}/seiten/").json()["seiten"]
+    assert seiten[0]["fragen"][0]["rdg_ok"] is False
+
+    c.post(f"/api/fragebogen/{fb_id}/seite/1/bestaetigen/")
+    r = c.post(f"/api/fragebogen/{fb_id}/final-attestieren/")
+    assert r.status_code == 200, r.content
+
+    from fragebogen.models import AntwortBibliothekEintrag
+
+    with schema_context(schema):
+        # Verbotene Formulierung darf NICHT als Wissen recycelt werden.
+        assert AntwortBibliothekEintrag.objects.count() == 0
+
+    # Export: die rdg_ok=False-Antworten bleiben leer (Zelle nicht befüllt).
+    r = c.post(f"/api/fragebogen/{fb_id}/export/")
+    assert r.status_code == 200, r.content
+
+    from fragebogen.models import Fragebogen
+
+    with schema_context(schema):
+        fb_obj = Fragebogen.objects.get(pk=fb_id)
+        wb = openpyxl.load_workbook(fb_obj.export_datei.path)
+        ws = wb.active
+        # C2 (Antwort-Zelle der ersten Frage) bleibt leer.
+        assert ws["C2"].value in (None, "")
+
+
+@pytest.mark.django_db
+def test_rdg_verstoss_nach_editieren_normal_exportiert(
+    tenant_client_gf, _xlsx_upload, _media_tmp, monkeypatch
+):
+    """rdg_ok=False, aber nach PATCH (status EDITIERT) → normal exportiert + übernommen."""
+    _mock_engine_rdg_verstoss(monkeypatch)
+    c = tenant_client_gf
+    schema = tenant_client_gf_schema(c)
+
+    r = c.post("/api/fragebogen/upload/", {"datei": _xlsx_upload})
+    fb_id = r.json()["id"]
+    detail = c.post(f"/api/fragebogen/{fb_id}/vorschlagen/").json()
+
+    # Beide Antworten manuell umformulieren (Mensch greift ein → status EDITIERT).
+    for f in detail["fragen"]:
+        aid = f["antwort"]["id"]
+        r = c.patch(
+            f"/api/fragebogen/{fb_id}/antwort/{aid}/",
+            {"bestaetigt_text": "Nach unserer Einschätzung vorhanden. Bitte prüfen."},
+            content_type="application/json",
+        )
+        assert r.status_code == 200, r.content
+
+    c.post(f"/api/fragebogen/{fb_id}/seite/1/bestaetigen/")
+    r = c.post(f"/api/fragebogen/{fb_id}/final-attestieren/")
+    assert r.status_code == 200, r.content
+
+    from fragebogen.models import AntwortBibliothekEintrag, Fragebogen
+
+    with schema_context(schema):
+        # Editierte Antworten gehen normal in die Bibliothek.
+        assert AntwortBibliothekEintrag.objects.count() == 2
+
+    r = c.post(f"/api/fragebogen/{fb_id}/export/")
+    assert r.status_code == 200, r.content
+
+    with schema_context(schema):
+        fb_obj = Fragebogen.objects.get(pk=fb_id)
+        wb = openpyxl.load_workbook(fb_obj.export_datei.path)
+        ws = wb.active
+        assert "Nach unserer Einschätzung" in str(ws["C2"].value)
+
+
 # --- Permissions ----------------------------------------------------------
 
 

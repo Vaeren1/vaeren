@@ -4756,6 +4756,7 @@ export interface components {
             readonly confidence: number;
             /** Format: double */
             readonly platzierung_confidence: number | null;
+            readonly rdg_ok: boolean;
             /** Format: date-time */
             readonly bestaetigt_at: string | null;
             readonly quellen: components["schemas"]["AntwortQuelle"][];

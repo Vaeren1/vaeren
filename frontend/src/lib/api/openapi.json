@@ -21436,6 +21436,10 @@
                         "readOnly": true,
                         "nullable": true
                     },
+                    "rdg_ok": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
                     "bestaetigt_at": {
                         "type": "string",
                         "format": "date-time",
@@ -21459,6 +21463,7 @@
                     "id",
                     "platzierung_confidence",
                     "quellen",
+                    "rdg_ok",
                     "status"
                 ]
             },

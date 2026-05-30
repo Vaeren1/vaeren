@@ -214,6 +214,7 @@ class FragebogenViewSet(viewsets.ModelViewSet):
                 defaults={
                     "entwurf_text": res["text"],
                     "confidence": res["confidence"],
+                    "rdg_ok": res["rdg_ok"],
                     "status": AntwortStatus.ENTWURF,
                 },
             )
@@ -274,6 +275,7 @@ class FragebogenViewSet(viewsets.ModelViewSet):
                     "finaler_text": antwort.finaler_text if antwort else "",
                     "status": antwort.status if antwort else None,
                     "confidence": antwort.confidence if antwort else None,
+                    "rdg_ok": antwort.rdg_ok if antwort else None,
                     "platzierung_confidence": (
                         antwort.platzierung_confidence if antwort else None
                     ),
@@ -355,6 +357,21 @@ class FragebogenViewSet(viewsets.ModelViewSet):
     def _alle_seiten(self, fb: Fragebogen) -> set[int]:
         return {(f.seite or 1) for f in fb.fragen.all()} or {1}
 
+    @staticmethod
+    def _rdg_freigegeben(antwort) -> bool:
+        """RDG-Layer-2-Gate: Darf der finale Text raus?
+
+        Eine Antwort mit rdg_ok=False (verbotene Rechtsformulierung erkannt) darf
+        nur exportiert/in die Bibliothek übernommen werden, wenn ein Mensch sie
+        aktiv umformuliert hat (status == EDITIERT). Andernfalls gilt sie wie eine
+        unbestätigte Antwort (Feld bleibt offen, keine Bibliothek-Übernahme).
+        """
+        if antwort is None:
+            return False
+        if antwort.rdg_ok:
+            return True
+        return antwort.status == AntwortStatus.EDITIERT
+
     @extend_schema(
         responses={
             200: FragebogenDetailSerializer,
@@ -386,6 +403,11 @@ class FragebogenViewSet(viewsets.ModelViewSet):
             for frage in fb.fragen.all():
                 antwort = getattr(frage, "antwort", None)
                 if antwort is None or not antwort.finaler_text.strip():
+                    continue
+                # RDG-Layer-2-Gate: nicht-editierte Antworten mit verbotener
+                # Formulierung gehen NICHT in die Bibliothek (sonst würde die
+                # verbotene Formel als bestätigtes Wissen recycelt).
+                if not self._rdg_freigegeben(antwort):
                     continue
                 antwort.bestaetigt_von = request.user
                 antwort.bestaetigt_at = now
@@ -467,7 +489,7 @@ class FragebogenViewSet(viewsets.ModelViewSet):
         for frage in fb.fragen.all():
             antwort = getattr(frage, "antwort", None)
             zelle = (frage.feld_referenz or {}).get("antwort_zelle")
-            if antwort and zelle and antwort.finaler_text:
+            if antwort and zelle and antwort.finaler_text and self._rdg_freigegeben(antwort):
                 sheet = (frage.feld_referenz or {}).get("sheet")
                 ref = f"{sheet}!{zelle}" if sheet else zelle
                 zelle_zu_text[ref] = antwort.finaler_text
@@ -478,7 +500,7 @@ class FragebogenViewSet(viewsets.ModelViewSet):
         for frage in fb.fragen.all():
             antwort = getattr(frage, "antwort", None)
             feld = (frage.feld_referenz or {}).get("feldname")
-            if antwort and feld and antwort.finaler_text:
+            if antwort and feld and antwort.finaler_text and self._rdg_freigegeben(antwort):
                 feld_zu_text[feld] = antwort.finaler_text
         fuelle_pdfform(fb.original_datei.path, out_pfad, feld_zu_text)
 
@@ -486,11 +508,17 @@ class FragebogenViewSet(viewsets.ModelViewSet):
         fragen_antworten = []
         for frage in fb.fragen.all():
             antwort = getattr(frage, "antwort", None)
+            # RDG-Layer-2-Gate: nicht-freigegebene Antwort bleibt im Beiblatt leer.
+            antwort_text = (
+                antwort.finaler_text
+                if antwort and self._rdg_freigegeben(antwort)
+                else ""
+            )
             fragen_antworten.append(
                 {
                     "nummer": frage.nummer,
                     "frage": frage.text,
-                    "antwort": antwort.finaler_text if antwort else "",
+                    "antwort": antwort_text,
                     "quellen": [
                         f"{q.quelle_typ}:{q.referenz}"
                         for q in (antwort.quellen.all() if antwort else [])

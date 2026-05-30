@@ -39,6 +39,7 @@ class AntwortSerializer(serializers.ModelSerializer):
             "status",
             "confidence",
             "platzierung_confidence",
+            "rdg_ok",
             "bestaetigt_at",
             "quellen",
         )

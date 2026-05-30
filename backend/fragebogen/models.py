@@ -95,6 +95,7 @@ class Antwort(models.Model):
     )
     confidence = models.FloatField(default=0.0)
     platzierung_confidence = models.FloatField(null=True, blank=True)  # Tier 2
+    rdg_ok = models.BooleanField(default=True)  # RDG-Layer-2: False = verbotene Formel erkannt
     bestaetigt_von = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
