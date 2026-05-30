@@ -41,10 +41,11 @@ class Regulierung:
     modul_key: str | None = None
 
 
+# Muss mit NIS2Sektor in nis2/models.py synchron bleiben (hier bewusst hardcodiert, damit core Django-frei testbar bleibt).
 _NIS2_SEKTOREN = {
     "energie", "verkehr", "bank", "gesundheit", "trinkwasser", "abwasser",
-    "digital_infra", "oeff_verw", "raumfahrt", "produktion", "chemie",
-    "lebensmittel", "post", "abfall", "forschung",
+    "digital_infra", "oeff_verw", "raumfahrt", "post_kurier", "chemie",
+    "lebensmittel", "industrie", "abfall", "forschung", "digital_dienste",
 }
 
 

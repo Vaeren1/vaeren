@@ -4,7 +4,7 @@ from core.relevanz_engine import bewerte_merkmale, bewerte_regulierungen
 
 def test_bewerte_regulierungen_liefert_nur_zutreffende():
     profil = ProfilData(mitarbeiter_anzahl=180, jahresumsatz_eur=41_000_000,
-                        rechtsform="GmbH", nis2_sektor="produktion",
+                        rechtsform="GmbH", nis2_sektor="industrie",
                         ist_automotive_zulieferer=True, hat_oem_kunden=True,
                         stellt_produkte_her=True, setzt_ki_ein=False)
     befunde = bewerte_regulierungen(profil)
@@ -16,6 +16,14 @@ def test_bewerte_regulierungen_liefert_nur_zutreffende():
     for b in befunde:
         assert b["abdeckung"] in {"voll_modul", "basis_hinweis", "in_vorbereitung"}
         assert b["begruendung"]
+
+
+def test_maschinenbau_nis2_betroffen():
+    """Maschinenbau (industrie) mit 180 MA muss NIS2-betroffen sein."""
+    profil = ProfilData(mitarbeiter_anzahl=180, nis2_sektor="industrie")
+    befunde = bewerte_regulierungen(profil)
+    codes = {b["code"] for b in befunde}
+    assert "nis2" in codes
 
 
 def test_bewerte_merkmale_strukturiert():
