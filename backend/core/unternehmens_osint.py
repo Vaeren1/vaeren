@@ -24,11 +24,12 @@ DEMO_FIXTURE: dict = {
     "jahresumsatz_eur": 41_000_000,
     "rechtsform": "GmbH",
     "standort_laender": ["DE"],
-    "nis2_sektor": "produktion",
+    "nis2_sektor": "industrie",
     "ist_automotive_zulieferer": True,
     "hat_oem_kunden": True,
     "stellt_produkte_her": True,
     "produkte_mit_digitalen_elementen": False,
+    "setzt_ki_ein": True,
     "betriebsmerkmale": ["lager", "maschinenproduktion", "schweisserei", "laermbereiche", "psa_pflicht"],
     "recherche_quelle": "Demo-Fixture",
 }

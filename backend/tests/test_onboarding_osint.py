@@ -57,3 +57,29 @@ def test_demo_fixture_merkmale_alle_bekannt():
     gueltig = _bekannte_keys()
     for key in DEMO_FIXTURE["betriebsmerkmale"]:
         assert key in gueltig, f"DEMO_FIXTURE key '{key}' nicht in MERKMALE"
+
+
+def test_demo_fixture_nis2_und_ai_act_im_radar():
+    """M1+M2: gültiger nis2_sektor ('industrie') + setzt_ki_ein=True sorgen dafür,
+    dass NIS2 UND AI Act für die Demofirma im Radar erscheinen."""
+    from core.regulierungen import ProfilData, _NIS2_SEKTOREN
+    from core.relevanz_engine import bewerte_regulierungen
+
+    assert DEMO_FIXTURE["nis2_sektor"] in _NIS2_SEKTOREN
+    assert DEMO_FIXTURE["setzt_ki_ein"] is True
+
+    profil = ProfilData(
+        mitarbeiter_anzahl=DEMO_FIXTURE["mitarbeiter_anzahl"],
+        jahresumsatz_eur=DEMO_FIXTURE["jahresumsatz_eur"],
+        rechtsform=DEMO_FIXTURE["rechtsform"],
+        nis2_sektor=DEMO_FIXTURE["nis2_sektor"],
+        ist_automotive_zulieferer=DEMO_FIXTURE["ist_automotive_zulieferer"],
+        hat_oem_kunden=DEMO_FIXTURE["hat_oem_kunden"],
+        stellt_produkte_her=DEMO_FIXTURE["stellt_produkte_her"],
+        produkte_mit_digitalen_elementen=DEMO_FIXTURE["produkte_mit_digitalen_elementen"],
+        setzt_ki_ein=DEMO_FIXTURE["setzt_ki_ein"],
+    )
+    codes = {b["code"] for b in bewerte_regulierungen(profil)}
+    assert "nis2" in codes
+    assert "ai_act" in codes
+    assert "iso42001" in codes
