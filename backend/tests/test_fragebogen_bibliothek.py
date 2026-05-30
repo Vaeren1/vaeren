@@ -70,7 +70,7 @@ def test_kein_treffer_bei_fremder_frage(bib_tenant):
 def test_update_aktualisiert_antwort_text(bib_tenant):
     """Ein Dedup-Update überschreibt den antwort_text des bestehenden Eintrags."""
     with schema_context(bib_tenant.schema_name):
-        from fragebogen.bibliothek import finde_aehnlichen_eintrag, uebernehme_antwort
+        from fragebogen.bibliothek import uebernehme_antwort
         from fragebogen.models import AntwortBibliothekEintrag
 
         uebernehme_antwort("Haben Sie ein ISMS?", "Ja, alt.", ["A.5.1"])

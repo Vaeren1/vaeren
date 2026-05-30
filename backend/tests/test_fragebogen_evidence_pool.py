@@ -2,10 +2,9 @@
 
 LLM- und Aggregator-Calls werden gemockt. Kein DB-Zwang.
 """
-import datetime
 from unittest.mock import patch
 
-from fragebogen.evidence_pool import sammle_evidenz, EvidenzSnippet
+from fragebogen.evidence_pool import EvidenzSnippet, sammle_evidenz
 
 
 def test_sammelt_aus_aggregatoren_und_profil():
