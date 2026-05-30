@@ -6,8 +6,7 @@
  * `useMutation` für schreibende Aktionen. `api<T>()` liefert das geparste
  * JSON direkt zurück (kein `{ data }`-Wrapper wie bei axios).
  */
-import { useMutation } from "@tanstack/react-query";
-import { type ApiError, api } from "./client";
+import { api } from "./client";
 import type { components } from "./types.gen";
 
 // --- Typen --------------------------------------------------------------
@@ -55,28 +54,3 @@ export const onboarding = {
     api<{ code: string; hinweis: string }>(`${BASE}/hinweis/${code}/`),
   status: () => api<OsintStatus>(`${BASE}/osint_status/`),
 };
-
-// --- TanStack-Query-Hooks (optional für deklarative Nutzung) ------------
-
-export function useRechercheMutation() {
-  return useMutation<
-    Profil,
-    ApiError,
-    { firmenname: string; website?: string; demo?: boolean }
-  >({
-    mutationFn: ({ firmenname, website = "", demo = false }) =>
-      onboarding.recherche(firmenname, website, demo),
-  });
-}
-
-export function useProfilMutation() {
-  return useMutation<Profil, ApiError, Partial<Profil>>({
-    mutationFn: (patch) => onboarding.speicherProfil(patch),
-  });
-}
-
-export function useAktivierenMutation() {
-  return useMutation<{ aktive_module: string[] }, ApiError, string[]>({
-    mutationFn: (keys) => onboarding.aktivieren(keys),
-  });
-}

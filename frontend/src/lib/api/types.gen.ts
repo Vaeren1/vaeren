@@ -7954,8 +7954,6 @@ export interface components {
             mitarbeiter_anzahl?: number;
             /** Format: int64 */
             jahresumsatz_eur?: number;
-            /** Format: int64 */
-            bilanzsumme_eur?: number;
             rechtsform?: string;
             nis2_sektor?: string;
             ist_automotive_zulieferer?: boolean;
@@ -7965,7 +7963,6 @@ export interface components {
             verarbeitet_personenbezogene_daten?: boolean;
             verarbeitet_gesundheits_sozialdaten?: boolean;
             setzt_ki_ein?: boolean;
-            drittland_transfer?: boolean;
             recherche_quelle?: string;
             recherche_rohdaten?: unknown;
             /** Format: date-time */
@@ -8596,8 +8593,6 @@ export interface components {
             mitarbeiter_anzahl?: number;
             /** Format: int64 */
             jahresumsatz_eur?: number;
-            /** Format: int64 */
-            bilanzsumme_eur?: number;
             rechtsform?: string;
             nis2_sektor?: string;
             ist_automotive_zulieferer?: boolean;
@@ -8607,7 +8602,6 @@ export interface components {
             verarbeitet_personenbezogene_daten?: boolean;
             verarbeitet_gesundheits_sozialdaten?: boolean;
             setzt_ki_ein?: boolean;
-            drittland_transfer?: boolean;
             recherche_quelle?: string;
             recherche_rohdaten?: unknown;
             /** Format: date-time */

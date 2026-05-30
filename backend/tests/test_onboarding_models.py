@@ -1,33 +1,12 @@
-"""Tests für Task C1: onboarding_wizard App + Models."""
+"""Tests für Task C1: onboarding_wizard App + Models.
 
-import uuid
+Tenant-Fixture `onboarding_tenant` kommt aus conftest.py (kein lokales Duplikat).
+"""
 
 import pytest
-from django.db import connection
 from django_tenants.utils import schema_context
 
 from onboarding_wizard.models import OperativeEmpfehlung, RegulierungsBefund, UnternehmensProfil
-from tenants.models import Tenant, TenantDomain
-
-
-@pytest.fixture
-def onboarding_tenant(db):
-    """Frischer Tenant für Onboarding-Modell-Tests (Muster aus arbsch_fixtures)."""
-    schema = f"ow_{uuid.uuid4().hex[:8]}"
-    connection.set_schema_to_public()
-    with schema_context("public"):
-        t = Tenant.objects.create(schema_name=schema, firma_name=f"OW {schema}")
-        TenantDomain.objects.create(
-            tenant=t,
-            domain=f"{schema.replace('_', '-')}.app.vaeren.local",
-            is_primary=True,
-        )
-    yield t
-    connection.set_schema_to_public()
-    with schema_context("public"):
-        obj = Tenant.objects.filter(schema_name=schema).first()
-        if obj is not None:
-            obj.delete(force_drop=True)
 
 
 @pytest.mark.django_db

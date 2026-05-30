@@ -29809,12 +29809,6 @@
                         "minimum": -9223372036854775808,
                         "format": "int64"
                     },
-                    "bilanzsumme_eur": {
-                        "type": "integer",
-                        "maximum": 9223372036854775807,
-                        "minimum": -9223372036854775808,
-                        "format": "int64"
-                    },
                     "rechtsform": {
                         "type": "string",
                         "maxLength": 60
@@ -29842,9 +29836,6 @@
                         "type": "boolean"
                     },
                     "setzt_ki_ein": {
-                        "type": "boolean"
-                    },
-                    "drittland_transfer": {
                         "type": "boolean"
                     },
                     "recherche_quelle": {
@@ -31359,12 +31350,6 @@
                         "minimum": -9223372036854775808,
                         "format": "int64"
                     },
-                    "bilanzsumme_eur": {
-                        "type": "integer",
-                        "maximum": 9223372036854775807,
-                        "minimum": -9223372036854775808,
-                        "format": "int64"
-                    },
                     "rechtsform": {
                         "type": "string",
                         "maxLength": 60
@@ -31392,9 +31377,6 @@
                         "type": "boolean"
                     },
                     "setzt_ki_ein": {
-                        "type": "boolean"
-                    },
-                    "drittland_transfer": {
                         "type": "boolean"
                     },
                     "recherche_quelle": {

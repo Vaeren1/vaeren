@@ -11,7 +11,6 @@ class UnternehmensProfil(models.Model):
     nace_code = models.CharField(max_length=20, blank=True)
     mitarbeiter_anzahl = models.IntegerField(default=0)
     jahresumsatz_eur = models.BigIntegerField(default=0)
-    bilanzsumme_eur = models.BigIntegerField(default=0)
     rechtsform = models.CharField(max_length=60, blank=True)
     standort_laender = models.JSONField(default=list, blank=True)
     nis2_sektor = models.CharField(max_length=30, blank=True)
@@ -22,7 +21,6 @@ class UnternehmensProfil(models.Model):
     verarbeitet_personenbezogene_daten = models.BooleanField(default=True)
     verarbeitet_gesundheits_sozialdaten = models.BooleanField(default=False)
     setzt_ki_ein = models.BooleanField(default=False)
-    drittland_transfer = models.BooleanField(default=False)
     betriebsmerkmale = models.JSONField(default=list, blank=True)
     betriebsmerkmale_freitext = models.JSONField(default=list, blank=True)
     recherche_quelle = models.TextField(blank=True)
@@ -68,11 +66,6 @@ class RegulierungsBefund(models.Model):
     begruendung = models.TextField()
     abdeckung = models.CharField(max_length=20)
     modul_key = models.CharField(max_length=40, blank=True)
-    # Reserviert für spätere Versionierung der Befund-Snapshots. Aktuell bewusst
-    # immer default=1 (YAGNI): der radar-View löscht + erzeugt Befunde neu, eine
-    # Historie wird noch nicht gebraucht. Inkrementieren erst, wenn Versions-Diffs
-    # über die Zeit angezeigt werden sollen.
-    profil_version = models.IntegerField(default=1)
     erstellt_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

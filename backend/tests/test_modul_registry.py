@@ -1,13 +1,13 @@
-"""Tests für Task B1 (Tenant.aktive_module) und B2 (Modul-Registry)."""
+"""Tests für Task B1 (Tenant.aktive_module) und B2 (Modul-Registry).
 
-import uuid
+Tenant-Fixture wird aus conftest.py (`onboarding_tenant`) bezogen; `registry_tenant`
+ist ein dünner Alias, damit die Test-Namen sprechend bleiben.
+"""
 
 import pytest
-from django.db import connection
-from django_tenants.utils import schema_context
 
 from core.modules import MODULE, aktiviere_module, ist_aktiv
-from tenants.models import Tenant, TenantDomain
+from tenants.models import Tenant
 
 
 @pytest.mark.django_db
@@ -31,23 +31,10 @@ def test_jedes_modul_kennt_seine_regulierungen():
 
 
 @pytest.fixture
-def registry_tenant(db):
-    """Frischer Tenant für Registry-Tests (Muster aus arbsch_fixtures)."""
-    schema = f"reg_{uuid.uuid4().hex[:8]}"
-    connection.set_schema_to_public()
-    with schema_context("public"):
-        t = Tenant.objects.create(schema_name=schema, firma_name=f"Reg {schema}")
-        TenantDomain.objects.create(
-            tenant=t,
-            domain=f"{schema.replace('_', '-')}.app.vaeren.local",
-            is_primary=True,
-        )
-    yield t
-    connection.set_schema_to_public()
-    with schema_context("public"):
-        obj = Tenant.objects.filter(schema_name=schema).first()
-        if obj is not None:
-            obj.delete(force_drop=True)
+def registry_tenant(onboarding_tenant):
+    """Alias auf die conftest-Fixture `onboarding_tenant` — sprechender Name
+    für die Registry-Tests, kein dupliziertes Tenant-Setup."""
+    return onboarding_tenant
 
 
 @pytest.mark.django_db
