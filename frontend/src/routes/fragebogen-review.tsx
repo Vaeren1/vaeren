@@ -185,7 +185,8 @@ function SeitenReview({
               {f.text}
             </p>
             <p className="mt-1">
-              Noch kein Antwort-Vorschlag — bitte zuerst „Antworten vorschlagen".
+              Noch kein Antwort-Vorschlag — bitte zuerst „Antworten
+              vorschlagen".
             </p>
           </div>
         ),
