@@ -12,6 +12,10 @@ import { DatenpanneDetailPage } from "@/routes/datenpanne-detail";
 import { DatenpanneFormPage } from "@/routes/datenpanne-form";
 import { DatenpannenListPage } from "@/routes/datenpannen";
 import { DemoPage } from "@/routes/demo";
+import { AntwortBibliothekPage } from "@/routes/antwort-bibliothek";
+import { FragebogenListePage } from "@/routes/fragebogen-liste";
+import { FragebogenReviewPage } from "@/routes/fragebogen-review";
+import { FragebogenUploadPage } from "@/routes/fragebogen-upload";
 import { Iso27001AuditDetail } from "@/routes/iso27001/AuditDetail";
 import { Iso27001Audits } from "@/routes/iso27001/Audits";
 import { Iso27001ControlDetail } from "@/routes/iso27001/ControlDetail";
@@ -262,6 +266,10 @@ export const router = createBrowserRouter([
           </Lazy>
         ),
       },
+      { path: "/fragebogen", element: <FragebogenListePage /> },
+      { path: "/fragebogen/upload", element: <FragebogenUploadPage /> },
+      { path: "/fragebogen/:id/review", element: <FragebogenReviewPage /> },
+      { path: "/antwort-bibliothek", element: <AntwortBibliothekPage /> },
       { path: "/redaktion", element: <RedaktionPage /> },
       { path: "/settings", element: <SettingsPage /> },
       { path: "/mfa-setup", element: <MfaSetupPage /> },
