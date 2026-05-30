@@ -66,6 +66,27 @@ def test_generiere_hinweis_mit_none_fallback():
     assert "verpflichtet" not in r
 
 
+def test_generiere_hinweis_faengt_llm_validation_error_ab():
+    """generate() wirft LLMValidationError, wenn der Output auch nach Retry
+    verboten formuliert ist → generiere_hinweis muss Fallback liefern, nicht werfen."""
+    with patch(
+        "core.basis_hinweis._llm_text",
+        side_effect=LLMValidationError("RDG-Verstoß auch nach Retry"),
+    ):
+        r = generiere_hinweis("lksg", profil_hash="rdg_err")
+    assert r  # kein leerer String, keine Exception
+    assert "verpflichtet" not in r
+
+
+def test_tenant_schema_trennt_cache():
+    """Gleicher (code, profil_hash) aber verschiedene Tenant-Schemata → kein Cross-Tenant-Cache."""
+    fake = "Nach unserer Einschätzung könnte X relevant sein. Bitte prüfen."
+    with patch("core.basis_hinweis._llm_text", return_value=fake) as m:
+        generiere_hinweis("dsgvo", profil_hash="same", tenant_schema="tenant_a")
+        generiere_hinweis("dsgvo", profil_hash="same", tenant_schema="tenant_b")
+    assert m.call_count == 2  # zwei Schemata → zwei Cache-Keys → zwei Calls
+
+
 def test_verschiedene_profil_hashes_unabhaengig_gecacht():
     fake = "Nach unserer Einschätzung könnte Punkt X relevant sein. Bitte prüfen."
     with patch("core.basis_hinweis._llm_text", return_value=fake) as m:

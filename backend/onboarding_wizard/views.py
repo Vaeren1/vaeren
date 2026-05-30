@@ -13,7 +13,7 @@ import json
 from typing import ClassVar
 
 from django.conf import settings
-from django.db import connection
+from django.db import connection, transaction
 from django.utils import timezone
 from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
 from rest_framework import serializers, status
@@ -146,31 +146,34 @@ class OnboardingWizardViewSet(ViewSet):
                 {"detail": "Kein Unternehmensprofil vorhanden. Bitte zuerst Recherche starten."},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        profil.befunde.all().delete()
-        profil.empfehlungen.all().delete()
         befunde = bewerte_regulierungen(profil.to_profil_data())
-        for b in befunde:
-            RegulierungsBefund.objects.create(
-                profil=profil,
-                regulierung_code=b["code"],
-                trifft_zu=True,
-                relevanz=b["relevanz"],
-                begruendung=b["begruendung"],
-                abdeckung=b["abdeckung"],
-                modul_key=b["modul_key"] or "",
-            )
         empfehlungen = bewerte_merkmale(
             profil.betriebsmerkmale, freitext=profil.betriebsmerkmale_freitext
         )
-        for e in empfehlungen:
-            OperativeEmpfehlung.objects.create(
-                profil=profil,
-                merkmal_key=e["merkmal"],
-                art=e["art"],
-                ziel=e["ziel"],
-                quelle=e["quelle"],
-                rechtsgrundlage=e["rechtsgrundlage"],
-            )
+        # Delete+Recreate atomar: nie ein leerer/halb-befüllter Befund-Stand
+        # sichtbar, falls ein Insert fehlschlägt.
+        with transaction.atomic():
+            profil.befunde.all().delete()
+            profil.empfehlungen.all().delete()
+            for b in befunde:
+                RegulierungsBefund.objects.create(
+                    profil=profil,
+                    regulierung_code=b["code"],
+                    trifft_zu=True,
+                    relevanz=b["relevanz"],
+                    begruendung=b["begruendung"],
+                    abdeckung=b["abdeckung"],
+                    modul_key=b["modul_key"] or "",
+                )
+            for e in empfehlungen:
+                OperativeEmpfehlung.objects.create(
+                    profil=profil,
+                    merkmal_key=e["merkmal"],
+                    art=e["art"],
+                    ziel=e["ziel"],
+                    quelle=e["quelle"],
+                    rechtsgrundlage=e["rechtsgrundlage"],
+                )
         return Response(
             {
                 "befunde": RegulierungsBefundSerializer(profil.befunde.all(), many=True).data,
@@ -234,7 +237,11 @@ class OnboardingWizardViewSet(ViewSet):
                 status=status.HTTP_404_NOT_FOUND,
             )
         try:
-            text = generiere_hinweis(code, profil_hash=_profil_hash(profil))
+            text = generiere_hinweis(
+                code,
+                profil_hash=_profil_hash(profil),
+                tenant_schema=connection.tenant.schema_name,
+            )
         except KeyError:
             return Response(
                 {"detail": "Unbekannte Regulierung"},
