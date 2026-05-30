@@ -479,9 +479,12 @@ class FragebogenViewSet(viewsets.ModelViewSet):
 
         if fb.tier == 2:
             # Tier 2 (unstrukturiertes Overlay) läuft asynchron — Phase H.
-            # Hier nur Job-Status markieren, kein synchrones Ergebnis.
+            # Celery-Task übernimmt OCR-Overlay + Vision-Review-Loop.
+            from .tasks import fragebogen_tier2_export
+
             fb.tier2_job_status = "pending"
             fb.save(update_fields=["tier2_job_status"])
+            fragebogen_tier2_export.delay(fb.pk)
             return Response(
                 {
                     "detail": "Tier-2-Export (Overlay) wird asynchron erstellt — "

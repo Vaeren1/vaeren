@@ -61,7 +61,13 @@ RUN apt-get update && \
         # Slice 2d: Office-Konvertierung (DOCX/PPTX → PDF) via headless soffice
         libreoffice-core-nogui \
         libreoffice-writer-nogui \
-        libreoffice-impress-nogui && \
+        libreoffice-impress-nogui \
+        # Feature 4 / Phase H: Tier-2-OCR (Tesseract DE+EN) + PDF→Bild (poppler/pdftoppm)
+        # für fragebogen.ingestion.extract_ocr + export.fill_unstructured (Vision-Review).
+        tesseract-ocr \
+        tesseract-ocr-deu \
+        tesseract-ocr-eng \
+        poppler-utils && \
     rm -rf /var/lib/apt/lists/*
 
 # venv + Code aus builder
