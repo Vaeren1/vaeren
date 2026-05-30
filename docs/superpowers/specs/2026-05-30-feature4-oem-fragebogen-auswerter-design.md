@@ -10,7 +10,7 @@
 
 OEM-Lieferanten-Fragebögen (VDA-ISA/TISAX, kundenspezifische Self-Assessments) sind laut ICP der **Schmerz Nr. 1** der Zielgruppe — und bisher in Vaeren ungebaut. Dieses Feature lädt einen beliebigen Fragebogen, **schlägt Antworten aus vorhandenen Vaeren-Evidenzen vor** (v.a. ISO-27001-Controls), lässt den Menschen jede Antwort bestätigen und gibt den **ausgefüllten Fragebogen im Original zurück**.
 
-**Cross-Sell-Kern:** Je mehr Vaeren-Module der Kunde nutzt, desto mehr füllt sich der Fragebogen von selbst. Das ist die stärkste Verkaufs-Story der App.
+**Cross-Sell-Kern:** Antworten kommen aus **allen** Daten, die wir über die Firma haben — jedes genutzte Modul *und* jeder früher ausgefüllte Fragebogen speist den Pool. Je mehr Vaeren der Kunde nutzt und je mehr Fragebögen er macht, desto mehr füllt sich der nächste von selbst. Das ist die stärkste Verkaufs-Story der App (und unabhängig davon, ob der Kunde ISO 27001 betreibt).
 
 **Anspruch (vom Nutzer bestätigt):** Es sollen **alle** Fragebögen verarbeitet werden — Standard *und* unbekannte/spezielle, in beliebigem Format. Antworten werden, wo technisch möglich, **ins Original** geschrieben.
 
@@ -70,7 +70,14 @@ Erkennt Dateityp + ob ausfüllbare Struktur vorhanden: `.xlsx` → Tier 1; PDF m
 - **Unstrukturiert** (`extract_ocr.py`): Tesseract-OCR + `pdfplumber` (Text + Koordinaten) → LLM segmentiert in Fragen + erkennt Antwort-Regionen (Bbox). Liefert `feld_referenz` mit Koordinaten + erkannter Schrift/Größe.
 
 ### 6.3 Antwort-Engine (`fragebogen/answer_engine.py`) — geteilt über alle Tiers
-Pro Frage: Evidenz-Retrieval über **`iso27001`** (`Iso27001Control` + `ControlImplementation.status/implementation_beschreibung` + `StatementOfApplicability` + `ControlEvidenceLink`) und ergänzend `onboarding_wizard.UnternehmensProfil` + weitere aktive Module. LLM entwirft Antwort in **Vorschlagssprache**, mit `AntwortQuelle`-Belegen + `confidence`. Output durch `core.llm_validator.validate_output` (RDG-Layer-2); bei Verstoß → markiert „Entwurf bitte prüfen", kein Auto-Export. Kein echter LLM-Call in Tests (gemockt).
+
+**Evidenz-Pool = ALLE Daten, die wir über die Firma haben** (nicht nur ISO 27001 — viele KMU nutzen es nicht). Quellen, zu einem einheitlichen Evidenz-Snippet-Format aggregiert:
+1. **Modulübergreifende Aggregation** — das **bestehende `auditor_export/aggregators/`-Framework wiederverwenden/verallgemeinern** (es deckt bereits arbeitsschutz, auftragsverarbeitung/AVV, datenpannen, hinschg, iso27001, iso42001, ki_inventar, nis2, pflichtunterweisung, transparenzregister ab). Nur **aktive** Module liefern Evidenz.
+2. **`onboarding_wizard.UnternehmensProfil`** (Feature 1) — Firmen-Stammdaten.
+3. **Frühere bestätigte Fragebogen-Antworten** — vergangene `Antwort` (status bestätigt) aus anderen `Fragebogen` desselben Tenants. → Das System wird **mit jedem ausgefüllten Fragebogen schlauer**; bei ähnlicher Frage wird die geprüfte Vorantwort mit hoher Confidence vorgeschlagen.
+4. Vom Nutzer erfasste freie Eingaben.
+
+**Retrieval pro Frage:** Keyword-/Control-Code-Match + Ähnlichkeit zu früheren Fragen (Token-Similarity wie redaktion-Curator; **Embeddings als Backlog**) → Kandidaten-Evidenz → LLM wählt + entwirft Antwort in **Vorschlagssprache**, mit `AntwortQuelle`-Belegen (Modul + Referenz) + `confidence`. Output durch `core.llm_validator.validate_output` (RDG-Layer-2); bei Verstoß → „Entwurf bitte prüfen", kein Auto-Export. Kein echter LLM-Call in Tests (gemockt). Hat ein Tenant kaum Module gepflegt → niedrige Confidence + ehrliche „keine Evidenz gefunden, bitte selbst ausfüllen"-Markierung statt Halluzination.
 
 ### 6.4 Export-Tiers
 - **Tier 1 (`export/fill_xlsx.py`, `fill_pdfform.py`, `fill_docx.py`)**: Original kopieren, bestätigte Antworten in die Felder schreiben, identische Datei zurück. Synchron.
@@ -110,7 +117,7 @@ Eine Fragebogen-Antwort ist eine **rechtsverbindliche Zusicherung an den OEM** (
 **System-Binaries im Docker-Image (Dockerfile-Änderung, kein reines pip-Add):** `tesseract-ocr` + Sprachpakete (`deu`, `eng`), `poppler-utils` (für pdf2image). Muss ins Backend-`Dockerfile` (multi-stage ARM64). **Deploy-Impact explizit testen.**
 
 ## 10. Demo-Daten
-- Vorbereitetes **VDA-ISA-.xlsx** (Tier 1) im Demo-Account, das sich aus den ISO-27001-Demo-Evidenzen sichtbar befüllt (Bühnen-Pfad, zuverlässig, instant).
+- Vorbereitetes **VDA-ISA-.xlsx** (Tier 1) im Demo-Account, das sich aus den Demo-Evidenzen **mehrerer Module** (ISO 27001 *und* z.B. Datenpannen/HinSchG/Arbeitsschutz/Profil) sichtbar befüllt (Bühnen-Pfad, zuverlässig, instant) — zeigt, dass es auch ohne ISO 27001 trägt.
 - Eine vorbereitete **Scan-PDF** (Tier 2) als async-Kür mit vorgecachtem Ergebnis (kein Live-OCR-Risiko auf der Bühne).
 - Seed-Command `seed_fragebogen_demo` (idempotent), das die ISO-27001-Demo-Evidenz als Antwortbasis nutzt.
 
@@ -131,7 +138,7 @@ Permissions: GF + Compliance.
 
 ## 12. Tests (4-Schichten)
 1. **Extraktion** je Format (xlsx/pdf-form/docx strukturiert; OCR-Pfad mit Fixture-Bild, Tesseract gemockt/optional).
-2. **Antwort-Engine** (Mock-LLM): korrektes Evidenz-Retrieval aus iso27001, RDG-Validierung, Confidence.
+2. **Antwort-Engine** (Mock-LLM): Evidenz-Aggregation über mehrere aktive Module (nicht nur iso27001) + UnternehmensProfil + Wiederverwendung einer früheren bestätigten Antwort bei ähnlicher Frage (hohe Confidence); „keine Evidenz"-Fall (leerer Tenant) → niedrige Confidence statt Halluzination; RDG-Validierung.
 3. **Tier-1-Roundtrip:** xlsx rein → bestätigte Antworten → befülltes xlsx raus (Zellwerte korrekt).
 4. **Tier-3-Beiblatt:** Antwort-Dokument generiert.
 5. **Tier-2** (Vision-Review gemockt): Job-Flow, Status, Nachjustier-Loop-Abbruch bei Nicht-Konvergenz → Feld als „unsicher" markiert.
@@ -147,4 +154,5 @@ Neue App `fragebogen` (Tenant-side): `Fragebogen`, `Frage`, `Antwort`, `AntwortQ
 - Exakter VDA-ISA-Demo-Workbook-Aufbau (Spalten/Sheet) + Mapping VDA-ISA-Fragen → ISO-27001-Controls für die Demo.
 - Tesseract-/poppler-Integration im ARM64-Dockerfile (Build-Größe/Zeit prüfen).
 - Vision-Review-Modell (OpenRouter Vision-fähiges Modell) + Nachjustier-Loop-Abbruchkriterium (max Runden / Konfidenz).
-- Genaue Evidenz-Retrieval-Strategie (Keyword/Embedding) pro Frage — Start: Keyword/Control-Code-Match + LLM-Auswahl.
+- Genaue Evidenz-Retrieval-Strategie pro Frage — Start: Keyword/Control-Code-Match + Token-Similarity zu früheren Fragen + LLM-Auswahl; **Embeddings/Vektor-Index als Backlog** (bessere Retrieval-Qualität, aber neue Infra).
+- Verallgemeinerung des `auditor_export/aggregators/`-Frameworks zu einer wiederverwendbaren Evidenz-Quelle (gemeinsame Schnittstelle für Auditor-Export *und* Fragebogen-Engine) — vs. dünner Adapter. Detail im Plan.
