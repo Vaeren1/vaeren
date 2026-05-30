@@ -56,14 +56,16 @@ class Command(BaseCommand):
         ctx = schema_context(schema) if schema else nullcontext()
         with ctx:
             profil = self._seed()
-        self.stdout.write(
-            self.style.SUCCESS(
-                f"Demo-Profil '{profil.firmenname}' geseedet: "
-                f"{profil.befunde.count()} Befunde, "
-                f"{profil.empfehlungen.count()} Empfehlungen. "
-                "Module bewusst NICHT aktiviert."
+            # Innerhalb des Schema-Kontexts bleiben: die count()-Querys liefen
+            # sonst nach Context-Exit im public-Schema (Tenant-Tabelle fehlt dort).
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"Demo-Profil '{profil.firmenname}' geseedet: "
+                    f"{profil.befunde.count()} Befunde, "
+                    f"{profil.empfehlungen.count()} Empfehlungen. "
+                    "Module bewusst NICHT aktiviert."
+                )
             )
-        )
 
     def _seed(self) -> UnternehmensProfil:
         # Nur Felder übernehmen, die das Model auch kennt.
