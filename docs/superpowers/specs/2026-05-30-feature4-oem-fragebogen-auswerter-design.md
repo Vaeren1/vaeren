@@ -26,8 +26,8 @@ OEM-Lieferanten-Fragebögen (VDA-ISA/TISAX, kundenspezifische Self-Assessments) 
 1. **Upload** — Kunde lädt Fragebogen hoch (.xlsx, .pdf, .docx, …).
 2. **Analyse** — Format-Erkennung + Tier-Routing + Frage-Extraktion. Status `analysiert`.
 3. **Vorschlag** — Antwort-Engine entwirft pro Frage eine Antwort aus Vaeren-Evidenz (Quelle + Confidence sichtbar). Status `vorgeschlagen`.
-4. **Review** — Kunde (GF oder Compliance) prüft jede Antwort, bestätigt/editiert. Quelle verlinkt. Nur **bestätigte** Antworten gehen in den Export.
-5. **Export** — Tier-abhängig: Original befüllt (Tier 1), async befülltes PDF (Tier 2), oder Antwort-Beiblatt (Tier 3). Download.
+4. **Review (visueller Seite-für-Seite-Editor)** — Kunde (GF oder Compliance) sieht den **fertig befüllten Fragebogen wie er aussieht**, Seite für Seite: gerenderte Original-Seiten mit überlagerten Antworten. Pro Antwort: Text editieren (immer), Position/Größe ziehen (nur Tier 2, wo Platzierung relevant ist). Felder mit niedriger Platzierungs-/Antwort-Confidence sind **hervorgehoben** („bitte prüfen") → gezielte Aufmerksamkeit. Ziel: Auto-Platzierung ist meist korrekt, der Mensch greift selten ein, bestätigt aber jede Antwort (RDG). Nur **bestätigte** Antworten gehen in den Export.
+5. **Export** — Tier-abhängig: Original befüllt (Tier 1), befülltes PDF mit den im Editor bestätigten Positionen (Tier 2), oder Antwort-Beiblatt (Tier 3). Download.
 
 ## 4. Architektur-Überblick
 
@@ -74,11 +74,23 @@ Pro Frage: Evidenz-Retrieval über **`iso27001`** (`Iso27001Control` + `ControlI
 
 ### 6.4 Export-Tiers
 - **Tier 1 (`export/fill_xlsx.py`, `fill_pdfform.py`, `fill_docx.py`)**: Original kopieren, bestätigte Antworten in die Felder schreiben, identische Datei zurück. Synchron.
-- **Tier 2 (`export/fill_unstructured.py`, Celery-Task)**: async. Antwort an OCR-Bbox via `reportlab`/`pypdf` overlayen (Schrift/Größe ans Vorhandene gematcht) → `pdf2image`-Render → **2 Vision-LLM-Review-Agenten** prüfen Inhalt+Platzierung → Nachjustier-Loop (max. N Runden) → finale PDF. Status + Benachrichtigung via bestehendes Notification-System.
+- **Tier 2 (`export/fill_unstructured.py`, Celery-Task)**: async, **gestaffelte Auto-Korrektheit** (der Kern-Mehrwert — Ziel: meist schon richtig, bevor der Mensch schaut):
+  1. **Erst-Platzierung:** Antwort an OCR-Bbox via `reportlab`/`pypdf` overlayen (Schrift/Größe ans Vorhandene gematcht).
+  2. **Auto-Vision-Review-Loop:** `pdf2image`-Render → **2 Vision-LLM-Agenten** prüfen Inhalt + Platzierung → Nachjustierung → erneut rendern/prüfen, max. N Runden. Pro Feld eine **Platzierungs-Confidence**; bei Nicht-Konvergenz wird das Feld als „unsicher" markiert (statt endlos zu loopen).
+  3. Ergebnis (befülltes PDF + Feld-Confidences + Markierungen) → Benachrichtigung. Der visuelle Editor (§6.6) ist das **finale menschliche Netz** für die wenigen markierten Felder.
 - **Tier 3 (`export/beiblatt.py`)**: generiert Antwort-Dokument (Frage/Antwort/Quelle) via WeasyPrint (wie `auditor_export`).
 
 ### 6.5 Confidence & Review-Priorisierung
-Niedrige `confidence` → im Review hervorgehoben („bitte besonders prüfen"). Hohe Confidence + klare Einzelquelle → vorausgewählt, aber trotzdem bestätigungspflichtig.
+Zwei Confidences: **Antwort-Confidence** (Antwort-Engine) + **Platzierungs-Confidence** (Tier-2-Vision-Loop). Niedrige Werte → im Editor hervorgehoben („bitte besonders prüfen") → lenken die Aufmerksamkeit des Menschen gezielt auf die seltenen Problemfälle. Hohe Confidence → vorausgewählt, aber trotzdem bestätigungspflichtig (RDG).
+
+### 6.6 Visueller Review-Editor (Frontend, `frontend/src/routes/fragebogen-review.tsx`)
+Seite-für-Seite-Canvas: server-seitig gerenderte Original-Seiten (`pdf2image`/Excel-Render) als Bild, darüber absolut positionierte, editierbare Antwort-Boxen an ihren Feld-/Bbox-Positionen.
+- **Editieren** des Antwort-Textes: immer (alle Tiers).
+- **Ziehen/Größe** der Box: nur Tier 2 (unstrukturierte PDF — wo Platzierung wackeln kann). Tier 1 (Excel/Formularfeld) hat feste Positionen → Ziehen deaktiviert.
+- **Confidence-Hervorhebung** (§6.5) lenkt den Blick; Quelle pro Antwort verlinkt.
+- Navigation Seite ‹ › + „Seite bestätigt"; am Ende „Fragebogen final bestätigen → Download".
+- Beim finalen Bestätigen: bestätigte Texte + (Tier-2-)Positionen werden ins Original geschrieben (Tier 1 Zelle/Feld, Tier 2 reportlab-Overlay an der menschlich bestätigten Position).
+- Tier 3 (kein Original-Layout): einfache Frage/Antwort-Liste statt Canvas.
 
 ## 7. RDG-Absicherung (strengster HITL der App)
 
@@ -108,7 +120,8 @@ Eine Fragebogen-Antwort ist eine **rechtsverbindliche Zusicherung an den OEM** (
 | POST | `/api/fragebogen/upload` | Datei hochladen → Format/Tier/Extraktion |
 | GET | `/api/fragebogen/<id>` | Fragebogen + Fragen + Antwort-Entwürfe |
 | POST | `/api/fragebogen/<id>/vorschlagen` | Antwort-Engine starten (Entwürfe erzeugen) |
-| PATCH | `/api/fragebogen/<id>/antwort/<aid>` | Antwort bestätigen/editieren |
+| GET | `/api/fragebogen/<id>/seiten` | gerenderte Original-Seiten (Bild-URLs) + Feld-/Box-Positionen + Confidences für den Editor |
+| PATCH | `/api/fragebogen/<id>/antwort/<aid>` | Antwort bestätigen/editieren + (Tier 2) Position/Größe der Box speichern |
 | POST | `/api/fragebogen/<id>/export` | Export erzeugen (Tier 1/3 sync, Tier 2 async-Job) |
 | GET | `/api/fragebogen/<id>/export-status` | Tier-2-Job-Status / Download-Link |
 
@@ -119,7 +132,8 @@ Permissions: GF + Compliance.
 2. **Antwort-Engine** (Mock-LLM): korrektes Evidenz-Retrieval aus iso27001, RDG-Validierung, Confidence.
 3. **Tier-1-Roundtrip:** xlsx rein → bestätigte Antworten → befülltes xlsx raus (Zellwerte korrekt).
 4. **Tier-3-Beiblatt:** Antwort-Dokument generiert.
-5. **Tier-2** (Vision-Review gemockt): Job-Flow, Status, Nachjustier-Loop-Abbruch.
+5. **Tier-2** (Vision-Review gemockt): Job-Flow, Status, Nachjustier-Loop-Abbruch bei Nicht-Konvergenz → Feld als „unsicher" markiert.
+5b. **Editor-Persistenz:** PATCH speichert editierten Text + (Tier 2) neue Box-Position; finaler Export nutzt die menschlich bestätigte Position. Storybook für den Review-Canvas.
 6. **RDG-Gate:** Export überspringt unbestätigte Antworten (nie LLM-Text exportiert).
 7. **Multi-Tenant-Isolation** + **Permission-Matrix** (GF/Compliance erlaubt, Mitarbeiter 403).
 8. OpenAPI-Schema-Sync.
