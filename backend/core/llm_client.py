@@ -32,6 +32,11 @@ DEFAULT_MODEL_FAST = os.environ.get("OPENROUTER_MODEL_FAST", "google/gemma-4-26b
 DEFAULT_MODEL_REASONING = os.environ.get(
     "OPENROUTER_MODEL_REASONING", "nvidia/nemotron-3-super-120b-a12b:free"
 )
+# Vision-fähiges Modell für Tier-2-Platzierungs-Review (Feature 4, Phase H).
+# Multimodal (Bild+Text); Override via env. Free-Tier-Vision auf OpenRouter.
+DEFAULT_MODEL_VISION = os.environ.get(
+    "OPENROUTER_MODEL_VISION", "google/gemma-4-26b-a4b-it:free"
+)
 
 # Phase-2-Switch: wenn `LLM_PROVIDER=anthropic` gesetzt ist + ANTHROPIC_API_KEY
 # vorhanden, nutzen wir Anthropic Claude statt OpenRouter. Spec §8.
@@ -138,6 +143,72 @@ def _call_openrouter(prompt: str, model: str) -> str:
         max_tokens=600,
     )
     return completion.choices[0].message.content or ""
+
+
+def _call_openrouter_vision(prompt: str, bild_png: bytes, model: str) -> str:
+    """Vision-Call gegen OpenRouter: Bild (PNG-Bytes) + Text-Prompt.
+
+    OpenRouter erwartet das Bild als data-URL im multimodalen content-Array
+    (OpenAI-kompatibel). Lazy-Import, damit Test-Pfade ohne Netz nicht hängen.
+    """
+    import base64
+
+    from openai import OpenAI
+
+    client = OpenAI(api_key=os.environ["OPENROUTER_API_KEY"], base_url=OPENROUTER_BASE)
+    data_url = "data:image/png;base64," + base64.b64encode(bild_png).decode("ascii")
+    completion = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT_VAEREN},
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {"type": "image_url", "image_url": {"url": data_url}},
+                ],
+            },
+        ],
+        temperature=0.2,
+        max_tokens=400,
+    )
+    return completion.choices[0].message.content or ""
+
+
+def vision_generate(
+    prompt: str,
+    bild_png: bytes,
+    *,
+    model: str | None = None,
+    static_fallback: str = "",
+) -> LLMResponse:
+    """Multimodaler Vision-Call (Bild + Text) — dünner Wrapper um OpenRouter.
+
+    Wird für den Tier-2-Platzierungs-Review (fragebogen.export.fill_unstructured)
+    genutzt. Strukturell identisch zu `generate`, aber mit Bild-Input. Der echte
+    Vision-Call läuft nur in Prod (API-Key gesetzt); in Tests ist die aufrufende
+    Funktion `_vision_review` die gemockte Grenze.
+
+    - Kein API-Key → static_fallback (kein Netz-Call)
+    - Anthropic-Provider hat hier (noch) keinen Vision-Pfad → static_fallback
+    - Netz-Fehler → static_fallback (graceful degradation)
+    """
+    chosen_model = model or DEFAULT_MODEL_VISION
+
+    if LLM_PROVIDER == "anthropic":
+        logger.info("vision_generate: kein Anthropic-Vision-Pfad — static fallback")
+        return LLMResponse(text=static_fallback, quelle="static", model=None)
+
+    if not _has_api_key() or not bild_png:
+        return LLMResponse(text=static_fallback, quelle="static", model=None)
+
+    try:
+        text = _call_openrouter_vision(prompt, bild_png, chosen_model)
+    except Exception as exc:
+        logger.warning("Vision-LLM-Call fehlgeschlagen (%s); fallback static", exc)
+        return LLMResponse(text=static_fallback, quelle="static", model=chosen_model)
+
+    return LLMResponse(text=text, quelle="llm", model=chosen_model)
 
 
 def generate(
