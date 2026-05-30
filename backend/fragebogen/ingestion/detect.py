@@ -62,8 +62,7 @@ def _docx_hat_formularfelder(pfad: str) -> bool:
 
     try:
         doc = Document(pfad)
-        return doc.element.body.find(qn("w:sdt")) is not None or any(
-            el.tag == qn("w:sdt") for el in doc.element.body.iter()
-        )
+        # iter() ist rekursiv und matcht auch verschachtelte SDTs (Content-Controls).
+        return any(el.tag == qn("w:sdt") for el in doc.element.body.iter())
     except Exception:
         return False
