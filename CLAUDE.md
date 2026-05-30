@@ -2,6 +2,16 @@
 
 > **Für künftige Claude-Sessions:** Diese Datei enthält die wichtigsten Architektur- und Konventions-Entscheidungen für das ai-act-Projekt. Sie ist die schnelle Referenz; die tiefe Wahrheit liegt in den Specs unter `docs/superpowers/specs/`.
 
+## Stand 2026-05-30 — Phase 4 / Feature 1 (Onboarding-Wizard) deployed
+
+**Phase 4 = 4 Demo-/Vertriebs-Features** für die Präsentation vor Kanzlei-Partner + ersten Kunden (Reihenfolge: 1 Wizard → 4 Fragebögen → 3 Schulungs-Generator → 2 Vishing). Specs: `docs/superpowers/specs/2026-05-30-onboarding-wizard-compliance-radar-design.md`. Plan: `docs/superpowers/plans/2026-05-30-feature1-onboarding-wizard.md`.
+
+**Feature 1 — Onboarding-Wizard / Compliance-Radar: deployed 2026-05-30** (PR #1 squash-merged, Commit `f48feff`). Erst-Login-Wizard: KI-Firmen-Recherche → Regulierungs-Relevanz-Engine (deterministisch, kein LLM, verallgemeinert NIS2-`klassifiziere_automatisch`) → Compliance-Radar mit Abdeckungs-Gradient (🟢 Voll-Modul / 🟡 LLM-Basis-Hinweis / ⚪ in Vorbereitung) → Ein-Klick-Modul-Aktivierung. Neue Bausteine: `core/regulierungen.py` + `core/betriebsmerkmale.py` (Kataloge als Code, anwaltsfest), `core/relevanz_engine.py`, `core/modules.py` (Modul-Registry, spiegelt Legacy-Flag `module_iso42001_aktiv`), `core/unternehmens_osint.py` (Demo-Cache; **echte `_llm_recherche` ist NotImplementedError-Stub = Backlog, Demo läuft über Fixture**), `core/basis_hinweis.py` (RDG-validiert). Neue Tenant-App `onboarding_wizard` (UnternehmensProfil/RegulierungsBefund/OperativeEmpfehlung). Migrations: `onboarding_wizard/0001` + `tenants/0007_tenant_aktive_module`. Entwickelt via subagent-driven-development + 3 PR-Review-Runden. Demo-Tenant geseedet (`seed_onboarding_demo`): 13 Befunde + 31 Empfehlungen. Tenant-API GF-gated (403 live verifiziert).
+
+**Wichtig — bekannte CI-Altlast (NICHT von Feature 1):** Die Backend- (`ruff` repo-weit, ~190 pre-existing Findings) und Frontend-CI-Gates (`bun test` globt Playwright-E2E-Specs → bricht) sind auf `main` **dauerhaft rot** und waren es schon vor Feature 1. Feature-1-eigener Code ist ruff-clean. PR #1 wurde per `--admin` gemergt (keine echte Branch-Protection). Aufräumen = eigenes Ticket.
+
+**Backlog Phase 4:** Live-OSINT-Implementierung (`_llm_recherche`), Feature 4 (OEM-Fragebogen-Auswerter, hybrid VDA-ISA strukturiert + KI-Fallback), Feature 3 (KI-Schulungs-Generator YouTube→Quiz), Feature 2 (Vishing/Voice-Clone-Demo — Quality-Gate: überzeugt der Klon nicht, fliegt es raus; Cloud für Demo, self-hosted EU fürs Produkt).
+
 ## Stand 2026-05-18 — Phase 3 deployed in Production (nach Audit-Review-Pass)
 
 **Deploy erfolgt am 2026-05-18** (Commit `0778c36`). Vorher Audit-Review-Pass mit 4 parallelen Audit-Agenten: **6 Deploy-Blocker + 12 HOCH-Findings + 30 Mittel/Niedrig** gefunden, alle 6 Blocker + 12 HOCH gefixt + 5 Frontend-Skeletons ausgebaut. Compliance-Index Demo-Tenant: 89 → **91/100 green**. Tests: 102/102 Phase-3-Modul-Tests grün. Details (inkl. Blocker-Liste: DSGVO-Art.-9-Bruch bei Unfall-Gesundheitsdaten, inaktiver RDG-Layer-2-Validator, Aggregator-Stubs, tenant_schema-Leak) in `~/.claude/projects/-home-konrad-ai-act/memory/project_phase3_status.md`.
