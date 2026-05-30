@@ -6,6 +6,279 @@
         "description": "Compliance-Autopilot Backend-API"
     },
     "paths": {
+        "/api/antwort-bibliothek/": {
+            "get": {
+                "operationId": "antwort_bibliothek_list",
+                "description": "CRUD für die kuratierbare Antwort-Bibliothek (/api/antwort-bibliothek/).",
+                "parameters": [
+                    {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "antwort-bibliothek"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedAntwortBibliothekEintragList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "antwort_bibliothek_create",
+                "description": "CRUD für die kuratierbare Antwort-Bibliothek (/api/antwort-bibliothek/).",
+                "tags": [
+                    "antwort-bibliothek"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AntwortBibliothekEintrag"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AntwortBibliothekEintrag"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AntwortBibliothekEintrag"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AntwortBibliothekEintrag"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/antwort-bibliothek/{id}/": {
+            "get": {
+                "operationId": "antwort_bibliothek_retrieve",
+                "description": "CRUD für die kuratierbare Antwort-Bibliothek (/api/antwort-bibliothek/).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der antwort bibliothek eintrag identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "antwort-bibliothek"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AntwortBibliothekEintrag"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "antwort_bibliothek_update",
+                "description": "CRUD für die kuratierbare Antwort-Bibliothek (/api/antwort-bibliothek/).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der antwort bibliothek eintrag identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "antwort-bibliothek"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AntwortBibliothekEintrag"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AntwortBibliothekEintrag"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AntwortBibliothekEintrag"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AntwortBibliothekEintrag"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "antwort_bibliothek_partial_update",
+                "description": "CRUD für die kuratierbare Antwort-Bibliothek (/api/antwort-bibliothek/).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der antwort bibliothek eintrag identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "antwort-bibliothek"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedAntwortBibliothekEintrag"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedAntwortBibliothekEintrag"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedAntwortBibliothekEintrag"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AntwortBibliothekEintrag"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "antwort_bibliothek_destroy",
+                "description": "CRUD für die kuratierbare Antwort-Bibliothek (/api/antwort-bibliothek/).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der antwort bibliothek eintrag identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "antwort-bibliothek"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
         "/api/antwort-optionen/": {
             "get": {
                 "operationId": "antwort_optionen_list",
@@ -8242,6 +8515,696 @@
                 }
             }
         },
+        "/api/fragebogen/": {
+            "get": {
+                "operationId": "fragebogen_list",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "parameters": [
+                    {
+                        "name": "ordering",
+                        "required": false,
+                        "in": "query",
+                        "description": "Feld, das zum Sortieren der Ergebnisse verwendet werden soll.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Eine Seitenzahl in der paginierten Ergebnismenge.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "required": false,
+                        "in": "query",
+                        "description": "Ein Suchbegriff.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "fragebogen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedFragebogenListList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "fragebogen_create",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "tags": [
+                    "fragebogen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/fragebogen/{id}/": {
+            "get": {
+                "operationId": "fragebogen_retrieve",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragebogen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "fragebogen_update",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragebogen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "fragebogen_partial_update",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragebogen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedFragebogenDetail"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedFragebogenDetail"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedFragebogenDetail"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "fragebogen_destroy",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragebogen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/fragebogen/{id}/antwort/{aid}/": {
+            "patch": {
+                "operationId": "fragebogen_antwort_partial_update",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "aid",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9]+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragebogen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedAntwortPatchRequest"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedAntwortPatchRequest"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedAntwortPatchRequest"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/fragebogen/{id}/export/": {
+            "post": {
+                "operationId": "fragebogen_export_create",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragebogen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    },
+                    "409": {
+                        "description": "Noch nicht final attestiert."
+                    }
+                }
+            }
+        },
+        "/api/fragebogen/{id}/export-status/": {
+            "get": {
+                "operationId": "fragebogen_export_status_retrieve",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragebogen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenExportStatus"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/fragebogen/{id}/final-attestieren/": {
+            "post": {
+                "operationId": "fragebogen_final_attestieren_create",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragebogen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    },
+                    "409": {
+                        "description": "Nicht alle Seiten bestätigt."
+                    }
+                }
+            }
+        },
+        "/api/fragebogen/{id}/seite/{n}/bestaetigen/": {
+            "post": {
+                "operationId": "fragebogen_seite_bestaetigen_create",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert.",
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "n",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9]+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragebogen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/fragebogen/{id}/seiten/": {
+            "get": {
+                "operationId": "fragebogen_seiten_retrieve",
+                "description": "Strukturierte Review-Daten pro Seite (kein Bild-Rendering in Phase F).\n\nFür jede Seite die Fragen + Antwort-Entwürfe + Confidence + feld_referenz.\nDas Frontend (Phase G) rendert daraus den Review-Editor; für xlsx gibt es\nohnehin kein Seitenbild.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragebogen"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenSeiten"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/fragebogen/{id}/vorschlagen/": {
+            "post": {
+                "operationId": "fragebogen_vorschlagen_create",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "fragebogen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenDetail"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/fragebogen/upload/": {
+            "post": {
+                "operationId": "fragebogen_upload_create",
+                "description": "Fragebogen-CRUD + Flow-Actions.\n\nStandard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die\n`upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über\ndie ModelViewSet-Defaults verfügbar (gleiche Permission).",
+                "tags": [
+                    "fragebogen"
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenUploadRequest"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FragebogenUploadRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FragebogenDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/api/fragen/": {
             "get": {
                 "operationId": "fragen_list",
@@ -8317,8 +9280,7 @@
                                 "$ref": "#/components/schemas/Frage"
                             }
                         }
-                    },
-                    "required": true
+                    }
                 },
                 "security": [
                     {
@@ -8659,8 +9621,7 @@
                                 "$ref": "#/components/schemas/Frage"
                             }
                         }
-                    },
-                    "required": true
+                    }
                 },
                 "security": [
                     {
@@ -20437,6 +21398,120 @@
                     }
                 }
             },
+            "Antwort": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "entwurf_text": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "bestaetigt_text": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "finaler_text": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AntwortStatusEnum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "confidence": {
+                        "type": "number",
+                        "format": "double",
+                        "readOnly": true
+                    },
+                    "platzierung_confidence": {
+                        "type": "number",
+                        "format": "double",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "bestaetigt_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "quellen": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AntwortQuelle"
+                        },
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "bestaetigt_at",
+                    "bestaetigt_text",
+                    "confidence",
+                    "entwurf_text",
+                    "finaler_text",
+                    "id",
+                    "platzierung_confidence",
+                    "quellen",
+                    "status"
+                ]
+            },
+            "AntwortBibliothekEintrag": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "frage_kanonisch": {
+                        "type": "string"
+                    },
+                    "antwort_text": {
+                        "type": "string"
+                    },
+                    "quelle_referenzen": {},
+                    "kategorie": {
+                        "type": "string",
+                        "maxLength": 120
+                    },
+                    "tags": {},
+                    "verwendungs_count": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "zuletzt_verwendet": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "erstellt_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "aktualisiert_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "aktualisiert_at",
+                    "antwort_text",
+                    "erstellt_at",
+                    "frage_kanonisch",
+                    "id",
+                    "verwendungs_count",
+                    "zuletzt_verwendet"
+                ]
+            },
             "AntwortOption": {
                 "type": "object",
                 "properties": {
@@ -20465,6 +21540,42 @@
                     "id",
                     "text"
                 ]
+            },
+            "AntwortQuelle": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "quelle_typ": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "referenz": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "auszug": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "auszug",
+                    "id",
+                    "quelle_typ",
+                    "referenz"
+                ]
+            },
+            "AntwortStatusEnum": {
+                "enum": [
+                    "entwurf",
+                    "editiert",
+                    "leer"
+                ],
+                "type": "string",
+                "description": "* `entwurf` - Entwurf\n* `editiert` - Editiert\n* `leer` - Leer/offen"
             },
             "Arbeitsbereich": {
                 "type": "object",
@@ -22429,32 +23540,51 @@
                         "type": "integer",
                         "readOnly": true
                     },
-                    "kurs": {
-                        "type": "integer"
-                    },
-                    "text": {
-                        "type": "string"
-                    },
-                    "erklaerung": {
-                        "type": "string",
-                        "description": "Erklärung nach Beantwortung"
-                    },
                     "reihenfolge": {
                         "type": "integer",
-                        "maximum": 32767,
-                        "minimum": 0
+                        "readOnly": true
                     },
-                    "optionen": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/_AntwortOptionNested"
-                        }
+                    "seite": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "nummer": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "text": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "feld_referenz": {
+                        "readOnly": true
+                    },
+                    "kategorie": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "extraktion_quelle": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "antwort": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Antwort"
+                            }
+                        ],
+                        "readOnly": true
                     }
                 },
                 "required": [
+                    "antwort",
+                    "extraktion_quelle",
+                    "feld_referenz",
                     "id",
-                    "kurs",
-                    "optionen",
+                    "kategorie",
+                    "nummer",
+                    "reihenfolge",
+                    "seite",
                     "text"
                 ]
             },
@@ -22541,6 +23671,212 @@
                     "optionen",
                     "status",
                     "text"
+                ]
+            },
+            "FragebogenDetail": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "dateiname": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "format": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "tier": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusB95Enum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "quelle_oem": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "bestaetigte_seiten": {
+                        "readOnly": true
+                    },
+                    "final_attestiert": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "final_attestiert_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "tier2_job_status": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "export_datei_url": {
+                        "type": "string",
+                        "nullable": true,
+                        "readOnly": true
+                    },
+                    "erstellt_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "fragen": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Frage"
+                        },
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "bestaetigte_seiten",
+                    "dateiname",
+                    "erstellt_at",
+                    "export_datei_url",
+                    "final_attestiert",
+                    "final_attestiert_at",
+                    "format",
+                    "fragen",
+                    "id",
+                    "quelle_oem",
+                    "status",
+                    "tier",
+                    "tier2_job_status"
+                ]
+            },
+            "FragebogenExportStatus": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "tier": {
+                        "type": "integer"
+                    },
+                    "tier2_job_status": {
+                        "type": "string"
+                    },
+                    "export_bereit": {
+                        "type": "boolean"
+                    },
+                    "export_datei_url": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "export_bereit",
+                    "export_datei_url",
+                    "status",
+                    "tier",
+                    "tier2_job_status"
+                ]
+            },
+            "FragebogenList": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "dateiname": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "format": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "tier": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusB95Enum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "quelle_oem": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "fragen_anzahl": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "bestaetigte_seiten": {
+                        "readOnly": true
+                    },
+                    "final_attestiert": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "tier2_job_status": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "erstellt_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "bestaetigte_seiten",
+                    "dateiname",
+                    "erstellt_at",
+                    "final_attestiert",
+                    "format",
+                    "fragen_anzahl",
+                    "id",
+                    "quelle_oem",
+                    "status",
+                    "tier",
+                    "tier2_job_status"
+                ]
+            },
+            "FragebogenSeiten": {
+                "type": "object",
+                "properties": {
+                    "seiten": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": {}
+                        }
+                    }
+                },
+                "required": [
+                    "seiten"
+                ]
+            },
+            "FragebogenUploadRequest": {
+                "type": "object",
+                "properties": {
+                    "datei": {
+                        "type": "string",
+                        "format": "uri"
+                    },
+                    "quelle_oem": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "datei"
                 ]
             },
             "Gbu": {
@@ -25274,6 +26610,37 @@
                     }
                 }
             },
+            "PaginatedAntwortBibliothekEintragList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AntwortBibliothekEintrag"
+                        }
+                    }
+                }
+            },
             "PaginatedAntwortOptionList": {
                 "type": "object",
                 "required": [
@@ -26014,6 +27381,37 @@
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/FrageVorschlag"
+                        }
+                    }
+                }
+            },
+            "PaginatedFragebogenListList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FragebogenList"
                         }
                     }
                 }
@@ -27334,6 +28732,47 @@
                     }
                 }
             },
+            "PatchedAntwortBibliothekEintrag": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "frage_kanonisch": {
+                        "type": "string"
+                    },
+                    "antwort_text": {
+                        "type": "string"
+                    },
+                    "quelle_referenzen": {},
+                    "kategorie": {
+                        "type": "string",
+                        "maxLength": 120
+                    },
+                    "tags": {},
+                    "verwendungs_count": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "zuletzt_verwendet": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "erstellt_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "aktualisiert_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                }
+            },
             "PatchedAntwortOption": {
                 "type": "object",
                 "properties": {
@@ -27355,6 +28794,18 @@
                         "type": "integer",
                         "maximum": 32767,
                         "minimum": 0
+                    }
+                }
+            },
+            "PatchedAntwortPatchRequest": {
+                "type": "object",
+                "properties": {
+                    "bestaetigt_text": {
+                        "type": "string"
+                    },
+                    "feld_referenz": {
+                        "type": "object",
+                        "additionalProperties": {}
                     }
                 }
             },
@@ -28361,6 +29812,73 @@
                         "items": {
                             "$ref": "#/components/schemas/_AntwortOptionNested"
                         }
+                    }
+                }
+            },
+            "PatchedFragebogenDetail": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "dateiname": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "format": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "tier": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusB95Enum"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "quelle_oem": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "bestaetigte_seiten": {
+                        "readOnly": true
+                    },
+                    "final_attestiert": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "final_attestiert_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "tier2_job_status": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "export_datei_url": {
+                        "type": "string",
+                        "nullable": true,
+                        "readOnly": true
+                    },
+                    "erstellt_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "fragen": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Frage"
+                        },
+                        "readOnly": true
                     }
                 }
             },
@@ -30872,6 +32390,18 @@
                 ],
                 "type": "string",
                 "description": "* `queued` - Eingereiht\n* `running` - Läuft\n* `done` - Fertig\n* `failed` - Fehlgeschlagen\n* `cancelled` - Abgebrochen"
+            },
+            "StatusB95Enum": {
+                "enum": [
+                    "hochgeladen",
+                    "analysiert",
+                    "vorgeschlagen",
+                    "in_review",
+                    "exportiert",
+                    "fehler"
+                ],
+                "type": "string",
+                "description": "* `hochgeladen` - Hochgeladen\n* `analysiert` - Analysiert\n* `vorgeschlagen` - Vorschläge erstellt\n* `in_review` - In Prüfung\n* `exportiert` - Exportiert\n* `fehler` - Fehler"
             },
             "StatusC14Enum": {
                 "enum": [

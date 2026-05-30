@@ -143,6 +143,18 @@ def tenant_client_mitarbeiter(onboarding_tenant, settings):
 
 
 @pytest.fixture
+def tenant_client_compliance(onboarding_tenant, settings):
+    from core.models import TenantRole
+
+    return _role_client(
+        onboarding_tenant,
+        email="cb@ow.de",
+        role=TenantRole.COMPLIANCE_BEAUFTRAGTER,
+        settings=settings,
+    )
+
+
+@pytest.fixture
 def two_tenants(db):
     t1 = _make_tenant()
     t2 = _make_tenant()

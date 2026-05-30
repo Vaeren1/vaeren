@@ -4,6 +4,44 @@
  */
 
 export interface paths {
+    "/api/antwort-bibliothek/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description CRUD für die kuratierbare Antwort-Bibliothek (/api/antwort-bibliothek/). */
+        get: operations["antwort_bibliothek_list"];
+        put?: never;
+        /** @description CRUD für die kuratierbare Antwort-Bibliothek (/api/antwort-bibliothek/). */
+        post: operations["antwort_bibliothek_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/antwort-bibliothek/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description CRUD für die kuratierbare Antwort-Bibliothek (/api/antwort-bibliothek/). */
+        get: operations["antwort_bibliothek_retrieve"];
+        /** @description CRUD für die kuratierbare Antwort-Bibliothek (/api/antwort-bibliothek/). */
+        put: operations["antwort_bibliothek_update"];
+        post?: never;
+        /** @description CRUD für die kuratierbare Antwort-Bibliothek (/api/antwort-bibliothek/). */
+        delete: operations["antwort_bibliothek_destroy"];
+        options?: never;
+        head?: never;
+        /** @description CRUD für die kuratierbare Antwort-Bibliothek (/api/antwort-bibliothek/). */
+        patch: operations["antwort_bibliothek_partial_update"];
+        trace?: never;
+    };
     "/api/antwort-optionen/": {
         parameters: {
             query?: never;
@@ -1601,6 +1639,264 @@ export interface paths {
          *     anzeigen, dass Mensch entscheidet.
          */
         post: operations["datenpannen_risiko_vorschlag_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragebogen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        get: operations["fragebogen_list"];
+        put?: never;
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        post: operations["fragebogen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragebogen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        get: operations["fragebogen_retrieve"];
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        put: operations["fragebogen_update"];
+        post?: never;
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        delete: operations["fragebogen_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        patch: operations["fragebogen_partial_update"];
+        trace?: never;
+    };
+    "/api/fragebogen/{id}/antwort/{aid}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        patch: operations["fragebogen_antwort_partial_update"];
+        trace?: never;
+    };
+    "/api/fragebogen/{id}/export/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        post: operations["fragebogen_export_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragebogen/{id}/export-status/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        get: operations["fragebogen_export_status_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragebogen/{id}/final-attestieren/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        post: operations["fragebogen_final_attestieren_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragebogen/{id}/seite/{n}/bestaetigen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        post: operations["fragebogen_seite_bestaetigen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragebogen/{id}/seiten/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Strukturierte Review-Daten pro Seite (kein Bild-Rendering in Phase F).
+         *
+         *     Für jede Seite die Fragen + Antwort-Entwürfe + Confidence + feld_referenz.
+         *     Das Frontend (Phase G) rendert daraus den Review-Editor; für xlsx gibt es
+         *     ohnehin kein Seitenbild.
+         */
+        get: operations["fragebogen_seiten_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragebogen/{id}/vorschlagen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        post: operations["fragebogen_vorschlagen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/fragebogen/upload/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Fragebogen-CRUD + Flow-Actions.
+         *
+         *     Standard-CRUD bleibt schlank (list/retrieve); create/upload läuft über die
+         *     `upload`-Action wegen Multipart + Ingestion. update/destroy bleiben über
+         *     die ModelViewSet-Defaults verfügbar (gleiche Permission).
+         */
+        post: operations["fragebogen_upload_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4450,6 +4746,35 @@ export interface components {
         AktivierenRequest: {
             modul_keys?: string[];
         };
+        Antwort: {
+            readonly id: number;
+            readonly entwurf_text: string;
+            readonly bestaetigt_text: string;
+            readonly finaler_text: string;
+            readonly status: components["schemas"]["AntwortStatusEnum"];
+            /** Format: double */
+            readonly confidence: number;
+            /** Format: double */
+            readonly platzierung_confidence: number | null;
+            /** Format: date-time */
+            readonly bestaetigt_at: string | null;
+            readonly quellen: components["schemas"]["AntwortQuelle"][];
+        };
+        AntwortBibliothekEintrag: {
+            readonly id: number;
+            frage_kanonisch: string;
+            antwort_text: string;
+            quelle_referenzen?: unknown;
+            kategorie?: string;
+            tags?: unknown;
+            readonly verwendungs_count: number;
+            /** Format: date-time */
+            readonly zuletzt_verwendet: string | null;
+            /** Format: date-time */
+            readonly erstellt_at: string;
+            /** Format: date-time */
+            readonly aktualisiert_at: string;
+        };
         AntwortOption: {
             readonly id: number;
             frage: number;
@@ -4457,6 +4782,19 @@ export interface components {
             ist_korrekt?: boolean;
             reihenfolge?: number;
         };
+        AntwortQuelle: {
+            readonly id: number;
+            readonly quelle_typ: string;
+            readonly referenz: string;
+            readonly auszug: string;
+        };
+        /**
+         * @description * `entwurf` - Entwurf
+         *     * `editiert` - Editiert
+         *     * `leer` - Leer/offen
+         * @enum {string}
+         */
+        AntwortStatusEnum: "entwurf" | "editiert" | "leer";
         Arbeitsbereich: {
             readonly id: number;
             name: string;
@@ -5152,12 +5490,14 @@ export interface components {
         EvidenceModeEnum: "embed" | "reference";
         Frage: {
             readonly id: number;
-            kurs: number;
-            text: string;
-            /** @description Erklärung nach Beantwortung */
-            erklaerung?: string;
-            reihenfolge?: number;
-            optionen: components["schemas"]["_AntwortOptionNested"][];
+            readonly reihenfolge: number;
+            readonly seite: number;
+            readonly nummer: string;
+            readonly text: string;
+            readonly feld_referenz: unknown;
+            readonly kategorie: string;
+            readonly extraktion_quelle: string;
+            readonly antwort: components["schemas"]["Antwort"];
         };
         FrageVorschlag: {
             readonly id: number;
@@ -5180,6 +5520,54 @@ export interface components {
             readonly entschieden_von: number | null;
             /** @description Bei status=AKZEPTIERT: Verweis auf die erzeugte Frage. */
             readonly akzeptiert_als: number | null;
+        };
+        FragebogenDetail: {
+            readonly id: number;
+            readonly dateiname: string;
+            readonly format: string;
+            readonly tier: number;
+            readonly status: components["schemas"]["StatusB95Enum"];
+            readonly quelle_oem: string;
+            readonly bestaetigte_seiten: unknown;
+            readonly final_attestiert: boolean;
+            /** Format: date-time */
+            readonly final_attestiert_at: string | null;
+            readonly tier2_job_status: string;
+            readonly export_datei_url: string | null;
+            /** Format: date-time */
+            readonly erstellt_at: string;
+            readonly fragen: components["schemas"]["Frage"][];
+        };
+        FragebogenExportStatus: {
+            status: string;
+            tier: number;
+            tier2_job_status: string;
+            export_bereit: boolean;
+            export_datei_url: string | null;
+        };
+        FragebogenList: {
+            readonly id: number;
+            readonly dateiname: string;
+            readonly format: string;
+            readonly tier: number;
+            readonly status: components["schemas"]["StatusB95Enum"];
+            readonly quelle_oem: string;
+            readonly fragen_anzahl: number;
+            readonly bestaetigte_seiten: unknown;
+            readonly final_attestiert: boolean;
+            readonly tier2_job_status: string;
+            /** Format: date-time */
+            readonly erstellt_at: string;
+        };
+        FragebogenSeiten: {
+            seiten: {
+                [key: string]: unknown;
+            }[];
+        };
+        FragebogenUploadRequest: {
+            /** Format: uri */
+            datei: string;
+            quelle_oem?: string;
         };
         Gbu: {
             readonly id: number;
@@ -6129,6 +6517,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["AimsManagementReview"][];
         };
+        PaginatedAntwortBibliothekEintragList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AntwortBibliothekEintrag"][];
+        };
         PaginatedAntwortOptionList: {
             /** @example 123 */
             count: number;
@@ -6488,6 +6891,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["FrageVorschlag"][];
+        };
+        PaginatedFragebogenListList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["FragebogenList"][];
         };
         PaginatedGbuGefaehrdungList: {
             /** @example 123 */
@@ -7071,12 +7489,33 @@ export interface components {
             /** Format: date-time */
             readonly erstellt_am?: string;
         };
+        PatchedAntwortBibliothekEintrag: {
+            readonly id?: number;
+            frage_kanonisch?: string;
+            antwort_text?: string;
+            quelle_referenzen?: unknown;
+            kategorie?: string;
+            tags?: unknown;
+            readonly verwendungs_count?: number;
+            /** Format: date-time */
+            readonly zuletzt_verwendet?: string | null;
+            /** Format: date-time */
+            readonly erstellt_at?: string;
+            /** Format: date-time */
+            readonly aktualisiert_at?: string;
+        };
         PatchedAntwortOption: {
             readonly id?: number;
             frage?: number;
             text?: string;
             ist_korrekt?: boolean;
             reihenfolge?: number;
+        };
+        PatchedAntwortPatchRequest: {
+            bestaetigt_text?: string;
+            feld_referenz?: {
+                [key: string]: unknown;
+            };
         };
         PatchedArbeitsbereich: {
             readonly id?: number;
@@ -7463,6 +7902,23 @@ export interface components {
             erklaerung?: string;
             reihenfolge?: number;
             optionen?: components["schemas"]["_AntwortOptionNested"][];
+        };
+        PatchedFragebogenDetail: {
+            readonly id?: number;
+            readonly dateiname?: string;
+            readonly format?: string;
+            readonly tier?: number;
+            readonly status?: components["schemas"]["StatusB95Enum"];
+            readonly quelle_oem?: string;
+            readonly bestaetigte_seiten?: unknown;
+            readonly final_attestiert?: boolean;
+            /** Format: date-time */
+            readonly final_attestiert_at?: string | null;
+            readonly tier2_job_status?: string;
+            readonly export_datei_url?: string | null;
+            /** Format: date-time */
+            readonly erstellt_at?: string;
+            readonly fragen?: components["schemas"]["Frage"][];
         };
         PatchedGbu: {
             readonly id?: number;
@@ -8400,6 +8856,16 @@ export interface components {
          */
         StatusB7bEnum: "queued" | "running" | "done" | "failed" | "cancelled";
         /**
+         * @description * `hochgeladen` - Hochgeladen
+         *     * `analysiert` - Analysiert
+         *     * `vorgeschlagen` - Vorschläge erstellt
+         *     * `in_review` - In Prüfung
+         *     * `exportiert` - Exportiert
+         *     * `fehler` - Fehler
+         * @enum {string}
+         */
+        StatusB95Enum: "hochgeladen" | "analysiert" | "vorgeschlagen" | "in_review" | "exportiert" | "fehler";
+        /**
          * @description * `entwurf` - Entwurf
          *     * `in_bewertung` - In Bewertung
          *     * `freigegeben` - Freigegeben
@@ -8719,6 +9185,156 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    antwort_bibliothek_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAntwortBibliothekEintragList"];
+                };
+            };
+        };
+    };
+    antwort_bibliothek_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AntwortBibliothekEintrag"];
+                "application/x-www-form-urlencoded": components["schemas"]["AntwortBibliothekEintrag"];
+                "multipart/form-data": components["schemas"]["AntwortBibliothekEintrag"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AntwortBibliothekEintrag"];
+                };
+            };
+        };
+    };
+    antwort_bibliothek_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der antwort bibliothek eintrag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AntwortBibliothekEintrag"];
+                };
+            };
+        };
+    };
+    antwort_bibliothek_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der antwort bibliothek eintrag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AntwortBibliothekEintrag"];
+                "application/x-www-form-urlencoded": components["schemas"]["AntwortBibliothekEintrag"];
+                "multipart/form-data": components["schemas"]["AntwortBibliothekEintrag"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AntwortBibliothekEintrag"];
+                };
+            };
+        };
+    };
+    antwort_bibliothek_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der antwort bibliothek eintrag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    antwort_bibliothek_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der antwort bibliothek eintrag identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAntwortBibliothekEintrag"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAntwortBibliothekEintrag"];
+                "multipart/form-data": components["schemas"]["PatchedAntwortBibliothekEintrag"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AntwortBibliothekEintrag"];
+                };
+            };
+        };
+    };
     antwort_optionen_list: {
         parameters: {
             query?: {
@@ -13214,6 +13830,380 @@ export interface operations {
             };
         };
     };
+    fragebogen_list: {
+        parameters: {
+            query?: {
+                /** @description Feld, das zum Sortieren der Ergebnisse verwendet werden soll. */
+                ordering?: string;
+                /** @description Eine Seitenzahl in der paginierten Ergebnismenge. */
+                page?: number;
+                /** @description Ein Suchbegriff. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedFragebogenListList"];
+                };
+            };
+        };
+    };
+    fragebogen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["FragebogenDetail"];
+                "multipart/form-data": components["schemas"]["FragebogenDetail"];
+                "application/x-www-form-urlencoded": components["schemas"]["FragebogenDetail"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenDetail"];
+                };
+            };
+        };
+    };
+    fragebogen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenDetail"];
+                };
+            };
+        };
+    };
+    fragebogen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["FragebogenDetail"];
+                "multipart/form-data": components["schemas"]["FragebogenDetail"];
+                "application/x-www-form-urlencoded": components["schemas"]["FragebogenDetail"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenDetail"];
+                };
+            };
+        };
+    };
+    fragebogen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    fragebogen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedFragebogenDetail"];
+                "multipart/form-data": components["schemas"]["PatchedFragebogenDetail"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedFragebogenDetail"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenDetail"];
+                };
+            };
+        };
+    };
+    fragebogen_antwort_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                aid: string;
+                /** @description Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAntwortPatchRequest"];
+                "multipart/form-data": components["schemas"]["PatchedAntwortPatchRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAntwortPatchRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenDetail"];
+                };
+            };
+        };
+    };
+    fragebogen_export_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["FragebogenDetail"];
+                "multipart/form-data": components["schemas"]["FragebogenDetail"];
+                "application/x-www-form-urlencoded": components["schemas"]["FragebogenDetail"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenDetail"];
+                };
+            };
+            /** @description Noch nicht final attestiert. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    fragebogen_export_status_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenExportStatus"];
+                };
+            };
+        };
+    };
+    fragebogen_final_attestieren_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["FragebogenDetail"];
+                "multipart/form-data": components["schemas"]["FragebogenDetail"];
+                "application/x-www-form-urlencoded": components["schemas"]["FragebogenDetail"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenDetail"];
+                };
+            };
+            /** @description Nicht alle Seiten bestätigt. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    fragebogen_seite_bestaetigen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert. */
+                id: number;
+                n: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["FragebogenDetail"];
+                "multipart/form-data": components["schemas"]["FragebogenDetail"];
+                "application/x-www-form-urlencoded": components["schemas"]["FragebogenDetail"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenDetail"];
+                };
+            };
+        };
+    };
+    fragebogen_seiten_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenSeiten"];
+                };
+            };
+        };
+    };
+    fragebogen_vorschlagen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Ein eindeutiger Ganzzahl-Wert, der fragebogen identifiziert. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["FragebogenDetail"];
+                "multipart/form-data": components["schemas"]["FragebogenDetail"];
+                "application/x-www-form-urlencoded": components["schemas"]["FragebogenDetail"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenDetail"];
+                };
+            };
+        };
+    };
+    fragebogen_upload_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["FragebogenUploadRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["FragebogenUploadRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FragebogenDetail"];
+                };
+            };
+        };
+    };
     fragen_list: {
         parameters: {
             query?: {
@@ -13247,7 +14237,7 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody: {
+        requestBody?: {
             content: {
                 "application/json": components["schemas"]["Frage"];
                 "application/x-www-form-urlencoded": components["schemas"]["Frage"];
@@ -13426,7 +14416,7 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody: {
+        requestBody?: {
             content: {
                 "application/json": components["schemas"]["Frage"];
                 "application/x-www-form-urlencoded": components["schemas"]["Frage"];
