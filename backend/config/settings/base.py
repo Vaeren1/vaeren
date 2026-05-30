@@ -54,6 +54,7 @@ TENANT_APPS: list[str] = [
     "arbeitsschutz",
     "auditor_export",
     "onboarding_wizard",
+    "fragebogen",
     "rest_framework",
     "drf_spectacular",
     "django_filters",
