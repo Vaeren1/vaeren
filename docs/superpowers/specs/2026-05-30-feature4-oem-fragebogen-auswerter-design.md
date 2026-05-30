@@ -26,7 +26,7 @@ OEM-Lieferanten-Fragebögen (VDA-ISA/TISAX, kundenspezifische Self-Assessments) 
 1. **Upload** — Kunde lädt Fragebogen hoch (.xlsx, .pdf, .docx, …).
 2. **Analyse** — Format-Erkennung + Tier-Routing + Frage-Extraktion. Status `analysiert`.
 3. **Vorschlag** — Antwort-Engine entwirft pro Frage eine Antwort aus Vaeren-Evidenz (Quelle + Confidence sichtbar). Status `vorgeschlagen`.
-4. **Review (visueller Seite-für-Seite-Editor)** — Kunde (GF oder Compliance) sieht den **fertig befüllten Fragebogen wie er aussieht**, Seite für Seite: gerenderte Original-Seiten mit überlagerten Antworten. Pro Antwort: Text editieren (immer), Position/Größe ziehen (nur Tier 2, wo Platzierung relevant ist). Felder mit niedriger Platzierungs-/Antwort-Confidence sind **hervorgehoben** („bitte prüfen") → gezielte Aufmerksamkeit. Ziel: Auto-Platzierung ist meist korrekt, der Mensch greift selten ein, bestätigt aber jede Antwort (RDG). Nur **bestätigte** Antworten gehen in den Export.
+4. **Review (visueller Seite-für-Seite-Editor)** — Kunde (GF oder Compliance) sieht den **fertig befüllten Fragebogen wie er aussieht**, Seite für Seite: gerenderte Original-Seiten mit überlagerten Antworten. Pro Antwort: Text editieren (immer), Position/Größe ziehen (nur Tier 2). Felder mit niedriger Confidence **hervorgehoben** → gezielte Aufmerksamkeit. Bestätigung **pro Seite** („Seite bestätigt"), Zurückblättern jederzeit möglich. **Kein Klick pro Antwort** — Zeitersparnis ist das Feature. Am Ende, wenn alle Seiten durchgeklickt+bestätigt: **finale Attestierung** („Antworten geprüft") → Download.
 5. **Export** — Tier-abhängig: Original befüllt (Tier 1), befülltes PDF mit den im Editor bestätigten Positionen (Tier 2), oder Antwort-Beiblatt (Tier 3). Download.
 
 ## 4. Architektur-Überblick
@@ -55,7 +55,7 @@ Geteilt: core/llm_client, core/llm_validator (RDG), iso27001-Evidenz, onboarding
 
 ## 5. Datenmodell (Tenant-App `fragebogen`)
 
-- **`Fragebogen`**: `original_datei` (FileField), `dateiname`, `format` (xlsx/pdf_form/pdf_unstrukturiert/docx/…), `tier` (1/2/3), `status` (hochgeladen/analysiert/vorgeschlagen/in_review/exportiert/fehler), `quelle_oem` (Freitext, z.B. „VW VDA-ISA"), `hochgeladen_von` (FK User), `erstellt_at`, `export_datei` (FileField, nullable), `tier2_job_status` (nullable).
+- **`Fragebogen`**: `original_datei` (FileField), `dateiname`, `format` (xlsx/pdf_form/pdf_unstrukturiert/docx/…), `tier` (1/2/3), `status` (hochgeladen/analysiert/vorgeschlagen/in_review/exportiert/fehler), `quelle_oem` (Freitext, z.B. „VW VDA-ISA"), `hochgeladen_von` (FK User), `erstellt_at`, `export_datei` (FileField, nullable), `tier2_job_status` (nullable), **`bestaetigte_seiten`** (JSON-Liste der bestätigten Seitennummern), **`final_attestiert_at`** + **`final_attestiert_von`** (FK User) — die finale Attestierung, Export-Gate.
 - **`Frage`**: `fragebogen` (FK), `nummer`/`reihenfolge`, `text`, `feld_referenz` (JSON — Excel-Zelle, PDF-Feldname oder OCR-Bbox-Koordinaten), `kategorie` (optional, z.B. Control-Bereich), `extraktion_quelle` (struktur/ocr/llm).
 - **`Antwort`**: `frage` (FK), `entwurf_text` (LLM), `bestaetigt_text` (vom Menschen final), `status` (entwurf/bestaetigt/abgelehnt/leer), `confidence` (0–1), `bestaetigt_von` (FK User, nullable), `bestaetigt_at`.
 - **`AntwortQuelle`**: `antwort` (FK), `quelle_typ` (iso27001_control/soa/policy/profil/…), `referenz` (z.B. Control-Code „A.5.1"), `auszug` (kurzer Beleg-Text).
@@ -97,7 +97,7 @@ Seite-für-Seite-Canvas: server-seitig gerenderte Original-Seiten (`pdf2image`/E
 Eine Fragebogen-Antwort ist eine **rechtsverbindliche Zusicherung an den OEM** (Gewährleistung/Haftung). Daher:
 - **Layer 1:** LLM-Entwürfe in Vorschlagssprache, als `entwurf_text` markiert.
 - **Layer 2:** `validate_output` über jeden Entwurf.
-- **Layer 3 (verschärft):** **Kein Export ohne `status=bestaetigt` pro exportierter Antwort.** Unbestätigte Fragen → im Export leer gelassen bzw. als „offen" markiert, nie mit LLM-Text befüllt. Bestätigung erfordert GF- oder Compliance-Rolle.
+- **Layer 3 (Human-Gate, klick-effizient):** Bestätigung **pro Seite** (nicht pro Antwort — Zeitersparnis ist das Feature) + **finale Attestierung** am Ende („Ich bestätige, dass die Antworten geprüft sind", mit Wer/Wann protokolliert). **Kein Export ohne finale Attestierung.** Nur Antworten auf bestätigten Seiten werden exportiert; Fragen auf nicht bestätigten Seiten → leer/„offen", nie mit LLM-Text befüllt. Bestätigung/Attestierung erfordert GF- oder Compliance-Rolle. Die Seiten-Bestätigung + finale Attestierung ist der rechtlich relevante menschliche Prüf-Akt (vollwertiger HITL, nur batch-granular statt pro Feld).
 - Disclaimer im Export-Beiblatt + Review-UI („Antworten vor Übermittlung an den OEM final prüfen").
 
 ## 8. Permissions
@@ -121,8 +121,10 @@ Eine Fragebogen-Antwort ist eine **rechtsverbindliche Zusicherung an den OEM** (
 | GET | `/api/fragebogen/<id>` | Fragebogen + Fragen + Antwort-Entwürfe |
 | POST | `/api/fragebogen/<id>/vorschlagen` | Antwort-Engine starten (Entwürfe erzeugen) |
 | GET | `/api/fragebogen/<id>/seiten` | gerenderte Original-Seiten (Bild-URLs) + Feld-/Box-Positionen + Confidences für den Editor |
-| PATCH | `/api/fragebogen/<id>/antwort/<aid>` | Antwort bestätigen/editieren + (Tier 2) Position/Größe der Box speichern |
-| POST | `/api/fragebogen/<id>/export` | Export erzeugen (Tier 1/3 sync, Tier 2 async-Job) |
+| PATCH | `/api/fragebogen/<id>/antwort/<aid>` | Antwort-Text editieren + (Tier 2) Position/Größe der Box speichern (kein Bestätigungs-Klick pro Antwort) |
+| POST | `/api/fragebogen/<id>/seite/<n>/bestaetigen` | Seite als geprüft markieren (in `bestaetigte_seiten`) |
+| POST | `/api/fragebogen/<id>/final-attestieren` | finale Attestierung (Wer/Wann); Export-Gate. Nur möglich, wenn alle Seiten bestätigt |
+| POST | `/api/fragebogen/<id>/export` | Export erzeugen (Tier 1/3 sync, Tier 2 async-Job) — setzt finale Attestierung voraus |
 | GET | `/api/fragebogen/<id>/export-status` | Tier-2-Job-Status / Download-Link |
 
 Permissions: GF + Compliance.
@@ -134,7 +136,7 @@ Permissions: GF + Compliance.
 4. **Tier-3-Beiblatt:** Antwort-Dokument generiert.
 5. **Tier-2** (Vision-Review gemockt): Job-Flow, Status, Nachjustier-Loop-Abbruch bei Nicht-Konvergenz → Feld als „unsicher" markiert.
 5b. **Editor-Persistenz:** PATCH speichert editierten Text + (Tier 2) neue Box-Position; finaler Export nutzt die menschlich bestätigte Position. Storybook für den Review-Canvas.
-6. **RDG-Gate:** Export überspringt unbestätigte Antworten (nie LLM-Text exportiert).
+6. **RDG-Gate:** Export erst nach finaler Attestierung möglich (vorher 409/Fehler); Fragen auf nicht bestätigten Seiten bleiben im Export leer (nie LLM-Text ohne Prüfung exportiert). Seiten-Bestätigung + Attestierung protokolliert (Wer/Wann).
 7. **Multi-Tenant-Isolation** + **Permission-Matrix** (GF/Compliance erlaubt, Mitarbeiter 403).
 8. OpenAPI-Schema-Sync.
 
