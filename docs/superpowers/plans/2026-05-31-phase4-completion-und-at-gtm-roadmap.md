@@ -62,7 +62,7 @@ DBA DE-CY: Arbeitslohn wird besteuert, wo physisch gearbeitet wird (Art. 15) = C
 
 **Substanz — zwei Ebenen:** (A) *persönliche Ansässigkeit* via **60-Tage-Regel** = gemietete Wohnung + ≥60 Tage CY + nirgends sonst ansässig/>183 Tage + CY-Beschäftigung/Direktorenposten → **Mietwohnung reicht**. (B) *Firmen-/IP-Box-Substanz* = F&E passiert dort wo Konrad codet (= Wohnung) + Registered Office (Service ~500–1.500 €/J.) + Konrad als ansässiger Direktor (kein Nominee nötig). **Kein separates Büro nötig.**
 
-**Wegzugsbesteuerung (AT/DE):** für Konrad ~Nicht-Thema (keine Anteile, nur niedrig-bewerteter Code) — Hebel ist Timing: **jetzt** in CY gründen, keine AT-Zwischen-GmbH bauen.
+**Wegzugsbesteuerung (DE, §6 AStG — Konrad ist steuerlich in DE ansässig, nicht AT):** für Konrad ~Nicht-Thema (keine Kapitalgesellschafts-Anteile, nur niedrig-bewerteter Code) — Hebel ist Timing: **jetzt** in CY gründen, keine Zwischen-GmbH bauen (DE-GmbH-Anteile würden §6 AStG auslösen).
 
 **Laufende Pflichten + Kosten (kleine Phase, Umsatz <200k):**
 - **ISRE-2400-Review statt Vollaudit** zulässig solange Umsatz ≤200k **und** Aktiva ≤500k → ~1.000–2.500 €/J. (Vollaudit ~3–8k erst bei Skalierung).
@@ -73,7 +73,7 @@ DBA DE-CY: Arbeitslohn wird besteuert, wo physisch gearbeitet wird (Art. 15) = C
 1. PayWise-PE-Absicherung reicht PayWise? (PayWise + ihr Berater)
 2. 50 %-Expat-Befreiung greift auf Remote-Anstellung bei ausländischem AG?
 3. Sauberer IP-Übertragungs-Zeitpunkt + Nexus-Doku (bestehender Code → CY-Firma).
-4. AT-seitiger sauberer Wegzug (Ansässigkeits-Ende, Entstrickung niedrig bestätigen).
+4. DE-seitiger sauberer Wegzug (Ende der DE-Steueransässigkeit, §6 AStG / Entstrickung niedrig bestätigen).
 
 **Lebensentscheidung (kein Steuer-, sondern Lebens-Gate):** echter Umzug muss als Leben funktionieren — sonst Konstrukt-Risiko (Ort der Geschäftsleitung). Konrad bestätigt Bereitschaft. *Tax-Schwanz darf nicht mit Lebens-Hund wedeln.*
 
@@ -110,7 +110,7 @@ Vor neuen Features das Vorhandene demo-fest machen.
 
 ## Workstream E — Firmengründung
 - [ ] Steuerberater + Anwalt (AT) konsultieren: Rechtsform-Entscheidung (Florida LLC vs. AT-GmbH/FlexCo — siehe E-FLAG-1).
-- [ ] **Zypern-Pfad prüfen (favorisiert, E-FLAG-2):** zusätzlich **CY-Steuerberater/Anwalt** einschalten (IP-Box-Strukturierung + Non-Dom + 50%-Expat-Befreiung) und AT-Berater den sauberen Wegzug bestätigen lassen. **Keine AT-Zwischen-GmbH bauen** (Timing-Hebel / Entstrickung schützen), bis Entscheidung steht. 4 offene Berater-Fragen siehe E-FLAG-2.
+- [ ] **Zypern-Pfad prüfen (favorisiert, E-FLAG-2):** zusätzlich **CY-Steuerberater/Anwalt** einschalten (IP-Box-Strukturierung + Non-Dom + 50%-Expat-Befreiung) und **DE-Steuerberater** den sauberen Wegzug aus Deutschland (§6 AStG) bestätigen lassen. **Keine Zwischen-GmbH bauen** (Timing-Hebel / Entstrickung schützen), bis Entscheidung steht. Konkrete Berater-Kandidaten + Briefing siehe `2026-06-03-berater-checkliste-zypern-rechtsform.md`. 4 offene Berater-Fragen siehe E-FLAG-2.
 - [ ] Markenrecht: Vaeren-Anmeldung (DPMA war auf 2026-05-10 postponed; jetzt auch AT/EU-Marke EUIPO prüfen) vor Pilot-Vertrag.
 - [ ] Impressum/Datenschutzerklärung an gewählte Rechtsform + AT-Recht anpassen.
 - [ ] Bankkonto + Rechnungs-/USt-Setup (Reverse-Charge DE/AT).

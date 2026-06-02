@@ -3,6 +3,7 @@
 > **Zweck:** Vorbereitung für die Gespräche zur Rechtsform-Entscheidung (E-FLAG-2). Vor den Terminen durchgehen, damit kein Termin „verschwendet" wird.
 > **Stand:** 2026-06-03. Gehört zu Workstream E der Roadmap `2026-05-31-phase4-completion-und-at-gtm-roadmap.md` (E-FLAG-2-Block enthält die Zahlen).
 > **Wichtig:** Alle bisherigen Zahlen sind *meine* (Claude) illustrativen Schätzungen — die Berater liefern die verbindlichen Zahlen. Diese Checkliste sammelt die **Fragen**, nicht die Antworten.
+> **Steuerlicher Ausgangspunkt:** Konrad wandert steuerlich aus **Deutschland** aus (nicht Österreich). Relevant ist daher die **deutsche** Wegzugsbesteuerung (§6 AStG) + deutsches DBA mit Zypern. Der AT-Bezug im Projekt betrifft nur den Vertrieb/Kundenmarkt, nicht die persönliche Steuer.
 
 ---
 
@@ -11,10 +12,10 @@
 | Berater | Rolle | Warum |
 |---|---|---|
 | **CY-Steuerberater/Anwalt** | IP-Box-Strukturierung, Non-Dom, Expat-Befreiung, Gründung, Substanz | Kennen das Regime im Schlaf, dort günstig. **Wichtigster Termin.** |
-| **AT-Steuerberater** (ggf. DE) | Sauberer Wegzug: Ansässigkeits-Ende, Wegzugs-/Entstrickungssteuer, Doppelbesteuerung | Verhindert, dass AT/DE das Konstrukt nachträglich aufrollt. |
+| **DE-Steuerberater** (Wegzug-Spezialist) | Sauberer Wegzug aus Deutschland: Ende DE-Ansässigkeit, **Wegzugsbesteuerung §6 AStG**, erweiterte beschränkte Steuerpflicht, DBA DE-CY | Verhindert, dass das deutsche Finanzamt das Konstrukt nachträglich aufrollt. **Hier kein CY-Formations-Portal nehmen — echter DE-Steuerberater.** |
 | **PayWise (deren Berater)** | Betriebsstätten-Risiko (PE) durch deine Remote-Arbeit aus CY | Ist *PayWise's* Risiko — du lieferst nur die Absicherungs-Bausteine. |
 
-**Reihenfolge:** Erst CY-Berater (klärt ob das Modell überhaupt für dich greift) → dann AT-Berater (sauberer Exit) → parallel PayWise informieren. **Keine AT-Zwischen-GmbH gründen**, bis CY-Entscheidung steht (Entstrickungs-/Timing-Falle).
+**Reihenfolge:** Erst CY-Berater (klärt ob das Modell überhaupt für dich greift) → dann DE-Berater (sauberer Exit aus Deutschland) → parallel PayWise informieren. **Keine Zwischen-GmbH gründen**, bis CY-Entscheidung steht (DE-GmbH-Anteile lösen §6 AStG aus — Entstrickungs-/Timing-Falle).
 
 ---
 
@@ -35,11 +36,12 @@
 - Welche **Nexus-Dokumentation** muss ich ab Tag 1 führen (R&D-Kosten je IP-Asset)?
 - Bestätigung: qualifiziert mein SaaS als **urheberrechtlich geschützte Software**? Was muss ich dafür nachweisen (Original, wirtschaftliches Eigentum + Entwicklungsrisiko bei der CY-Ltd)?
 
-### Frage 4 — Sauberer AT-/DE-Wegzug (an AT-Berater)
-- Bin ich aktuell **AT- oder DE-steueransässig**? Wann genau endet die Ansässigkeit beim Umzug?
-- Löst der Wegzug **Wegzugs-/Entstrickungssteuer** aus? (Annahme: ~Nein, da keine Kapitalgesellschafts-Anteile, nur niedrig-bewerteter Code — bestätigen.)
-- Greift **§6 AStG** (DE) bzw. das AT-Pendant auf den selbst-entwickelten Code, wenn ich ihn vor/beim Wegzug halte?
-- **Erweiterte beschränkte Steuerpflicht** / Nachversteuerungs-Risiken DE/AT nach Wegzug?
+### Frage 4 — Sauberer Wegzug aus Deutschland (an DE-Steuerberater)
+- Wann genau endet meine **deutsche Steueransässigkeit** beim Umzug (Abmeldung, 183-Tage, Mittelpunkt der Lebensinteressen)?
+- Löst der Wegzug **Wegzugsbesteuerung (§6 AStG)** aus? (Annahme: ~Nein, da keine Kapitalgesellschafts-Anteile, nur niedrig-bewerteter, privat gehaltener Code — bestätigen.)
+- Greift **§6 AStG** auf den selbst-entwickelten Code, wenn ich ihn vor/beim Wegzug halte oder in die CY-Ltd einlege? Wie bewerte ich ihn sicher niedrig (Umsatz=0)?
+- **Erweiterte beschränkte Steuerpflicht (§2 AStG)** / Nachversteuerungs-Risiken nach Wegzug nach Zypern (Niedrigsteuerland?)?
+- **DBA DE-CY:** greift es sauber für Gehalt (Art. 15), Dividenden, Unternehmensgewinn — Freistellung oder Anrechnung?
 
 ---
 
@@ -56,10 +58,10 @@
 - **CY-Steuerreform 2026:** alle genannten Sätze final in Kraft (KSt 15 %, IP-Box 3 %, Bänder, Non-Dom, Expat-Bef.)? Geplante weitere Änderungen?
 - **Gründungsdauer + Ablauf:** wie lange bis betriebsbereit, welche Schritte?
 
-### An den AT-/DE-Berater
-- **Sozialversicherung:** wandert nach EU-VO 883/2004 nach CY (Tätigkeitsstaat)? A1-Bescheinigung nötig? Was passiert mit DE-Rentenanwartschaften?
-- **Doppelbesteuerung:** greift das DBA sauber für Gehalt (Art. 15) + Dividenden + Unternehmensgewinn? Anrechnung/Freistellung?
-- **Abmelde-Mechanik:** Was muss ich in AT/DE formal tun (Abmeldung, letzte Steuererklärung, Fristen)?
+### An den DE-Steuerberater
+- **Sozialversicherung:** wandert nach EU-VO 883/2004 nach CY (Tätigkeitsstaat)? A1-Bescheinigung nötig? Was passiert mit meinen DE-Rentenanwartschaften?
+- **Abmelde-Mechanik:** Was muss ich in Deutschland formal tun (Abmeldung beim Einwohnermeldeamt, letzte ESt-Erklärung, Fristen, Wegzugs-Anzeige)?
+- **Wohnsitz-Auflösung:** Habe ich in DE noch eine Wohnung/Zugriff, die eine fortbestehende Ansässigkeit auslösen könnte?
 
 ### An PayWise (organisatorisch)
 - Sind sie mit CY als Wohnsitzland einverstanden (wie bei den Paraguay-Kollegen)?
@@ -71,7 +73,7 @@
 ## 3. Unterlagen, die du mitbringen/bereithalten solltest
 
 - [ ] **Einkommens-Eckdaten:** PayWise-Gehalt (80k brutto), erwarteter SaaS-Gewinn-Korridor (ehrlich: aktuell 0, Prognose).
-- [ ] **Aktuelle steuerliche Situation:** wo gemeldet/ansässig (AT? DE?), Steuer-IDs.
+- [ ] **Aktuelle steuerliche Situation:** steuerlich in **Deutschland** ansässig (Steuer-ID, Finanzamt), aktueller Wohnsitz/Meldeadresse.
 - [ ] **Vaeren-Kurzbeschreibung:** SaaS-Compliance-Produkt, Solo-entwickelt, EU-Hosting (Hetzner), B2B DE/AT-Mittelstand.
 - [ ] **Code-/IP-Status:** wer hält den Code aktuell (du privat), seit wann, kein Umsatz, keine bestehende Firma/Anteile.
 - [ ] **PayWise-Arbeitsvertrag** (für die PE-/Befreiungs-Prüfung).
@@ -83,7 +85,7 @@
 ## 4. Entscheidungs-Gates nach den Gesprächen
 
 1. **Greift das IP-Box-/Non-Dom-Modell für mich konkret?** (CY-Berater) → wenn nein/eingeschränkt: Modell neu bewerten.
-2. **Ist der Wegzug AT/DE sauber + günstig?** (AT-Berater) → wenn teure Entstrickung: Timing/Reihenfolge anpassen.
+2. **Ist der Wegzug aus Deutschland sauber + günstig?** (DE-Steuerberater, §6 AStG) → wenn teure Entstrickung: Timing/Reihenfolge anpassen.
 3. **Spielt PayWise mit?** (PayWise) → wenn PE-Sorge unlösbar: PayWise-Verhältnis umbauen oder Modell kippen.
 4. **Lebensentscheidung:** will ich real in Zypern leben? → *kein Steuer-, sondern Lebens-Gate. Tax-Schwanz darf nicht mit Lebens-Hund wedeln.*
 
@@ -91,6 +93,81 @@
 
 ---
 
-## 5. Querverweise
+## 5. Berater-Kandidaten (online/E-Mail-Beratung, Stand 2026-06-03)
+
+> **Disclaimer:** Recherche-Ergebnisse, **keine Empfehlung/Prüfung** durch Claude. Vor Beauftragung: Zulassung prüfen (DE: Steuerberaterkammer; CY: ICPAC / Cyprus Bar), Referenzen/Bewertungen checken, Festpreis schriftlich. Kontaktaufnahme teilt deine Daten mit dem Anbieter.
+
+**Du brauchst zwei Rollen** (eine pro Seite). Idealfall: eine deutschsprachige Kanzlei mit CY-Standbein, die *beide* Seiten abdeckt — aber die **§6-AStG-Meinung** möglichst von jemandem, dessen Geschäft *nicht* der Verkauf einer Zypern-Gründung ist (sonst wird das DE-Risiko gern kleingeredet).
+
+### A) DE-Seite — Wegzugsbesteuerung §6 AStG (echte deutsche Steuerberater)
+| Anbieter | Profil | Online/E-Mail |
+|---|---|---|
+| **JUHN Partner** (juhn.com) | Deutsche StB-Kanzlei, Schwerpunkt internationales Steuerrecht + Wegzugsbesteuerung + Zypern; viel publiziert | ja (Video/Tel.) |
+| **Sebastian Sauerborn** (sebsauerborn.com) | Deutschsprachiger internat. Steuerberater, Relocation/Zypern-Spezialist | ja |
+
+### B) CY-Seite + deutschsprachige Brücke (Non-Dom, IP-Box, Gründung, Yellow Slip)
+| Anbieter | Profil | Hinweis |
+|---|---|---|
+| **Privacy Management Group** (wohnsitz-ausland.com) | Deutschsprachig, ~20 J. Erfahrung, CY-Team aus StB/Juristen, Non-Dom-Komplettservice | etabliert, Online |
+| **nachzypernauswandern.de** | Deutschsprachige Einzel-Begleitung Ansässigkeit/Gründung | Online |
+| **zypernberatung.net** | Team vor Ort (StB/Recht/Immobilien) | Online |
+| **zypern.ltd** | Großes Auswanderer-Portal, Ltd/Non-Dom/Yellow-Slip, WhatsApp-Berater | ⚠️ stark vertriebsgetrieben — DE-Risiko separat absichern |
+| **cypruslimited.com** (Eduard Fütterer) | Dt. Finanzverwaltungs-Background, internat. Steuer | Online |
+
+### C) CY-lokale Fachkanzleien (IP-Box stark, primär Englisch)
+| Anbieter | Profil |
+|---|---|
+| **KTC Business Consultants** (ktc.com.cy) | IP-Box + Relocation + Company Formation, viele Guides |
+| **IBCCS Tax** (ibccs.tax) | Internationale Steuerplanung CY, Tax-Planning-Service |
+| **easycorporate.com.cy** / **NAK Law** (naklaw.com) / **Zeno Legal** | IP-Box-Strukturierung / Anwalts-Seite |
+
+**Pragmatischer Plan:** 2–3 Anbieter aus B oder C für die CY-Seite anschreiben (Erstgespräch oft kostenlos/günstig), **plus** einen aus A für die DE-Wegzugs-Meinung. Angebote (Festpreis) vergleichen. Marktübliche Sätze: ~150–400 €/Std. Beratung, ~1.500–5.000 € für komplette Relocation-Begleitung.
+
+---
+
+## 6. Briefing / Anschreiben (Vorlage zum Versenden)
+
+### Deutsche Variante (für A + B)
+
+> **Betreff:** Anfrage Erstberatung (online) — Wegzug Deutschland → Zypern, CY-Ltd mit IP-Box + Non-Dom
+>
+> Sehr geehrte Damen und Herren,
+>
+> ich plane meinen steuerlichen Wegzug aus **Deutschland** nach **Zypern** und suche eine **Online-/E-Mail-Beratung** zur sauberen Strukturierung. Eckdaten:
+>
+> - **Person:** alleinstehend, aktuell in Deutschland unbeschränkt steuerpflichtig.
+> - **Einkommen 1 — Anstellung:** 100 % remote als Software-Entwickler bei einem deutschen Arbeitgeber (ca. 80.000 €/Jahr brutto), Wohnsitzland frei wählbar; der Arbeitgeber möchte vermeiden, dass durch meine Remote-Tätigkeit eine **Betriebsstätte** in CY entsteht.
+> - **Einkommen 2 — eigenes SaaS:** ich entwickle als Solo-Gründer eine **B2B-Compliance-Software** (urheberrechtlich geschützter Code, aktuell vorrevenue), die ich künftig über eine **zyprische Ltd** betreiben möchte. Ziel: **IP-Box** (3 % auf qualifizierten Software-Gewinn) + **Non-Dom** (Dividenden).
+>
+> **Konkret bitte ich um Einschätzung zu:**
+> 1. Greift die zyprische **IP-Box** für meinen selbstentwickelten SaaS-Code (Nexus, sauberer IP-Übertrag des bestehenden Codes in die Ltd)?
+> 2. **Non-Dom**-Setup + **60-Tage-Ansässigkeit** (Mietwohnung als Substanz, ich als ansässiger Direktor)?
+> 3. Greift die **50 %-Expat-Befreiung** auf mein Gehalt von einem **ausländischen (deutschen)** Arbeitgeber?
+> 4. **Deutsche Wegzugsbesteuerung (§6 AStG)** / erweiterte beschränkte Steuerpflicht — Risiken bei meiner Konstellation (keine bestehenden GmbH-Anteile)?
+> 5. Laufende Pflichten/Kosten (Buchhaltung, Review/Audit-Schwelle, Registered Office) + grober Zeitplan der Gründung.
+>
+> Bitte teilen Sie mir mit, ob Sie eine **reine Online-/E-Mail-Beratung** anbieten und mit welchem **Honorar** (Erstgespräch + ggf. Festpreis-Paket) zu rechnen ist.
+>
+> Vielen Dank, mit freundlichen Grüßen
+> Konrad Bizer
+
+### Englische Kurzvariante (für C)
+
+> **Subject:** Online consultation request — relocation Germany → Cyprus, Cyprus Ltd with IP Box + Non-Dom
+>
+> Dear Sir/Madam,
+>
+> I am planning to relocate (tax residency) from **Germany** to **Cyprus** and am looking for **online/email advisory**. In short: I am a solo software founder building B2B compliance SaaS (self-developed, copyrighted code, pre-revenue) that I want to run through a **Cyprus Ltd** to benefit from the **IP Box** (~3% on qualifying software income) and **Non-Dom** status on dividends. In parallel I work 100% remotely as a developer for a German employer (~€80k/yr) — my employer wants to avoid triggering a **permanent establishment** in Cyprus.
+>
+> Could you advise on: (1) IP-Box qualification + nexus for my self-developed software and clean transfer of the existing code into the Ltd; (2) Non-Dom + 60-day residency (rented apartment as substance, myself as resident director); (3) whether the **50% expat exemption** applies to salary from a **foreign (German) employer**; (4) ongoing obligations/costs (bookkeeping, ISRE-2400 review vs. full audit thresholds, registered office) and setup timeline?
+>
+> Please let me know whether you offer **online/email-only** consultation and your **fee** (initial call + fixed-price package).
+>
+> Best regards,
+> Konrad Bizer
+
+---
+
+## 7. Querverweise
 - Zahlen + Tabellen: E-FLAG-2 in `2026-05-31-phase4-completion-und-at-gtm-roadmap.md`
 - Markenrecht (parallel in Workstream E): Vaeren EUIPO/AT-Marke vor Pilot-Vertrag — separat klären.
