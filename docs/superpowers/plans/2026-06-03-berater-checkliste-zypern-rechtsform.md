@@ -123,6 +123,62 @@
 
 **Pragmatischer Plan:** 2–3 Anbieter aus B oder C für die CY-Seite anschreiben (Erstgespräch oft kostenlos/günstig), **plus** einen aus A für die DE-Wegzugs-Meinung. Angebote (Festpreis) vergleichen. Marktübliche Sätze: ~150–400 €/Std. Beratung, ~1.500–5.000 € für komplette Relocation-Begleitung.
 
+### Preisvergleich deutschsprachige CY-Anbieter (Stand 2026-06-03)
+
+| Anbieter | Erstgespräch | Gründung (einmalig) | Non-Dom | Jahresgebühr (Solo) | Jahr 1 gesamt |
+|---|---|---|---|---|---|
+| zypern.ltd | **49 €** Expertengespräch | rabattiert (−300 € Mitglied) | im Paket | nicht transparent | n/a |
+| wohnsitz-ausland.com (Privacy Mgmt Group) | kostenlos (Video) | 2.850 € | 490 €/Person | ab 1.750 € | ~4.890 € |
+| zypern-limited.com *(gleiche Gruppe)* | kostenlos | 2.850 € | — | 2.950 € (bis 125 Buchungen) | ~4.700–4.900 € |
+| firma-offshore.com *(gleiche Gruppe)* | kostenlos | 2.850 € | — | 2.950/3.850/5.450 € gestaffelt | ~5.800 € |
+| kanzlei-rieger.eu (dt. Kanzlei München) | kostenlos | nicht transparent | — | nicht transparent (Office ab 150 €/Mo) | n/a |
+
+Die `2.850 €`-Gründung + identische Staffelung bei drei „Anbietern" = **dasselbe Reseller-Netzwerk** (Privacy Management Group, mehrere Marken). Der Aufschlag ist Mittelsmann-Marge auf einen zyprischen ICPAC-Buchhalter.
+
+### Gewählte Strategie: Wissen kaufen, Ausführung selbst (Eigenregie)
+
+> **Entscheidung (2026-06-03):** Konrad holt die **Strukturierungs-Beratung** bezahlt ein (CY-Berater + DE-§6-AStG-Berater), **führt die Schritte dann aber selbst aus** — beste Effizienz + Kontrolle über die Pflicht-Termine. Nur die zwei gesetzlich gebundenen Schritte werden zugekauft.
+
+**Was gesetzlich NICHT selbst geht (Pflicht-Profi):**
+1. **Gründung:** Formular **HE1/HE2** = eidesstattliche Erklärung, muss ein **zyprischer Anwalt** zeichnen. (~300–800 €)
+2. **Jahresabschluss:** testierter/ISRE-2400-reviewter Abschluss + Steuererklärung von einem **lizenzierten ICPAC-Prüfer**. (~1.000–2.000 €/J.)
+
+Alles andere selbst: Yellow Slip (MEU1), GESY + Sozialversicherungs-Nr., Steuer-/USt-Registrierung, Non-Dom-Antrag, laufende Buchungs-Datenerfassung.
+
+**Einmalkosten DIY/Direkt:**
+
+| Position | Kosten | selbst? |
+|---|---|---|
+| Namensgenehmigung | 20 € | ✅ |
+| M&A-Eintragung | 105 € | ✅ |
+| HE1+HE2 Filing | 40 € | ✅ |
+| Anwalt HE1-Erklärung | ~300–800 € | ❌ Pflicht |
+| Bar-Stempel (1.000 € Kapital) | ~49 € | ❌ |
+| Steuer-/USt-Registrierung | 0 € | ✅ |
+| Yellow Slip (MEU1) | 20 € | ✅ |
+| Non-Dom-Antrag | ~0–20 € | ✅ |
+| GESY + SV-Nr. | 0 € | ✅ |
+| Private KV (für Yellow Slip) | 120–200 € | ✅ |
+| **Summe** | **~700–1.300 €** | (vs. ~4.000–5.000 € Agentur-Paket) |
+
+**Laufende Jahreskosten DIY/Direkt (Pflicht-Minimum):**
+
+| Position | Kosten/Jahr | selbst? |
+|---|---|---|
+| ICPAC-Prüfer (Review + Steuererklärung) | ~1.000–2.000 € | ❌ Pflicht |
+| Registered Office (eigene Mietwohnung) | 0 € | ✅ |
+| Company Secretary (du selbst) | 0 € | ✅ |
+| Jahres-Return HE32 | ~20 € | ✅ |
+| Jahres-Levy (350 €) | 0 € (abgeschafft 2024) | – |
+| Buchungs-Datenerfassung | 0 € | ✅ |
+| **Summe** | **~1.000–2.000 €/J.** | (vs. ~1.750–2.950 €/J. Reseller) |
+
+**Gesamt-Ersparnis Eigenregie:** ~3.000 € einmalig + ~750–1.500 €/Jahr gegenüber dem deutschen Full-Service-Paket.
+
+🔴 **Nicht wegsparen:** die *Strukturierungs*-Beratung (IP-Box-Qualifikation, 50%-Expat-Befreiung, §6-AStG-Wegzug). Das ist die 49-€-/Stundensatz-Ausgabe, die vor sechsstelligen Fehlern schützt. Gespart wird an der **Ausführung**, nicht an der **Struktur-Frage**.
+
+**Berater-Quellen (Live-Recherche 2026-06-03):** Registrar of Companies (companies.gov.cy, amtl. Gebühren), easycorporate.com.cy, koufettaslaw.com, philippoulaw.com, cyprustaxlife.com (Yellow Slip), zypern.ltd / wohnsitz-ausland.com / zypern-limited.com / firma-offshore.com (Paketpreise).
+
 ---
 
 ## 6. Briefing / Anschreiben (Vorlage zum Versenden)
