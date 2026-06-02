@@ -181,7 +181,62 @@ Alles andere selbst: Yellow Slip (MEU1), GESY + Sozialversicherungs-Nr., Steuer-
 
 ---
 
-## 6. Briefing / Anschreiben (Vorlage zum Versenden)
+## 6. Chronologische Ausführungs-Reihenfolge (Eigenregie)
+
+> **Zweck:** Reihenfolge der Schritte mit Vor-/Nachbedingungen. **Template** — nach dem Beratungsgespräch mit den konkreten Behörden, Formularen, Adressen und Fristen füllen, dann abhaken.
+> **Grundlogik der Abhängigkeiten:** *Mietvertrag* → *Yellow Slip* → (*Steuernummer/Non-Dom* + *Sozialversicherung/GESY*). Die *Firmengründung* läuft **parallel** ab Phase 1 (braucht nur den CY-Anwalt). Unter allem liegt die *physische Anwesenheit* (60-/183-Tage) als Basis der persönlichen Ansässigkeit.
+> ⚠️ Genaue Reihenfolge + Anforderungen **vom Berater bestätigen lassen** — Behörden-Praxis ändert sich.
+
+### Phase 0 — Vorbereitung in Deutschland (vor Abreise)
+- [ ] DE-§6-AStG-Beratung: Wegzug sauber? Optimaler **Zeitpunkt** für Gründung + Abmeldung? → _Berater: ______
+- [ ] CY-Strukturberatung: IP-Box + 50%-Expat-Befreiung bestätigt, exakte Schrittfolge/Formulare erhalten → _Berater: ______
+- [ ] Dokumente besorgen: Reisepass/Perso, ggf. Geburtsurkunde, **Apostille + beglaubigte Übersetzungen** (was genau? → Berater)
+- [ ] PayWise-Arbeitsvertrag mit **PE-Schutzklauseln** (keine Vollmacht, Entwickler-/Hilfsfunktion, Home-Office = eigene Wahl) anpassen lassen
+- [ ] Einkommensnachweis PayWise (Vertrag + Gehaltsabrechnungen) für Yellow Slip bereitlegen
+- [ ] Private Krankenversicherung für Yellow Slip klären (Übergang bis GESY)
+- [ ] **Vorbedingung Abreise:** noch KEINE DE-Abmeldung (Timing mit Steuerberater, Phase 6)
+
+### Phase 1 — Ankunft + Wohnsitz (Zypern)
+- [ ] **Mietwohnung** anmieten → Mietvertrag (= Substanz + Adresse für ALLES Folgende). *Nachbedingung: liefert Adresse für Yellow Slip, Registered Office, Bank.*
+- [ ] Persönliches **Bankkonto** eröffnen (manche Banken verlangen bereits Yellow Slip → ggf. nach Phase 2)
+
+### Phase 2 — Aufenthaltsregistrierung (Vorbedingung: Mietvertrag)
+- [ ] **Yellow Slip (MEU1)** beim Civil Registry & Migration Dept. — braucht: Mietvertrag, KV-Nachweis, Einkommensnachweis (PayWise), Reisepass, 20 €. *Nachbedingung: Voraussetzung für GESY/SV + meist TIC/Non-Dom.* → _Termin/Ort: ______
+
+### Phase 3 — Steuer + Sozialversicherung (Vorbedingung: Yellow Slip)
+- [ ] **Steuernummer (TIC/TIN)** beim Tax Department → persönliche Steueransässigkeit
+- [ ] **Non-Dom-Bestätigung** beantragen (Tax Department, Fragebogen/Erklärung) → 0 % SDC auf Dividenden
+- [ ] **Sozialversicherungs-Nummer** registrieren (ggf. A1-Wechsel von DE nach EU-VO 883/2004)
+- [ ] **GESY**-Registrierung (online/Center, braucht SV-Nr.) → 2,65 % GeSY
+
+### Phase 4 — Firmengründung (parallel ab Phase 1, Vorbedingung: CY-Anwalt)
+- [ ] **CY-Anwalt** beauftragen (nur HE1/HE2-Pflichtteil) → _Kanzlei: ______
+- [ ] **Namensgenehmigung** (20 €, bis 5 Vorschläge)
+- [ ] **M&A** erstellen + Eintragung (105 € + HE1/HE2 je 20 € + Bar-Stempel ~49 €) → *Nachbedingung: HE-Nummer*
+- [ ] **Firmen-Steuernummer + USt/VAT**-Registrierung (Reverse-Charge B2B EU)
+- [ ] **Firmen-Bankkonto**
+- [ ] Registered Office = eigene Wohnung, Secretary = ich selbst, Director = ich (ansässig) eintragen
+
+### Phase 5 — IP + Betriebsaufnahme (Vorbedingung: Firma existiert)
+- [ ] **IP-Übertrag** des bestehenden Vaeren-Codes in die Ltd — sauber + niedrig bewertet (Umsatz=0), nach Berater-Vorgabe. *Timing: früh = niedriger Wert.*
+- [ ] **Nexus-Dokumentation** ab Tag 1 (R&D-Kosten je IP-Asset tracken) → Voraussetzung IP-Box
+- [ ] **Gehalts-/Dividenden-Mix** festlegen (kleines Gehalt für Substanz, Rest Dividende)
+- [ ] **ICPAC-Prüfer** vorab auswählen (für künftigen Jahresabschluss/Review) → _Kanzlei: ______
+
+### Phase 6 — DE-Abschluss (Timing nach Steuerberater)
+- [ ] **DE-Abmeldung** Einwohnermeldeamt (Wegzugsanzeige)
+- [ ] **DE-Wohnsitz/Verfügbarkeit** auflösen (keine fortbestehende DE-Ansässigkeit)
+- [ ] **Letzte DE-Steuererklärung** + ggf. §6-AStG-Erklärung
+
+### Laufend (jährlich, nach Setup)
+- [ ] Buchungs-Datenerfassung selbst
+- [ ] ICPAC-Review (ISRE 2400) + Steuererklärung einreichen lassen
+- [ ] Jahres-Return **HE32** (~20 €) selbst
+- [ ] 60-/183-Tage-Anwesenheit dokumentieren (Reise-/Aufenthaltsnachweise)
+
+---
+
+## 7. Briefing / Anschreiben (Vorlage zum Versenden)
 
 ### Deutsche Variante (für A + B)
 
@@ -224,6 +279,6 @@ Alles andere selbst: Yellow Slip (MEU1), GESY + Sozialversicherungs-Nr., Steuer-
 
 ---
 
-## 7. Querverweise
+## 8. Querverweise
 - Zahlen + Tabellen: E-FLAG-2 in `2026-05-31-phase4-completion-und-at-gtm-roadmap.md`
 - Markenrecht (parallel in Workstream E): Vaeren EUIPO/AT-Marke vor Pilot-Vertrag — separat klären.
