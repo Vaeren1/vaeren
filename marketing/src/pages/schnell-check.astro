@@ -1,0 +1,350 @@
+---
+/**
+ * Compliance-Schnell-Check: 6 Fragen → deterministisches Ergebnis-Radar.
+ * Engine: src/lib/relevanz.ts (TS-Port des anwaltsfesten Python-Katalogs,
+ * Parität CI-getestet). Kein LLM, keine Speicherung — Auswertung komplett
+ * im Browser. Deep-Link: ?p=<profil> zeigt direkt das Ergebnis.
+ */
+import Layout from "../components/Layout.astro";
+import { BRANCHEN, BRANCHEN_GRUPPEN } from "../data/branchen";
+import { RECHTSFORMEN } from "../lib/check-profil";
+
+const MA_OPTIONEN = [
+  { wert: 40, label: "unter 50" },
+  { wert: 75, label: "50 – 99" },
+  { wert: 150, label: "100 – 249" },
+  { wert: 350, label: "250 – 499" },
+  { wert: 700, label: "500 – 999" },
+  { wert: 1200, label: "1000 und mehr" },
+];
+const UMSATZ_OPTIONEN = [
+  { wert: 5, label: "unter 10 Mio. €" },
+  { wert: 25, label: "10 – 50 Mio. €" },
+  { wert: 60, label: "über 50 Mio. €" },
+  { wert: 0, label: "keine Angabe" },
+];
+const FLAG_OPTIONEN = [
+  { key: "stellt_produkte_her", label: "Wir stellen physische Produkte her" },
+  { key: "produkte_mit_digitalen_elementen", label: "Unsere Produkte enthalten digitale Elemente (Software, Konnektivität)" },
+  { key: "setzt_ki_ein", label: "Wir setzen KI ein (intern oder im Produkt)" },
+  { key: "hat_oem_kunden", label: "Wir beliefern OEMs / Großkunden mit Auditanforderungen" },
+];
+const DATEN_OPTIONEN = [
+  { key: "verarbeitet_personenbezogene_daten", label: "Wir verarbeiten personenbezogene Daten (Mitarbeitende, Kunden)", default: true },
+  { key: "verarbeitet_gesundheits_sozialdaten", label: "Darunter Gesundheits- oder Sozialdaten", default: false },
+];
+---
+
+<Layout
+  title="Compliance-Schnell-Check"
+  description="6 Fragen, 90 Sekunden, sofortiges Ergebnis: Welche Compliance-Pflichten treffen Ihren Betrieb? Deterministisch ausgewertet, ohne Anmeldung."
+>
+  <section class="max-w-(--container-wide) mx-auto px-6 py-12 md:py-16">
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Compliance-Schnell-Check</div>
+    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-4 max-w-3xl">Welche Pflichten treffen Ihren Betrieb?</h1>
+    <p class="text-lg text-ink-soft max-w-2xl leading-relaxed">6 Fragen, 90 Sekunden, sofortiges Ergebnis — dieselbe deterministische Engine wie im Produkt. Ohne Anmeldung, ohne Speicherung.</p>
+    <p class="mt-2 text-sm text-ink-muted max-w-2xl">Unverbindliche Erst-Einschätzung, keine Rechtsberatung. Bitte bestätigen Sie das Ergebnis mit Ihrer Rechtsberatung.</p>
+
+    {/* ---------- Wizard ---------- */}
+    <div id="check-wizard" class="mt-10 max-w-3xl">
+      <div class="text-sm text-ink-muted mb-3">Frage <span id="check-step-num">1</span> von 6</div>
+
+      <fieldset data-step="1" class="check-step">
+        <legend class="font-serif text-2xl text-ink mb-5">In welcher Branche ist Ihr Unternehmen tätig?</legend>
+        {BRANCHEN_GRUPPEN.map(gruppe => (
+          <div class="mb-4">
+            <div class="text-[11px] uppercase tracking-widest text-ink-muted font-semibold mb-2">{gruppe}</div>
+            <div class="flex flex-wrap gap-2">
+              {BRANCHEN.filter(b => b.gruppe === gruppe).map(b => (
+                <button type="button" class={`check-chip${b.key === "keine" ? " check-chip-ghost" : ""}`} data-feld="branche" data-wert={b.key}>{b.label}</button>
+              ))}
+            </div>
+          </div>
+        ))}
+        <p class="text-xs text-ink-muted mt-3">Auch ohne Branchen-Treffer erhalten Sie ein Ergebnis — viele Pflichten gelten branchenunabhängig.</p>
+      </fieldset>
+
+      <fieldset data-step="2" class="check-step" hidden>
+        <legend class="font-serif text-2xl text-ink mb-5">Wie viele Mitarbeitende hat Ihr Unternehmen?</legend>
+        <div class="flex flex-wrap gap-2">
+          {MA_OPTIONEN.map(o => <button type="button" class="check-chip" data-feld="ma" data-wert={o.wert}>{o.label}</button>)}
+        </div>
+      </fieldset>
+
+      <fieldset data-step="3" class="check-step" hidden>
+        <legend class="font-serif text-2xl text-ink mb-5">Wie hoch ist Ihr Jahresumsatz (grob)?</legend>
+        <div class="flex flex-wrap gap-2">
+          {UMSATZ_OPTIONEN.map(o => <button type="button" class="check-chip" data-feld="umsatz" data-wert={o.wert}>{o.label}</button>)}
+        </div>
+        <p class="text-xs text-ink-muted mt-3">Relevant für Schwellen wie NIS2 (10 Mio. €) und CSRD (50 Mio. €).</p>
+      </fieldset>
+
+      <fieldset data-step="4" class="check-step" hidden>
+        <legend class="font-serif text-2xl text-ink mb-5">Welche Rechtsform hat Ihr Unternehmen?</legend>
+        <div class="flex flex-wrap gap-2">
+          {RECHTSFORMEN.map(r => <button type="button" class="check-chip" data-feld="rechtsform" data-wert={r.key}>{r.label}</button>)}
+        </div>
+      </fieldset>
+
+      <fieldset data-step="5" class="check-step" hidden>
+        <legend class="font-serif text-2xl text-ink mb-5">Was trifft auf Ihre Produkte und Technik zu?</legend>
+        <div class="flex flex-col gap-2">
+          {FLAG_OPTIONEN.map(o => <button type="button" class="check-chip check-chip-multi" data-feld="flags" data-wert={o.key}>{o.label}</button>)}
+        </div>
+        <p class="text-xs text-ink-muted mt-3">Mehrfachauswahl möglich — Vorauswahl basiert auf Ihrer Branche, bitte prüfen.</p>
+      </fieldset>
+
+      <fieldset data-step="6" class="check-step" hidden>
+        <legend class="font-serif text-2xl text-ink mb-5">Welche Daten verarbeiten Sie?</legend>
+        <div class="flex flex-col gap-2">
+          {DATEN_OPTIONEN.map(o => <button type="button" class={`check-chip check-chip-multi${o.default ? " selected" : ""}`} data-feld="daten" data-wert={o.key}>{o.label}</button>)}
+        </div>
+      </fieldset>
+
+      <div class="mt-8 flex items-center gap-3">
+        <button type="button" id="check-zurueck" class="px-5 py-2.5 rounded-full border border-line text-ink-soft hover:border-brand hover:text-brand transition-colors" hidden>← Zurück</button>
+        <button type="button" id="check-weiter" class="px-7 py-2.5 rounded-full bg-brand text-paper font-medium hover:bg-ink transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>Weiter →</button>
+      </div>
+    </div>
+
+    {/* ---------- Ergebnis ---------- */}
+    <div id="check-ergebnis" class="mt-10" hidden>
+      <h2 class="font-serif text-3xl md:text-4xl text-ink"><span id="erg-anzahl">0</span> Pflichten betreffen Ihren Betrieb voraussichtlich.</h2>
+      <p id="erg-profil" class="mt-2 text-sm text-ink-muted"></p>
+      <div class="mt-3 flex flex-wrap gap-4 text-xs text-ink-muted">
+        <span class="inline-flex items-center gap-1.5"><span class="erg-dot" style="background:#15803D"></span> Voll-Modul in Vaeren</span>
+        <span class="inline-flex items-center gap-1.5"><span class="erg-dot" style="background:#CA8A04"></span> Basis-Begleitung</span>
+        <span class="inline-flex items-center gap-1.5"><span class="erg-dot" style="background:#9CA3AF"></span> in Vorbereitung</span>
+      </div>
+
+      <div class="mt-8 grid lg:grid-cols-[380px_1fr] gap-10 items-start">
+        <div>
+          <svg id="erg-radar" viewBox="0 0 300 235" class="w-full max-w-[380px]" role="img" aria-label="Ihr Compliance-Radar"></svg>
+          <p class="text-xs text-ink-muted text-center mt-1">Ring = Anzahl Pflichten je Bereich · Kategorien rechts aufklappbar</p>
+        </div>
+        <div id="erg-kategorien" class="space-y-2"></div>
+      </div>
+
+      <p class="mt-6 text-sm text-ink-muted max-w-3xl" id="erg-disclaimer">Nach unserer Einschätzung dürften die genannten Pflichten auf Ihren Betrieb zutreffen. Diese Erst-Einschätzung ersetzt keine Rechtsberatung — bitte mit Ihrer Rechtsberatung bestätigen.</p>
+
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a id="erg-demo-link" href="/kontakt" class="inline-flex items-center gap-2 px-7 py-3.5 bg-brand text-paper font-medium no-underline rounded-full shadow-sm shadow-brand/30 hover:bg-ink transition-all">Vollanalyse mit Maßnahmenplan — Demo anfragen →</a>
+        <button type="button" id="erg-neustart" class="px-6 py-3.5 rounded-full border border-line text-ink-soft hover:border-brand hover:text-brand transition-colors">Check neu starten</button>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style is:global>
+  .check-chip { border: 1px solid var(--color-line); border-radius: 999px; padding: 8px 16px; font-size: 14px; background: #fff; color: var(--color-ink-soft); cursor: pointer; transition: all .15s; text-align: left; }
+  .check-chip:hover { border-color: var(--color-brand); color: var(--color-brand); }
+  .check-chip.selected { border-color: var(--color-brand); background: var(--color-brand-soft); color: var(--color-brand); font-weight: 600; }
+  .check-chip-ghost { border-style: dashed; color: var(--color-ink-muted); }
+  .erg-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .erg-kat { background: #fff; border: 1px solid var(--color-line); border-radius: 8px; overflow: hidden; }
+  .erg-kat-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; cursor: pointer; font-size: 15px; }
+  .erg-kat-head:hover { background: var(--color-paper-soft); }
+  .erg-kat-count { font-family: var(--font-serif); font-weight: 600; color: var(--color-brand); white-space: nowrap; font-size: 14px; }
+  .erg-kat-detail { display: none; border-top: 1px dashed var(--color-line); padding: 10px 16px; }
+  .erg-kat.open .erg-kat-detail { display: block; }
+  .erg-item { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 14px; padding: 4px 0; }
+  .erg-law { color: var(--color-ink-muted); font-size: 12px; }
+</style>
+
+<script>
+  import { BRANCHE_BY_KEY } from "../data/branchen";
+  import { decodeProfil, encodeProfil, zuProfilData, type CheckAntworten } from "../lib/check-profil";
+  import { bewerteRegulierungen, type Befund, type Kategorie } from "../lib/relevanz";
+  import { AXES, CATCOL } from "../data/teaser-firmen";
+
+  const AMPEL: Record<string, { farbe: string; label: string }> = {
+    voll_modul: { farbe: "#15803D", label: "Voll-Modul" },
+    basis_hinweis: { farbe: "#CA8A04", label: "Basis-Begleitung" },
+    in_vorbereitung: { farbe: "#9CA3AF", label: "in Vorbereitung" },
+  };
+  const MA_LABELS: Record<number, string> = { 40: "unter 50", 75: "50–99", 150: "100–249", 350: "250–499", 700: "500–999", 1200: "1000+" };
+
+  const wizard = document.getElementById("check-wizard")!;
+  const ergebnis = document.getElementById("check-ergebnis")!;
+  const stepNum = document.getElementById("check-step-num")!;
+  const btnWeiter = document.getElementById("check-weiter") as HTMLButtonElement;
+  const btnZurueck = document.getElementById("check-zurueck") as HTMLButtonElement;
+  const steps = Array.from(wizard.querySelectorAll<HTMLFieldSetElement>(".check-step"));
+
+  type State = { branche?: string; ma?: number; umsatz?: number; rechtsform?: string; flags: Set<string>; daten: Set<string> };
+  const state: State = { flags: new Set(), daten: new Set(["verarbeitet_personenbezogene_daten"]) };
+  let aktStep = 1;
+
+  function antwortVorhanden(step: number): boolean {
+    if (step === 1) return !!state.branche;
+    if (step === 2) return state.ma !== undefined;
+    if (step === 3) return state.umsatz !== undefined;
+    if (step === 4) return !!state.rechtsform;
+    return true; // Mehrfachauswahl darf leer sein
+  }
+
+  function zeigeStep(n: number) {
+    aktStep = n;
+    steps.forEach(s => { s.hidden = Number(s.dataset.step) !== n; });
+    stepNum.textContent = String(n);
+    btnZurueck.hidden = n === 1;
+    btnWeiter.textContent = n === 6 ? "Ergebnis anzeigen" : "Weiter →";
+    btnWeiter.disabled = !antwortVorhanden(n);
+  }
+
+  wizard.addEventListener("click", e => {
+    const chip = (e.target as HTMLElement).closest<HTMLButtonElement>(".check-chip");
+    if (!chip) return;
+    const feld = chip.dataset.feld!;
+    const wert = chip.dataset.wert!;
+    if (feld === "flags" || feld === "daten") {
+      const set = state[feld as "flags" | "daten"];
+      set.has(wert) ? set.delete(wert) : set.add(wert);
+      chip.classList.toggle("selected");
+    } else {
+      chip.closest("fieldset")!.querySelectorAll(".check-chip").forEach(c => c.classList.remove("selected"));
+      chip.classList.add("selected");
+      if (feld === "branche") {
+        state.branche = wert;
+        // Branchen-Defaults für Frage 5 vorbelegen (Nutzer kann ändern).
+        const defaults = BRANCHE_BY_KEY.get(wert)?.defaults ?? {};
+        state.flags = new Set(Object.entries(defaults).filter(([, v]) => v).map(([k]) => k));
+        steps[4].querySelectorAll<HTMLButtonElement>(".check-chip").forEach(c => {
+          c.classList.toggle("selected", state.flags.has(c.dataset.wert!));
+        });
+      } else if (feld === "ma") state.ma = Number(wert);
+      else if (feld === "umsatz") state.umsatz = Number(wert);
+      else if (feld === "rechtsform") state.rechtsform = wert;
+    }
+    btnWeiter.disabled = !antwortVorhanden(aktStep);
+  });
+
+  btnZurueck.addEventListener("click", () => zeigeStep(Math.max(1, aktStep - 1)));
+  btnWeiter.addEventListener("click", () => {
+    if (aktStep < 6) { zeigeStep(aktStep + 1); return; }
+    const antworten = stateZuAntworten();
+    history.replaceState(null, "", "?p=" + encodeURIComponent(encodeProfil(antworten)));
+    zeigeErgebnis(antworten);
+  });
+  document.getElementById("erg-neustart")!.addEventListener("click", () => {
+    history.replaceState(null, "", location.pathname);
+    ergebnis.hidden = true;
+    wizard.hidden = false;
+    zeigeStep(1);
+  });
+
+  function stateZuAntworten(): CheckAntworten {
+    return {
+      branche: state.branche!, ma: state.ma ?? 0, umsatz: (state.umsatz ?? 0) * 1_000_000,
+      rechtsform: state.rechtsform ?? "sonstige",
+      flags: {
+        stellt_produkte_her: state.flags.has("stellt_produkte_her"),
+        produkte_mit_digitalen_elementen: state.flags.has("produkte_mit_digitalen_elementen"),
+        setzt_ki_ein: state.flags.has("setzt_ki_ein"),
+        hat_oem_kunden: state.flags.has("hat_oem_kunden"),
+      },
+      daten: {
+        verarbeitet_personenbezogene_daten: state.daten.has("verarbeitet_personenbezogene_daten"),
+        verarbeitet_gesundheits_sozialdaten: state.daten.has("verarbeitet_gesundheits_sozialdaten"),
+      },
+    };
+  }
+
+  // ---------- Ergebnis-Rendering ----------
+  const SVGNS = "http://www.w3.org/2000/svg";
+  const DIRS = [[0, -1], [0.866, -0.5], [0.866, 0.5], [0, 1], [-0.866, 0.5], [-0.866, -0.5]];
+  const LBLPOS: [number, number, string][] = [[150, 22, "middle"], [228, 76, "start"], [228, 170, "start"], [150, 222, "middle"], [72, 170, "end"], [72, 76, "end"]];
+
+  function svgEl(tag: string, attrs: Record<string, string | number>) {
+    const el = document.createElementNS(SVGNS, tag);
+    for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, String(v));
+    return el;
+  }
+
+  function zeichneRadar(counts: number[]) {
+    const svg = document.getElementById("erg-radar")!;
+    svg.innerHTML = "";
+    const CX = 150, CY = 122;
+    const ringe = Math.max(4, ...counts);
+    const step = 84 / ringe;
+    const defs = svgEl("defs", {});
+    defs.innerHTML = '<linearGradient id="erg-flaeche" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4F46E5" stop-opacity="0.15"/><stop offset="100%" stop-color="#0D9488" stop-opacity="0.15"/></linearGradient>';
+    svg.appendChild(defs);
+    for (let r = 1; r <= ringe; r++) {
+      const pts = DIRS.map(d => `${CX + d[0] * r * step},${CY + d[1] * r * step}`).join(" ");
+      svg.appendChild(svgEl("polygon", { points: pts, fill: "none", stroke: r === ringe ? "#DBD8D1" : "#E7E4DE" }));
+      const t = svgEl("text", { x: CX + 5, y: CY - r * step + 3, "font-size": 8, fill: "#A7A299", "font-family": "Georgia,serif", "font-style": "italic" });
+      t.textContent = String(r);
+      svg.appendChild(t);
+    }
+    DIRS.forEach(d => svg.appendChild(svgEl("line", { x1: CX, y1: CY, x2: CX + d[0] * 84, y2: CY + d[1] * 84, stroke: "#F0EEE9" })));
+    const datenPts = counts.map((v, i) => [CX + DIRS[i][0] * v * step, CY + DIRS[i][1] * v * step]);
+    svg.appendChild(svgEl("polygon", { points: datenPts.map(p => p.join(",")).join(" "), fill: "url(#erg-flaeche)", stroke: "#0F4C5C", "stroke-width": 1.5 }));
+    datenPts.forEach((p, i) => svg.appendChild(svgEl("circle", { cx: p[0], cy: p[1], r: 3.5, fill: CATCOL[AXES[i]], stroke: "#FBFAF8", "stroke-width": 1 })));
+    AXES.forEach((a, i) => {
+      const t = svgEl("text", { x: LBLPOS[i][0], y: LBLPOS[i][1], "text-anchor": LBLPOS[i][2], "font-size": 10, "font-weight": 600, fill: CATCOL[a] });
+      t.textContent = `${a} (${counts[i]})`;
+      svg.appendChild(t);
+    });
+  }
+
+  function esc(s: string) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+
+  function zeigeErgebnis(antworten: CheckAntworten) {
+    const profil = zuProfilData(antworten);
+    const befunde = bewerteRegulierungen(profil);
+    const branche = BRANCHE_BY_KEY.get(antworten.branche);
+
+    document.getElementById("erg-anzahl")!.textContent = String(befunde.length);
+    document.getElementById("erg-profil")!.textContent =
+      `${branche?.label ?? "—"} · ${MA_LABELS[antworten.ma] ?? antworten.ma} Mitarbeitende · Einschätzung ohne Rechtsberatung`;
+
+    const counts = AXES.map(a => befunde.filter(b => b.kategorie === a).length);
+    zeichneRadar(counts);
+
+    const katBox = document.getElementById("erg-kategorien")!;
+    katBox.innerHTML = "";
+    const sortiert = [...AXES].map((a, i) => ({ achse: a as Kategorie, count: counts[i] }))
+      .sort((x, y) => y.count - x.count);
+    for (const { achse, count } of sortiert) {
+      const items = befunde.filter(b => b.kategorie === achse);
+      if (!items.length) continue;
+      const kat = document.createElement("div");
+      kat.className = "erg-kat" + (count === Math.max(...counts) ? " open" : "");
+      kat.innerHTML =
+        `<div class="erg-kat-head"><b style="color:${CATCOL[achse]}">${achse}</b><span class="erg-kat-count">${count} ${count === 1 ? "Pflicht" : "Pflichten"} ▾</span></div>` +
+        `<div class="erg-kat-detail">` +
+        items.map(b => itemHTML(b)).join("") +
+        `</div>`;
+      kat.querySelector(".erg-kat-head")!.addEventListener("click", () => kat.classList.toggle("open"));
+      katBox.appendChild(kat);
+    }
+    // Sonstiges-Fall: NIS2-Hinweis statt Sackgasse (Spec §5).
+    if (profil.nis2_sektor === "sonstiges") {
+      const hinweis = document.createElement("div");
+      hinweis.className = "erg-kat";
+      hinweis.innerHTML = `<div class="erg-kat-head" style="cursor:default"><span class="text-sm" style="color:var(--color-ink-muted)">NIS2: nach Ihrer Branchenangabe nicht einschlägig — branchenspezifische Sonderpflichten prüfen wir individuell in der Demo.</span></div>`;
+      katBox.appendChild(hinweis);
+    }
+
+    (document.getElementById("erg-demo-link") as HTMLAnchorElement).href =
+      "/kontakt?p=" + encodeURIComponent(encodeProfil(antworten));
+
+    wizard.hidden = true;
+    ergebnis.hidden = false;
+  }
+
+  function itemHTML(b: Befund): string {
+    const a = AMPEL[b.abdeckung];
+    return `<div class="erg-item"><span><span class="erg-dot" style="background:${a.farbe};margin-right:8px"></span>${esc(b.name)} <span class="erg-law">${esc(b.rechtsgrundlage)}</span></span><span class="erg-law">${a.label}</span></div>`;
+  }
+
+  // Deep-Link: ?p=… zeigt direkt das Ergebnis (geteilte Links).
+  const p = new URLSearchParams(location.search).get("p");
+  const restored = p ? decodeProfil(p) : null;
+  if (restored) {
+    zeigeErgebnis(restored);
+  } else {
+    zeigeStep(1);
+  }
+</script>

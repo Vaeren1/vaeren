@@ -76,6 +76,32 @@ import Layout from "../components/Layout.astro";
 </Layout>
 
 <script>
+  import { BRANCHE_BY_KEY } from "../data/branchen";
+  import { decodeProfil, zuProfilData } from "../lib/check-profil";
+  import { bewerteRegulierungen } from "../lib/relevanz";
+
+  // Schnell-Check-Deep-Link (?p=…): Anliegen + Größenklasse vorausfüllen,
+  // damit das Erstgespräch mit dem Pflichten-Profil starten kann.
+  const profilParam = new URLSearchParams(location.search).get("p");
+  const antworten = profilParam ? decodeProfil(profilParam) : null;
+  if (antworten) {
+    const befunde = bewerteRegulierungen(zuProfilData(antworten));
+    const branche = BRANCHE_BY_KEY.get(antworten.branche);
+    const anliegen = document.getElementById("anliegen") as HTMLTextAreaElement | null;
+    if (anliegen && !anliegen.value) {
+      anliegen.value =
+        `Schnell-Check-Ergebnis (${new Date().toLocaleDateString("de-DE")}):\n` +
+        `Branche: ${branche?.label ?? "—"} · ca. ${antworten.ma} Mitarbeitende\n` +
+        `Voraussichtlich relevant (${befunde.length}): ${befunde.map(b => b.name).join(", ")}\n\n` +
+        `Bitte um eine Demo mit Vollanalyse.`;
+    }
+    const select = document.getElementById("mitarbeitende") as HTMLSelectElement | null;
+    if (select) {
+      const ma = antworten.ma;
+      select.value = ma < 50 ? "unter 50" : ma < 100 ? "50 bis 99" : ma < 250 ? "100 bis 249" : ma < 500 ? "250 bis 499" : "500 und mehr";
+    }
+  }
+
   const form = document.getElementById("kontakt-form") as HTMLFormElement | null;
   const submitBtn = document.getElementById("kontakt-submit") as HTMLButtonElement | null;
   const statusEl = document.getElementById("kontakt-status") as HTMLParagraphElement | null;
