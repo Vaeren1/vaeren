@@ -11,15 +11,15 @@ import { RECHTSFORMEN } from "../lib/check-profil";
 
 const MA_OPTIONEN = [
   { wert: 40, label: "unter 50" },
-  { wert: 75, label: "50 – 99" },
-  { wert: 150, label: "100 – 249" },
-  { wert: 350, label: "250 – 499" },
-  { wert: 700, label: "500 – 999" },
+  { wert: 75, label: "50 bis 99" },
+  { wert: 150, label: "100 bis 249" },
+  { wert: 350, label: "250 bis 499" },
+  { wert: 700, label: "500 bis 999" },
   { wert: 1200, label: "1000 und mehr" },
 ];
 const UMSATZ_OPTIONEN = [
   { wert: 5, label: "unter 10 Mio. €" },
-  { wert: 25, label: "10 – 50 Mio. €" },
+  { wert: 25, label: "10 bis 50 Mio. €" },
   { wert: 60, label: "über 50 Mio. €" },
   { wert: 0, label: "keine Angabe" },
 ];
@@ -42,7 +42,7 @@ const DATEN_OPTIONEN = [
   <section class="max-w-(--container-wide) mx-auto px-6 py-12 md:py-16">
     <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Compliance-Schnell-Check</div>
     <h1 class="font-serif text-4xl md:text-5xl text-ink mb-4 max-w-3xl">Welche Pflichten treffen Ihren Betrieb?</h1>
-    <p class="text-lg text-ink-soft max-w-2xl leading-relaxed">6 Fragen, 90 Sekunden, sofortiges Ergebnis — dieselbe deterministische Engine wie im Produkt. Ohne Anmeldung, ohne Speicherung.</p>
+    <p class="text-lg text-ink-soft max-w-2xl leading-relaxed">6 Fragen, 90 Sekunden, sofortiges Ergebnis. Dieselbe deterministische Engine wie im Produkt, ohne Anmeldung und ohne Speicherung.</p>
     <p class="mt-2 text-sm text-ink-muted max-w-2xl">Unverbindliche Erst-Einschätzung, keine Rechtsberatung. Bitte bestätigen Sie das Ergebnis mit Ihrer Rechtsberatung.</p>
 
     {/* ---------- Wizard ---------- */}
@@ -61,7 +61,7 @@ const DATEN_OPTIONEN = [
             </div>
           </div>
         ))}
-        <p class="text-xs text-ink-muted mt-3">Auch ohne Branchen-Treffer erhalten Sie ein Ergebnis — viele Pflichten gelten branchenunabhängig.</p>
+        <p class="text-xs text-ink-muted mt-3">Auch ohne Branchen-Treffer erhalten Sie ein Ergebnis, viele Pflichten gelten branchenunabhängig.</p>
       </fieldset>
 
       <fieldset data-step="2" class="check-step" hidden>
@@ -91,7 +91,7 @@ const DATEN_OPTIONEN = [
         <div class="flex flex-col gap-2">
           {FLAG_OPTIONEN.map(o => <button type="button" class="check-chip check-chip-multi" data-feld="flags" data-wert={o.key}>{o.label}</button>)}
         </div>
-        <p class="text-xs text-ink-muted mt-3">Mehrfachauswahl möglich — Vorauswahl basiert auf Ihrer Branche, bitte prüfen.</p>
+        <p class="text-xs text-ink-muted mt-3">Mehrfachauswahl möglich. Die Vorauswahl basiert auf Ihrer Branche, bitte prüfen.</p>
       </fieldset>
 
       <fieldset data-step="6" class="check-step" hidden>
@@ -125,10 +125,10 @@ const DATEN_OPTIONEN = [
         <div id="erg-kategorien" class="space-y-2"></div>
       </div>
 
-      <p class="mt-6 text-sm text-ink-muted max-w-3xl" id="erg-disclaimer">Nach unserer Einschätzung dürften die genannten Pflichten auf Ihren Betrieb zutreffen. Diese Erst-Einschätzung ersetzt keine Rechtsberatung — bitte mit Ihrer Rechtsberatung bestätigen.</p>
+      <p class="mt-6 text-sm text-ink-muted max-w-3xl" id="erg-disclaimer">Nach unserer Einschätzung dürften die genannten Pflichten auf Ihren Betrieb zutreffen. Diese Erst-Einschätzung ersetzt keine Rechtsberatung. Bitte mit Ihrer Rechtsberatung bestätigen.</p>
 
       <div class="mt-8 flex flex-wrap items-center gap-3">
-        <a id="erg-demo-link" href="/kontakt" class="inline-flex items-center gap-2 px-7 py-3.5 bg-brand text-paper font-medium no-underline rounded-full shadow-sm shadow-brand/30 hover:bg-ink transition-all">Vollanalyse mit Maßnahmenplan — Demo anfragen →</a>
+        <a id="erg-demo-link" href="/kontakt" class="inline-flex items-center gap-2 px-7 py-3.5 bg-brand text-paper font-medium no-underline rounded-full shadow-sm shadow-brand/30 hover:bg-ink transition-all">Demo mit Vollanalyse anfragen →</a>
         <button type="button" id="erg-neustart" class="px-6 py-3.5 rounded-full border border-line text-ink-soft hover:border-brand hover:text-brand transition-colors">Check neu starten</button>
       </div>
     </div>
@@ -162,7 +162,7 @@ const DATEN_OPTIONEN = [
     basis_hinweis: { farbe: "#CA8A04", label: "Basis-Begleitung" },
     in_vorbereitung: { farbe: "#9CA3AF", label: "in Vorbereitung" },
   };
-  const MA_LABELS: Record<number, string> = { 40: "unter 50", 75: "50–99", 150: "100–249", 350: "250–499", 700: "500–999", 1200: "1000+" };
+  const MA_LABELS: Record<number, string> = { 40: "unter 50", 75: "50 bis 99", 150: "100 bis 249", 350: "250 bis 499", 700: "500 bis 999", 1200: "1000+" };
 
   const wizard = document.getElementById("check-wizard")!;
   const ergebnis = document.getElementById("check-ergebnis")!;
@@ -297,7 +297,7 @@ const DATEN_OPTIONEN = [
 
     document.getElementById("erg-anzahl")!.textContent = String(befunde.length);
     document.getElementById("erg-profil")!.textContent =
-      `${branche?.label ?? "—"} · ${MA_LABELS[antworten.ma] ?? antworten.ma} Mitarbeitende · Einschätzung ohne Rechtsberatung`;
+      `${branche?.label ?? "k. A."} · ${MA_LABELS[antworten.ma] ?? antworten.ma} Mitarbeitende · Einschätzung ohne Rechtsberatung`;
 
     const counts = AXES.map(a => befunde.filter(b => b.kategorie === a).length);
     zeichneRadar(counts);
@@ -323,7 +323,7 @@ const DATEN_OPTIONEN = [
     if (profil.nis2_sektor === "sonstiges") {
       const hinweis = document.createElement("div");
       hinweis.className = "erg-kat";
-      hinweis.innerHTML = `<div class="erg-kat-head" style="cursor:default"><span class="text-sm" style="color:var(--color-ink-muted)">NIS2: nach Ihrer Branchenangabe nicht einschlägig — branchenspezifische Sonderpflichten prüfen wir individuell in der Demo.</span></div>`;
+      hinweis.innerHTML = `<div class="erg-kat-head" style="cursor:default"><span class="text-sm" style="color:var(--color-ink-muted)">NIS2: nach Ihrer Branchenangabe nicht einschlägig. Branchenspezifische Sonderpflichten prüfen wir individuell in der Demo.</span></div>`;
       katBox.appendChild(hinweis);
     }
 

@@ -172,7 +172,7 @@ import Layout from "../components/Layout.astro";
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       statusEl.className = "text-sm text-ink-soft";
-      statusEl.textContent = "Mandant wird angelegt — das dauert 5 bis 10 Sekunden …";
+      statusEl.textContent = "Mandant wird angelegt, das dauert 5 bis 10 Sekunden …";
       submitBtn.disabled = true;
 
       const fd = new FormData(form);

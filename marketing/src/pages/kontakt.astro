@@ -91,7 +91,7 @@ import Layout from "../components/Layout.astro";
     if (anliegen && !anliegen.value) {
       anliegen.value =
         `Schnell-Check-Ergebnis (${new Date().toLocaleDateString("de-DE")}):\n` +
-        `Branche: ${branche?.label ?? "—"} · ca. ${antworten.ma} Mitarbeitende\n` +
+        `Branche: ${branche?.label ?? "k. A."} · ca. ${antworten.ma} Mitarbeitende\n` +
         `Voraussichtlich relevant (${befunde.length}): ${befunde.map(b => b.name).join(", ")}\n\n` +
         `Bitte um eine Demo mit Vollanalyse.`;
     }

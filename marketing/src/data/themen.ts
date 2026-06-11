@@ -61,7 +61,7 @@ export const HUBS: Hub[] = [
       { aspekt: "Unternehmen ab 250 Mitarbeitende", wert: "Volle Pflichten seit Juli 2023." },
       { aspekt: "Unternehmen 50 bis 249 Mitarbeitende", wert: "Volle Pflichten seit Dezember 2023." },
       { aspekt: "Unternehmen unter 50 Mitarbeitende", wert: "Keine Pflicht zur Meldestelle, aber Anti-Repressalien-Schutz greift bei Hinweisen aus dem Unternehmen." },
-      { aspekt: "Branchen mit Sonderpflichten", wert: "Finanzbranche, Geldwäsche-verpflichtete, Wertpapier — unabhängig von Mitarbeitendenzahl." },
+      { aspekt: "Branchen mit Sonderpflichten", wert: "Finanzbranche, Geldwäsche-verpflichtete, Wertpapier, unabhängig von Mitarbeitendenzahl." },
     ],
     pflichten: [
       { titel: "Interne Meldestelle einrichten (§12)", kurz: "Schriftlich, mündlich oder persönlich erreichbar, vertraulich, qualifiziertes Personal.", frist: "erfüllt sein" },
@@ -93,8 +93,8 @@ export const HUBS: Hub[] = [
     status_satz: "Die deutsche Umsetzung (NIS2UmsuCG) wird im vierten Quartal 2026 erwartet. Die Pflichten der EU-Richtlinie gelten unabhängig davon faktisch bereits.",
     stand_datum: "2026-05-16",
     wer_betroffen: [
-      { aspekt: "Wesentliche Einrichtungen (Annex I)", wert: "Energie, Verkehr, Banken, Gesundheit, Wasser, digitale Infrastruktur — ab 250 Mitarbeitenden oder 50 Mio. EUR Umsatz." },
-      { aspekt: "Wichtige Einrichtungen (Annex II)", wert: "Post, Abfall, Lebensmittel, Hersteller von Industrieprodukten, Forschung, digitale Dienste — ab 50 Mitarbeitenden oder 10 Mio. EUR Umsatz." },
+      { aspekt: "Wesentliche Einrichtungen (Annex I)", wert: "Energie, Verkehr, Banken, Gesundheit, Wasser, digitale Infrastruktur, ab 250 Mitarbeitenden oder 50 Mio. EUR Umsatz." },
+      { aspekt: "Wichtige Einrichtungen (Annex II)", wert: "Post, Abfall, Lebensmittel, Hersteller von Industrieprodukten, Forschung, digitale Dienste, ab 50 Mitarbeitenden oder 10 Mio. EUR Umsatz." },
       { aspekt: "Anzahl betroffener Unternehmen DE", wert: "Schätzung BMI: rund 30.000 Unternehmen." },
       { aspekt: "Nicht betroffen", wert: "Kleinstunternehmen unter 50 Mitarbeitenden und 10 Mio. EUR Umsatz, mit Ausnahme bestimmter Sektoren." },
     ],

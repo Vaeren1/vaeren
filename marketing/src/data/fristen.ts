@@ -45,13 +45,13 @@ export const FRISTEN: Frist[] = [
     kurz: "Anhang-III-Systeme fallen unter volle Hochrisiko-Pflichten: Risikomanagement, Logging, Human Oversight, Konformitätsbewertung.",
     quelle_url: "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32024R1689" },
   { datum: "2026-10-17", titel: "NIS2: ursprüngliche EU-Umsetzungsfrist (überschritten in DE)", kategorie: "it_sicherheit", geo: "EU",
-    kurz: "DE-Gesetz liegt im Verzug. EU-Recht gilt aber faktisch — andere Mitgliedsstaaten prüfen.",
+    kurz: "DE-Gesetz liegt im Verzug. EU-Recht gilt aber faktisch, andere Mitgliedsstaaten prüfen.",
     quelle_url: "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32022L2555" },
   { datum: "2026-10-31", titel: "DE NIS2UmsuCG: erwartetes Inkrafttreten", kategorie: "it_sicherheit", geo: "DE",
     kurz: "Aktueller BMI-Referentenentwurf adressiert Vorfall-Meldung 24/72h, Supply-Chain, Geschäftsleitungs-Haftung.",
     quelle_url: "https://www.bmi.bund.de/" },
   { datum: "2026-12-31", titel: "CSRD: erstmalige Berichterstattung für kapitalmarktorientierte Großunternehmen", kategorie: "esg_nachhaltigkeit", geo: "EU",
-    kurz: "Berichtsjahr 2024 — Erst-Berichte werden Anfang 2026 fällig, Prüfungs-Engpass realistisch.",
+    kurz: "Berichtsjahr 2024: Erst-Berichte werden Anfang 2026 fällig, Prüfungs-Engpass realistisch.",
     quelle_url: "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32022L2464" },
 
   // 2027
@@ -73,7 +73,7 @@ export const FRISTEN: Frist[] = [
 
   // 2028
   { datum: "2028-01-01", titel: "CSRD: Berichtspflicht für kapitalmarktorientierte KMU", kategorie: "esg_nachhaltigkeit", geo: "EU",
-    kurz: "Berichtsjahr 2027 — kapitalmarktorientierte kleine und mittlere Unternehmen.",
+    kurz: "Berichtsjahr 2027: kapitalmarktorientierte kleine und mittlere Unternehmen.",
     quelle_url: "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32022L2464" },
   { datum: "2028-07-26", titel: "CSDDD: Pflichten ab 3.000 Mitarbeitenden", kategorie: "lieferkette", geo: "EU",
     kurz: "Stufe 2: 3.000+ MA und 900 Mio. EUR Umsatz fallen unter EU-Sorgfaltspflicht.",
@@ -84,7 +84,7 @@ export const FRISTEN: Frist[] = [
 
   // 2029
   { datum: "2029-07-26", titel: "CSDDD: Pflichten ab 1.000 Mitarbeitenden", kategorie: "lieferkette", geo: "EU",
-    kurz: "Stufe 3: 1.000+ MA und 450 Mio. EUR Umsatz — größter Teil des deutschen industriellen Mittelstands betroffen.",
+    kurz: "Stufe 3: 1.000+ MA und 450 Mio. EUR Umsatz, größter Teil des deutschen industriellen Mittelstands betroffen.",
     quelle_url: "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32024L1760" },
 
   // Wiederkehrende DE-Termine (für laufendes Jahr)

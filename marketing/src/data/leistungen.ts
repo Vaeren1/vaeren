@@ -73,7 +73,7 @@ export const LEISTUNGEN: Leistung[] = [
       "Risk-Register mit Maßnahmen-Verknüpfung",
     ],
     details:
-      "Vaeren führt durch alle 93 Controls des ISO-27001-Annex A. Zu jedem Control werden Nachweise abgelegt, bewertet und versioniert. Das Statement of Applicability entsteht aus den erfassten Daten, nicht aus einer separaten Excel-Liste — und ist damit immer konsistent mit dem tatsächlichen Stand.",
+      "Vaeren führt durch alle 93 Controls des ISO-27001-Annex A. Zu jedem Control werden Nachweise abgelegt, bewertet und versioniert. Das Statement of Applicability entsteht aus den erfassten Daten, nicht aus einer separaten Excel-Liste, und ist damit immer konsistent mit dem tatsächlichen Stand.",
     use_case:
       "Ein OEM verlangt von seinem Zulieferer einen TISAX-Nachweis. Statt drei Monate Beratungsprojekt: Controls durchgehen, vorhandene Nachweise hochladen, Lücken als Aufgaben verteilen, SoA exportieren.",
     bezug: "ISO/IEC 27001, TISAX (OEM-Anforderung)",
@@ -83,16 +83,16 @@ export const LEISTUNGEN: Leistung[] = [
     modulKey: "iso42001",
     titel: "ISO 42001 KI-Management",
     einzeiler:
-      "Das Managementsystem für den KI-Einsatz — Controls, Impact-Assessments, Policies.",
+      "Das Managementsystem für den KI-Einsatz: Controls, Impact-Assessments, Policies.",
     beweise: [
       "38 ISO-42001-Controls als geführter Katalog",
       "AI-Impact-Assessments mit Vier-Augen-Prinzip",
       "KI-Vorfälle eskalieren automatisch bis ins Datenpannen-Register",
     ],
     details:
-      "Wer KI einsetzt, braucht nachweisbare Governance. Vaeren bildet die ISO-42001-Controls ab, verwaltet KI-Policies mit Kenntnisnahme-Tracking und dokumentiert Impact-Assessments. Jede Bewertung durchläuft ein Vier-Augen-Gate — keine ungeprüfte Einschätzung wird wirksam.",
+      "Wer KI einsetzt, braucht nachweisbare Governance. Vaeren bildet die ISO-42001-Controls ab, verwaltet KI-Policies mit Kenntnisnahme-Tracking und dokumentiert Impact-Assessments. Jede Bewertung durchläuft ein Vier-Augen-Gate. Keine ungeprüfte Einschätzung wird wirksam.",
     use_case:
-      "Die Geschäftsführung will den ChatGPT-Einsatz im Vertrieb absichern. Impact-Assessment anlegen, Risiken bewerten, Policy ausrollen, Kenntnisnahmen nachhalten — alles dokumentiert für Kunde und Aufsicht.",
+      "Die Geschäftsführung will den ChatGPT-Einsatz im Vertrieb absichern. Impact-Assessment anlegen, Risiken bewerten, Policy ausrollen, Kenntnisnahmen nachhalten, alles dokumentiert für Kunde und Aufsicht.",
     bezug: "ISO/IEC 42001, flankiert EU AI Act",
   },
   {
@@ -100,7 +100,7 @@ export const LEISTUNGEN: Leistung[] = [
     modulKey: "arbeitsschutz",
     titel: "Arbeitsschutz & GBU",
     einzeiler:
-      "Gefährdungsbeurteilungen, ASA-Sitzungen und Verbandbuch — digital und rechtssicher.",
+      "Gefährdungsbeurteilungen, ASA-Sitzungen und Verbandbuch, digital und rechtssicher.",
     beweise: [
       "Gefährdungskatalog mit 76 Einträgen für den Industrie-Mittelstand",
       "Maßnahmen nach STOP-Hierarchie, mit Fristen und Verantwortlichen",
@@ -124,9 +124,9 @@ export const LEISTUNGEN: Leistung[] = [
       "Meldepflicht-Fristen (24 h / 72 h / 1 Monat) als automatische Aufgaben",
     ],
     details:
-      "Vaeren klärt zuerst, ob und wie Ihr Unternehmen unter NIS2 fällt — nachvollziehbar dokumentiert. Danach werden die Risikomanagement-Maßnahmen als strukturierter Katalog abgearbeitet. Im Vorfall greifen die gesetzlichen Meldefristen als vorbereitete Aufgaben mit Vorlagen.",
+      "Vaeren klärt zuerst, ob und wie Ihr Unternehmen unter NIS2 fällt, nachvollziehbar dokumentiert. Danach werden die Risikomanagement-Maßnahmen als strukturierter Katalog abgearbeitet. Im Vorfall greifen die gesetzlichen Meldefristen als vorbereitete Aufgaben mit Vorlagen.",
     use_case:
-      "Ein Ransomware-Verdacht am Freitagabend. Das System zeigt sofort: Erstmeldung binnen 24 Stunden an das BSI, mit vorbereitetem Meldeentwurf und Checkliste — statt Panik und Google-Suche.",
+      "Ein Ransomware-Verdacht am Freitagabend. Das System zeigt sofort: Erstmeldung binnen 24 Stunden an das BSI, mit vorbereitetem Meldeentwurf und Checkliste, statt Panik und Google-Suche.",
     bezug: "NIS2-Richtlinie / NIS2UmsuCG",
   },
   {
@@ -141,9 +141,9 @@ export const LEISTUNGEN: Leistung[] = [
       "Transparenz- und Kennzeichnungspflichten als Checklisten",
     ],
     details:
-      "Der EU AI Act verlangt zu wissen, welche KI wo im Einsatz ist. Vaeren inventarisiert die Systeme, schlägt eine Risikoklasse vor — bestätigt wird sie immer von einem Menschen — und leitet daraus die konkreten Pflichten ab: Transparenz, Kennzeichnung, Schulung.",
+      "Der EU AI Act verlangt zu wissen, welche KI wo im Einsatz ist. Vaeren inventarisiert die Systeme, schlägt eine Risikoklasse vor, bestätigt wird sie immer von einem Menschen, und leitet daraus die konkreten Pflichten ab: Transparenz, Kennzeichnung, Schulung.",
     use_case:
-      "Der Betriebsrat fragt, welche KI-Tools im Haus laufen. Ein Blick ins Inventar beantwortet die Frage vollständig — inklusive Risikoeinstufung und Schulungsstand der Nutzer.",
+      "Der Betriebsrat fragt, welche KI-Tools im Haus laufen. Ein Blick ins Inventar beantwortet die Frage vollständig, inklusive Risikoeinstufung und Schulungsstand der Nutzer.",
     bezug: "VO (EU) 2024/1689 (AI Act)",
   },
   {
@@ -160,7 +160,7 @@ export const LEISTUNGEN: Leistung[] = [
     details:
       "Im Ernstfall zählt jede Stunde: Das Register erfasst die Panne strukturiert, startet den 72-Stunden-Countdown und führt durch die Meldeentscheidung. Auftragsverarbeitungs-Verträge mit Dienstleistern liegen zentral, statt verstreut in Postfächern.",
     use_case:
-      "Ein Laptop mit Kundendaten wird gestohlen. Panne erfassen, Risikobewertung dokumentieren, Meldeentwurf generieren, Frist halten — der gesamte Vorgang ist hinterher lückenlos belegbar.",
+      "Ein Laptop mit Kundendaten wird gestohlen. Panne erfassen, Risikobewertung dokumentieren, Meldeentwurf generieren, Frist halten. Der gesamte Vorgang ist hinterher lückenlos belegbar.",
     bezug: "Art. 28, 33, 34 DSGVO",
   },
   {
@@ -175,7 +175,7 @@ export const LEISTUNGEN: Leistung[] = [
       "Nachweis-Ablage für Banken- und Notar-Anfragen",
     ],
     details:
-      "Die Transparenzregister-Pflicht ist klein, aber bußgeldbewehrt — und wird bei Gesellschafterwechseln regelmäßig vergessen. Vaeren hält die wirtschaftlich Berechtigten samt Nachweisen vor und erinnert, wenn eine Änderung eine neue Eintragung erfordert.",
+      "Die Transparenzregister-Pflicht ist klein, aber bußgeldbewehrt und wird bei Gesellschafterwechseln regelmäßig vergessen. Vaeren hält die wirtschaftlich Berechtigten samt Nachweisen vor und erinnert, wenn eine Änderung eine neue Eintragung erfordert.",
     use_case:
       "Die Hausbank verlangt im KYC-Prozess einen aktuellen Transparenzregister-Auszug samt Historie. Beides liegt ablagefertig im System.",
     bezug: "§§ 19, 20 GwG",
@@ -189,12 +189,12 @@ export const LEISTUNGEN: Leistung[] = [
     beweise: [
       "Versteht Excel- und PDF-Fragebögen, schreibt ins Originalformat zurück",
       "Antworten aus allen Vaeren-Modulen + kuratierter Antwort-Bibliothek",
-      "Seitenbasierter Review mit finaler Attestierung — kein ungeprüfter Text verlässt das Haus",
+      "Seitenbasierter Review mit finaler Attestierung, kein ungeprüfter Text verlässt das Haus",
     ],
     details:
       "OEMs und Konzernkunden schicken Lieferanten-Fragebögen im Dutzend. Vaeren liest das Format, beantwortet Fragen aus den vorhandenen Compliance-Daten und einer wachsenden Antwort-Bibliothek, und gibt den ausgefüllten Fragebogen erst nach menschlicher Attestierung frei.",
     use_case:
-      "Der dritte 200-Fragen-Sicherheitsfragebogen in diesem Quartal. Statt zwei Tagen Copy-Paste: hochladen, Auto-Antworten prüfen, attestieren, Original zurückschicken — in einer Stunde.",
+      "Der dritte 200-Fragen-Sicherheitsfragebogen in diesem Quartal. Statt zwei Tagen Copy-Paste: hochladen, Auto-Antworten prüfen, attestieren, Original zurückschicken, in einer Stunde.",
     bezug: "Lieferketten-Anfragen (CSDDD/OEM), TISAX-Self-Assessments",
   },
 ];

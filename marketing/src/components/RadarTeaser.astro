@@ -227,41 +227,10 @@ import { AXES, CATCOL, FIRMS } from "../data/teaser-firmen";
     var counter = 0;
 
     function setLblStatic(i, text) { lbls[i].textContent = text; }
-    function renderFirmStatic(f) {
-      // Endzustand ohne Animation (reduced-motion / Initialbild).
-      shownVals = f.vals.slice();
-      render();
-      var html = "", total = 0;
-      AXES.forEach(function (a, i) {
-        setLblStatic(i, a + " (" + f.vals[i] + ")");
-        var items = f.module[a];
-        if (items) { html += groupHTML(a, items); total += items.length; }
-      });
-      listEl.innerHTML = html;
-      dosCard.innerHTML = dosHTML(f, 1);
-      dosCard.querySelector(".cnt").textContent = total;
-    }
 
-    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) {
-      renderFirmStatic(FIRMS[0]);
-      karSet(0);
-      karRow.addEventListener("click", function (e) {
-        var tile = e.target.closest(".kar-tile");
-        if (!tile) return;
-        e.preventDefault(); e.stopPropagation();
-        var i = parseInt(tile.getAttribute("data-i"), 10);
-        idx = i; renderFirmStatic(FIRMS[i]); karSet(i);
-        dosCard.innerHTML = dosHTML(FIRMS[i], i + 1);
-        dosCard.querySelector(".cnt").textContent = FIRMS[i].vals.reduce(function (a, b) { return a + b; }, 0);
-      });
-      box.addEventListener("click", function (e) {
-        if (e.target.closest(".kar-tile") || e.target.closest("a")) return;
-        window.location.href = "/schnell-check";
-      });
-      return;
-    }
-
+    // Bewusst KEIN prefers-reduced-motion-Standbild: Der Scan ist die
+    // Kernbotschaft des Heros. Windows-Systeme mit deaktivierten
+    // Animationseffekten würden sonst einen "toten" Teaser sehen.
     dosCard.innerHTML = dosHTML(firm, 1);
     karSet(0);
     AXES.forEach(function (a, i) { setLblStatic(i, a); });
