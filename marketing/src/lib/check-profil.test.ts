@@ -25,4 +25,10 @@ describe("check-profil encode/decode", () => {
     expect(p.mitarbeiter_anzahl).toBe(150);
     expect(p.jahresumsatz_eur).toBe(25_000_000);
   });
+
+  test("Rechtsform-Key mit Punkt-Label (GmbH & Co. KG) übersteht den Roundtrip", () => {
+    const a = { ...antworten, rechtsform: "gmbh_co_kg" };
+    expect(decodeProfil(encodeProfil(a))).toEqual(a);
+    expect(zuProfilData(a).rechtsform).toBe("gmbh & co. kg");
+  });
 });

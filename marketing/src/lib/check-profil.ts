@@ -5,11 +5,25 @@
 import { BRANCHE_BY_KEY } from "../data/branchen";
 import { LEERES_PROFIL, type ProfilData } from "./relevanz";
 
+// Rechtsform reist als Key (URL-sicher, keine Punkte/Leerzeichen) und wird
+// erst für die Engine auf den normalisierten String gemappt.
+export const RECHTSFORMEN: { key: string; label: string; engine: string }[] = [
+  { key: "gmbh", label: "GmbH", engine: "gmbh" },
+  { key: "ug", label: "UG (haftungsbeschränkt)", engine: "ug" },
+  { key: "ag", label: "AG", engine: "ag" },
+  { key: "kg", label: "KG", engine: "kg" },
+  { key: "gmbh_co_kg", label: "GmbH & Co. KG", engine: "gmbh & co. kg" },
+  { key: "einzel", label: "Einzelunternehmen", engine: "einzelunternehmen" },
+  { key: "gbr", label: "GbR", engine: "gbr" },
+  { key: "sonstige", label: "Sonstige", engine: "" },
+];
+const RECHTSFORM_BY_KEY = new Map(RECHTSFORMEN.map(r => [r.key, r]));
+
 export interface CheckAntworten {
   branche: string;
   ma: number;
   umsatz: number;
-  rechtsform: string;
+  rechtsform: string; // Key aus RECHTSFORMEN
   flags: { stellt_produkte_her: boolean; produkte_mit_digitalen_elementen: boolean; setzt_ki_ein: boolean; hat_oem_kunden: boolean };
   daten: { verarbeitet_personenbezogene_daten: boolean; verarbeitet_gesundheits_sozialdaten: boolean };
 }
@@ -46,7 +60,7 @@ export function zuProfilData(a: CheckAntworten): ProfilData {
     ...LEERES_PROFIL,
     mitarbeiter_anzahl: a.ma,
     jahresumsatz_eur: a.umsatz,
-    rechtsform: a.rechtsform,
+    rechtsform: RECHTSFORM_BY_KEY.get(a.rechtsform)?.engine ?? "",
     nis2_sektor: branche?.sektor ?? "sonstiges",
     ist_automotive_zulieferer: branche?.defaults?.ist_automotive_zulieferer ?? false,
     ...a.flags,
