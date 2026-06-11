@@ -1,0 +1,1381 @@
+{
+ "katalog_codes": [
+  "ai_act",
+  "arbschg",
+  "ce_masch",
+  "cra",
+  "csrd",
+  "dsgvo",
+  "dsgvo_art9",
+  "geschgehg",
+  "gwg",
+  "hinschg",
+  "iso27001",
+  "iso42001",
+  "lksg",
+  "nis2",
+  "prodhaftg",
+  "unterweisung"
+ ],
+ "vektoren": [
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "sonstiges",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "gesundheit",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "verkehr",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "digital_dienste",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "chemie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 0,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 1,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 49,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 50,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 249,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 250,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "csrd",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 999,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "csrd",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 1000,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "csrd",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 30,
+    "jahresumsatz_eur": 0,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 30,
+    "jahresumsatz_eur": 9999999,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 30,
+    "jahresumsatz_eur": 10000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 30,
+    "jahresumsatz_eur": 50000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "csrd",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "GmbH",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "ag",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "einzelunternehmen",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh & co. kg",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": true,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": false,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso42001",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": false,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": false,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": false,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": false,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 120,
+    "jahresumsatz_eur": 20000000,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": true
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "dsgvo_art9",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 49,
+    "jahresumsatz_eur": 0,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 50,
+    "jahresumsatz_eur": 0,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "industrie",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "nis2",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 49,
+    "jahresumsatz_eur": 0,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "sonstiges",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 50,
+    "jahresumsatz_eur": 0,
+    "rechtsform": "gmbh",
+    "nis2_sektor": "sonstiges",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": true,
+    "stellt_produkte_her": true,
+    "produkte_mit_digitalen_elementen": true,
+    "setzt_ki_ein": true,
+    "verarbeitet_personenbezogene_daten": true,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "ai_act",
+    "arbschg",
+    "ce_masch",
+    "cra",
+    "dsgvo",
+    "geschgehg",
+    "gwg",
+    "hinschg",
+    "iso27001",
+    "iso42001",
+    "lksg",
+    "prodhaftg",
+    "unterweisung"
+   ]
+  },
+  {
+   "profil": {
+    "mitarbeiter_anzahl": 0,
+    "jahresumsatz_eur": 0,
+    "rechtsform": "",
+    "nis2_sektor": "",
+    "ist_automotive_zulieferer": false,
+    "hat_oem_kunden": false,
+    "stellt_produkte_her": false,
+    "produkte_mit_digitalen_elementen": false,
+    "setzt_ki_ein": false,
+    "verarbeitet_personenbezogene_daten": false,
+    "verarbeitet_gesundheits_sozialdaten": false
+   },
+   "erwartete_codes": [
+    "geschgehg"
+   ]
+  }
+ ]
+}

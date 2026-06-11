@@ -9,7 +9,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "bun test src"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.5",
