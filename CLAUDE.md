@@ -2,6 +2,10 @@
 
 > **Für künftige Claude-Sessions:** Diese Datei enthält die wichtigsten Architektur- und Konventions-Entscheidungen für das ai-act-Projekt. Sie ist die schnelle Referenz; die tiefe Wahrheit liegt in den Specs unter `docs/superpowers/specs/`.
 
+## Stand 2026-06-12 — Marketing-Site-Redesign deployed
+
+vaeren.de komplett überarbeitet (Spec/Plan `2026-06-12-marketing-site-redesign-*`): **animierter Radar-Teaser als Hero** (4 Beispiel-Firmen, Sweep-Scan-Choreografie, Referenz-Prototyp in `docs/superpowers/specs/assets/`), **/schnell-check** (6 Fragen, deterministischer TS-Port von `core/regulierungen.py` in `marketing/src/lib/relevanz.ts` — **Paritäts-Test via `backend/scripts/export_relevanz_testvektoren.py` ist Pflicht, bei Katalog-Änderungen Export neu laufen lassen**), Profil-Deep-Link in die Demo-Anfrage, **Regulierung-zu-Modul-Matrix** (Datenquelle = Engine-Katalog), Zahlenband, **Screenshot-Pipeline** (`marketing/scripts/screenshots.mjs`, Playwright lokal gegen Demo-Tenant, PNGs committet). `cd marketing && bun test src` (52 Tests) vor jedem Marketing-Deploy. Demo-Tenant-Seiten ISO 27001/NIS2/Arbeitsschutz sind leer + Schulungsliste hat Test-Müll → Screenshot-Auswahl beachten, Aufräumen = offenes Ticket.
+
 ## Stand 2026-05-30 — Phase 4 / Feature 1 (Onboarding-Wizard) deployed
 
 **Phase 4 = 4 Demo-/Vertriebs-Features** für die Präsentation vor Kanzlei-Partner + ersten Kunden (Reihenfolge: 1 Wizard → 4 Fragebögen → 3 Schulungs-Generator → 2 Vishing). Specs: `docs/superpowers/specs/2026-05-30-onboarding-wizard-compliance-radar-design.md`. Plan: `docs/superpowers/plans/2026-05-30-feature1-onboarding-wizard.md`.
