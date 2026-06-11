@@ -1,0 +1,78 @@
+---
+/**
+ * Regulierung-zu-Modul-Matrix: Einstieg über die Pflicht, nicht die Modulliste.
+ * Datenquelle ist der Engine-Katalog (src/lib/relevanz.ts) — keine zweite
+ * Wahrheit: Die Matrix zeigt exakt die Regulierungen, die auch der
+ * Schnell-Check kennt, mit ehrlichem Abdeckungs-Gradient.
+ */
+import { KATALOG, type Kategorie } from "../lib/relevanz";
+import { LEISTUNGEN } from "../data/leistungen";
+
+interface Props {
+  /** true = nur Voll-Modul-Regulierungen, kompakt (Startseiten-Vorschau) */
+  kompakt?: boolean;
+}
+const { kompakt = false } = Astro.props;
+
+const AMPEL = {
+  voll_modul: { farbe: "#15803D", label: "Voll-Modul" },
+  basis_hinweis: { farbe: "#CA8A04", label: "Basis-Begleitung" },
+  in_vorbereitung: { farbe: "#9CA3AF", label: "in Vorbereitung" },
+} as const;
+
+const KATEGORIEN: Kategorie[] = ["Datenschutz", "IT-Sicherheit", "KI", "Arbeitsschutz", "Produkt", "Governance"];
+const leistungByModulKey = new Map(LEISTUNGEN.map(l => [l.modulKey, l]));
+const eintraege = kompakt ? KATALOG.filter(r => r.abdeckung === "voll_modul") : KATALOG;
+---
+
+{!kompakt && (
+  <div class="flex flex-wrap gap-4 text-xs text-ink-muted mb-6">
+    {Object.values(AMPEL).map(a => (
+      <span class="inline-flex items-center gap-1.5"><span class="inline-block w-2 h-2 rounded-full" style={`background:${a.farbe}`}></span> {a.label}</span>
+    ))}
+  </div>
+)}
+
+<div class={kompakt ? "grid md:grid-cols-2 gap-x-10 gap-y-1" : "space-y-8"}>
+  {kompakt
+    ? eintraege.map(r => {
+        const leistung = r.modulKey ? leistungByModulKey.get(r.modulKey) : undefined;
+        return (
+          <div class="flex items-baseline justify-between gap-4 py-2 border-b border-line">
+            <span class="text-ink text-[15px]">{r.name}</span>
+            {leistung
+              ? <a href={`/leistungen#${leistung.id}`} class="text-sm whitespace-nowrap no-underline border-b border-line hover:border-brand hover:text-brand">{leistung.titel} →</a>
+              : <span class="text-sm text-ink-muted whitespace-nowrap">{AMPEL[r.abdeckung].label}</span>}
+          </div>
+        );
+      })
+    : KATEGORIEN.map(kat => {
+        const regs = eintraege.filter(r => r.kategorie === kat);
+        if (!regs.length) return null;
+        return (
+          <div>
+            <h3 class="text-xs uppercase tracking-widest text-ink-muted font-semibold mb-3">{kat}</h3>
+            <div class="grid gap-2">
+              {regs.map(r => {
+                const leistung = r.modulKey ? leistungByModulKey.get(r.modulKey) : undefined;
+                return (
+                  <div class="grid md:grid-cols-[1fr_auto] gap-2 md:gap-6 items-baseline bg-paper border border-line rounded-lg px-5 py-3.5">
+                    <div>
+                      <span class="inline-block w-2 h-2 rounded-full mr-2.5" style={`background:${AMPEL[r.abdeckung].farbe}`}></span>
+                      <span class="font-medium text-ink">{r.name}</span>
+                      <span class="text-sm text-ink-muted ml-2">{r.rechtsgrundlage}</span>
+                      <p class="text-sm text-ink-soft mt-0.5 ml-[18px]">{r.kurzbeschreibung}</p>
+                    </div>
+                    <div class="text-right ml-[18px] md:ml-0">
+                      {leistung
+                        ? <a href={`#${leistung.id}`} class="text-sm whitespace-nowrap no-underline border-b border-line hover:border-brand hover:text-brand">{leistung.titel} →</a>
+                        : <span class="text-sm text-ink-muted whitespace-nowrap">{AMPEL[r.abdeckung].label}</span>}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+</div>

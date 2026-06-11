@@ -1,18 +1,26 @@
 ---
 import Layout from "../components/Layout.astro";
+import RegulierungsMatrix from "../components/RegulierungsMatrix.astro";
 import { LEISTUNGEN } from "../data/leistungen";
 ---
 
 <Layout
-  title="Leistungen"
-  description="Pflichtunterweisungen, HinSchG-Hinweisgeberportal, Compliance-Cockpit. Drei Module, eine Plattform."
+  title="Produkt"
+  description="Zehn Module von Pflichtunterweisung bis ISO 27001 — welche Pflicht, welches Modul. Eine Plattform, ein Compliance-Index."
 >
   <section class="max-w-(--container-wide) mx-auto px-6 py-16">
-    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Leistungen</div>
-    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-4 max-w-3xl">Drei Module. Eine Plattform. Alle Pflichten.</h1>
-    <p class="text-lg text-ink-soft max-w-2xl mb-16 leading-relaxed">
-      Vaeren bündelt die drei wiederkehrenden Compliance-Lasten des Industrie-Mittelstands in einer integrierten Software. Modulübergreifender Compliance-Index, gemeinsames Audit-Log, eine Anmeldung.
+    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Produkt</div>
+    <h1 class="font-serif text-4xl md:text-5xl text-ink mb-4 max-w-3xl">Zehn Module. Eine Plattform. Alle Pflichten.</h1>
+    <p class="text-lg text-ink-soft max-w-2xl mb-12 leading-relaxed">
+      Vaeren bündelt die wiederkehrenden Compliance-Lasten des Industrie-Mittelstands in einer integrierten Software. Modulübergreifender Compliance-Index, gemeinsames Audit-Log, eine Anmeldung.
     </p>
+
+    {/* Einstieg über die Pflicht: Welche Regulierung → welches Modul. */}
+    <section class="mb-20">
+      <h2 class="font-serif text-3xl text-ink mb-2">Welche Pflicht — welches Modul?</h2>
+      <p class="text-ink-soft mb-6 max-w-2xl">Der vollständige Regulierungs-Katalog, gegen den auch der <a href="/schnell-check">Schnell-Check</a> prüft — mit ehrlicher Auskunft, wie tief Vaeren jede Pflicht heute abdeckt.</p>
+      <RegulierungsMatrix />
+    </section>
 
     <div class="space-y-20">
       {LEISTUNGEN.map((l, idx) => (
@@ -46,7 +54,7 @@ import { LEISTUNGEN } from "../data/leistungen";
     <section class="mt-20 p-8 border border-line rounded-lg bg-ink text-paper flex flex-col md:flex-row md:items-center justify-between gap-6">
       <div>
         <h2 class="font-serif text-2xl">Demo gewünscht?</h2>
-        <p class="mt-2 text-paper/80">30 Minuten Live-Tour durch alle drei Module. Wir zeigen den Compliance-Index, ein HinSchG-Formular und einen Wizard für eine Schulungswelle.</p>
+        <p class="mt-2 text-paper/80">30 Minuten Live-Tour durch die Plattform. Wir zeigen den Compliance-Radar, den Compliance-Index und die Module, die Ihr Schnell-Check-Ergebnis betreffen.</p>
       </div>
       <a href="/kontakt" class="inline-flex items-center px-6 py-3 bg-paper text-ink no-underline rounded-full hover:bg-paper-soft">Termin vereinbaren →</a>
     </section>

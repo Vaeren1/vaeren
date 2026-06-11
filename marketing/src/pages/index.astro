@@ -3,8 +3,8 @@ import Layout from "../components/Layout.astro";
 import RadarTeaser from "../components/RadarTeaser.astro";
 import TrustBadges from "../components/TrustBadges.astro";
 import NewsCard from "../components/NewsCard.astro";
+import RegulierungsMatrix from "../components/RegulierungsMatrix.astro";
 import { fetchNewsList, KATEGORIE_LABELS } from "../lib/api";
-import { LEISTUNGEN } from "../data/leistungen";
 import { HUBS } from "../data/themen";
 
 const posts = await fetchNewsList();
@@ -92,24 +92,16 @@ const teaserPosts = posts
     </div>
   </section>
 
-  {/* Module-Pitch (was Vaeren als Software tut), kompakter. */}
+  {/* Module-Pitch: Einstieg über die Pflicht (kompakte Matrix-Vorschau). */}
   <section class="max-w-(--container-wide) mx-auto px-6 py-14 md:py-20">
-    <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Was Vaeren tut</div>
-    <h2 class="font-serif text-3xl md:text-4xl text-ink mb-10 max-w-3xl">Drei Module, eine integrierte Plattform.</h2>
-    <div class="grid md:grid-cols-3 gap-8">
-      {LEISTUNGEN.map(l => (
-        <article class="space-y-3">
-          <h3 class="font-serif text-xl text-ink">{l.titel}</h3>
-          <p class="text-ink-soft leading-relaxed text-[15px]">{l.einzeiler}</p>
-          <ul class="text-sm space-y-1.5 text-ink-muted">
-            {l.beweise.map(b => (
-              <li class="flex gap-2"><span class="text-brand mt-1">•</span><span>{b}</span></li>
-            ))}
-          </ul>
-          <a href={`/leistungen#${l.id}`} class="inline-block text-sm no-underline border-b border-line hover:border-brand hover:text-brand">Mehr →</a>
-        </article>
-      ))}
+    <div class="flex items-end justify-between gap-4 mb-8">
+      <div>
+        <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Was Vaeren tut</div>
+        <h2 class="font-serif text-3xl md:text-4xl text-ink max-w-3xl">Zehn Module, eine integrierte Plattform.</h2>
+      </div>
+      <a href="/leistungen" class="text-sm no-underline border-b border-ink hover:border-brand hover:text-brand whitespace-nowrap">Alle Module & Abdeckung →</a>
     </div>
+    <RegulierungsMatrix kompakt />
   </section>
 
   {/* Trust-Badges, dezent als horizontaler Streifen. */}
