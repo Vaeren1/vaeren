@@ -1,0 +1,387 @@
+---
+/**
+ * Animierter Radar-Teaser für die Startseite.
+ *
+ * Choreografie (validiert, Referenz: docs/superpowers/specs/assets/
+ * 2026-06-12-teaser-prototyp-v13.html): Beispiel-Akte flippt herein, alle
+ * Radar-Punkte kollabieren zur Mitte, der rotierende Sweep baut das
+ * Pflichten-Profil Achse für Achse wieder auf (Punkt-Puls + Tabellenzeilen +
+ * tickender Zähler), nach einer Lesepause kommt die nächste Firma. Die
+ * Karussell-Kacheln unten sind klickbar.
+ *
+ * prefers-reduced-motion: statisches Endbild der ersten Firma, kein Loop.
+ */
+import { AXES, CATCOL, FIRMS } from "../data/teaser-firmen";
+---
+
+<div class="t-box" id="radar-teaser" title="Schnell-Check starten">
+  <div class="dos-scene">
+    <div class="dos" id="rt-dos"></div>
+  </div>
+  <div class="t-cols">
+    <div class="t-radar">
+      <svg viewBox="0 0 300 225" role="img" aria-label="Compliance-Radar: Pflichten-Profil der Beispiel-Firma">
+        <defs>
+          <radialGradient id="rt-bgGlow" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="#0F4C5C" stop-opacity="0.07"></stop>
+            <stop offset="100%" stop-color="#0F4C5C" stop-opacity="0"></stop>
+          </radialGradient>
+          <linearGradient id="rt-flaeche" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#4F46E5" stop-opacity="0.15"></stop>
+            <stop offset="100%" stop-color="#0D9488" stop-opacity="0.15"></stop>
+          </linearGradient>
+          <filter id="rt-glow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F4C5C" flood-opacity="0.22"></feDropShadow>
+          </filter>
+        </defs>
+        <circle cx="150" cy="118" r="95" fill="url(#rt-bgGlow)"></circle>
+        <g id="rt-rings"></g>
+        <g id="rt-sweep">
+          <path d="M150,118 L150,38 A80,80 0 0 1 190,48.7 Z" fill="#0F4C5C" opacity="0.07"></path>
+          <line x1="150" y1="118" x2="190" y2="48.7" stroke="#0F4C5C" stroke-width="1" opacity="0.45"></line>
+        </g>
+        <text x="155" y="99" font-size="8" fill="#A7A299" font-family="Georgia,serif" font-style="italic">1</text>
+        <text x="155" y="79" font-size="8" fill="#A7A299" font-family="Georgia,serif" font-style="italic">2</text>
+        <text x="155" y="59" font-size="8" fill="#A7A299" font-family="Georgia,serif" font-style="italic">3</text>
+        <text x="155" y="39" font-size="8" fill="#A7A299" font-family="Georgia,serif" font-style="italic">4</text>
+        <polygon id="rt-poly" points="" fill="url(#rt-flaeche)" stroke="#0F4C5C" stroke-width="1.25" filter="url(#rt-glow)"></polygon>
+        <g id="rt-pulse"></g>
+        <g id="rt-pts"></g>
+        <g id="rt-lbls"></g>
+      </svg>
+    </div>
+    <div class="t-list" id="rt-list"></div>
+  </div>
+  <div class="kar-row" id="rt-kar"></div>
+  <div class="t-hint">Beispiel-Profile, automatisch ausgewertet von der Vaeren-Engine</div>
+  <div class="t-cta"><a href="/schnell-check">Und Ihr Betrieb? → Schnell-Check starten</a></div>
+</div>
+
+<style is:global>
+  /* Teaser-Styles global, weil das Script HTML-Strings injiziert (Astro-
+     Scoping würde die dynamischen Knoten nicht treffen). Präfixe t-/dos-/kar-
+     verhindern Kollisionen. */
+  .t-box { font-family: var(--font-sans); background: linear-gradient(165deg, #FBFAF8 0%, #F6F5F2 100%); border: 1px solid #E2DFD9; border-radius: 14px; padding: 24px 26px; color: #0A0A0A; position: relative; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.03), 0 12px 40px rgba(15,76,92,.07); cursor: pointer; }
+  /* Statische Edel-Kante: Petrol läuft in Gold aus. */
+  .t-box::before { content:""; position:absolute; top:0; left:0; right:0; height:2px; background: linear-gradient(90deg, #0F4C5C 0%, #16677C 45%, #B45309 100%); opacity:.85; }
+
+  .dos-scene { position:relative; height: 158px; max-width: 560px; margin: 0 auto; perspective: 900px; }
+  .dos { position:absolute; inset:0; transition: transform .28s ease-in, filter .28s; }
+  .dos.flipping { transform: rotateX(88deg); filter: brightness(1.12); }
+  .dos.unflipping { transition: transform .32s ease-out, filter .32s; }
+  .dos.flipping .dos-body { box-shadow: 0 12px 32px rgba(15,76,92,.28), 0 0 26px rgba(180,83,9,.22); }
+  .dos.flash .dos-body::after { content:""; position:absolute; inset:0; border-radius:8px; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.85) 50%, transparent 70%); transform: translateX(-130%); animation: dosFlash .55s ease-out forwards; pointer-events:none; }
+  @keyframes dosFlash { to { transform: translateX(130%); } }
+  .dos-tab { display:inline-block; background:#F6F5F2; border:1px solid #E2DFD9; border-bottom:none; border-radius:6px 6px 0 0; padding:3px 16px; font-family: var(--font-serif); font-style:italic; font-size:12px; letter-spacing:1.4px; color:#8A857C; margin-left:16px; }
+  .dos-body { background:#FFFFFE; border:1px solid #E2DFD9; border-radius:8px; padding:14px 20px; position:relative; box-shadow: 0 4px 14px rgba(15,76,92,.06), inset 0 0 0 1px rgba(255,255,255,.6); }
+  .dos-body::before { content:""; position:absolute; left:0; top:12px; bottom:12px; width:2.5px; border-radius:2px; background:linear-gradient(180deg,#0F4C5C,#B45309); }
+  .dos-head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .dos-name { font-family: var(--font-serif); font-size:20px; font-weight:600; letter-spacing:.01em; }
+  .dos-count { font-family: var(--font-serif); font-size:14px; color:#0F4C5C; white-space:nowrap; }
+  .dos-count b { font-size:24px; font-weight:600; }
+  .dos-rows { margin-top:8px; font-size:13px; color:#3A3833; display:grid; grid-template-columns: 1fr 1fr; gap:3px 18px; }
+  .dos-rows b { color:#8A857C; font-weight:500; font-size:10px; text-transform:uppercase; letter-spacing:1px; margin-right:6px; }
+
+  .t-cols { display:flex; gap:22px; align-items:flex-start; margin-top:14px; }
+  .t-radar { flex: 0 0 46%; min-width: 0; }
+  .t-radar svg { width: 100%; display: block; }
+  .t-list { flex:1; min-width:0; height: 500px; overflow: hidden; transition: opacity .3s ease; }
+  .t-group { font-size:10.5px; text-transform:uppercase; letter-spacing:1.4px; margin:10px 0 4px; font-weight:600; padding-top:9px; border-top:1px solid #ECEAE4; }
+  .t-list > .g-in:first-child .t-group { border-top:none; padding-top:0; margin-top:2px; }
+  .t-item { display:flex; align-items:center; gap:8px; font-size:14px; padding:2.5px 0; color:#22211E; }
+  .t-law { color:#8A857C; font-size:11px; }
+  .t-dot { width:7px; height:7px; border-radius:50%; display:inline-block; flex-shrink:0; }
+  .g-in { animation: gIn .35s ease both; }
+  @keyframes gIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform:none; } }
+
+  .kar-row { display:flex; gap:10px; margin-top:18px; }
+  .kar-tile { flex:1; background:#FFFFFE; border:1px solid #E2DFD9; border-radius:8px; padding:11px 6px 13px; text-align:center; transition: all .4s ease; opacity:.5; position:relative; overflow:hidden; cursor:pointer; }
+  .kar-tile:hover { opacity:.8; }
+  .kar-tile.active { opacity:1; border:1.5px solid transparent; background: linear-gradient(#FFFFFE,#FFFFFE) padding-box, linear-gradient(135deg,#0F4C5C 0%,#16677C 50%,#B45309 100%) border-box; box-shadow: 0 6px 18px rgba(15,76,92,.12); }
+  .kar-mono { width:36px; height:36px; border-radius:50%; margin:0 auto 6px; background:#FFFFFE; border:1px solid #0F4C5C44; color:#0F4C5C; display:flex; align-items:center; justify-content:center; font-family: var(--font-serif); font-size:15px; font-weight:600; }
+  .kar-tile.active .kar-mono { background:#0F4C5C; color:#FBFAF8; border-color:#0F4C5C; }
+  .kar-name { font-family: var(--font-serif); font-size:13px; font-weight:600; line-height:1.2; }
+  .kar-sub { font-size:10.5px; color:#8A857C; margin-top:2px; }
+  .kar-prog { position:absolute; bottom:0; left:0; height:2px; background:linear-gradient(90deg,#0F4C5C,#B45309); width:0%; }
+
+  .t-hint { text-align:center; font-size:12px; color:#8A857C; margin-top:14px; letter-spacing:.02em; }
+  .t-cta { text-align:center; margin-top:10px; }
+  .t-cta a { display:inline-block; background:#0F4C5C; color:#FBFAF8; border-radius:999px; padding:9px 24px; font-size:14px; letter-spacing:.02em; box-shadow: 0 3px 10px rgba(15,76,92,.25); text-decoration:none; transition: background .2s; }
+  .t-cta a:hover { background:#0B3A47; text-decoration:none; }
+
+  @media (max-width: 768px) {
+    .t-cols { flex-direction: column; align-items: stretch; }
+    .t-radar { flex: none; max-width: 360px; margin: 0 auto; width: 100%; }
+    .t-list { height: auto; max-height: 420px; }
+    .kar-name, .kar-sub { display: none; }
+    .dos-rows { grid-template-columns: 1fr; }
+    .dos-scene { height: 196px; }
+  }
+</style>
+
+<script define:vars={{ FIRMS, AXES, CATCOL }}>
+  (function () {
+    var DIRS = [[0, -1], [0.866, -0.5], [0.866, 0.5], [0, 1], [-0.866, 0.5], [-0.866, -0.5]];
+    var AXDEG = [0, 60, 120, 180, 240, 300];
+    var CX = 150, CY = 118, STEP = 20;
+    var LBLPOS = [[150, 24, "middle"], [226, 74, "start"], [226, 166, "start"], [150, 216, "middle"], [74, 166, "end"], [74, 74, "end"]];
+    var HOLD = 2200;
+    var SVGNS = "http://www.w3.org/2000/svg";
+
+    var box = document.getElementById("radar-teaser");
+    if (!box) return;
+
+    // Statisches Grundgerüst (Ringe, Achsen, Punkte, Labels) per JS aufbauen.
+    var ringsG = document.getElementById("rt-rings");
+    [20, 40, 60, 80].forEach(function (r, i) {
+      var pts = DIRS.map(function (d) { return (CX + d[0] * r) + "," + (CY + d[1] * r); }).join(" ");
+      var poly = document.createElementNS(SVGNS, "polygon");
+      poly.setAttribute("points", pts);
+      poly.setAttribute("fill", "none");
+      poly.setAttribute("stroke", i === 3 ? "#DBD8D1" : "#E7E4DE");
+      ringsG.appendChild(poly);
+    });
+    DIRS.forEach(function (d) {
+      var line = document.createElementNS(SVGNS, "line");
+      line.setAttribute("x1", CX); line.setAttribute("y1", CY);
+      line.setAttribute("x2", CX + d[0] * 80); line.setAttribute("y2", CY + d[1] * 80);
+      line.setAttribute("stroke", "#F0EEE9");
+      ringsG.appendChild(line);
+    });
+    var pulseG = document.getElementById("rt-pulse"), ptsG = document.getElementById("rt-pts"), lblG = document.getElementById("rt-lbls");
+    AXES.forEach(function (a) {
+      var c = document.createElementNS(SVGNS, "circle");
+      c.setAttribute("r", "0"); c.setAttribute("fill", "none");
+      c.setAttribute("stroke", CATCOL[a]); c.setAttribute("stroke-width", "1.5"); c.setAttribute("stroke-opacity", "0");
+      pulseG.appendChild(c);
+    });
+    AXES.forEach(function (a) {
+      var c = document.createElementNS(SVGNS, "circle");
+      c.setAttribute("r", "3.2"); c.setAttribute("fill", CATCOL[a]);
+      c.setAttribute("stroke", "#FBFAF8"); c.setAttribute("stroke-width", "1");
+      ptsG.appendChild(c);
+    });
+    AXES.forEach(function (a, i) {
+      var t = document.createElementNS(SVGNS, "text");
+      t.setAttribute("x", LBLPOS[i][0]); t.setAttribute("y", LBLPOS[i][1]);
+      t.setAttribute("text-anchor", LBLPOS[i][2]); t.setAttribute("font-size", "10");
+      t.setAttribute("font-weight", "600"); t.setAttribute("fill", CATCOL[a]);
+      lblG.appendChild(t);
+    });
+
+    var poly = document.getElementById("rt-poly");
+    var pts = ptsG.querySelectorAll("circle");
+    var hits = pulseG.querySelectorAll("circle");
+    var lbls = lblG.querySelectorAll("text");
+    var sweepEl = document.getElementById("rt-sweep");
+    var listEl = document.getElementById("rt-list");
+    var dosCard = document.getElementById("rt-dos");
+    var karRow = document.getElementById("rt-kar");
+
+    function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+    function dosHTML(f, nr) {
+      return '<div class="dos-tab">Beispiel-Profil ' + nr + ' / ' + FIRMS.length + '</div>' +
+        '<div class="dos-body"><div class="dos-head"><div class="dos-name">' + esc(f.name) + '</div>' +
+        '<div class="dos-count"><b class="cnt">0</b> Pflichten</div></div>' +
+        '<div class="dos-rows"><span><b>Branche</b>' + esc(f.branche) + '</span><span><b>Größe</b>' + esc(f.ma) + '</span>' +
+        '<span><b>Rechtsform</b>' + esc(f.rf) + '</span><span><b>Merkmale</b>' + esc(f.merkmale) + '</span></div></div>';
+    }
+    function groupHTML(cat, items) {
+      var col = CATCOL[cat];
+      var html = '<div class="g-in"><div class="t-group" style="color:' + col + ';">' + esc(cat) + "</div>";
+      items.forEach(function (m) {
+        html += '<div class="t-item"><span class="t-dot" style="background:' + col + ';"></span><span>' + esc(m[0]) + ' <span class="t-law">' + esc(m[1]) + "</span></span></div>";
+      });
+      return html + "</div>";
+    }
+    function target(i, v) { return [CX + DIRS[i][0] * v * STEP, CY + DIRS[i][1] * v * STEP]; }
+    function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+    function render() {
+      var c = shownVals.map(function (v, i) { return target(i, v); });
+      poly.setAttribute("points", c.map(function (p) { return p[0] + "," + p[1]; }).join(" "));
+      c.forEach(function (p, i) { pts[i].setAttribute("cx", p[0]); pts[i].setAttribute("cy", p[1]); });
+    }
+
+    FIRMS.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "kar-tile";
+      tile.setAttribute("data-i", i);
+      tile.innerHTML = '<div class="kar-mono">' + esc(f.ini) + '</div><div class="kar-name">' + esc(f.name) + '</div><div class="kar-sub">' + esc(f.branche) + '</div><div class="kar-prog"></div>';
+      karRow.appendChild(tile);
+    });
+    function karSet(i) {
+      var tiles = karRow.children;
+      for (var k = 0; k < tiles.length; k++) {
+        tiles[k].classList.toggle("active", k === i);
+        tiles[k].querySelector(".kar-prog").style.width = "0%";
+      }
+    }
+
+    var idx = 0, firm = FIRMS[0];
+    var shownVals = [0, 0, 0, 0, 0, 0];
+    var tweens = [null, null, null, null, null, null];
+    var pulses = [null, null, null, null, null, null];
+    var axisDone = [false, false, false, false, false, false];
+    var phase = "scan";
+    var holdStart = null, listClearAt = null;
+    var counter = 0;
+
+    function setLblStatic(i, text) { lbls[i].textContent = text; }
+    function renderFirmStatic(f) {
+      // Endzustand ohne Animation (reduced-motion / Initialbild).
+      shownVals = f.vals.slice();
+      render();
+      var html = "", total = 0;
+      AXES.forEach(function (a, i) {
+        setLblStatic(i, a + " (" + f.vals[i] + ")");
+        var items = f.module[a];
+        if (items) { html += groupHTML(a, items); total += items.length; }
+      });
+      listEl.innerHTML = html;
+      dosCard.innerHTML = dosHTML(f, 1);
+      dosCard.querySelector(".cnt").textContent = total;
+    }
+
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      renderFirmStatic(FIRMS[0]);
+      karSet(0);
+      karRow.addEventListener("click", function (e) {
+        var tile = e.target.closest(".kar-tile");
+        if (!tile) return;
+        e.preventDefault(); e.stopPropagation();
+        var i = parseInt(tile.getAttribute("data-i"), 10);
+        idx = i; renderFirmStatic(FIRMS[i]); karSet(i);
+        dosCard.innerHTML = dosHTML(FIRMS[i], i + 1);
+        dosCard.querySelector(".cnt").textContent = FIRMS[i].vals.reduce(function (a, b) { return a + b; }, 0);
+      });
+      box.addEventListener("click", function (e) {
+        if (e.target.closest(".kar-tile") || e.target.closest("a")) return;
+        window.location.href = "/schnell-check";
+      });
+      return;
+    }
+
+    dosCard.innerHTML = dosHTML(firm, 1);
+    karSet(0);
+    AXES.forEach(function (a, i) { setLblStatic(i, a); });
+    render();
+
+    function startSwitch(ts, targetIdx) {
+      idx = targetIdx !== undefined ? targetIdx : (idx + 1) % FIRMS.length;
+      firm = FIRMS[idx];
+      counter = 0;
+      // Flip: Karte kippt hoch, Inhalt wechselt am Scheitelpunkt, Lichtstreif danach.
+      var newFirm = firm, newNr = idx + 1;
+      dosCard.classList.remove("flash", "unflipping");
+      dosCard.classList.add("flipping");
+      setTimeout(function () {
+        dosCard.innerHTML = dosHTML(newFirm, newNr);
+        dosCard.classList.add("unflipping", "flash");
+        dosCard.classList.remove("flipping");
+        setTimeout(function () { dosCard.classList.remove("unflipping", "flash"); }, 700);
+      }, 290);
+      karSet(idx);
+      listEl.style.opacity = 0;
+      listClearAt = ts + 320;
+      for (var i = 0; i < 6; i++) {
+        tweens[i] = { from: shownVals[i], to: 0, t0: ts };
+        setLblStatic(i, AXES[i]);
+      }
+      axisDone = [false, false, false, false, false, false];
+      phase = "collapse";
+      holdStart = null;
+    }
+
+    karRow.addEventListener("click", function (e) {
+      var tile = e.target.closest(".kar-tile");
+      if (!tile) return;
+      e.stopPropagation();
+      var i = parseInt(tile.getAttribute("data-i"), 10);
+      if (i !== idx) startSwitch(performance.now(), i);
+    });
+    box.addEventListener("click", function (e) {
+      if (e.target.closest(".kar-tile") || e.target.closest("a")) return;
+      window.location.href = "/schnell-check";
+    });
+
+    var ang = 0, last = null;
+    var SPEED = 0.10; // Grad/ms → volle Runde in 3,6 s
+    function loop(ts) {
+      if (last === null) last = ts;
+      var dt = Math.min(50, ts - last); last = ts;
+      var prevFront = (ang + 30) % 360;
+      ang = (ang + dt * SPEED) % 360;
+      var newFront = (ang + 30) % 360;
+      sweepEl.setAttribute("transform", "rotate(" + ang + " " + CX + " " + CY + ")");
+
+      if (listClearAt && ts >= listClearAt) { listEl.innerHTML = ""; listEl.style.opacity = 1; listClearAt = null; }
+
+      var dirty = false, anyTween = false;
+      tweens.forEach(function (tw, i) {
+        if (!tw) return;
+        anyTween = true;
+        var t = Math.min(1, (ts - tw.t0) / (phase === "collapse" ? 500 : 250));
+        shownVals[i] = tw.from + (tw.to - tw.from) * ease(t);
+        if (t >= 1) { shownVals[i] = tw.to; tweens[i] = null; }
+        dirty = true;
+      });
+      if (dirty) render();
+
+      if (phase === "collapse" && !anyTween && !listClearAt) {
+        phase = "scan";
+      } else if (phase === "scan") {
+        var delta = (newFront - prevFront + 360) % 360;
+        AXDEG.forEach(function (a, i) {
+          if (axisDone[i]) return;
+          var off = (a - prevFront + 360) % 360;
+          if (off <= delta) {
+            axisDone[i] = true;
+            tweens[i] = { from: shownVals[i], to: firm.vals[i], t0: ts };
+            if (firm.vals[i] > 0) pulses[i] = { t0: ts };
+            setLblStatic(i, AXES[i] + " (" + firm.vals[i] + ")");
+            var items = firm.module[AXES[i]];
+            if (items) {
+              listEl.insertAdjacentHTML("beforeend", groupHTML(AXES[i], items));
+              counter += items.length;
+              var cnt = dosCard.querySelector(".cnt");
+              if (cnt) cnt.textContent = counter;
+            }
+          }
+        });
+        if (axisDone.every(function (d) { return d; })) { phase = "hold"; holdStart = ts; }
+      } else if (phase === "hold" && ts - holdStart > HOLD) {
+        startSwitch(ts);
+      }
+
+      // Fortschrittsbalken: 80 % über den Scan, 20 % über die Lesepause.
+      var activeTile = karRow.children[idx];
+      if (activeTile) {
+        var prog = 0;
+        if (phase === "scan" || phase === "collapse") {
+          var done = 0;
+          for (var k = 0; k < 6; k++) if (axisDone[k]) done++;
+          prog = (done / 6) * 80;
+        } else if (phase === "hold") {
+          prog = 80 + 20 * Math.min(1, (ts - holdStart) / HOLD);
+        }
+        activeTile.querySelector(".kar-prog").style.width = prog + "%";
+      }
+
+      // Treffer-Puls: Ring expandiert + Punkt springt kurz auf.
+      pulses.forEach(function (pu, i) {
+        if (!pu) return;
+        var t = Math.min(1, (ts - pu.t0) / 550);
+        var p = target(i, shownVals[i]);
+        hits[i].setAttribute("cx", p[0]); hits[i].setAttribute("cy", p[1]);
+        hits[i].setAttribute("r", 4 + 16 * t);
+        hits[i].setAttribute("stroke-opacity", 0.75 * (1 - t));
+        pts[i].setAttribute("r", 3.2 + 3 * Math.sin(Math.PI * Math.min(1, t * 1.4)));
+        if (t >= 1) { pulses[i] = null; hits[i].setAttribute("stroke-opacity", 0); pts[i].setAttribute("r", 3.2); }
+      });
+
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  })();
+</script>
