@@ -4,8 +4,22 @@ import RadarTeaser from "../components/RadarTeaser.astro";
 import TrustBadges from "../components/TrustBadges.astro";
 import NewsCard from "../components/NewsCard.astro";
 import RegulierungsMatrix from "../components/RegulierungsMatrix.astro";
+import { Image } from "astro:assets";
 import { fetchNewsList, KATEGORIE_LABELS } from "../lib/api";
 import { HUBS } from "../data/themen";
+
+// Produktbeweis: Screenshots aus dem Demo-Tenant (scripts/screenshots.mjs).
+// Sektion erscheint nur, wenn Bilder vorhanden sind.
+const screenshotModules = import.meta.glob<{ default: ImageMetadata }>("../assets/screenshots/*.png", { eager: true });
+const SHOT_LABELS: Record<string, string> = {
+  "cockpit.png": "Compliance-Cockpit — Index, Aufgaben, Fristen auf einen Blick",
+  "wizard.png": "Onboarding-Wizard — in fünf Schritten zur Compliance-Landkarte",
+  "fragebogen.png": "OEM-Fragebogen-Auswerter — Auto-Antworten mit Attestierung",
+};
+const SHOT_REIHENFOLGE = ["cockpit.png", "wizard.png", "fragebogen.png"];
+const screenshots = Object.entries(screenshotModules)
+  .map(([pfad, mod]) => ({ datei: pfad.split("/").pop()!, bild: mod.default }))
+  .sort((a, b) => SHOT_REIHENFOLGE.indexOf(a.datei) - SHOT_REIHENFOLGE.indexOf(b.datei));
 
 const posts = await fetchNewsList();
 const teaserPosts = posts
@@ -103,6 +117,28 @@ const teaserPosts = posts
     </div>
     <RegulierungsMatrix kompakt />
   </section>
+
+  {/* Produktbeweis: echte App-Screenshots aus dem Demo-Mandanten. */}
+  {screenshots.length > 0 && (
+    <section class="border-t border-line bg-paper-soft/30">
+      <div class="max-w-(--container-wide) mx-auto px-6 py-14 md:py-20">
+        <div class="text-xs uppercase tracking-widest text-brand font-medium mb-2">Produktbeweis</div>
+        <h2 class="font-serif text-3xl md:text-4xl text-ink mb-10">So sieht Vaeren wirklich aus.</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {screenshots.map(({ datei, bild }) => (
+            <figure class="bg-paper border border-line rounded-lg overflow-hidden shadow-sm">
+              <div class="flex gap-1.5 px-3 py-2 border-b border-line bg-paper-soft">
+                <span class="w-2 h-2 rounded-full bg-line"></span><span class="w-2 h-2 rounded-full bg-line"></span><span class="w-2 h-2 rounded-full bg-line"></span>
+              </div>
+              <Image src={bild} alt={SHOT_LABELS[datei] ?? datei} class="w-full h-auto" widths={[480, 800]} sizes="(max-width: 768px) 100vw, 33vw" />
+              <figcaption class="px-4 py-3 text-sm text-ink-soft">{SHOT_LABELS[datei] ?? ""}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <p class="mt-4 text-xs text-ink-muted">Screenshots aus dem Demo-Mandanten — keine Mockups.</p>
+      </div>
+    </section>
+  )}
 
   {/* Trust-Badges, dezent als horizontaler Streifen. */}
   <TrustBadges />
