@@ -7,9 +7,8 @@
  * Radar-Punkte kollabieren zur Mitte, der rotierende Sweep baut das
  * Pflichten-Profil Achse für Achse wieder auf (Punkt-Puls + Tabellenzeilen +
  * tickender Zähler), nach einer Lesepause kommt die nächste Firma. Die
- * Karussell-Kacheln unten sind klickbar.
- *
- * prefers-reduced-motion: statisches Endbild der ersten Firma, kein Loop.
+ * Karussell-Kacheln unten sind klickbar. Animation läuft bewusst auch bei
+ * prefers-reduced-motion (der Scan ist die Kernbotschaft des Heros).
  */
 import { AXES, CATCOL, FIRMS } from "../data/teaser-firmen";
 ---
@@ -65,7 +64,7 @@ import { AXES, CATCOL, FIRMS } from "../data/teaser-firmen";
   /* Statische Edel-Kante: Petrol läuft in Gold aus. */
   .t-box::before { content:""; position:absolute; top:0; left:0; right:0; height:2px; background: linear-gradient(90deg, #0F4C5C 0%, #16677C 45%, #B45309 100%); opacity:.85; }
 
-  .dos-scene { position:relative; height: 158px; max-width: 560px; margin: 0 auto; perspective: 900px; }
+  .dos-scene { position:relative; height: 148px; max-width: 560px; margin: 0 auto; perspective: 900px; }
   .dos { position:absolute; inset:0; transition: transform .28s ease-in, filter .28s; }
   .dos.flipping { transform: rotateX(88deg); filter: brightness(1.12); }
   .dos.unflipping { transition: transform .32s ease-out, filter .32s; }
@@ -82,13 +81,14 @@ import { AXES, CATCOL, FIRMS } from "../data/teaser-firmen";
   .dos-rows { margin-top:8px; font-size:13px; color:#3A3833; display:grid; grid-template-columns: 1fr 1fr; gap:3px 18px; }
   .dos-rows b { color:#8A857C; font-weight:500; font-size:10px; text-transform:uppercase; letter-spacing:1px; margin-right:6px; }
 
-  .t-cols { display:flex; gap:22px; align-items:flex-start; margin-top:14px; }
-  .t-radar { flex: 0 0 46%; min-width: 0; }
+  /* Schlanke Spalten-Form (Anordnung B): Radar über der Tabelle. */
+  .t-cols { display:flex; flex-direction: column; gap:6px; align-items:stretch; margin-top:12px; }
+  .t-radar { width: 100%; max-width: 320px; margin: 0 auto; }
   .t-radar svg { width: 100%; display: block; }
-  .t-list { flex:1; min-width:0; height: 500px; overflow: hidden; transition: opacity .3s ease; }
-  .t-group { font-size:10.5px; text-transform:uppercase; letter-spacing:1.4px; margin:10px 0 4px; font-weight:600; padding-top:9px; border-top:1px solid #ECEAE4; }
+  .t-list { min-width:0; height: 372px; overflow: hidden; transition: opacity .3s ease; }
+  .t-group { font-size:10px; text-transform:uppercase; letter-spacing:1.4px; margin:8px 0 3px; font-weight:600; padding-top:8px; border-top:1px solid #ECEAE4; }
   .t-list > .g-in:first-child .t-group { border-top:none; padding-top:0; margin-top:2px; }
-  .t-item { display:flex; align-items:center; gap:8px; font-size:14px; padding:2.5px 0; color:#22211E; }
+  .t-item { display:flex; align-items:center; gap:8px; font-size:13.5px; padding:2px 0; color:#22211E; }
   .t-law { color:#8A857C; font-size:11px; }
   .t-dot { width:7px; height:7px; border-radius:50%; display:inline-block; flex-shrink:0; }
   .g-in { animation: gIn .35s ease both; }
@@ -110,9 +110,6 @@ import { AXES, CATCOL, FIRMS } from "../data/teaser-firmen";
   .t-cta a:hover { background:#0B3A47; text-decoration:none; }
 
   @media (max-width: 768px) {
-    .t-cols { flex-direction: column; align-items: stretch; }
-    .t-radar { flex: none; max-width: 360px; margin: 0 auto; width: 100%; }
-    .t-list { height: auto; max-height: 420px; }
     .kar-name, .kar-sub { display: none; }
     .dos-rows { grid-template-columns: 1fr; }
     .dos-scene { height: 196px; }

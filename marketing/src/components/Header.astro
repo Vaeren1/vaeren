@@ -10,7 +10,18 @@ const links = [
 
 <header class="border-b border-line bg-paper/95 backdrop-blur-sm sticky top-0 z-30">
   <div class="max-w-(--container-wide) mx-auto px-6 py-4 flex items-center justify-between gap-6">
-    <a href="/" class="flex items-center gap-2 no-underline" aria-label="Vaeren Startseite">
+    <a href="/" class="flex items-center gap-2.5 no-underline" aria-label="Vaeren Startseite">
+      {/* V-Haken-Bildmarke: das V von Vaeren als Häkchen, Petrol-zu-Gold-Verlauf. */}
+      <svg width="26" height="26" viewBox="0 0 48 48" aria-hidden="true">
+        <defs>
+          <linearGradient id="logo-v" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stop-color="#0F4C5C"></stop>
+            <stop offset="75%" stop-color="#16677C"></stop>
+            <stop offset="100%" stop-color="#B45309"></stop>
+          </linearGradient>
+        </defs>
+        <path d="M8,14 L22,40 L42,8" fill="none" stroke="url(#logo-v)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
       <span class="font-serif text-2xl font-semibold tracking-tight text-ink">Vaeren</span>
       <span class="hidden sm:inline text-xs uppercase tracking-widest text-ink-muted border-l border-line pl-2">Compliance-Autopilot</span>
     </a>
