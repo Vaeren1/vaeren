@@ -1,0 +1,68 @@
+---
+/**
+ * Schmaler News-Ticker direkt unter dem Header: rotiert durch die aktuellsten
+ * Beiträge (Crossfade alle 5 s, pausiert bei Hover), jede Zeile verlinkt auf
+ * den Beitrag. Server-seitig gerendert, JS rotiert nur die Sichtbarkeit.
+ */
+import type { NewsPostListItem } from "../lib/api";
+import { KATEGORIE_LABELS } from "../lib/api";
+import { formatDateShort } from "../lib/format";
+
+interface Props {
+  posts: NewsPostListItem[];
+}
+const { posts } = Astro.props;
+const eintraege = posts.slice(0, 5);
+---
+
+{eintraege.length > 0 && (
+  <div class="border-b border-line bg-paper-soft/60" id="news-ticker">
+    <div class="max-w-(--container-wide) mx-auto px-6 py-2.5 flex items-center gap-4">
+      <span class="flex items-center gap-2 text-[11px] uppercase tracking-widest text-brand font-semibold whitespace-nowrap">
+        <span class="ticker-puls" aria-hidden="true"></span>Aktuell
+      </span>
+      <div class="relative flex-1 min-w-0 h-6">
+        {eintraege.map((post, i) => (
+          <a
+            href={`/news/${post.slug}`}
+            class="ticker-item absolute inset-0 flex items-center gap-3 no-underline text-sm text-ink-soft hover:text-brand truncate"
+            style={`opacity:${i === 0 ? 1 : 0}; pointer-events:${i === 0 ? "auto" : "none"};`}
+            data-i={i}
+          >
+            <span class={`pill pill-${post.kategorie} flex-shrink-0`}>{KATEGORIE_LABELS[post.kategorie] ?? post.kategorie}</span>
+            <span class="truncate">{post.titel}</span>
+            <span class="hidden sm:inline text-xs text-ink-muted flex-shrink-0">{formatDateShort(post.published_at)}</span>
+          </a>
+        ))}
+      </div>
+      <a href="/news" class="hidden md:inline text-xs no-underline text-ink-muted hover:text-brand whitespace-nowrap">Alle Beiträge →</a>
+    </div>
+  </div>
+)}
+
+<style>
+  .ticker-item { transition: opacity 0.5s ease; }
+  .ticker-puls { width: 7px; height: 7px; border-radius: 50%; background: var(--color-brand); display: inline-block; animation: tickerPuls 2s ease-in-out infinite; }
+  @keyframes tickerPuls { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+</style>
+
+<script>
+  const ticker = document.getElementById("news-ticker");
+  if (ticker) {
+    const items = ticker.querySelectorAll<HTMLElement>(".ticker-item");
+    if (items.length > 1) {
+      let idx = 0;
+      let pausiert = false;
+      ticker.addEventListener("mouseenter", () => { pausiert = true; });
+      ticker.addEventListener("mouseleave", () => { pausiert = false; });
+      setInterval(() => {
+        if (pausiert) return;
+        items[idx].style.opacity = "0";
+        items[idx].style.pointerEvents = "none";
+        idx = (idx + 1) % items.length;
+        items[idx].style.opacity = "1";
+        items[idx].style.pointerEvents = "auto";
+      }, 5000);
+    }
+  }
+</script>

@@ -9,14 +9,15 @@ export const MANIFEST = {
   warum: {
     titel: "Warum es Vaeren gibt",
     text: [
-      "Der Compliance-Aufwand im industriellen Mittelstand wächst seit Jahren stärker als das Personal, das ihn bewältigen soll. AI Act, NIS2, CSDDD, HinSchG und ein Dutzend weiterer Pflichten landen gleichzeitig auf dem Schreibtisch der Geschäftsführung. Die Wahl heißt heute: ignorieren, externe Beratung einkaufen, oder einen Software-Autopiloten nutzen.",
-      "Ignorieren ist riskant. Externe Beratung ist teuer und nicht skalierbar. Vaeren ist die dritte Option: ein Compliance-Autopilot, der die wiederkehrende Arbeit übernimmt, damit die Geschäftsführung und die Compliance-Beauftragten ihre Aufmerksamkeit auf die echten Entscheidungen lenken können.",
+      "Der Compliance-Aufwand im Mittelstand wächst seit Jahren schneller als die Zeit, die dafür zur Verfügung steht. AI Act, NIS2, CSRD, HinSchG und ein Dutzend weiterer Pflichten landen fast gleichzeitig auf dem Schreibtisch der Geschäftsführung. Ob ein Unternehmen eine eigene Compliance-Abteilung hat oder die Aufgabe neben dem Tagesgeschäft mitläuft: Die wiederkehrende Arbeit dahinter, also Fristen, Nachweise, Schulungen und Register, frisst Zeit, die niemand übrig hat.",
+      "Vaeren ist der Compliance-Autopilot: Die Software übernimmt diese wiederkehrende Arbeit, Menschen treffen die Entscheidungen. Geschäftsführung, Compliance-Beauftragte und Fachkräfte sehen jederzeit, wo der Betrieb steht, was als Nächstes fällig ist und womit sich ein Audit oder eine Kundenanfrage beantworten lässt. Wer bereits ein Compliance-Team hat, gewinnt damit Tempo und Struktur. Wer keines hat, gewinnt ein System, das die Aufgabe überhaupt erst beherrschbar macht.",
+      "Hinter Vaeren steht außerdem eine Redaktion aus Software und Mensch: Wir kuratieren laufend die Rechtsentwicklungen, die den Mittelstand wirklich betreffen, von der EU-Verordnung bis zum BGH-Urteil. Diese Beiträge sind frei zugänglich, mit offenen Quellen.",
     ],
   },
   wie: {
     titel: "Wie wir arbeiten",
     text: [
-      "Drei Prinzipien leiten unsere Arbeit. Erstens: Mensch entscheidet, Software arbeitet. Jede rechtsrelevante Bewertung wird von einem Menschen freigegeben, bevor sie wirksam wird.",
+      "Drei Prinzipien leiten unsere Arbeit. Erstens: Mensch entscheidet, Software arbeitet. Jede rechtsrelevante Bewertung wird von einem Menschen freigegeben, bevor sie wirksam wird. Das gilt im Produkt genauso wie in unseren Beiträgen.",
       "Zweitens: Quellen werden offen verlinkt. Wer einen Beitrag von uns liest, soll mit zwei Klicks beim Original-Urteil oder Original-Gesetz landen. Keine Black-Box.",
       "Drittens: Fehler werden korrigiert, nicht versteckt. Wir führen ein öffentliches Korrektur-Log. Jeder Fund wird benannt, datiert und mit Grund versehen.",
     ],
@@ -24,8 +25,8 @@ export const MANIFEST = {
   was_nicht: {
     titel: "Was wir nicht sind",
     text: [
-      "Vaeren ist keine Anwaltskanzlei. Wir geben keine Rechtsberatung im Einzelfall. Unsere Beiträge sind Information und ersetzen nicht den Rat einer fachkundigen Person für einen konkreten Sachverhalt.",
-      "Wir setzen auch keine Cookie-Banner, kein Marketing-Karussell und kein Buzzword-Bingo ein.",
+      "Vaeren ist keine Anwaltskanzlei. Wir geben keine Rechtsberatung im Einzelfall. Unsere Beiträge und Einschätzungen sind Information und ersetzen nicht den Rat einer fachkundigen Person für einen konkreten Sachverhalt.",
+      "Vaeren ist auch kein Häkchen-Generator. Wo eine Entscheidung Gewicht hat, gehört sie in menschliche Hände, und genau so ist die Software gebaut: Sie bereitet vor, dokumentiert und erinnert, aber sie entscheidet nicht über Ihren Kopf hinweg.",
     ],
   },
 };
@@ -65,7 +66,7 @@ export const METHODIK = {
 
 export const IMPRESSUM = {
   name: "Konrad Bizer",
-  postanschrift: ["Ochsengasse 40", "89081 Ulm"],
+  postanschrift: ["Engelhofstraße 47", "73252 Lenningen"],
   email: "kontakt@vaeren.de",
   ust_id_hinweis:
     "Kleinunternehmer im Sinne von §19 UStG. Es wird keine Umsatzsteuer berechnet.",

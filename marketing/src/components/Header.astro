@@ -2,7 +2,7 @@
 const links = [
   { href: "/leistungen", label: "Produkt" },
   { href: "/schnell-check", label: "Schnell-Check" },
-  { href: "/news", label: "Wissen" },
+  { href: "/news", label: "Aktuelles" },
   { href: "/fristen", label: "Fristen" },
   { href: "/manifest", label: "Über uns" },
   { href: "/kontakt", label: "Kontakt" },
@@ -30,7 +30,7 @@ const links = [
       {links.map(l => (
         <a href={l.href} class="text-ink-soft hover:text-brand no-underline">{l.label}</a>
       ))}
-      <a href="https://app.vaeren.de" class="text-ink no-underline border border-line rounded-full px-4 py-1.5 hover:border-brand hover:text-brand">Login →</a>
+      <a href="https://app.vaeren.de" class="text-ink no-underline bg-brand-soft/60 border border-brand/30 rounded-full px-4 py-1.5 font-medium hover:bg-brand hover:text-paper hover:border-brand transition-colors">Login →</a>
     </nav>
     <details class="md:hidden relative">
       <summary class="list-none cursor-pointer p-2 -m-2">

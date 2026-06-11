@@ -8,6 +8,7 @@ import {
   type Geo,
   type NewsType,
 } from "../lib/api";
+import { grafikDaten } from "../lib/kategorie-grafik";
 
 interface Props {
   posts: NewsPostListItem[];
@@ -174,32 +175,64 @@ function Select({
   );
 }
 
+function KategorieThumb({ kategorie }: { kategorie: string }) {
+  const { hell, dunkel, icon } = grafikDaten(kategorie);
+  const gid = `kgr-${kategorie}`;
+  return (
+    <svg viewBox="0 0 400 112" preserveAspectRatio="xMidYMid slice" className="w-full h-full block" aria-hidden="true">
+      <defs>
+        <linearGradient id={gid} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor={hell} />
+          <stop offset="100%" stopColor={hell} stopOpacity="0.45" />
+        </linearGradient>
+      </defs>
+      <rect width="400" height="112" fill={`url(#${gid})`} />
+      <g stroke={dunkel} strokeOpacity="0.08" strokeWidth="1">
+        <line x1="240" y1="-20" x2="360" y2="132" />
+        <line x1="270" y1="-20" x2="390" y2="132" />
+        <line x1="300" y1="-20" x2="420" y2="132" />
+      </g>
+      <g transform="translate(310, 14) scale(3.5)" fill="none" stroke={dunkel} strokeOpacity="0.14" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d={icon} />
+      </g>
+      <g transform="translate(22, 32) scale(2)" fill="none" stroke={dunkel} strokeOpacity="0.85" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d={icon} />
+      </g>
+    </svg>
+  );
+}
+
 function NewsRow({ post }: { post: NewsPostListItem }) {
   const href = `/news/${post.slug}`;
   return (
-    <a href={href} className="group block py-7 border-b border-line no-underline">
-      <div className="flex flex-wrap items-center gap-3 mb-3">
-        <span className={`pill pill-${post.kategorie}`}>
-          {KATEGORIE_LABELS[post.kategorie]}
-        </span>
-        <span className="text-xs uppercase tracking-wide text-ink-muted">
-          {GEO_LABELS[post.geo]}
-        </span>
-        <span className="text-xs text-ink-muted">
-          {post.published_at
-            ? new Date(post.published_at).toLocaleDateString("de-DE")
-            : ""}
-        </span>
-        {post.pinned && (
-          <span className="text-xs uppercase tracking-wide text-accent-warm">
-            Angepinnt
-          </span>
-        )}
+    <a href={href} className="group grid md:grid-cols-[180px_1fr] gap-6 items-start py-7 border-b border-line no-underline">
+      <div className="hidden md:block h-24 rounded-lg overflow-hidden border border-line">
+        <KategorieThumb kategorie={post.kategorie} />
       </div>
-      <h2 className="font-serif text-2xl text-ink leading-snug group-hover:text-brand mb-2">
-        {post.titel}
-      </h2>
-      <p className="text-base text-ink-soft leading-relaxed">{post.lead}</p>
+      <div>
+        <div className="flex flex-wrap items-center gap-3 mb-3">
+          <span className={`pill pill-${post.kategorie}`}>
+            {KATEGORIE_LABELS[post.kategorie]}
+          </span>
+          <span className="text-xs uppercase tracking-wide text-ink-muted">
+            {GEO_LABELS[post.geo]}
+          </span>
+          <span className="text-xs text-ink-muted">
+            {post.published_at
+              ? new Date(post.published_at).toLocaleDateString("de-DE")
+              : ""}
+          </span>
+          {post.pinned && (
+            <span className="text-xs uppercase tracking-wide text-accent-warm">
+              Angepinnt
+            </span>
+          )}
+        </div>
+        <h2 className="font-serif text-2xl text-ink leading-snug group-hover:text-brand mb-2">
+          {post.titel}
+        </h2>
+        <p className="text-base text-ink-soft leading-relaxed">{post.lead}</p>
+      </div>
     </a>
   );
 }

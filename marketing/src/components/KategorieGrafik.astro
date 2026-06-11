@@ -1,0 +1,42 @@
+---
+/**
+ * Dekorative Kategorie-Grafik für News-Karten: weicher Farbverlauf in den
+ * Pill-Farben der Kategorie plus reduziertes Linien-Icon. Bewusst generativ
+ * statt Stockfoto: konsistent, lizenzfrei, passt zum Editorial-Design.
+ */
+interface Props {
+  kategorie: string;
+  /** Höhe in Tailwind-Klassen, z. B. "h-28" */
+  klasse?: string;
+}
+const { kategorie, klasse = "h-28" } = Astro.props;
+import { grafikDaten } from "../lib/kategorie-grafik";
+const { hell, dunkel, icon } = grafikDaten(kategorie);
+const gradientId = `kg-${kategorie}-${Math.abs([...kategorie].reduce((a, c) => a + c.charCodeAt(0), 0))}`;
+---
+
+<div class={`${klasse} w-full overflow-hidden rounded-t-lg`} aria-hidden="true">
+  <svg viewBox="0 0 400 112" preserveAspectRatio="xMidYMid slice" class="w-full h-full block">
+    <defs>
+      <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color={hell}></stop>
+        <stop offset="100%" stop-color={hell} stop-opacity="0.45"></stop>
+      </linearGradient>
+    </defs>
+    <rect width="400" height="112" fill={`url(#${gradientId})`}></rect>
+    {/* feine Diagonal-Linien als Textur */}
+    <g stroke={dunkel} stroke-opacity="0.08" stroke-width="1">
+      <line x1="240" y1="-20" x2="360" y2="132"></line>
+      <line x1="270" y1="-20" x2="390" y2="132"></line>
+      <line x1="300" y1="-20" x2="420" y2="132"></line>
+    </g>
+    {/* großes, halbtransparentes Motiv rechts */}
+    <g transform="translate(310, 14) scale(3.5)" fill="none" stroke={dunkel} stroke-opacity="0.14" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d={icon}></path>
+    </g>
+    {/* kleines, kräftiges Motiv links */}
+    <g transform="translate(22, 32) scale(2)" fill="none" stroke={dunkel} stroke-opacity="0.85" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d={icon}></path>
+    </g>
+  </svg>
+</div>
