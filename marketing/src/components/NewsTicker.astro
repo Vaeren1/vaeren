@@ -1,68 +1,120 @@
 ---
 /**
- * Schmaler News-Ticker direkt unter dem Header: rotiert durch die aktuellsten
- * Beiträge (Crossfade alle 5 s, pausiert bei Hover), jede Zeile verlinkt auf
- * den Beitrag. Server-seitig gerendert, JS rotiert nur die Sichtbarkeit.
+ * News-Slider direkt unter dem Header: mehrere Beitrags-Karten mit
+ * Kategorie-Grafik gleiten im 4-Sekunden-Takt seitwärts (nahtlose Schleife
+ * über Klone, pausiert bei Hover). Sichtbar: 1 Karte mobil, 2 ab md, 3 ab lg.
  */
 import type { NewsPostListItem } from "../lib/api";
 import { KATEGORIE_LABELS } from "../lib/api";
+import KategorieGrafik from "./KategorieGrafik.astro";
 import { formatDateShort } from "../lib/format";
 
 interface Props {
   posts: NewsPostListItem[];
 }
 const { posts } = Astro.props;
-const eintraege = posts.slice(0, 5);
+const eintraege = posts.slice(0, 8);
+// Klone der ersten Karten für die nahtlose Endlos-Schleife.
+const KLONE = 3;
+const track = [...eintraege, ...eintraege.slice(0, Math.min(KLONE, eintraege.length))];
 ---
 
 {eintraege.length > 0 && (
-  <div class="border-b border-line bg-paper-soft/60" id="news-ticker">
-    <div class="max-w-(--container-wide) mx-auto px-6 py-2.5 flex items-center gap-4">
-      <span class="flex items-center gap-2 text-[11px] uppercase tracking-widest text-brand font-semibold whitespace-nowrap">
-        <span class="ticker-puls" aria-hidden="true"></span>Aktuell
-      </span>
-      <div class="relative flex-1 min-w-0 h-6">
-        {eintraege.map((post, i) => (
-          <a
-            href={`/news/${post.slug}`}
-            class="ticker-item absolute inset-0 flex items-center gap-3 no-underline text-sm text-ink-soft hover:text-brand truncate"
-            style={`opacity:${i === 0 ? 1 : 0}; pointer-events:${i === 0 ? "auto" : "none"};`}
-            data-i={i}
-          >
-            <span class={`pill pill-${post.kategorie} flex-shrink-0`}>{KATEGORIE_LABELS[post.kategorie] ?? post.kategorie}</span>
-            <span class="truncate">{post.titel}</span>
-            <span class="hidden sm:inline text-xs text-ink-muted flex-shrink-0">{formatDateShort(post.published_at)}</span>
-          </a>
-        ))}
+  <div class="border-b border-line bg-paper-soft/60" id="news-slider">
+    <div class="max-w-(--container-wide) mx-auto px-6 py-4">
+      <div class="flex items-center justify-between mb-2.5">
+        <span class="flex items-center gap-2 text-[11px] uppercase tracking-widest text-brand font-semibold">
+          <span class="slider-puls" aria-hidden="true"></span>Aktuelle Rechtsentwicklungen
+        </span>
+        <div class="flex items-center gap-2">
+          <button type="button" id="slider-prev" aria-label="Vorheriger Beitrag" class="slider-btn">←</button>
+          <button type="button" id="slider-next" aria-label="Nächster Beitrag" class="slider-btn">→</button>
+          <a href="/news" class="hidden md:inline text-xs no-underline text-ink-muted hover:text-brand whitespace-nowrap ml-2">Alle Beiträge →</a>
+        </div>
       </div>
-      <a href="/news" class="hidden md:inline text-xs no-underline text-ink-muted hover:text-brand whitespace-nowrap">Alle Beiträge →</a>
+      <div class="overflow-hidden" id="slider-fenster">
+        <div class="flex gap-4 slider-track" id="slider-track">
+          {track.map(post => (
+            <a href={`/news/${post.slug}`} class="slider-card no-underline group">
+              <div class="w-24 flex-shrink-0 self-stretch overflow-hidden rounded-l-lg">
+                <KategorieGrafik kategorie={post.kategorie} klasse="h-full" />
+              </div>
+              <div class="min-w-0 p-3 flex flex-col justify-center gap-1.5">
+                <div class="flex items-center gap-2">
+                  <span class={`pill pill-${post.kategorie}`}>{KATEGORIE_LABELS[post.kategorie] ?? post.kategorie}</span>
+                  <span class="text-xs text-ink-muted whitespace-nowrap">{formatDateShort(post.published_at)}</span>
+                </div>
+                <span class="font-serif text-[15px] leading-snug text-ink group-hover:text-brand slider-titel">{post.titel}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
     </div>
   </div>
 )}
 
 <style>
-  .ticker-item { transition: opacity 0.5s ease; }
-  .ticker-puls { width: 7px; height: 7px; border-radius: 50%; background: var(--color-brand); display: inline-block; animation: tickerPuls 2s ease-in-out infinite; }
-  @keyframes tickerPuls { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .slider-puls { width: 7px; height: 7px; border-radius: 50%; background: var(--color-brand); display: inline-block; animation: sliderPuls 2s ease-in-out infinite; }
+  @keyframes sliderPuls { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .slider-btn { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--color-line); background: var(--color-paper); color: var(--color-ink-soft); font-size: 12px; line-height: 1; cursor: pointer; transition: all .15s; }
+  .slider-btn:hover { border-color: var(--color-brand); color: var(--color-brand); }
+  .slider-track { transition: transform .6s cubic-bezier(.3,.7,.3,1); will-change: transform; }
+  .slider-card { display: flex; flex: 0 0 100%; background: var(--color-paper); border: 1px solid var(--color-line); border-radius: 0.5rem; overflow: hidden; min-height: 88px; transition: border-color .15s, box-shadow .15s; }
+  .slider-card:hover { border-color: var(--color-brand); box-shadow: 0 4px 14px rgba(15, 76, 92, 0.08); }
+  .slider-titel { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  @media (min-width: 768px) { .slider-card { flex-basis: calc((100% - 1rem) / 2); } }
+  @media (min-width: 1024px) { .slider-card { flex-basis: calc((100% - 2rem) / 3); } }
 </style>
 
 <script>
-  const ticker = document.getElementById("news-ticker");
-  if (ticker) {
-    const items = ticker.querySelectorAll<HTMLElement>(".ticker-item");
-    if (items.length > 1) {
-      let idx = 0;
-      let pausiert = false;
-      ticker.addEventListener("mouseenter", () => { pausiert = true; });
-      ticker.addEventListener("mouseleave", () => { pausiert = false; });
-      setInterval(() => {
-        if (pausiert) return;
-        items[idx].style.opacity = "0";
-        items[idx].style.pointerEvents = "none";
-        idx = (idx + 1) % items.length;
-        items[idx].style.opacity = "1";
-        items[idx].style.pointerEvents = "auto";
-      }, 5000);
+  const fenster = document.getElementById("slider-fenster");
+  const track = document.getElementById("slider-track");
+  const slider = document.getElementById("news-slider");
+  if (fenster && track && slider) {
+    const karten = track.querySelectorAll<HTMLElement>(".slider-card");
+    const KLONE = 3;
+    const anzahl = Math.max(1, karten.length - Math.min(KLONE, karten.length));
+    let idx = 0;
+    let pausiert = false;
+
+    const GAP = 16; // muss zu gap-4 passen
+    const schritt = () => (karten[0]?.getBoundingClientRect().width ?? 0) + GAP;
+
+    function geheZu(i: number, animiert: boolean) {
+      idx = i;
+      track.style.transition = animiert ? "" : "none";
+      track.style.transform = `translateX(${-i * schritt()}px)`;
+      if (!animiert) {
+        // Reflow erzwingen, damit die nächste Animation wieder greift.
+        void track.offsetWidth;
+        track.style.transition = "";
+      }
+    }
+
+    function weiter() {
+      if (idx >= anzahl) return;
+      geheZu(idx + 1, true);
+      if (idx >= anzahl) {
+        // Nach der Animation unsichtbar an den Anfang springen.
+        setTimeout(() => geheZu(0, false), 650);
+      }
+    }
+    function zurueck() {
+      if (idx <= 0) {
+        geheZu(anzahl, false);
+      }
+      geheZu(idx - 1, true);
+    }
+
+    slider.addEventListener("mouseenter", () => { pausiert = true; });
+    slider.addEventListener("mouseleave", () => { pausiert = false; });
+    document.getElementById("slider-next")?.addEventListener("click", weiter);
+    document.getElementById("slider-prev")?.addEventListener("click", zurueck);
+    window.addEventListener("resize", () => geheZu(Math.min(idx, anzahl - 1), false));
+
+    if (anzahl > 1) {
+      setInterval(() => { if (!pausiert) weiter(); }, 4000);
     }
   }
 </script>

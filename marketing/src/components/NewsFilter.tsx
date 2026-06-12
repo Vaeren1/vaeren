@@ -192,10 +192,10 @@ function KategorieThumb({ kategorie }: { kategorie: string }) {
         <line x1="270" y1="-20" x2="390" y2="132" />
         <line x1="300" y1="-20" x2="420" y2="132" />
       </g>
-      <g transform="translate(310, 14) scale(3.5)" fill="none" stroke={dunkel} strokeOpacity="0.14" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <g transform="translate(262, 12) scale(3.6)" fill="none" stroke={dunkel} strokeOpacity="0.14" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
         <path d={icon} />
       </g>
-      <g transform="translate(22, 32) scale(2)" fill="none" stroke={dunkel} strokeOpacity="0.85" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <g transform="translate(172, 30) scale(2.2)" fill="none" stroke={dunkel} strokeOpacity="0.85" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <path d={icon} />
       </g>
     </svg>

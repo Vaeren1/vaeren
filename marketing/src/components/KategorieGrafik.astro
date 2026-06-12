@@ -30,12 +30,12 @@ const gradientId = `kg-${kategorie}-${Math.abs([...kategorie].reduce((a, c) => a
       <line x1="270" y1="-20" x2="390" y2="132"></line>
       <line x1="300" y1="-20" x2="420" y2="132"></line>
     </g>
-    {/* großes, halbtransparentes Motiv rechts */}
-    <g transform="translate(310, 14) scale(3.5)" fill="none" stroke={dunkel} stroke-opacity="0.14" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    {/* großes, halbtransparentes Motiv rechts der Mitte */}
+    <g transform="translate(262, 12) scale(3.6)" fill="none" stroke={dunkel} stroke-opacity="0.14" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
       <path d={icon}></path>
     </g>
-    {/* kleines, kräftiges Motiv links */}
-    <g transform="translate(22, 32) scale(2)" fill="none" stroke={dunkel} stroke-opacity="0.85" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    {/* kräftiges Motiv im Zentrum: bleibt bei jedem slice-Zuschnitt sichtbar */}
+    <g transform="translate(172, 30) scale(2.2)" fill="none" stroke={dunkel} stroke-opacity="0.85" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
       <path d={icon}></path>
     </g>
   </svg>
