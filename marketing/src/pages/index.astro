@@ -65,17 +65,15 @@ const teaserPosts = posts
           ))}
         </ul>
         <a href="/kontakt" class="mt-8 inline-flex items-center gap-2 px-7 py-3.5 bg-brand text-paper font-medium no-underline rounded-full shadow-sm shadow-brand/30 hover:bg-ink transition-all">Demo anfragen →</a>
+
+        {/* Zahlen als Kompetenzbeweis, kompakt in der Hero-Spalte. */}
+        <div class="mt-10 pt-6 border-t border-line grid grid-cols-3 gap-x-8 gap-y-5 max-w-md">
+          {[["24", "Branchen im Schnell-Check"], ["20", "Pflicht-Kurse"], ["93", "ISO-Controls"], ["16", "Regulierungen im Katalog"], ["DE", "Hosting"]].map(([zahl, label]) => (
+            <div><div class="font-serif text-2xl text-brand font-semibold">{zahl}</div><div class="text-[11px] uppercase tracking-widest text-ink-muted mt-0.5 leading-snug">{label}</div></div>
+          ))}
+        </div>
       </div>
       <RadarTeaser />
-    </div>
-  </section>
-
-  {/* Zahlenband — echte Produktzahlen als Kompetenzbeweis. */}
-  <section class="border-b border-line bg-paper-soft/40">
-    <div class="max-w-(--container-wide) mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
-      {[["24", "Branchen im Schnell-Check"], ["20", "Pflicht-Kurse"], ["93", "ISO-Controls"], ["16", "Regulierungen im Katalog"], ["DE", "Hosting"]].map(([zahl, label]) => (
-        <div><div class="font-serif text-3xl text-brand font-semibold">{zahl}</div><div class="text-xs uppercase tracking-widest text-ink-muted mt-1">{label}</div></div>
-      ))}
     </div>
   </section>
 

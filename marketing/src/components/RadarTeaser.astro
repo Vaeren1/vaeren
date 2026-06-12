@@ -64,7 +64,9 @@ import { AXES, CATCOL, FIRMS } from "../data/teaser-firmen";
   /* Statische Edel-Kante: Petrol läuft in Gold aus. */
   .t-box::before { content:""; position:absolute; top:0; left:0; right:0; height:2px; background: linear-gradient(90deg, #0F4C5C 0%, #16677C 45%, #B45309 100%); opacity:.85; }
 
-  .dos-scene { position:relative; height: 148px; max-width: 560px; margin: 0 auto; perspective: 900px; }
+  /* Höhe ist deterministisch: alle Zeilen einzeilig mit Ellipsis (s. u.),
+     damit die Kachel nie ins Radar darunter wächst. */
+  .dos-scene { position:relative; height: 134px; max-width: 560px; margin: 0 auto; perspective: 900px; }
   .dos { position:absolute; inset:0; transition: transform .28s ease-in, filter .28s; }
   .dos.flipping { transform: rotateX(88deg); filter: brightness(1.12); }
   .dos.unflipping { transition: transform .32s ease-out, filter .32s; }
@@ -79,6 +81,8 @@ import { AXES, CATCOL, FIRMS } from "../data/teaser-firmen";
   .dos-count { font-family: var(--font-serif); font-size:14px; color:#0F4C5C; white-space:nowrap; }
   .dos-count b { font-size:24px; font-weight:600; }
   .dos-rows { margin-top:8px; font-size:13px; color:#3A3833; display:grid; grid-template-columns: 1fr 1fr; gap:3px 18px; }
+  .dos-rows span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .dos-rows .dos-merkmale { grid-column: 1 / -1; }
   .dos-rows b { color:#8A857C; font-weight:500; font-size:10px; text-transform:uppercase; letter-spacing:1px; margin-right:6px; }
 
   /* Schlanke Spalten-Form (Anordnung B): Radar über der Tabelle. */
@@ -181,7 +185,7 @@ import { AXES, CATCOL, FIRMS } from "../data/teaser-firmen";
         '<div class="dos-body"><div class="dos-head"><div class="dos-name">' + esc(f.name) + '</div>' +
         '<div class="dos-count"><b class="cnt">0</b> Pflichten</div></div>' +
         '<div class="dos-rows"><span><b>Branche</b>' + esc(f.branche) + '</span><span><b>Größe</b>' + esc(f.ma) + '</span>' +
-        '<span><b>Rechtsform</b>' + esc(f.rf) + '</span><span><b>Merkmale</b>' + esc(f.merkmale) + '</span></div></div>';
+        '<span class="dos-merkmale"><b>Rechtsform</b>' + esc(f.rf) + ' · <b>Merkmale</b>' + esc(f.merkmale) + '</span></div></div>';
     }
     function groupHTML(cat, items) {
       var col = CATCOL[cat];
