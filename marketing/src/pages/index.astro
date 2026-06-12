@@ -44,7 +44,7 @@ const teaserPosts = posts
   {/* Hero: Erklärung + Benefit-Checkliste links, animierter Radar-Teaser
       rechts. Schnell-Check-Einstieg bewusst NUR im Teaser (kein Doppel-CTA). */}
   <section class="border-b border-line">
-    <div class="max-w-(--container-wide) mx-auto px-6 py-12 md:py-16 grid lg:grid-cols-[1fr_1.05fr] gap-12 items-start">
+    <div class="max-w-(--container-wide) mx-auto px-6 py-12 md:py-16 grid lg:grid-cols-[1fr_auto_1.05fr] gap-10 items-start">
       <div class="lg:pt-4">
         <div class="text-xs uppercase tracking-widest text-brand font-medium mb-5">Compliance-Autopilot für den Mittelstand</div>
         <h1 class="font-serif text-4xl md:text-5xl leading-[1.05] text-ink">Compliance läuft.<br />Ihr Geschäft auch.</h1>
@@ -64,14 +64,17 @@ const teaserPosts = posts
             </li>
           ))}
         </ul>
-        {/* Zahlen als Kompetenzbeweis, kompakt zwischen Checkliste und CTA. */}
-        <div class="mt-7 pt-5 border-t border-line grid grid-cols-3 gap-x-8 gap-y-4 max-w-md">
-          {[["24", "Branchen im Schnell-Check"], ["20", "Pflicht-Kurse"], ["93", "ISO-Controls"], ["16", "Regulierungen im Katalog"], ["DE", "Hosting"]].map(([zahl, label]) => (
-            <div><div class="font-serif text-2xl text-brand font-semibold">{zahl}</div><div class="text-[11px] uppercase tracking-widest text-ink-muted mt-0.5 leading-snug">{label}</div></div>
-          ))}
-        </div>
         <a href="/kontakt" class="mt-8 inline-flex items-center gap-2 px-7 py-3.5 bg-brand text-paper font-medium no-underline rounded-full shadow-sm shadow-brand/30 hover:bg-ink transition-all">Demo anfragen →</a>
       </div>
+
+      {/* Kennzahlen als eigene schmale Spalte zwischen Text und Teaser:
+          vertikal ab lg, darunter als Drei-Spalten-Reihe. */}
+      <div class="lg:border-l lg:border-line lg:pl-8 lg:pr-2 grid grid-cols-3 lg:grid-cols-1 gap-x-8 gap-y-5 lg:gap-y-7 content-start lg:pt-2">
+        {[["24", "Branchen im Schnell-Check"], ["20", "Pflicht-Kurse"], ["93", "ISO-Controls"], ["16", "Regulierungen im Katalog"], ["DE", "Hosting"]].map(([zahl, label]) => (
+          <div><div class="font-serif text-3xl text-brand font-semibold">{zahl}</div><div class="text-[11px] uppercase tracking-widest text-ink-muted mt-1 leading-snug max-w-[120px]">{label}</div></div>
+        ))}
+      </div>
+
       <RadarTeaser />
     </div>
   </section>
