@@ -8,12 +8,20 @@ import type { NewsPostListItem } from "../lib/api";
 import { KATEGORIE_LABELS } from "../lib/api";
 import KategorieGrafik from "./KategorieGrafik.astro";
 import { formatDateShort } from "../lib/format";
+import { Image } from "astro:assets";
 
 interface Props {
   posts: NewsPostListItem[];
 }
 const { posts } = Astro.props;
 const eintraege = posts.slice(0, 8);
+
+// Echte Fotos je Kategorie (CC0/PD, siehe src/assets/news/LICENSES.md);
+// Fallback ist die generative Kategorie-Grafik.
+const fotoModule = import.meta.glob<{ default: ImageMetadata }>("../assets/news/*.jpg", { eager: true });
+const FOTOS = new Map(
+  Object.entries(fotoModule).map(([pfad, mod]) => [pfad.split("/").pop()!.replace(".jpg", ""), mod.default]),
+);
 // Klone der ersten Karten für die nahtlose Endlos-Schleife.
 const KLONE = 3;
 const track = [...eintraege, ...eintraege.slice(0, Math.min(KLONE, eintraege.length))];
@@ -36,15 +44,17 @@ const track = [...eintraege, ...eintraege.slice(0, Math.min(KLONE, eintraege.len
         <div class="flex gap-4 slider-track" id="slider-track">
           {track.map(post => (
             <a href={`/news/${post.slug}`} class="slider-card no-underline group">
-              <div class="w-24 flex-shrink-0 self-stretch overflow-hidden rounded-l-lg">
-                <KategorieGrafik kategorie={post.kategorie} klasse="h-full" />
+              <div class="w-28 flex-shrink-0 self-stretch overflow-hidden">
+                {FOTOS.has(post.kategorie)
+                  ? <Image src={FOTOS.get(post.kategorie)!} alt="" width={224} class="w-full h-full object-cover" loading="eager" />
+                  : <KategorieGrafik kategorie={post.kategorie} klasse="h-full" />}
               </div>
               <div class="min-w-0 p-3 flex flex-col justify-center gap-1.5">
                 <div class="flex items-center gap-2">
                   <span class={`pill pill-${post.kategorie}`}>{KATEGORIE_LABELS[post.kategorie] ?? post.kategorie}</span>
                   <span class="text-xs text-ink-muted whitespace-nowrap">{formatDateShort(post.published_at)}</span>
                 </div>
-                <span class="font-serif text-[15px] leading-snug text-ink group-hover:text-brand slider-titel">{post.titel}</span>
+                <span class="font-serif text-sm leading-snug text-ink group-hover:text-brand slider-titel">{post.titel}</span>
               </div>
             </a>
           ))}
@@ -60,9 +70,9 @@ const track = [...eintraege, ...eintraege.slice(0, Math.min(KLONE, eintraege.len
   .slider-btn { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--color-line); background: var(--color-paper); color: var(--color-ink-soft); font-size: 12px; line-height: 1; cursor: pointer; transition: all .15s; }
   .slider-btn:hover { border-color: var(--color-brand); color: var(--color-brand); }
   .slider-track { transition: transform .6s cubic-bezier(.3,.7,.3,1); will-change: transform; }
-  .slider-card { display: flex; flex: 0 0 100%; background: var(--color-paper); border: 1px solid var(--color-line); border-radius: 0.5rem; overflow: hidden; min-height: 88px; transition: border-color .15s, box-shadow .15s; }
+  .slider-card { display: flex; flex: 0 0 100%; background: var(--color-paper); border: 1px solid var(--color-line); border-radius: 0.5rem; overflow: hidden; height: 104px; transition: border-color .15s, box-shadow .15s; }
   .slider-card:hover { border-color: var(--color-brand); box-shadow: 0 4px 14px rgba(15, 76, 92, 0.08); }
-  .slider-titel { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .slider-titel { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   @media (min-width: 768px) { .slider-card { flex-basis: calc((100% - 1rem) / 2); } }
   @media (min-width: 1024px) { .slider-card { flex-basis: calc((100% - 2rem) / 3); } }
 </style>
