@@ -154,6 +154,16 @@ app.vaeren.de, *.app.vaeren.de {
 # --- GlitchTip (Self-hosted Sentry-API) ----------------------------------
 # Production-Error-Monitoring. Konrads Daten bleiben EU-side, kein Vendor-Lock.
 errors.app.vaeren.de {
+    # errors.app matcht AUCH das Wildcard *.app.vaeren.de (on_demand). Ohne
+    # explizites on_demand landete der Host gleichzeitig in der eager-Policy UND
+    # der on-demand-Wildcard-Policy → Cert-Serving-Konflikt, der TLS-Handshake
+    # brach mit `internal_error` ab (die Sentry/GlitchTip-Telemetrie schlug fehl).
+    # Konsistent on_demand (wie hinweise.app.vaeren.de) löst den Konflikt; das
+    # cert-allowed-Gate erlaubt errors.app explizit (Infra-Allow-List in
+    # tenants.views.cert_allowed_view).
+    tls {
+        on_demand
+    }
     encode gzip zstd
     reverse_proxy glitchtip-web:8000 {
         header_up X-Forwarded-Proto https
