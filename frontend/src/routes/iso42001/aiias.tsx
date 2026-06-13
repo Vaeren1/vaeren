@@ -17,7 +17,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  type AIIAStatus,
   AIIA_STATUS_LABELS,
+  type AiImpactAssessment,
   createAIIA,
   freigebenAIIA,
   listAIIAs,
@@ -26,8 +28,6 @@ import {
   updateAIIA,
   vorschlagAuswirkungsKategorien,
   vorschlagRisiken,
-  type AIIAStatus,
-  type AiImpactAssessment,
 } from "@/lib/api/iso42001";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -44,7 +44,7 @@ const AUSWIRKUNGS_KATEGORIEN = [
 
 export function Iso42001AIIAsPage() {
   const qc = useQueryClient();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["iso42001-aiias"],
     queryFn: listAIIAs,
   });
@@ -72,7 +72,9 @@ export function Iso42001AIIAsPage() {
       toast.success("Status gewechselt.");
     },
     onError: (e: unknown) => {
-      toast.error(e instanceof Error ? e.message : "Status-Wechsel fehlgeschlagen");
+      toast.error(
+        e instanceof Error ? e.message : "Status-Wechsel fehlgeschlagen",
+      );
     },
   });
 
@@ -94,11 +96,14 @@ export function Iso42001AIIAsPage() {
         <div>
           <h1 className="text-2xl font-semibold">AI Impact Assessments</h1>
           <p className="text-sm text-muted-foreground">
-            ISO/IEC 42001 Annex A.5 — strukturierte Bewertung der Auswirkungen eines
-            KI-Systems. 4-Augen-Approval enforced (Ersteller ≠ Approver).
+            ISO/IEC 42001 Annex A.5 — strukturierte Bewertung der Auswirkungen
+            eines KI-Systems. 4-Augen-Approval enforced (Ersteller ≠ Approver).
           </p>
         </div>
-        <Button onClick={() => setShowForm(true)} disabled={!systems?.results.length}>
+        <Button
+          onClick={() => setShowForm(true)}
+          disabled={!systems?.results.length}
+        >
           + Neue AIIA
         </Button>
       </div>
@@ -106,8 +111,15 @@ export function Iso42001AIIAsPage() {
       <Card>
         <CardContent className="pt-4">
           {isLoading && <p>Lade …</p>}
+          {isError && (
+            <p className="text-destructive">
+              AIIAs konnten nicht geladen werden — bitte Seite neu laden.
+            </p>
+          )}
           {data && data.results.length === 0 && (
-            <p className="text-sm text-muted-foreground">Keine AIIAs erfasst.</p>
+            <p className="text-sm text-muted-foreground">
+              Keine AIIAs erfasst.
+            </p>
           )}
           {data && data.results.length > 0 && (
             <Table>
@@ -128,7 +140,11 @@ export function Iso42001AIIAsPage() {
                     <TableCell>{AIIA_STATUS_LABELS[a.status]}</TableCell>
                     <TableCell>{a.approved_at ? "Ja" : "—"}</TableCell>
                     <TableCell className="space-x-1 text-right">
-                      <Button size="sm" variant="outline" onClick={() => setEdit(a)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setEdit(a)}
+                      >
                         Bearbeiten
                       </Button>
                       {a.status === "entwurf" && (
@@ -147,14 +163,20 @@ export function Iso42001AIIAsPage() {
                           size="sm"
                           variant="outline"
                           onClick={() =>
-                            statusMut.mutate({ id: a.id, status: "approval_offen" })
+                            statusMut.mutate({
+                              id: a.id,
+                              status: "approval_offen",
+                            })
                           }
                         >
                           Approval anfordern
                         </Button>
                       )}
                       {a.status === "approval_offen" && (
-                        <Button size="sm" onClick={() => freigabeMut.mutate(a.id)}>
+                        <Button
+                          size="sm"
+                          onClick={() => freigabeMut.mutate(a.id)}
+                        >
                           Freigeben (GF)
                         </Button>
                       )}
@@ -241,7 +263,11 @@ function AIIAForm({
           </div>
           <div>
             <Label>Titel</Label>
-            <Input value={titel} onChange={(e) => setTitel(e.target.value)} required />
+            <Input
+              value={titel}
+              onChange={(e) => setTitel(e.target.value)}
+              required
+            />
           </div>
           <div>
             <Label>Zweck-Beschreibung</Label>
@@ -287,7 +313,8 @@ function AIIAEditDrawer({
   onClose: () => void;
   onSaved: () => void;
 }) {
-  const readOnly = aiia.status === "freigegeben" || aiia.status === "archiviert";
+  const readOnly =
+    aiia.status === "freigegeben" || aiia.status === "archiviert";
   const [kats, setKats] = useState<string[]>(aiia.auswirkungs_kategorien);
   const [mitigationen, setMitigationen] = useState(aiia.mitigationen);
   const [restrisiko, setRestrisiko] = useState(aiia.restrisiko);
@@ -321,9 +348,12 @@ function AIIAEditDrawer({
       }),
     onSuccess: (v) => {
       setKats(Array.from(new Set([...kats, ...v.kategorien])));
-      toast.info(`KI-Vorschlag (${v.kategorien.length} Kategorien) — bitte prüfen.`);
+      toast.info(
+        `KI-Vorschlag (${v.kategorien.length} Kategorien) — bitte prüfen.`,
+      );
     },
-    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "LLM-Fehler"),
+    onError: (e: unknown) =>
+      toast.error(e instanceof Error ? e.message : "LLM-Fehler"),
   });
 
   const vorschlagRisikenMut = useMutation({
@@ -337,7 +367,8 @@ function AIIAEditDrawer({
       setRisiken([...risiken, ...v.risiken]);
       toast.info(`KI-Vorschlag (${v.risiken.length} Risiken) — bitte prüfen.`);
     },
-    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "LLM-Fehler"),
+    onError: (e: unknown) =>
+      toast.error(e instanceof Error ? e.message : "LLM-Fehler"),
   });
 
   return (
@@ -365,7 +396,9 @@ function AIIAEditDrawer({
                       checked={kats.includes(k)}
                       onChange={(e) =>
                         setKats(
-                          e.target.checked ? [...kats, k] : kats.filter((x) => x !== k),
+                          e.target.checked
+                            ? [...kats, k]
+                            : kats.filter((x) => x !== k),
                         )
                       }
                     />
@@ -448,7 +481,10 @@ function AIIAEditDrawer({
             Schließen
           </Button>
           {!readOnly && (
-            <Button onClick={() => saveMut.mutate()} disabled={saveMut.isPending}>
+            <Button
+              onClick={() => saveMut.mutate()}
+              disabled={saveMut.isPending}
+            >
               Speichern
             </Button>
           )}

@@ -15,15 +15,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  type AiIncident,
+  type AiIncidentSchweregrad,
+  type AiIncidentTyp,
   INCIDENT_TYP_LABELS,
   createIncident,
   eskalierenAlsDatenpanne,
   incidentAbschliessen,
   listAiSystems,
   listIncidents,
-  type AiIncident,
-  type AiIncidentSchweregrad,
-  type AiIncidentTyp,
 } from "@/lib/api/iso42001";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -39,11 +39,16 @@ const TYP_VALUES: AiIncidentTyp[] = [
   "sonstiges",
 ];
 
-const SCHWERE_VALUES: AiIncidentSchweregrad[] = ["niedrig", "mittel", "hoch", "kritisch"];
+const SCHWERE_VALUES: AiIncidentSchweregrad[] = [
+  "niedrig",
+  "mittel",
+  "hoch",
+  "kritisch",
+];
 
 export function Iso42001IncidentsPage() {
   const qc = useQueryClient();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["iso42001-incidents"],
     queryFn: listIncidents,
   });
@@ -108,8 +113,8 @@ export function Iso42001IncidentsPage() {
         <div>
           <h1 className="text-2xl font-semibold">KI-Vorfälle</h1>
           <p className="text-sm text-muted-foreground">
-            Bias, fehlerhafte Outputs, Drift, Missbrauch — passiv dokumentiert, bei
-            PII-Bezug nach DSGVO Art. 33 als Datenpanne eskalierbar.
+            Bias, fehlerhafte Outputs, Drift, Missbrauch — passiv dokumentiert,
+            bei PII-Bezug nach DSGVO Art. 33 als Datenpanne eskalierbar.
           </p>
         </div>
         <Button onClick={() => setShowForm(true)}>+ Vorfall melden</Button>
@@ -118,8 +123,15 @@ export function Iso42001IncidentsPage() {
       <Card>
         <CardContent className="pt-4">
           {isLoading && <p>Lade …</p>}
+          {isError && (
+            <p className="text-destructive">
+              Vorfälle konnten nicht geladen werden — bitte Seite neu laden.
+            </p>
+          )}
           {data && data.results.length === 0 && (
-            <p className="text-sm text-muted-foreground">Keine Vorfälle erfasst.</p>
+            <p className="text-sm text-muted-foreground">
+              Keine Vorfälle erfasst.
+            </p>
           )}
           {data && data.results.length > 0 && (
             <Table>
@@ -143,7 +155,9 @@ export function Iso42001IncidentsPage() {
                     <TableCell>{i.entdeckt_am}</TableCell>
                     <TableCell>
                       {i.offen ? (
-                        <span className="text-rose-700">offen seit {i.offen_seit_tagen}d</span>
+                        <span className="text-rose-700">
+                          offen seit {i.offen_seit_tagen}d
+                        </span>
                       ) : (
                         <span className="text-emerald-700">abgeschlossen</span>
                       )}
@@ -198,9 +212,7 @@ export function Iso42001IncidentsPage() {
         <EskalationsDialog
           incident={eskalate}
           onCancel={() => setEskalate(null)}
-          onConfirm={(force) =>
-            eskalateMut.mutate({ id: eskalate.id, force })
-          }
+          onConfirm={(force) => eskalateMut.mutate({ id: eskalate.id, force })}
           isPending={eskalateMut.isPending}
         />
       )}
@@ -247,8 +259,8 @@ function AbschluessenDialog({
       >
         <h2 className="mb-2 text-lg font-semibold">Vorfall abschließen</h2>
         <p className="text-sm text-muted-foreground">
-          Bestätigt, dass der Vorfall <strong>{incident.titel}</strong> bearbeitet
-          ist. Die Korrekturmaßnahme wird in der Akte dokumentiert.
+          Bestätigt, dass der Vorfall <strong>{incident.titel}</strong>{" "}
+          bearbeitet ist. Die Korrekturmaßnahme wird in der Akte dokumentiert.
         </p>
         <div className="mt-3 space-y-3">
           <div>
@@ -329,7 +341,11 @@ function IncidentForm({
         <div className="space-y-3">
           <div>
             <Label>Titel</Label>
-            <Input value={titel} onChange={(e) => setTitel(e.target.value)} required />
+            <Input
+              value={titel}
+              onChange={(e) => setTitel(e.target.value)}
+              required
+            />
           </div>
           <div className="grid grid-cols-3 gap-2">
             <div>
@@ -351,7 +367,9 @@ function IncidentForm({
               <select
                 className="w-full rounded border px-3 py-2 text-sm"
                 value={schwere}
-                onChange={(e) => setSchwere(e.target.value as AiIncidentSchweregrad)}
+                onChange={(e) =>
+                  setSchwere(e.target.value as AiIncidentSchweregrad)
+                }
               >
                 {SCHWERE_VALUES.map((s) => (
                   <option key={s} value={s}>
@@ -375,7 +393,9 @@ function IncidentForm({
             <select
               className="w-full rounded border px-3 py-2 text-sm"
               value={systemId}
-              onChange={(e) => setSystemId(e.target.value ? Number(e.target.value) : "")}
+              onChange={(e) =>
+                setSystemId(e.target.value ? Number(e.target.value) : "")
+              }
             >
               <option value="">— kein bestimmtes System —</option>
               {systems.map((s) => (
@@ -424,11 +444,13 @@ function EskalationsDialog({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
       <div className="w-[560px] max-w-full rounded-md bg-white p-6 shadow-xl">
-        <h2 className="mb-2 text-lg font-semibold">Als Datenpanne eskalieren?</h2>
+        <h2 className="mb-2 text-lg font-semibold">
+          Als Datenpanne eskalieren?
+        </h2>
         <p className="text-sm text-muted-foreground">
-          Wenn personenbezogene Daten betroffen sind, ist eine Eskalation nach DSGVO
-          Art. 33 (72-h-Frist) erforderlich. Die Datenpanne wird mit Daten aus dem
-          Vorfall vorausgefüllt.
+          Wenn personenbezogene Daten betroffen sind, ist eine Eskalation nach
+          DSGVO Art. 33 (72-h-Frist) erforderlich. Die Datenpanne wird mit Daten
+          aus dem Vorfall vorausgefüllt.
         </p>
         <div className="my-3 rounded bg-amber-50 p-3 text-xs">
           Vorfall: <strong>{incident.titel}</strong>

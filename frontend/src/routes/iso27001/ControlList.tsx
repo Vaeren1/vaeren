@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { listControls, type ImplementationStatus } from "@/lib/api/iso27001";
+import { type ImplementationStatus, listControls } from "@/lib/api/iso27001";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -43,10 +43,9 @@ export function Iso27001ControlList() {
   const [kategorieFilter, setKategorieFilter] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["iso27001-controls", kategorieFilter],
-    queryFn: () =>
-      listControls({ kategorie: kategorieFilter || undefined }),
+    queryFn: () => listControls({ kategorie: kategorieFilter || undefined }),
   });
 
   const filtered = data?.results.filter(
@@ -85,7 +84,11 @@ export function Iso27001ControlList() {
         </div>
       </CardHeader>
       <CardContent>
-        {isLoading ? (
+        {isError ? (
+          <p className="text-destructive">
+            Controls konnten nicht geladen werden — bitte Seite neu laden.
+          </p>
+        ) : isLoading ? (
           <p>Lade Controls …</p>
         ) : (
           <Table>

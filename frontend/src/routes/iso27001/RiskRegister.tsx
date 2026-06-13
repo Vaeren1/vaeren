@@ -16,15 +16,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  type IsmsAsset,
+  type IsmsRiskAssessment,
+  type LlmEntwurfResponse,
   akzeptiereRisiko,
   createRisiko,
   listAssets,
   listRisiken,
   llmTreatmentVorschlag,
   updateRisiko,
-  type IsmsAsset,
-  type IsmsRiskAssessment,
-  type LlmEntwurfResponse,
 } from "@/lib/api/iso27001";
 import { useMitarbeiterList } from "@/lib/api/mitarbeiter";
 import { useAuthStore } from "@/lib/stores/auth-store";
@@ -59,7 +59,7 @@ export function Iso27001RiskRegister() {
   const user = useAuthStore((s) => s.user);
   const isGf = user?.tenant_role === "geschaeftsfuehrer";
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["iso27001-risiken"],
     queryFn: listRisiken,
   });
@@ -128,16 +128,23 @@ export function Iso27001RiskRegister() {
                 Heatmap
               </button>
             </div>
-            <Button onClick={() => setShowCreate(true)}>+ Risiko anlegen</Button>
+            <Button onClick={() => setShowCreate(true)}>
+              + Risiko anlegen
+            </Button>
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        {isLoading ? (
+        {isError ? (
+          <p className="text-destructive">
+            Risiken konnten nicht geladen werden — bitte Seite neu laden.
+          </p>
+        ) : isLoading ? (
           <p>Lade …</p>
         ) : !data || data.results.length === 0 ? (
           <p className="text-muted-foreground text-sm">
-            Noch keine Risiken erfasst. Klick „+ Risiko anlegen", um zu beginnen.
+            Noch keine Risiken erfasst. Klick „+ Risiko anlegen", um zu
+            beginnen.
           </p>
         ) : view === "liste" ? (
           <RisikoListe
@@ -254,11 +261,7 @@ function RisikoListe({
                 )}
               </TableCell>
               <TableCell className="space-x-1">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onEdit(r)}
-                >
+                <Button size="sm" variant="outline" onClick={() => onEdit(r)}>
                   Bearbeiten
                 </Button>
                 {canAkzeptieren && isGf && (
@@ -676,7 +679,10 @@ function AkzeptanzDialog({
 
   const mut = useMutation({
     mutationFn: () =>
-      akzeptiereRisiko(risiko.id, mitarbeiterId === "" ? 0 : Number(mitarbeiterId)),
+      akzeptiereRisiko(
+        risiko.id,
+        mitarbeiterId === "" ? 0 : Number(mitarbeiterId),
+      ),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["iso27001-risiken"] });
       qc.invalidateQueries({ queryKey: ["iso27001-dashboard"] });

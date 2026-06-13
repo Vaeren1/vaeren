@@ -13,12 +13,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  type ControlImplementationStatus,
+  type ControlListItem,
   KATEGORIE_LABELS,
   STATUS_LABELS,
   listControls,
   upsertControlImplementation,
-  type ControlImplementationStatus,
-  type ControlListItem,
 } from "@/lib/api/iso42001";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
@@ -34,7 +34,7 @@ const STATUS_VALUES: ControlImplementationStatus[] = [
 
 export function Iso42001ControlListPage() {
   const qc = useQueryClient();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["iso42001-controls"],
     queryFn: listControls,
   });
@@ -89,7 +89,8 @@ export function Iso42001ControlListPage() {
         <div>
           <h1 className="text-2xl font-semibold">Statement of Applicability</h1>
           <p className="text-sm text-muted-foreground">
-            38 Annex-A-Controls. Jedes Control muss umgesetzt oder begründet ausgeschlossen werden.
+            38 Annex-A-Controls. Jedes Control muss umgesetzt oder begründet
+            ausgeschlossen werden.
           </p>
         </div>
         <select
@@ -107,6 +108,11 @@ export function Iso42001ControlListPage() {
       </div>
 
       {isLoading && <p>Lade …</p>}
+      {isError && (
+        <p className="text-destructive">
+          Controls konnten nicht geladen werden — bitte Seite neu laden.
+        </p>
+      )}
 
       {Object.entries(grouped).map(([kat, items]) => (
         <Card key={kat}>
@@ -127,17 +133,25 @@ export function Iso42001ControlListPage() {
               <TableBody>
                 {items.map((c) => (
                   <TableRow key={c.code}>
-                    <TableCell className="font-mono text-xs">{c.code}</TableCell>
+                    <TableCell className="font-mono text-xs">
+                      {c.code}
+                    </TableCell>
                     <TableCell>
                       <div className="font-medium">{c.title_de}</div>
-                      <div className="text-xs text-slate-500">{c.description_de}</div>
+                      <div className="text-xs text-slate-500">
+                        {c.description_de}
+                      </div>
                     </TableCell>
                     <TableCell>{statusBadge(c.status)}</TableCell>
                     <TableCell>
                       {c.anwendbar === null ? "—" : c.anwendbar ? "Ja" : "Nein"}
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button size="sm" variant="outline" onClick={() => setEdit(c)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setEdit(c)}
+                      >
                         Bearbeiten
                       </Button>
                     </TableCell>
@@ -156,7 +170,9 @@ export function Iso42001ControlListPage() {
               <h2 className="text-lg font-semibold">
                 {edit.code} — {edit.title_de}
               </h2>
-              <p className="text-xs text-muted-foreground">{edit.description_de}</p>
+              <p className="text-xs text-muted-foreground">
+                {edit.description_de}
+              </p>
             </div>
             <ControlEditForm
               initial={edit}
@@ -193,7 +209,9 @@ function ControlEditForm({
   }) => void;
   isPending: boolean;
 }) {
-  const [anwendbar, setAnwendbar] = useState<boolean>(initial.anwendbar ?? true);
+  const [anwendbar, setAnwendbar] = useState<boolean>(
+    initial.anwendbar ?? true,
+  );
   const [status, setStatus] = useState<ControlImplementationStatus>(
     initial.status ?? "offen",
   );
@@ -228,7 +246,9 @@ function ControlEditForm({
         <select
           className="w-full rounded border px-3 py-2 text-sm"
           value={status}
-          onChange={(e) => setStatus(e.target.value as ControlImplementationStatus)}
+          onChange={(e) =>
+            setStatus(e.target.value as ControlImplementationStatus)
+          }
         >
           {STATUS_VALUES.map((s) => (
             <option key={s} value={s}>

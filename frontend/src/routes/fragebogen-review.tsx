@@ -234,6 +234,10 @@ export function FragebogenReviewPage() {
     queryKey: ["fragebogen", fbId],
     queryFn: () => fragebogen.detail(fbId),
     enabled: Number.isFinite(fbId),
+    // Tier-2-OCR-Analyse läuft asynchron im Worker. Solange der Status
+    // "hochgeladen" ist, alle 3s pollen, bis er auf "analysiert"/"fehler" wechselt.
+    refetchInterval: (query) =>
+      query.state.data?.status === "hochgeladen" ? 3000 : false,
   });
 
   const vorschlagen = useMutation({
@@ -297,6 +301,36 @@ export function FragebogenReviewPage() {
   if (detail.isLoading) return <p>Lade …</p>;
   if (detail.isError || !fb)
     return <p className="text-destructive">Fehler beim Laden.</p>;
+
+  // Tier-2-OCR-Analyse läuft noch (asynchron) → Warte-Hinweis statt leerer Liste.
+  if (fb.status === "hochgeladen") {
+    return (
+      <div className="space-y-3 max-w-2xl">
+        <h1 className="text-xl font-semibold">{fb.dateiname}</h1>
+        <Card>
+          <CardContent className="py-8 text-center space-y-2">
+            <p className="font-medium">Dokument wird analysiert …</p>
+            <p className="text-sm text-muted-foreground">
+              Gescanntes PDF: die Texterkennung (OCR) läuft im Hintergrund und
+              kann bei mehrseitigen Scans 1–2 Minuten dauern. Die Seite
+              aktualisiert sich automatisch.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+  if (fb.status === "fehler" && fb.fragen.length === 0) {
+    return (
+      <div className="space-y-3 max-w-2xl">
+        <h1 className="text-xl font-semibold">{fb.dateiname}</h1>
+        <p className="text-destructive">
+          Die automatische Analyse ist fehlgeschlagen. Bitte das Dokument erneut
+          hochladen oder ein strukturiertes Format (xlsx / PDF-Formular) nutzen.
+        </p>
+      </div>
+    );
+  }
 
   // Noch keine Antwort-Entwürfe → Vorschlagen anbieten.
   const hatEntwuerfe = fb.fragen.some(

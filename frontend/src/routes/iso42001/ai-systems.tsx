@@ -13,23 +13,28 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  type AiSystemRegistration,
   RISIKO_AIMS_LABELS,
+  type RisikoStufeAIMS,
   createAiSystem,
   listAiSystems,
   updateAiSystem,
-  type AiSystemRegistration,
-  type RisikoStufeAIMS,
 } from "@/lib/api/iso42001";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
-const RISIKO_VALUES: RisikoStufeAIMS[] = ["niedrig", "mittel", "hoch", "kritisch"];
+const RISIKO_VALUES: RisikoStufeAIMS[] = [
+  "niedrig",
+  "mittel",
+  "hoch",
+  "kritisch",
+];
 
 export function Iso42001AiSystemsPage() {
   const qc = useQueryClient();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["iso42001-ai-systems"],
     queryFn: listAiSystems,
   });
@@ -61,8 +66,8 @@ export function Iso42001AiSystemsPage() {
         <div>
           <h1 className="text-2xl font-semibold">AI-Systeme im AIMS-Scope</h1>
           <p className="text-sm text-muted-foreground">
-            Erweitert das KI-Inventar um AIMS-Felder (AI Risk Owner, Bias-Tests, Monitoring,
-            Decommissioning).
+            Erweitert das KI-Inventar um AIMS-Felder (AI Risk Owner, Bias-Tests,
+            Monitoring, Decommissioning).
           </p>
         </div>
       </div>
@@ -73,9 +78,15 @@ export function Iso42001AiSystemsPage() {
         </CardHeader>
         <CardContent>
           {isLoading && <p>Lade …</p>}
+          {isError && (
+            <p className="text-destructive">
+              KI-Systeme konnten nicht geladen werden — bitte Seite neu laden.
+            </p>
+          )}
           {data && data.results.length === 0 && (
             <p className="text-sm text-muted-foreground">
-              Noch kein KI-Tool als AI-System registriert. Lege zunächst KI-Tools im{" "}
+              Noch kein KI-Tool als AI-System registriert. Lege zunächst
+              KI-Tools im{" "}
               <Link to="/ki-inventar" className="underline">
                 KI-Inventar
               </Link>{" "}
@@ -97,13 +108,19 @@ export function Iso42001AiSystemsPage() {
               <TableBody>
                 {data.results.map((s) => (
                   <TableRow key={s.id}>
-                    <TableCell className="font-medium">{s.ki_tool_name}</TableCell>
+                    <TableCell className="font-medium">
+                      {s.ki_tool_name}
+                    </TableCell>
                     <TableCell>{s.ki_tool_anbieter}</TableCell>
                     <TableCell>{RISIKO_AIMS_LABELS[s.risiko_aims]}</TableCell>
                     <TableCell>{s.ki_tool_risiko}</TableCell>
                     <TableCell>{s.in_aims_scope ? "Ja" : "Nein"}</TableCell>
                     <TableCell className="text-right">
-                      <Button size="sm" variant="outline" onClick={() => setEdit(s)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setEdit(s)}
+                      >
                         Bearbeiten
                       </Button>
                     </TableCell>
@@ -125,7 +142,10 @@ export function Iso42001AiSystemsPage() {
               initial={edit}
               onCancel={() => setEdit(null)}
               onSave={(payload) =>
-                saveMut.mutate({ id: edit.id, payload: { ki_tool: edit.ki_tool, ...payload } })
+                saveMut.mutate({
+                  id: edit.id,
+                  payload: { ki_tool: edit.ki_tool, ...payload },
+                })
               }
               isPending={saveMut.isPending}
             />
@@ -149,11 +169,15 @@ function AiSystemEditForm({
 }) {
   const [risiko, setRisiko] = useState<RisikoStufeAIMS>(initial.risiko_aims);
   const [scope, setScope] = useState(initial.in_aims_scope);
-  const [trainingsDaten, setTrainingsDaten] = useState(initial.trainings_daten_quelle);
+  const [trainingsDaten, setTrainingsDaten] = useState(
+    initial.trainings_daten_quelle,
+  );
   const [biasTest, setBiasTest] = useState(initial.bias_tests_durchgefuehrt);
   const [biasUrl, setBiasUrl] = useState(initial.bias_tests_dokument_url);
   const [monitoring, setMonitoring] = useState(initial.monitoring_plan);
-  const [decommissioning, setDecommissioning] = useState(initial.decommissioning_plan);
+  const [decommissioning, setDecommissioning] = useState(
+    initial.decommissioning_plan,
+  );
 
   return (
     <form
@@ -230,7 +254,9 @@ function AiSystemEditForm({
         />
       </div>
       <div>
-        <label className="mb-1 block text-sm">Decommissioning-Plan (A.6.2.8)</label>
+        <label className="mb-1 block text-sm">
+          Decommissioning-Plan (A.6.2.8)
+        </label>
         <textarea
           rows={2}
           className="w-full rounded border px-3 py-2 text-sm"

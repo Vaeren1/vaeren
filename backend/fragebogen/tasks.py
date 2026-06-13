@@ -139,3 +139,47 @@ def _fuehre_tier2_export_aus(fragebogen_id: int) -> str:
                 os.unlink(out_pfad)
             except OSError:
                 pass
+
+
+@shared_task(name="fragebogen.analysiere_ocr")
+def analysiere_fragebogen_ocr(fragebogen_id: int, tenant_schema: str) -> dict:
+    """Analysiert ein hochgeladenes Tier-2-PDF asynchron (OCR-Ingestion).
+
+    Die OCR-Extraktion (pdf2image + Tesseract + LLM-Segmentierung pro Seite) ist
+    zu langsam für den HTTP-Request (mehrseitige Scans → Gateway-Timeout). Der
+    Upload legt den Fragebogen in HOCHGELADEN an; dieser Task extrahiert die
+    Fragen und setzt ANALYSIERT (bzw. FEHLER).
+
+    Idempotent: existieren bereits Fragen, wird übersprungen (Retry-sicher).
+    """
+    from django_tenants.utils import schema_context
+
+    with schema_context(tenant_schema):
+        from django.db import transaction
+
+        # Extraktion + Frage-Erzeugung aus views wiederverwenden (gleiche
+        # _EXTRAKTOREN-Auflösung, die auch Tests mocken; Lazy-Import gegen Zyklus).
+        from .models import Fragebogen, FragebogenStatus
+        from .views import _erzeuge_fragen, _extrahiere_fragen
+
+        fb = Fragebogen.objects.filter(pk=fragebogen_id).first()
+        if fb is None:
+            logger.warning("OCR-Analyse: Fragebogen %s nicht gefunden", fragebogen_id)
+            return {"error": "not_found", "fragebogen_id": fragebogen_id}
+        if fb.fragen.exists():
+            return {"skipped": True, "fragebogen_id": fragebogen_id}
+
+        try:
+            pfad = fb.original_datei.path
+            fragen_dicts = _extrahiere_fragen(fb.format, pfad)
+            with transaction.atomic():
+                _erzeuge_fragen(fb, fragen_dicts)
+                fb.status = FragebogenStatus.ANALYSIERT
+                fb.save(update_fields=["status"])
+            logger.info("OCR-Analyse fertig: fb=%s, %d Fragen", fb.pk, len(fragen_dicts))
+            return {"fragebogen_id": fb.pk, "fragen": len(fragen_dicts)}
+        except Exception as exc:
+            logger.exception("OCR-Analyse fehlgeschlagen für Fragebogen %s", fb.pk)
+            fb.status = FragebogenStatus.FEHLER
+            fb.save(update_fields=["status"])
+            return {"error": str(exc), "fragebogen_id": fb.pk}

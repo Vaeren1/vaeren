@@ -12,6 +12,7 @@ View-Only-Zugriff.
 
 from __future__ import annotations
 
+import logging
 import os
 import tempfile
 from typing import ClassVar
@@ -88,6 +89,8 @@ class FragebogenPermission(BasePermission):
 
 # --- Mapping Extraktor + Export pro Format ---------------------------------
 
+logger = logging.getLogger(__name__)
+
 _EXTRAKTOREN = {
     "xlsx": extrahiere_fragen_xlsx,
     "pdf_form": extrahiere_fragen_pdfform,
@@ -101,6 +104,29 @@ def _extrahiere_fragen(format_: str, pfad: str) -> list[dict]:
     """Wählt den passenden Extraktor je Format (Tier 1/2/3)."""
     extraktor = _EXTRAKTOREN.get(format_)
     return extraktor(pfad) if extraktor else []
+
+
+def _erzeuge_fragen(fb, fragen_dicts: list[dict]) -> None:
+    """Legt die Frage-Records eines Fragebogens aus den Extraktor-Dicts an.
+
+    Geteilt zwischen synchronem Upload (Tier 1) und dem asynchronen OCR-Task
+    (Tier 2), damit die Seitenzahl-Logik (F1) nur an einer Stelle lebt.
+    """
+    for i, fd in enumerate(fragen_dicts, start=1):
+        # Seitenzahl kann je nach Extraktor top-level (struktur) oder in
+        # feld_referenz (OCR) liegen — beide Stellen lesen, damit mehrseitige
+        # Scans nicht alle auf Seite 1 landen (F1).
+        seite = fd.get("seite") or fd.get("feld_referenz", {}).get("seite", 1)
+        Frage.objects.create(
+            fragebogen=fb,
+            reihenfolge=i,
+            seite=seite or 1,
+            nummer=(fd.get("nummer") or "")[:40],
+            text=fd.get("text", ""),
+            feld_referenz=fd.get("feld_referenz", {}) or {},
+            kategorie=(fd.get("kategorie") or "")[:120],
+            extraktion_quelle=fd.get("extraktion_quelle", "struktur"),
+        )
 
 
 class FragebogenViewSet(viewsets.ModelViewSet):
@@ -191,38 +217,48 @@ class FragebogenViewSet(viewsets.ModelViewSet):
 
         try:
             format_, tier = erkenne_format_und_tier(tmp_pfad)
-            fragen_dicts = _extrahiere_fragen(format_, tmp_pfad)
+            gemeinsame_felder = {
+                "dateiname": datei.name[:255],
+                "format": format_,
+                "tier": tier,
+                "quelle_oem": request.data.get("quelle_oem", "")[:255],
+                "hochgeladen_von": request.user,
+            }
 
-            with transaction.atomic():
-                fb = Fragebogen.objects.create(
-                    dateiname=datei.name[:255],
-                    format=format_,
-                    tier=tier,
-                    quelle_oem=request.data.get("quelle_oem", "")[:255],
-                    hochgeladen_von=request.user,
-                    status=FragebogenStatus.ANALYSIERT,
-                )
-                # Original-Datei am Model speichern (Re-Read von Beginn).
-                with open(tmp_pfad, "rb") as fh:
-                    fb.original_datei.save(datei.name, File(fh), save=True)
+            if format_ == "pdf_unstrukturiert":
+                # Tier-2-OCR (pdf2image + Tesseract + LLM pro Seite) ist langsam →
+                # NICHT synchron im HTTP-Request (mehrseitige Scans liefen sonst in
+                # einen Gateway-Timeout, Spec §7). Fragebogen wird in HOCHGELADEN
+                # angelegt; der Celery-Task analysiert und setzt ANALYSIERT. Das
+                # Frontend pollt bis dahin. Sync-Fallback, falls Broker nicht da.
+                with transaction.atomic():
+                    fb = Fragebogen.objects.create(
+                        **gemeinsame_felder, status=FragebogenStatus.HOCHGELADEN
+                    )
+                    with open(tmp_pfad, "rb") as fh:
+                        fb.original_datei.save(datei.name, File(fh), save=True)
 
-                for i, fd in enumerate(fragen_dicts, start=1):
-                    # Seitenzahl kann je nach Extraktor top-level (struktur) oder
-                    # in feld_referenz (OCR) liegen — beide Stellen lesen, damit
-                    # mehrseitige Scans nicht alle auf Seite 1 landen (F1).
-                    seite = fd.get("seite") or fd.get("feld_referenz", {}).get(
-                        "seite", 1
+                from .tasks import analysiere_fragebogen_ocr
+
+                try:
+                    analysiere_fragebogen_ocr.delay(fb.pk, connection.schema_name)
+                except Exception:  # pragma: no cover — Broker-Ausfall ist Infrastruktur
+                    logger.warning(
+                        "OCR-Enqueue für Fragebogen %s fehlgeschlagen — synchroner Fallback.",
+                        fb.pk,
+                        exc_info=True,
                     )
-                    Frage.objects.create(
-                        fragebogen=fb,
-                        reihenfolge=i,
-                        seite=seite or 1,
-                        nummer=(fd.get("nummer") or "")[:40],
-                        text=fd.get("text", ""),
-                        feld_referenz=fd.get("feld_referenz", {}) or {},
-                        kategorie=(fd.get("kategorie") or "")[:120],
-                        extraktion_quelle=fd.get("extraktion_quelle", "struktur"),
+                    analysiere_fragebogen_ocr(fb.pk, connection.schema_name)
+            else:
+                # Tier 1 / strukturiert: schnell genug für synchrone Extraktion.
+                fragen_dicts = _extrahiere_fragen(format_, tmp_pfad)
+                with transaction.atomic():
+                    fb = Fragebogen.objects.create(
+                        **gemeinsame_felder, status=FragebogenStatus.ANALYSIERT
                     )
+                    with open(tmp_pfad, "rb") as fh:
+                        fb.original_datei.save(datei.name, File(fh), save=True)
+                    _erzeuge_fragen(fb, fragen_dicts)
         finally:
             try:
                 os.unlink(tmp_pfad)

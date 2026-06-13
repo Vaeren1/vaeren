@@ -223,6 +223,53 @@ def test_upload_ocr_seiten_aus_feld_referenz(
     assert seiten["Frage auf Seite 2?"] == 2
 
 
+@pytest.mark.django_db
+def test_tier2_upload_async_enqueued_then_task_analysiert(
+    tenant_client_gf, _pdf_unstrukturiert_upload, _media_tmp, monkeypatch
+):
+    """Tier-2-OCR läuft asynchron: Upload → HOCHGELADEN (0 Fragen) + Task enqueued;
+    Task-Lauf → ANALYSIERT + Fragen (Seitenlogik); zweiter Lauf idempotent."""
+    from unittest.mock import patch
+
+    from fragebogen import views as fb_views
+    from fragebogen.models import Fragebogen, FragebogenStatus
+    from fragebogen.tasks import analysiere_fragebogen_ocr
+
+    fake_ocr = lambda pfad: [  # noqa: E731
+        {"text": "Frage A?", "feld_referenz": {"seite": 1}, "extraktion_quelle": "ocr"},
+        {"text": "Frage B?", "feld_referenz": {"seite": 2}, "extraktion_quelle": "ocr"},
+    ]
+    monkeypatch.setitem(fb_views._EXTRAKTOREN, "pdf_unstrukturiert", fake_ocr)
+    schema = tenant_client_gf_schema(tenant_client_gf)
+
+    # .delay mocken (NICHT ausführen) → Upload muss HOCHGELADEN + 0 Fragen liefern.
+    with patch("fragebogen.tasks.analysiere_fragebogen_ocr.delay") as delay:
+        r = tenant_client_gf.post(
+            "/api/fragebogen/upload/", {"datei": _pdf_unstrukturiert_upload}
+        )
+    assert r.status_code == 201, r.content
+    fb_json = r.json()
+    assert fb_json["status"] == "hochgeladen"
+    assert fb_json["tier"] == 2
+    assert len(fb_json["fragen"]) == 0
+    delay.assert_called_once()
+    fb_id = fb_json["id"]
+    assert delay.call_args.args == (fb_id, schema)
+
+    # Task ausführen → ANALYSIERT + 2 Fragen mit korrekter Seitenzahl.
+    res = analysiere_fragebogen_ocr(fb_id, schema)
+    assert res["fragen"] == 2
+    with schema_context(schema):
+        fb = Fragebogen.objects.get(pk=fb_id)
+        assert fb.status == FragebogenStatus.ANALYSIERT
+        assert fb.fragen.count() == 2
+        assert {f.seite for f in fb.fragen.all()} == {1, 2}
+
+    # Idempotenz: zweiter Lauf überspringt (Retry-sicher).
+    res2 = analysiere_fragebogen_ocr(fb_id, schema)
+    assert res2.get("skipped") is True
+
+
 def tenant_client_gf_schema(client):
     """Liest das Tenant-Schema aus dem Test-Client-Host (HTTP_HOST → Tenant)."""
     from django.db import connection
