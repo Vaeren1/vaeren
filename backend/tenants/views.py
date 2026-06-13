@@ -325,13 +325,24 @@ def cert_allowed_view(request):
       ruft, kein Sicherheitsrisiko — wir geben nur 'ist Host registriert' preis,
       was via DNS-Lookup eh erkennbar wäre.
     - KEIN Throttling, weil Caddy potentiell oft pingt.
-    - Reine Existenz-Check via TenantDomain — kein Schema-Switch.
+    - Reine Existenz-Check via TenantDomain (+ Infra-Allow-List) — kein Schema-Switch.
+
+    Infra-Allow-List: `errors.app.vaeren.de` (self-hosted GlitchTip) hat einen
+    eigenen Caddy-Block mit eager-Cert, matcht aber AUCH das Wildcard
+    `*.app.vaeren.de` mit On-Demand-TLS. Ohne diese Allow-List fragt Caddy für
+    den Host hier nach, bekommt 404 und bricht den TLS-Handshake mit
+    `internal_error` ab (obwohl ein gültiges Cert im Storage liegt) — die
+    Sentry/GlitchTip-Telemetrie schlägt dann fehl. Konfigurierbar via Setting,
+    Default deckt die bekannten Infra-Hosts ab.
     """
     from .models import TenantDomain
 
     host = request.GET.get("domain", "").strip().lower()
     if not host:
         return Response({"detail": "domain required"}, status=400)
-    if TenantDomain.objects.filter(domain=host).exists():
+    infra_hosts = getattr(
+        settings, "CERT_ALLOWED_INFRA_HOSTS", ("errors.app.vaeren.de",)
+    )
+    if host in infra_hosts or TenantDomain.objects.filter(domain=host).exists():
         return Response({"allowed": True})
     return Response({"detail": "not registered", "domain": host}, status=404)
