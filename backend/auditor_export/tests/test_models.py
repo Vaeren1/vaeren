@@ -20,7 +20,8 @@ from auditor_export.models import (
 from tests.factories import TenantDomainFactory, TenantFactory
 
 
-MAPPE_ID_RE = re.compile(r"^VAE-\d{4}-\d{4}-[a-f0-9]{4}$")
+# Suffix von 4 → 10 Hex-Zeichen erhöht (40 Bit) gegen Cross-Tenant-Index-Kollision.
+MAPPE_ID_RE = re.compile(r"^VAE-\d{4}-\d{4}-[a-f0-9]{10}$")
 
 
 @pytest.fixture

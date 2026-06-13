@@ -112,7 +112,20 @@ class OnboardingWizardViewSet(ViewSet):
         name = request.data.get("firmenname", "")[:255]
         website = request.data.get("website", "")[:200]
         demo = bool(request.data.get("demo", False))
-        fakten = recherchiere(firmenname=name, website=website, demo=demo)
+        try:
+            fakten = recherchiere(firmenname=name, website=website, demo=demo)
+        except NotImplementedError:
+            # Live-OSINT (_llm_recherche) ist noch nicht implementiert (Backlog).
+            # Sauberer 503 statt ungefangenem 500, bis der Live-Pfad steht.
+            return Response(
+                {
+                    "detail": (
+                        "Live-Recherche ist noch nicht verfügbar. "
+                        "Bitte den Demo-Modus nutzen (demo=true)."
+                    )
+                },
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
         model_fields = {f.name for f in UnternehmensProfil._meta.fields}
         defaults = {"website": website, "recherche_rohdaten": fakten}
         defaults.update({k: v for k, v in fakten.items() if k in model_fields})

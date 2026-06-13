@@ -159,6 +159,16 @@ class MfaLoginView(APIView):
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
+        # Trial-Gate (Defense-in-depth — Stufe 1 blockt normalerweise schon vor
+        # der Token-Ausgabe). Lazy-Import vermeidet Zyklus auth_views ↔ mfa_views.
+        from core.auth_views import TRIAL_EXPIRED_MESSAGE, tenant_trial_expired
+
+        if tenant_trial_expired():
+            return Response(
+                {"detail": "trial_expired", "message": TRIAL_EXPIRED_MESSAGE},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         # Code gegen User's TOTP-Authenticator validieren.
         from allauth.mfa.models import Authenticator
 

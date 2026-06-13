@@ -287,6 +287,23 @@ def test_token_round_trip():
     assert parse_token(tok) == 123
 
 
+def test_token_bound_to_tenant_schema_rejects_replay():
+    """Cross-Tenant-Replay-Schutz: Ein für Schema A signierter Token wird unter
+    einem anderen aktiven Schema NICHT aufgelöst (parse_token → None). Sonst
+    könnte ein Token von Tenant A gegen die Subdomain von Tenant B abgespielt
+    werden (Task-PKs sind pro Schema sequenziell)."""
+    from django.db import connection
+
+    # Token für ein fremdes Schema 'acme' — aktives Schema im Test ist ein anderes.
+    fremd = make_token(123, schema_name="acme")
+    assert connection.schema_name != "acme"
+    assert parse_token(fremd) is None
+
+    # Mit passendem Schema löst derselbe Token-Inhalt korrekt auf.
+    eigen = make_token(123, schema_name=connection.schema_name)
+    assert parse_token(eigen) == 123
+
+
 def test_invalid_token_returns_none():
     assert parse_token("totaler-Quatsch") is None
 
@@ -483,7 +500,7 @@ def test_pool_first_resolve_samples_subset(pool_setup):
     """Erster resolve zieht fragen_pro_quiz Fragen aus dem 10er-Pool + persistiert sie."""
     tenant, domain, task, _token = pool_setup
     client = Client(HTTP_HOST=domain.domain)
-    resp = client.get(f"/api/public/schulung/{make_token(task.pk)}/")
+    resp = client.get(f"/api/public/schulung/{make_token(task.pk, tenant.schema_name)}/")
     assert resp.status_code == 200, resp.content
     body = resp.json()
     assert len(body["fragen"]) == 3, "fragen_pro_quiz=3 muss 3 ziehen"
@@ -494,9 +511,9 @@ def test_pool_first_resolve_samples_subset(pool_setup):
 
 def test_pool_second_resolve_returns_same_fragen(pool_setup):
     """Tab-Wechsel-Szenario: zweites resolve liefert exakt dieselbe Auswahl."""
-    _tenant, domain, task, _token = pool_setup
+    tenant, domain, task, _token = pool_setup
     client = Client(HTTP_HOST=domain.domain)
-    tok = make_token(task.pk)
+    tok = make_token(task.pk, tenant.schema_name)
     first = client.get(f"/api/public/schulung/{tok}/").json()
     second = client.get(f"/api/public/schulung/{tok}/").json()
     first_ids = [f["id"] for f in first["fragen"]]
@@ -508,7 +525,7 @@ def test_pool_abschliessen_counts_against_gezogene_fragen(pool_setup):
     """Prozent-Rechnung basiert auf gezogene_fragen.count(), nicht auf Pool-Größe."""
     tenant, domain, task, _token = pool_setup
     client = Client(HTTP_HOST=domain.domain)
-    tok = make_token(task.pk)
+    tok = make_token(task.pk, tenant.schema_name)
     # Resolve sampelt 3 Fragen.
     body = client.get(f"/api/public/schulung/{tok}/").json()
     # 2 von 3 richtig beantworten.
@@ -558,8 +575,8 @@ def test_pool_independent_samples_per_task(tenant_setup):
     # Mock random.sample so dass t1 die ersten 3, t2 die letzten 3 zieht.
     samples = iter([fragen[:3], fragen[-3:]])
     with patch("pflichtunterweisung.views.random.sample", side_effect=lambda _pool, _k: next(samples)):
-        b1 = client.get(f"/api/public/schulung/{make_token(t1.pk)}/").json()
-        b2 = client.get(f"/api/public/schulung/{make_token(t2.pk)}/").json()
+        b1 = client.get(f"/api/public/schulung/{make_token(t1.pk, tenant.schema_name)}/").json()
+        b2 = client.get(f"/api/public/schulung/{make_token(t2.pk, tenant.schema_name)}/").json()
     assert [f["id"] for f in b1["fragen"]] == [f.pk for f in fragen[:3]]
     assert [f["id"] for f in b2["fragen"]] == [f.pk for f in fragen[-3:]]
 

@@ -651,5 +651,32 @@ class AntwortBibliothekViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return AntwortBibliothekEintrag.objects.all().order_by("-aktualisiert_at")
 
+    @staticmethod
+    def _rdg_gate(serializer):
+        """RDG-Layer-2 auch für direkt kuratierte Bibliothek-Einträge.
+
+        Die Bibliothek ist Engine-Quelle Nr. 1 (Auto-Übernahme in künftige
+        Antworten). Ohne diese Prüfung könnte über das CRUD-Endpoint eine
+        verbotene Rechtsformulierung eingeschleust werden, die das zentrale
+        Export-Gate (ist_rdg_freigegeben) umgeht.
+        """
+        text = serializer.validated_data.get("antwort_text", "")
+        if text:
+            ergebnis = validate_output(text)
+            if not ergebnis.is_valid:
+                raise serializers.ValidationError(
+                    {
+                        "antwort_text": (
+                            "Verbotene Rechtsformulierung erkannt "
+                            f"({', '.join(ergebnis.matched_phrases)}). Bitte umformulieren."
+                        )
+                    }
+                )
+
     def perform_create(self, serializer):
+        self._rdg_gate(serializer)
         serializer.save(erstellt_von=self.request.user)
+
+    def perform_update(self, serializer):
+        self._rdg_gate(serializer)
+        serializer.save()

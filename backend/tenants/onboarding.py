@@ -22,6 +22,7 @@ import datetime
 import logging
 import re
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from django.conf import settings
 from django.core.mail import EmailMessage
@@ -37,6 +38,11 @@ from .models import (
     Tenant,
     TenantDomain,
 )
+
+if TYPE_CHECKING:
+    # Nur für Typannotation — Laufzeit-Import bleibt lazy in activate_tenant
+    # (Modul-Boundary-Zyklus core ↔ tenants).
+    from core.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -307,7 +313,7 @@ def send_invite_mail(result: OnboardingResult) -> None:
 
 
 @transaction.atomic
-def activate_tenant(req: OnboardingRequest, *, new_password: str) -> "User":
+def activate_tenant(req: OnboardingRequest, *, new_password: str) -> User:
     """Setzt das Passwort des GF + markiert Tenant + OnboardingRequest aktiviert.
 
     Muss im Tenant-Schema des Onboarding-Requests aufgerufen werden.

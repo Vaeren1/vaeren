@@ -274,3 +274,62 @@ def compress_asset(tenant_schema: str, asset_id: int) -> dict:
             "savings_percent": round(result.savings_percent, 1),
             "error": result.error,
         }
+
+
+@shared_task(name="pflichtunterweisung.versende_welle_einladungen")
+def versende_welle_einladungen(tenant_schema: str, welle_id: int, base_url: str) -> dict:
+    """Versendet alle Einladungs-Mails einer SchulungsWelle — idempotent.
+
+    Läuft im Tenant-Schema. Bereits versendete Tasks (``einladung_versendet_am``
+    gesetzt) werden übersprungen → sicher bei Celery-Retry und bei einem
+    synchronen Fallback-Aufruf aus der View.
+
+    Spec §7 fordert „niemals synchron im HTTP-Request" für Mail-Versand bei
+    50–300 Mitarbeitenden (sonst Gateway-Timeout). Die View enqueued diesen Task;
+    nur wenn der Broker nicht erreichbar ist, ruft sie ihn synchron als Fallback.
+
+    Args:
+        tenant_schema: Schema-Name des Tenants (django-tenants).
+        welle_id: PK der SchulungsWelle.
+        base_url: z. B. ``https://acme.app.vaeren.de`` (für den Token-Link).
+    """
+    from django.utils import timezone
+
+    from integrations.mailjet.client import send_schulung_invite
+
+    from .models import SchulungsWelle
+    from .tokens import make_token
+
+    with schema_context(tenant_schema):
+        welle = SchulungsWelle.objects.select_related("kurs").filter(pk=welle_id).first()
+        if welle is None:
+            logger.warning("versende_welle_einladungen: Welle %s fehlt in %s", welle_id, tenant_schema)
+            return {"error": "welle_not_found", "welle_id": welle_id}
+
+        deadline_str = welle.deadline.strftime("%d.%m.%Y")
+        sent = skipped = failed = 0
+        for task in welle.tasks.select_related("mitarbeiter").all():
+            if task.einladung_versendet_am:
+                skipped += 1
+                continue
+            # make_token liest connection.schema_name → hier korrekt der Tenant.
+            url = f"{base_url}/schulung/{make_token(task.pk)}"
+            res = send_schulung_invite(
+                to_email=task.mitarbeiter.email,
+                mitarbeiter_name=f"{task.mitarbeiter.vorname} {task.mitarbeiter.nachname}",
+                kurs_titel=welle.kurs.titel,
+                deadline=deadline_str,
+                schulungs_url=url,
+                einleitungs_text=welle.einleitungs_text,
+            )
+            if res.sent:
+                task.einladung_versendet_am = timezone.now()
+                task.save(update_fields=["einladung_versendet_am"])
+                sent += 1
+            else:
+                failed += 1
+        logger.info(
+            "versende_welle_einladungen welle=%s sent=%d skipped=%d failed=%d",
+            welle_id, sent, skipped, failed,
+        )
+        return {"welle_id": welle_id, "sent": sent, "skipped": skipped, "failed": failed}

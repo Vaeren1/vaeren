@@ -16,27 +16,60 @@ import {
   updateKontrolle,
 } from "@/lib/api/nis2";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 const SEKTOR_OPTIONS = [
-  "energie", "verkehr", "bank", "gesundheit", "trinkwasser", "abwasser",
-  "digital_infra", "oeff_verw", "raumfahrt", "post_kurier", "abfall",
-  "chemie", "lebensmittel", "industrie", "digital_dienste", "forschung", "sonstiges",
+  "energie",
+  "verkehr",
+  "bank",
+  "gesundheit",
+  "trinkwasser",
+  "abwasser",
+  "digital_infra",
+  "oeff_verw",
+  "raumfahrt",
+  "post_kurier",
+  "abfall",
+  "chemie",
+  "lebensmittel",
+  "industrie",
+  "digital_dienste",
+  "forschung",
+  "sonstiges",
 ];
 
-const REIFE_LABEL = ["nicht etabliert", "initial", "geplant", "umgesetzt", "optimiert"];
+const REIFE_LABEL = [
+  "nicht etabliert",
+  "initial",
+  "geplant",
+  "umgesetzt",
+  "optimiert",
+];
 
 export function NIS2Page() {
   const qc = useQueryClient();
-  const { data: bet } = useQuery({ queryKey: ["nis2-bet"], queryFn: getBetroffenheit });
-  const { data: kontrollen } = useQuery({ queryKey: ["nis2-kontrollen"], queryFn: listKontrollen });
-  const { data: score } = useQuery({ queryKey: ["nis2-score"], queryFn: getReifeScore });
+  const betQ = useQuery({ queryKey: ["nis2-bet"], queryFn: getBetroffenheit });
+  const kontrollenQ = useQuery({
+    queryKey: ["nis2-kontrollen"],
+    queryFn: listKontrollen,
+  });
+  const scoreQ = useQuery({ queryKey: ["nis2-score"], queryFn: getReifeScore });
+  const bet = betQ.data;
+  const kontrollen = kontrollenQ.data;
+  const score = scoreQ.data;
+  const anyError = betQ.isError || kontrollenQ.isError || scoreQ.isError;
 
   const [form, setForm] = useState<Partial<BetroffenheitsCheck>>({});
 
+  // Formular nur EINMAL aus den Server-Daten seeden. Sonst überschriebe jeder
+  // Hintergrund-Refetch (Window-Refocus, Save-Invalidierung) die laufenden Eingaben.
+  const seeded = useRef(false);
   useEffect(() => {
-    if (bet) setForm(bet);
+    if (bet && !seeded.current) {
+      setForm(bet);
+      seeded.current = true;
+    }
   }, [bet]);
 
   const saveMut = useMutation({
@@ -48,8 +81,10 @@ export function NIS2Page() {
   });
 
   const updKontrolle = useMutation({
-    mutationFn: (vars: { id: number; reife_stufe: KontrollAntwort["reife_stufe"] }) =>
-      updateKontrolle(vars.id, { reife_stufe: vars.reife_stufe }),
+    mutationFn: (vars: {
+      id: number;
+      reife_stufe: KontrollAntwort["reife_stufe"];
+    }) => updateKontrolle(vars.id, { reife_stufe: vars.reife_stufe }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["nis2-kontrollen"] });
       qc.invalidateQueries({ queryKey: ["nis2-score"] });
@@ -58,13 +93,19 @@ export function NIS2Page() {
 
   return (
     <div className="space-y-4 max-w-4xl">
+      {anyError && (
+        <div className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          Einige NIS2-Daten konnten nicht geladen werden — Anzeige evtl.
+          unvollständig. Bitte Seite neu laden.
+        </div>
+      )}
       <Card>
         <CardHeader>
           <CardTitle>NIS2-Selbstbewertung</CardTitle>
           <p className="text-sm text-muted-foreground mt-1">
-            Bewertung der Betroffenheit nach NIS2-Richtlinie (EU 2022/2555) + Reife-Score
-            auf Basis von 10 BSI-Grundschutz-orientierten Kontrollfragen. Kein
-            Zertifizierungs-Tool — nur Selbst-Einordnung.
+            Bewertung der Betroffenheit nach NIS2-Richtlinie (EU 2022/2555) +
+            Reife-Score auf Basis von 10 BSI-Grundschutz-orientierten
+            Kontrollfragen. Kein Zertifizierungs-Tool — nur Selbst-Einordnung.
           </p>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -76,7 +117,11 @@ export function NIS2Page() {
                 type="number"
                 value={form.mitarbeiter_anzahl ?? ""}
                 onChange={(e) =>
-                  setForm({ ...form, mitarbeiter_anzahl: Number.parseInt(e.target.value, 10) || undefined })
+                  setForm({
+                    ...form,
+                    mitarbeiter_anzahl:
+                      Number.parseInt(e.target.value, 10) || undefined,
+                  })
                 }
               />
             </div>
@@ -87,7 +132,11 @@ export function NIS2Page() {
                 type="number"
                 value={form.jahresumsatz_eur ?? ""}
                 onChange={(e) =>
-                  setForm({ ...form, jahresumsatz_eur: Number.parseInt(e.target.value, 10) || undefined })
+                  setForm({
+                    ...form,
+                    jahresumsatz_eur:
+                      Number.parseInt(e.target.value, 10) || undefined,
+                  })
                 }
               />
             </div>
@@ -126,7 +175,8 @@ export function NIS2Page() {
           <CardTitle>Reife-Score (10 Kontrollfragen)</CardTitle>
           {score && (
             <p className="text-sm">
-              Score: <strong>{score.score}/100</strong> · {score.beantwortet} von {score.gesamt} Fragen beantwortet
+              Score: <strong>{score.score}/100</strong> · {score.beantwortet}{" "}
+              von {score.gesamt} Fragen beantwortet
             </p>
           )}
         </CardHeader>
@@ -134,7 +184,9 @@ export function NIS2Page() {
           {kontrollen?.map((k) => (
             <div key={k.id} className="border rounded p-3">
               <p className="font-medium text-sm">{k.titel}</p>
-              <p className="text-sm text-muted-foreground mt-1">{k.frage_text}</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {k.frage_text}
+              </p>
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {[0, 1, 2, 3, 4].map((stufe) => (
                   <button

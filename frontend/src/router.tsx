@@ -1,6 +1,7 @@
 import { ProtectedRoute } from "@/components/auth/protected-route";
 import { RequireWizard } from "@/components/auth/require-wizard";
 import { SidebarShell } from "@/components/layout/sidebar-shell";
+import { AntwortBibliothekPage } from "@/routes/antwort-bibliothek";
 import { AuditExportDashboard } from "@/routes/audit-export";
 import { AuditExportProfileEditPage } from "@/routes/audit-export-profile-edit";
 import { AuditExportRunDetailPage } from "@/routes/audit-export-run-detail";
@@ -12,7 +13,6 @@ import { DatenpanneDetailPage } from "@/routes/datenpanne-detail";
 import { DatenpanneFormPage } from "@/routes/datenpanne-form";
 import { DatenpannenListPage } from "@/routes/datenpannen";
 import { DemoPage } from "@/routes/demo";
-import { AntwortBibliothekPage } from "@/routes/antwort-bibliothek";
 import { FragebogenListePage } from "@/routes/fragebogen-liste";
 import { FragebogenReviewPage } from "@/routes/fragebogen-review";
 import { FragebogenUploadPage } from "@/routes/fragebogen-upload";
@@ -98,6 +98,7 @@ import { MfaChallengePage } from "@/routes/mfa-challenge";
 import { MfaSetupPage } from "@/routes/mfa-setup";
 import { MitarbeiterListPage } from "@/routes/mitarbeiter";
 import { MitarbeiterFormPage } from "@/routes/mitarbeiter-form";
+import { NotFoundPage } from "@/routes/not-found";
 import { OnboardingSetupPage } from "@/routes/onboarding-setup";
 import { OnboardingWizardPage } from "@/routes/onboarding-wizard";
 import { PublicHinweisePage } from "@/routes/public-hinweise";
@@ -273,6 +274,8 @@ export const router = createBrowserRouter([
       { path: "/redaktion", element: <RedaktionPage /> },
       { path: "/settings", element: <SettingsPage /> },
       { path: "/mfa-setup", element: <MfaSetupPage /> },
+      // Catch-all: tote Links rendern eine 404-Seite statt eines leeren Outlets.
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
 ]);

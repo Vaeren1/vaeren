@@ -44,9 +44,9 @@ class BetroffenheitsCheckViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         instance = serializer.save()
-        if not serializer.validated_data.get("klassifizierung"):
-            instance.klassifizierung = instance.klassifiziere_automatisch()
-            instance.save(update_fields=["klassifizierung", "updated_at"])
+        # Immer deterministisch neu klassifizieren (Feld ist read-only im Serializer).
+        instance.klassifizierung = instance.klassifiziere_automatisch()
+        instance.save(update_fields=["klassifizierung", "updated_at"])
 
 
 class AssetViewSet(viewsets.ModelViewSet):

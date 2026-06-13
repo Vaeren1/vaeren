@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import json
 import logging
-import re
 
+import nh3
+from django.utils.html import escape
 from django.utils.text import slugify
 
 from redaktion.models import NewsCandidate, NewsPost, NewsPostStatus
@@ -69,16 +70,22 @@ def write_post_from_candidate(candidate: NewsCandidate, meta: dict) -> NewsPost 
 
     titel = _clean_dashes(response.get("titel", "").strip())[:200]
     lead = _clean_dashes(response.get("lead", "").strip())[:600]
-    body_html = _clean_dashes(response.get("body_html", "").strip())
+    # body_html ist roher LLM-Output und wird per dangerouslySetInnerHTML im
+    # redaktions-Editor UND öffentlich auf der News-Site gerendert → Stored-XSS-
+    # Senke. nh3 (ammonia) strippt script/Event-Handler/javascript:-URLs gegen
+    # eine erprobte Allowlist (p/a/strong/em/Listen/Überschriften bleiben).
+    body_html = nh3.clean(_clean_dashes(response.get("body_html", "").strip()))
     if not titel or not lead or not body_html:
         logger.warning("Writer: unvollständige Antwort: %r", response)
         return None
 
-    # Quell-Link sicherstellen (falls Writer ihn nicht im body_html eingebaut hat)
+    # Quell-Link sicherstellen (falls Writer ihn nicht im body_html eingebaut hat).
+    # URL + Quellenname escapen — quell_url stammt aus gecrawlten Drittquellen.
     if candidate.quell_url not in body_html:
         body_html += (
-            f'<p><strong>Quelle:</strong> '
-            f'<a href="{candidate.quell_url}" rel="external nofollow">{candidate.source.name}</a></p>'
+            f"<p><strong>Quelle:</strong> "
+            f'<a href="{escape(candidate.quell_url)}" rel="external nofollow">'
+            f"{escape(candidate.source.name)}</a></p>"
         )
 
     slug = _make_unique_slug(titel)

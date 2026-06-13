@@ -108,9 +108,15 @@ class ExportRunStatus(models.TextChoices):
 
 
 def _generate_mappe_id() -> str:
-    """Format VAE-YYYY-MMDD-XXXX (4 Hex-Chars Random)."""
+    """Format VAE-YYYY-MMDD-XXXXXXXXXX (10 Hex-Chars Random = 40 Bit).
+
+    Der öffentliche AuditExportRunIndex ist global (über alle Tenants) eindeutig
+    auf mappe_id. Mit nur 16 Bit Entropie/Tag kollidierten zwei Tenants am selben
+    Tag mit hoher Wahrscheinlichkeit (Geburtstagsparadoxon) → ein Tenant würde
+    den Index-Eintrag des anderen überschreiben. 40 Bit macht das vernachlässigbar.
+    """
     today = datetime.date.today()
-    random_suffix = secrets.token_hex(2)  # 4 Hex-Zeichen
+    random_suffix = secrets.token_hex(5)  # 10 Hex-Zeichen = 40 Bit
     return f"VAE-{today.year:04d}-{today.month:02d}{today.day:02d}-{random_suffix}"
 
 

@@ -442,6 +442,15 @@ class SchulungsTask(ComplianceTask):
     bestanden = models.BooleanField(null=True)
     zertifikat_id = models.CharField(max_length=64, blank=True, db_index=True)
     ablauf_datum = models.DateField(null=True, blank=True)
+    einladung_versendet_am = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text=(
+            "Zeitpunkt des erfolgreichen Einladungs-Mail-Versands. Ermöglicht "
+            "Idempotenz beim asynchronen (Celery-)Versand: bereits versendete "
+            "Tasks werden bei einem Retry übersprungen."
+        ),
+    )
     gezogene_fragen = models.ManyToManyField(
         "Frage",
         through="SchulungsTaskFrage",

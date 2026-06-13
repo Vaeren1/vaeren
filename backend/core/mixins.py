@@ -1,12 +1,19 @@
-"""DRF-ViewSet-Mixin: bereichert Signal-AuditLog mit Request-Kontext.
+"""DRF-ViewSet-Mixin: setzt den Request-Kontext für die Signal-AuditLog.
 
-Pattern: nach erfolgreichem create/update/destroy nimmt der Mixin
-das LETZTE AuditLog (das durch den ORM-Save vom Signal entstand)
-und ergänzt actor + actor_email_snapshot + ip_address.
+Pattern (seit Actor-Race-Fix): Vor der mutierenden Operation setzt der Mixin
+Actor + IP in einen thread-lokalen Kontext (`core.audit_context`). Das
+post_save/post_delete-Signal liest sie und schreibt sie DIREKT beim Anlegen des
+AuditLog-Eintrags.
+
+Vorher wurde nach der Operation der `latest("timestamp")`-Eintrag nachträglich
+per `.update()` angereichert — das war (a) ein Race (Request A konnte den
+Eintrag von Request B anreichern → Actor-Fehlattribution) und (b) eine Umgehung
+des `AuditLog.save()`-Immutability-Guards. Beides ist mit diesem Ansatz weg.
 """
 
-from rest_framework import status
 from rest_framework.response import Response
+
+from core.audit_context import clear_audit_context, set_audit_context
 
 
 def _client_ip(request) -> str | None:
@@ -17,52 +24,42 @@ def _client_ip(request) -> str | None:
 
 
 class AuditLogMixin:
-    """Auto-bereicherter AuditLog-Eintrag pro mutating-Endpoint."""
+    """Setzt Actor+IP-Kontext rund um jede mutierende Operation."""
 
     audit_log_track_actions = ("create", "update", "partial_update", "destroy")
 
-    def _enrich_latest_audit_log(self, request) -> None:
-        from core.models import AuditLog
-
-        try:
-            latest = AuditLog.objects.latest("timestamp")
-        except AuditLog.DoesNotExist:
-            return
-
-        actor = None
-        actor_email = ""
-        if request.user.is_authenticated:
-            actor = request.user
-            actor_email = request.user.email
-
-        # Direkter UPDATE bypassed AuditLog.save()-Immutability-Guard,
-        # weil wir nur Metadaten setzen, die im selben Request-Lifecycle entstehen.
-        AuditLog.objects.filter(pk=latest.pk).update(
-            actor=actor,
-            actor_email_snapshot=actor_email,
-            ip_address=_client_ip(request),
-        )
+    def _set_audit_context(self, request) -> None:
+        actor = request.user if request.user.is_authenticated else None
+        set_audit_context(actor, _client_ip(request))
 
     def create(self, request, *args, **kwargs):
-        response: Response = super().create(request, *args, **kwargs)
-        if response.status_code == status.HTTP_201_CREATED:
-            self._enrich_latest_audit_log(request)
+        self._set_audit_context(request)
+        try:
+            response: Response = super().create(request, *args, **kwargs)
+        finally:
+            clear_audit_context()
         return response
 
     def update(self, request, *args, **kwargs):
-        response: Response = super().update(request, *args, **kwargs)
-        if response.status_code == status.HTTP_200_OK:
-            self._enrich_latest_audit_log(request)
+        self._set_audit_context(request)
+        try:
+            response: Response = super().update(request, *args, **kwargs)
+        finally:
+            clear_audit_context()
         return response
 
     def partial_update(self, request, *args, **kwargs):
-        response: Response = super().partial_update(request, *args, **kwargs)
-        if response.status_code == status.HTTP_200_OK:
-            self._enrich_latest_audit_log(request)
+        self._set_audit_context(request)
+        try:
+            response: Response = super().partial_update(request, *args, **kwargs)
+        finally:
+            clear_audit_context()
         return response
 
     def destroy(self, request, *args, **kwargs):
-        response: Response = super().destroy(request, *args, **kwargs)
-        if response.status_code == status.HTTP_204_NO_CONTENT:
-            self._enrich_latest_audit_log(request)
+        self._set_audit_context(request)
+        try:
+            response: Response = super().destroy(request, *args, **kwargs)
+        finally:
+            clear_audit_context()
         return response

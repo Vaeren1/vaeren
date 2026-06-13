@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { listKITools, type KIRisikoKlasse } from "@/lib/api/ki_inventar";
+import { type KIRisikoKlasse, listKITools } from "@/lib/api/ki_inventar";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 
@@ -35,7 +35,7 @@ const RISIKO_LABEL: Record<KIRisikoKlasse, string> = {
 };
 
 export function KIInventarListPage() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["ki-tools"],
     queryFn: listKITools,
   });
@@ -45,7 +45,8 @@ export function KIInventarListPage() {
         <div>
           <CardTitle>KI-Tool-Inventar</CardTitle>
           <p className="text-sm text-muted-foreground mt-1">
-            EU AI Act Art. 26: Betreiber von Hochrisiko-KI-Systemen führen ein Verzeichnis.
+            EU AI Act Art. 26: Betreiber von Hochrisiko-KI-Systemen führen ein
+            Verzeichnis.
           </p>
         </div>
         <Button asChild>
@@ -54,6 +55,12 @@ export function KIInventarListPage() {
       </CardHeader>
       <CardContent>
         {isLoading && <p>Lade …</p>}
+        {isError && (
+          <p className="text-destructive">
+            Inventar konnte nicht geladen werden — die Liste ist evtl.
+            unvollständig. Bitte Seite neu laden.
+          </p>
+        )}
         {data && data.results.length === 0 && (
           <p className="text-muted-foreground">
             Noch keine KI-Tools erfasst.{" "}
@@ -82,13 +89,17 @@ export function KIInventarListPage() {
                     <Link to={`/ki-inventar/${k.id}`} className="underline">
                       <strong>{k.name}</strong>
                     </Link>
-                    <p className="text-xs text-muted-foreground">{k.anbieter}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {k.anbieter}
+                    </p>
                   </TableCell>
                   <TableCell className={RISIKO_FARBE[k.risiko] ?? ""}>
                     {RISIKO_LABEL[k.risiko] ?? k.risiko}
                   </TableCell>
                   <TableCell>{k.status}</TableCell>
-                  <TableCell className="text-xs">{k.datenkategorie_sensibilitaet}</TableCell>
+                  <TableCell className="text-xs">
+                    {k.datenkategorie_sensibilitaet}
+                  </TableCell>
                   <TableCell>{k.menschliche_aufsicht ? "✓" : "—"}</TableCell>
                   <TableCell>{k.transparenz_information ? "✓" : "—"}</TableCell>
                 </TableRow>

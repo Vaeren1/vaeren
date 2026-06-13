@@ -5,8 +5,10 @@ Spec §8. Memory-Footprint < 200 MB für 1000-Evidence-Szenario (Test-Gate).
 
 from __future__ import annotations
 
+import csv
 import hashlib
 import hmac
+import io
 import json
 import logging
 import os
@@ -124,6 +126,7 @@ class ZIPBuilder:
         ssp_json: dict | None = None,
         ar_json: dict | None = None,
         audit_log_chain_head: str = "",
+        audit_log_chain_entries: list[dict] | None = None,
         evidence_mode: str = "embed",
     ) -> None:
         self.run = run
@@ -136,6 +139,7 @@ class ZIPBuilder:
         self.ssp_json = ssp_json
         self.ar_json = ar_json
         self.audit_log_chain_head = audit_log_chain_head
+        self.audit_log_chain_entries = audit_log_chain_entries or []
         self.evidence_mode = evidence_mode
 
     def _write_entry(
@@ -166,6 +170,32 @@ class ZIPBuilder:
                     dst.write(chunk)
                     size += len(chunk)
         return ZipFileEntry(path=arcname, sha256=sha.hexdigest(), size=size)
+
+    _CHAIN_CSV_COLUMNS = (
+        "id",
+        "timestamp",
+        "actor_email_snapshot",
+        "aktion",
+        "target_content_type",
+        "target_object_id",
+        "entry_sha256",
+        "chain_hash",
+    )
+
+    def _render_chain_csv(self) -> str:
+        """Serialisiert die AuditLog-Hash-Chain als CSV.
+
+        Ermöglicht einem Auditor, `audit_log_chain_head` aus dem Manifest selbst
+        nachzurechnen. Bei leerer Chain bleibt nur die Header-Zeile.
+        """
+        buf = io.StringIO()
+        writer = csv.DictWriter(
+            buf, fieldnames=self._CHAIN_CSV_COLUMNS, extrasaction="ignore"
+        )
+        writer.writeheader()
+        for entry in self.audit_log_chain_entries:
+            writer.writerow(entry)
+        return buf.getvalue()
 
     def build(self) -> tuple[Path, str, int]:
         """Baut das ZIP-Bundle, signiert das Manifest, schreibt es als letzte Entry.
@@ -234,9 +264,17 @@ class ZIPBuilder:
                 f"- oscal/                    — NIST-OSCAL-1.1.2-Subset JSON\n"
                 f"- evidence/<modul>/<rec>/   — Original-Belege (encrypted bleibt encrypted)\n"
                 f"- manifest.json             — HMAC-signiertes Inventar\n"
-                f"- audit-log-chain.csv       — optionaler Hash-Chain-Auszug\n\n"
+                f"- audit-log-chain.csv       — Hash-Chain-Auszug (verifiziert chain_head)\n\n"
             )
             entries.append(self._write_entry(zf, "README.txt", readme.encode("utf-8")))
+
+            # 4b. AuditLog-Hash-Chain als CSV (vom README versprochen, früher nie
+            # geschrieben → Chain war ohne Datenbasis nicht nachvollziehbar). Wird
+            # in `entries` aufgenommen, also von der Manifest-Signatur abgedeckt.
+            chain_csv = self._render_chain_csv()
+            entries.append(
+                self._write_entry(zf, "audit-log-chain.csv", chain_csv.encode("utf-8"))
+            )
 
             # 5. Manifest (mit Signatur, als letzte Entry)
             manifest = build_manifest(

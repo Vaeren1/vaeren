@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { listGbu, type GbuStatus } from "@/lib/api/arbeitsschutz";
+import { type GbuStatus, listGbu } from "@/lib/api/arbeitsschutz";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -32,7 +32,10 @@ const STATUS_LABEL: Record<GbuStatus, string> = {
 
 export function GbuListPage() {
   const navigate = useNavigate();
-  const { data, isLoading } = useQuery({ queryKey: ["as-gbu"], queryFn: listGbu });
+  const { data, isLoading } = useQuery({
+    queryKey: ["as-gbu"],
+    queryFn: listGbu,
+  });
   return (
     <Card>
       <CardHeader>
@@ -70,7 +73,10 @@ export function GbuListPage() {
               {data.results.map((g) => (
                 <TableRow key={g.id}>
                   <TableCell>
-                    <Link to={`/arbeitsschutz/gbu/${g.id}`} className="underline">
+                    <Link
+                      to={`/arbeitsschutz/gbu/${g.id}/bearbeiten`}
+                      className="underline"
+                    >
                       {g.titel}
                     </Link>
                   </TableCell>

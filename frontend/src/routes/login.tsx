@@ -37,7 +37,15 @@ export function LoginPage() {
   const onSubmit = handleSubmit((values) => {
     login.mutate(values, {
       onError: (err) => {
-        if (err.status === 400) {
+        const body = err.body as
+          | { detail?: string; message?: string }
+          | undefined;
+        if (err.status === 403 && body?.detail === "trial_expired") {
+          toast.error(
+            body.message ??
+              "Ihre Testphase ist abgelaufen. Bitte kontaktieren Sie uns.",
+          );
+        } else if (err.status === 400) {
           toast.error("Login fehlgeschlagen — E-Mail oder Passwort prüfen.");
         } else if (err.status === 401) {
           // 401 ohne mfa_required ist hier ein echter Fehler

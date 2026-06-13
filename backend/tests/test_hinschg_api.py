@@ -117,6 +117,9 @@ def test_public_status_returns_sanitized_payload(tenant_setup):
     assert "bearbeiter" not in schritte[0]
     assert "geheim" not in resp.content.decode()
     assert "INTERN" not in resp.content.decode()
+    # Bearbeiter-getipptes Aktion-Label ("klassifizierung") wird NICHT durchgereicht,
+    # sondern auf ein neutrales Label vergröbert (kein Freitext-Leak nach außen).
+    assert schritte[0]["aktion"] == "interne_bearbeitung"
 
 
 def test_public_status_404_unknown_token(tenant_setup):

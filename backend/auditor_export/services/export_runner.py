@@ -187,14 +187,15 @@ def execute_run(run_id: int, *, tenant_schema: str | None = None) -> AuditExport
         # 7. ZIP-Bundle bauen
         signing_key = _tenant_signing_key(tenant_schema)
         if not signing_key:
-            # Fallback: generiere on-the-fly (nur Dev/Test)
-            import secrets
-
-            signing_key = secrets.token_bytes(32)
-            run.log(
-                level="warning",
-                aggregator="zipbundle",
-                message="Tenant.audit_signing_key leer — Fallback-Key verwendet",
+            # KEIN Wegwerf-Fallback-Key: Ein damit signiertes Bundle wäre offline
+            # nie verifizierbar (die Manifest-HMAC-Schicht wäre tot), sähe aber
+            # vollständig + „verified" aus. Lieber hart scheitern — der except-Block
+            # unten markiert den Run als FAILED mit klarer Fehlermeldung.
+            # (Tenant.save() generiert den Key normalerweise automatisch; trifft
+            #  also nur Tenants, die per Raw-SQL/Fixture an save() vorbei entstanden.)
+            raise RuntimeError(
+                f"Tenant '{tenant_schema}' hat keinen audit_signing_key — "
+                "Bundle-Signatur nicht möglich, Export abgebrochen."
             )
 
         zb = ZIPBuilder(
@@ -208,6 +209,7 @@ def execute_run(run_id: int, *, tenant_schema: str | None = None) -> AuditExport
             ssp_json=ssp_json,
             ar_json=ar_json,
             audit_log_chain_head=chain_head,
+            audit_log_chain_entries=chain_entries,
             evidence_mode=profile.evidence_mode,
         )
         zip_path, zip_sha, zip_size = zb.build()

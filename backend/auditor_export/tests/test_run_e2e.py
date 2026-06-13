@@ -82,11 +82,17 @@ def test_run_e2e_produces_zip_pdf_oscal(tenant, settings):
             assert "manifest.json" in names
             assert "oscal/system-security-plan.json" in names
             assert "oscal/assessment-results.json" in names
+            # Hash-Chain-CSV wird jetzt tatsächlich geschrieben (früher nur im
+            # README versprochen).
+            assert "audit-log-chain.csv" in names
             # Manifest auslesen + Signatur prüfen
             with zf.open("manifest.json") as f:
                 manifest = json.loads(f.read())
         assert manifest["mappe_id"] == result.mappe_id
         assert "signature" in manifest
+        # Die Chain-CSV ist Teil des signierten Manifests (nicht nur lose im ZIP).
+        chain_manifest_paths = [e["path"] for e in manifest["files"]]
+        assert "audit-log-chain.csv" in chain_manifest_paths
         # HMAC-Roundtrip mit Tenant-Key
         from django_tenants.utils import schema_context
 

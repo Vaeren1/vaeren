@@ -168,8 +168,18 @@ export function useMfaLogin() {
       });
     },
     onSuccess: async () => {
-      const me = await api<AuthUser>("/api/auth/user/");
-      setUser(me);
+      // Nach erfolgreichem MFA ist das Session-Cookie bereits gültig. Den
+      // User-Fetch defensiv kapseln: scheitert er (transienter 5xx/Netz),
+      // darf der ephemeralToken NICHT gesetzt bleiben — sonst wirft
+      // ProtectedRoute jede geschützte Route dauerhaft zur (bereits
+      // verbrauchten) MFA-Challenge zurück. setUser(null) räumt den Token ab;
+      // ProtectedRoute holt den User dann selbst über useCurrentUser nach.
+      try {
+        const me = await api<AuthUser>("/api/auth/user/");
+        setUser(me);
+      } catch {
+        setUser(null);
+      }
       queryClient.invalidateQueries({ queryKey: ["me"] });
       navigate("/mitarbeiter");
     },

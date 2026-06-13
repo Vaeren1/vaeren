@@ -97,6 +97,22 @@ class Tenant(TenantMixin):
             self.audit_signing_key = secrets.token_bytes(32)
         super().save(*args, **kwargs)
 
+    def is_trial_expired(self, *, today: datetime.date | None = None) -> bool:
+        """True, wenn eine Self-Service-Testphase abgelaufen ist.
+
+        Regel (siehe `trial_ends_at`-help_text):
+        - ``trial_ends_at is None`` → kein Trial (Pilot/Bezahl-Plan) → nie geblockt.
+        - ``pilot=True`` → ausgenommen, auch wenn ein altes trial_ends_at noch steht.
+        - sonst geblockt, sobald ``trial_ends_at`` in der Vergangenheit liegt.
+
+        Das „Freischalten" passiert über das Zuweisen eines Plans, der
+        ``trial_ends_at`` auf NULL setzt (oder ``pilot=True``).
+        """
+        if self.pilot or self.trial_ends_at is None:
+            return False
+        ref = today or datetime.date.today()
+        return self.trial_ends_at < ref
+
     def __str__(self) -> str:
         return f"{self.firma_name} ({self.schema_name})"
 

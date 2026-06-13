@@ -12,13 +12,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  type ImplementationStatus,
   confirmEvidenceLink,
   getControl,
   getImplementation,
   llmEntwurfImplementation,
   updateImplementation,
   verifyImplementation,
-  type ImplementationStatus,
 } from "@/lib/api/iso27001";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -31,13 +31,21 @@ export function Iso27001ControlDetail() {
   const [beschreibung, setBeschreibung] = useState("");
   const [status, setStatus] = useState<ImplementationStatus>("nicht_bewertet");
 
-  const { data: control } = useQuery({
+  const {
+    data: control,
+    isLoading: controlLoading,
+    isError: controlError,
+  } = useQuery({
     queryKey: ["iso27001-control", code],
     queryFn: () => getControl(code!),
     enabled: !!code,
   });
 
-  const { data: impl, refetch } = useQuery({
+  const {
+    data: impl,
+    isLoading: implLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["iso27001-impl", control?.implementation_id],
     queryFn: () => getImplementation(control!.implementation_id!),
     enabled: !!control?.implementation_id,
@@ -91,8 +99,27 @@ export function Iso27001ControlDetail() {
     },
   });
 
-  if (!control || !impl) {
+  if (controlError) {
+    return (
+      <p className="text-destructive">
+        Control konnte nicht geladen werden. Bitte Seite neu laden.
+      </p>
+    );
+  }
+  if (controlLoading || !control) {
     return <p>Lade Control …</p>;
+  }
+  if (control.implementation_id && (implLoading || !impl)) {
+    return <p>Lade Umsetzung …</p>;
+  }
+  if (!impl) {
+    // Control ohne erfasste Umsetzung: früher hing die Seite hier ewig auf
+    // „Lade Control …", weil die impl-Query nie lief.
+    return (
+      <p className="text-muted-foreground">
+        Für Control <strong>{code}</strong> ist noch keine Umsetzung erfasst.
+      </p>
+    );
   }
 
   return (
@@ -130,7 +157,9 @@ export function Iso27001ControlDetail() {
                 id="status"
                 className="w-full border rounded px-2 py-1 text-sm"
                 value={status}
-                onChange={(e) => setStatus(e.target.value as ImplementationStatus)}
+                onChange={(e) =>
+                  setStatus(e.target.value as ImplementationStatus)
+                }
               >
                 <option value="nicht_bewertet">Nicht bewertet</option>
                 <option value="nicht_anwendbar">Nicht anwendbar</option>
@@ -157,7 +186,9 @@ export function Iso27001ControlDetail() {
                 <div className="text-xs font-medium text-amber-900 mb-1">
                   LLM-Entwurf — bitte prüfen, KEIN juristischer Rat:
                 </div>
-                <p className="whitespace-pre-wrap">{impl.implementation_vorschlag}</p>
+                <p className="whitespace-pre-wrap">
+                  {impl.implementation_vorschlag}
+                </p>
                 <Button
                   size="sm"
                   variant="outline"
@@ -170,7 +201,10 @@ export function Iso27001ControlDetail() {
             )}
 
             <div className="flex flex-wrap gap-2">
-              <Button onClick={() => saveMut.mutate()} disabled={saveMut.isPending}>
+              <Button
+                onClick={() => saveMut.mutate()}
+                disabled={saveMut.isPending}
+              >
                 Speichern
               </Button>
               <Button

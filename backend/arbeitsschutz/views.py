@@ -404,6 +404,22 @@ class ArbeitsunfallViewSet(viewsets.ModelViewSet):
     filterset_fields = ("schwere", "arbeitsbereich", "bg_meldung_pflicht")
     ordering_fields = ("datum",)
 
+    # Verschlüsselte Art.-9-Felder (Gesundheitsdaten). Werden in der Liste NICHT
+    # serialisiert — sie hier zu laden würde sie unnötig pro Zeile Fernet-
+    # entschlüsseln (Performance) und ein einzelner Key-Mismatch würde die ganze
+    # anonymisierte Liste mit 500 brechen.
+    _ENCRYPTED_FIELDS: ClassVar = (
+        "betroffener_name_verschluesselt",
+        "beschreibung_verschluesselt",
+        "verletzungsart_verschluesselt",
+    )
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.action == "list":
+            return qs.defer(*self._ENCRYPTED_FIELDS)
+        return qs
+
     def get_permissions(self):
         if self.action == "list":
             return [IsAuthenticated(), ArbeitsschutzPermission()]

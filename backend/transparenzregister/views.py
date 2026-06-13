@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -37,6 +37,21 @@ class UnternehmensstammblattViewSet(viewsets.ModelViewSet):
         return Unternehmensstammblatt.objects.all().prefetch_related(
             "berechtigte", "bekanntmachungen"
         )
+
+    def create(self, request, *args, **kwargs):
+        # Singleton: ein zweites POST darf das bestehende Stammblatt NICHT still
+        # überschreiben (Model.save() würde sonst auf die bestehende PK mappen).
+        if Unternehmensstammblatt.objects.exists():
+            return Response(
+                {
+                    "detail": (
+                        "Es existiert bereits ein Stammblatt. "
+                        "Bitte das vorhandene bearbeiten (PATCH/PUT)."
+                    )
+                },
+                status=status.HTTP_409_CONFLICT,
+            )
+        return super().create(request, *args, **kwargs)
 
     @action(detail=False, methods=["get"], url_path="current")
     def current(self, request):

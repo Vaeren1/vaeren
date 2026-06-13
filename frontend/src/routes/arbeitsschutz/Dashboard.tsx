@@ -16,18 +16,36 @@ import { Link } from "react-router-dom";
 export function ArbeitsschutzDashboardPage() {
   const gbu = useQuery({ queryKey: ["as-gbu"], queryFn: listGbu });
   const m = useQuery({ queryKey: ["as-massn"], queryFn: listMassnahmen });
-  const unf = useQuery({ queryKey: ["as-unfall-stat"], queryFn: unfallStatistik });
-  const quoten = useQuery({ queryKey: ["as-quoten"], queryFn: listBeauftragtenQuoten });
+  const unf = useQuery({
+    queryKey: ["as-unfall-stat"],
+    queryFn: unfallStatistik,
+  });
+  const quoten = useQuery({
+    queryKey: ["as-quoten"],
+    queryFn: listBeauftragtenQuoten,
+  });
   const asa = useQuery({ queryKey: ["as-asa"], queryFn: listAsaSitzungen });
 
   const gbuQuote = gbu.data
     ? `${gbu.data.results.filter((g) => g.ist_aktuell).length} / ${gbu.data.count} aktuell`
     : "—";
-  const offeneMassn = m.data?.results.filter((x) => x.status === "geplant").length ?? 0;
+  const offeneMassn =
+    m.data?.results.filter((x) => x.status === "geplant").length ?? 0;
   const naechsteAsa = asa.data?.results.find((s) => s.status === "geplant");
+
+  // Ohne diesen Hinweis sähe ein 500er-Fehler aus wie „alles in Ordnung" (0 offene
+  // Maßnahmen, — Unfälle) — für ein Compliance-Dashboard ein gefährliches Falsch-Grün.
+  const anyError =
+    gbu.isError || m.isError || unf.isError || quoten.isError || asa.isError;
 
   return (
     <div className="space-y-4">
+      {anyError && (
+        <div className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          Einige Kennzahlen konnten nicht geladen werden. Die angezeigten Werte
+          sind möglicherweise unvollständig — bitte Seite neu laden.
+        </div>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader>
@@ -67,7 +85,9 @@ export function ArbeitsschutzDashboardPage() {
             <CardTitle className="text-sm">Nächste ASA</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-base font-semibold">{naechsteAsa?.quartal ?? "—"}</p>
+            <p className="text-base font-semibold">
+              {naechsteAsa?.quartal ?? "—"}
+            </p>
             <p className="text-xs text-muted-foreground">
               {naechsteAsa
                 ? new Date(naechsteAsa.geplant_am).toLocaleDateString("de-DE")
@@ -98,7 +118,9 @@ export function ArbeitsschutzDashboardPage() {
                   <span className="text-sm">{q.typ}</span>
                   <span
                     className={
-                      q.erfuellt ? "text-emerald-700" : "text-rose-700 font-semibold"
+                      q.erfuellt
+                        ? "text-emerald-700"
+                        : "text-rose-700 font-semibold"
                     }
                   >
                     {q.ist} / {q.soll} ({q.quote_prozent}%)
@@ -113,7 +135,8 @@ export function ArbeitsschutzDashboardPage() {
       <div className="text-sm text-muted-foreground">
         <p>
           Arbeitsschutz-Modul nach ArbSchG + DGUV. Vorschläge des Systems sind
-          immer HITL — verbindlich entscheidet die Fachkraft für Arbeitssicherheit.
+          immer HITL — verbindlich entscheidet die Fachkraft für
+          Arbeitssicherheit.
         </p>
       </div>
     </div>

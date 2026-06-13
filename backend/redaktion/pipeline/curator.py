@@ -27,7 +27,7 @@ _STOPWORDS = {
     "der", "die", "das", "den", "dem", "des", "ein", "eine", "einer", "eines",
     "und", "oder", "aber", "doch", "im", "in", "an", "am", "auf", "für", "mit",
     "von", "zu", "zur", "zum", "bei", "nach", "vor", "über", "unter", "durch",
-    "the", "a", "an", "of", "for", "to", "in", "on", "by", "with", "and", "or",
+    "the", "a", "of", "for", "to", "on", "by", "with", "and", "or",
     "ist", "sind", "war", "waren", "wird", "werden", "kann", "sollen", "muss",
     "bzw", "ggf", "z", "b", "etc", "vs", "neu", "neue", "neuen", "neuer",
 }

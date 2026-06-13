@@ -128,6 +128,41 @@ def test_mixin_captures_request_context(tenant_with_domain, settings):
         assert latest.ip_address in ("127.0.0.1", "::1")
 
 
+def test_signal_uses_audit_context_not_latest_race(tenant):
+    """Signal schreibt Actor/IP direkt aus dem thread-lokalen Context (ersetzt die
+    racy latest()-Anreicherung). Ohne Context bleibt Actor None — kein Leak vom
+    vorigen Save, keine Fehlattribution zwischen nebenläufigen Requests."""
+    from core.audit_context import clear_audit_context, set_audit_context
+    from core.models import AuditLog, Mitarbeiter
+    from tests.factories import MitarbeiterFactory, UserFactory
+
+    with schema_context(tenant.schema_name):
+        user = UserFactory(email="ctx@audit.de")
+        ct = ContentType.objects.get_for_model(Mitarbeiter)
+
+        # Mit Context → Actor + IP direkt beim Anlegen gesetzt.
+        set_audit_context(user, "9.9.9.9")
+        try:
+            ma1 = MitarbeiterFactory(vorname="With", nachname="Ctx")
+        finally:
+            clear_audit_context()
+        log1 = AuditLog.objects.get(
+            target_content_type=ct, target_object_id=ma1.pk, aktion="create"
+        )
+        assert log1.actor_id == user.pk
+        assert log1.actor_email_snapshot == "ctx@audit.de"
+        assert log1.ip_address == "9.9.9.9"
+
+        # Ohne Context → Actor None.
+        ma2 = MitarbeiterFactory(vorname="No", nachname="Ctx")
+        log2 = AuditLog.objects.get(
+            target_content_type=ct, target_object_id=ma2.pk, aktion="create"
+        )
+        assert log2.actor is None
+        assert log2.actor_email_snapshot == ""
+        assert log2.ip_address is None
+
+
 def test_full_flow_create_via_api_logs_actor_and_ip(tenant_with_domain, settings):
     """End-to-End: API-CREATE → AuditLog hat Actor + IP + CREATE-Aktion."""
     from django.contrib.contenttypes.models import ContentType

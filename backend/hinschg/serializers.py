@@ -52,6 +52,13 @@ class MeldungSubmitResponseSerializer(serializers.Serializer):
     rueckmeldung_faellig_bis = serializers.DateField()
 
 
+# Aktion-Labels, die gefahrlos an den Hinweisgeber zurückgespiegelt werden dürfen
+# (system-gesetzt). Alle anderen Bearbeitungsschritte tragen Bearbeiter-getippten
+# Freitext (z. B. interne Verdachts-Notizen) und werden im Public-Status auf ein
+# neutrales Label vergröbert.
+_OEFFENTLICHE_SCHRITT_AKTIONEN = frozenset({"hinweisgeber_nachricht"})
+
+
 class MeldungPublicStatusSerializer(serializers.ModelSerializer):
     """Sanitized Status — keine Bearbeiter-Infos, keine entschlüsselten Notizen."""
 
@@ -70,10 +77,17 @@ class MeldungPublicStatusSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
     def get_bearbeitungsschritte(self, obj):
-        """Nur sanitized: Datum + Aktion-Typ. Keine Notizen, keine Bearbeiter-Identität."""
-        return [
-            {"timestamp": s.timestamp, "aktion": s.aktion} for s in obj.bearbeitungsschritte.all()
-        ]
+        """Nur sanitized: Datum + vergröbertes Aktion-Label.
+
+        Keine Notizen, keine Bearbeiter-Identität, kein Bearbeiter-Freitext.
+        """
+        schritte = []
+        for s in obj.bearbeitungsschritte.all():
+            aktion = (
+                s.aktion if s.aktion in _OEFFENTLICHE_SCHRITT_AKTIONEN else "interne_bearbeitung"
+            )
+            schritte.append({"timestamp": s.timestamp, "aktion": aktion})
+        return schritte
 
 
 class HinweisgeberNachrichtSerializer(serializers.Serializer):

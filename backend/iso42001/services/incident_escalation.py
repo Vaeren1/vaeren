@@ -12,6 +12,8 @@ würde Migration-Reihenfolge brechen. `iso42001` ruft datenpannen.models direkt
 
 from __future__ import annotations
 
+import datetime
+
 from django.db import transaction
 from django.utils import timezone
 
@@ -68,7 +70,7 @@ def eskaliere_als_datenpanne(
         return incident.datenpanne
 
     # Import lazy, damit kein Modul-Boundary-Zyklus entsteht.
-    from datenpannen.models import Datenpanne, PannenArt
+    from datenpannen.models import FRIST_MELDUNG_BEHOERDE_STUNDEN, Datenpanne, PannenArt
 
     titel = f"KI-Vorfall: {incident.titel}"
     # Mapping AiIncidentTyp → PannenArt: konservativ, default sonstiges.
@@ -81,6 +83,14 @@ def eskaliere_als_datenpanne(
     }
     art = art_map.get(incident.typ, PannenArt.SONSTIGES)
 
+    # DSGVO Art. 33: Die 72-h-Meldefrist läuft ab Kenntnisnahme. Wir ankern auf
+    # das Entdeckungsdatum des KI-Vorfalls (frühestmögliche Kenntnis), NICHT auf
+    # den Eskalationszeitpunkt — sonst würde ein längst überfälliger Vorfall ein
+    # frisches 72-h-Fenster bekommen und fälschlich als fristgerecht erscheinen.
+    # incident.entdeckt_am ist ein DateField → auf Tagesbeginn aware-konvertieren.
+    entdeckt_am_dt = timezone.make_aware(
+        datetime.datetime.combine(incident.entdeckt_am, datetime.time.min)
+    )
     panne = Datenpanne.objects.create(
         titel=titel,
         art=art,
@@ -92,7 +102,10 @@ def eskaliere_als_datenpanne(
             f"Beschreibung:\n{incident.beschreibung}\n\n"
             f"Sofortmaßnahme:\n{incident.sofortmassnahme or '(noch keine)'}\n"
         ),
-        entdeckt_am=timezone.now(),
+        entdeckt_am=entdeckt_am_dt,
+        frist_meldung_behoerde=(
+            entdeckt_am_dt + datetime.timedelta(hours=FRIST_MELDUNG_BEHOERDE_STUNDEN)
+        ),
         entdeckt_durch=(erfasser.email if erfasser and erfasser.is_authenticated else ""),
         verantwortlicher_user=erfasser if erfasser and erfasser.is_authenticated else None,
     )

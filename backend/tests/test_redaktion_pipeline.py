@@ -85,7 +85,7 @@ class TestCurator:
                 }
             ]
         }
-        with mock.patch("redaktion.pipeline.curator.call_json", return_value=fake_response):
+        with mock.patch("redaktion.pipeline.curator.call_json_with_fallback", return_value=fake_response):
             from redaktion.pipeline.curator import curate_pending
 
             result = curate_pending()
@@ -114,7 +114,7 @@ class TestCurator:
                 }
             ]
         }
-        with mock.patch("redaktion.pipeline.curator.call_json", return_value=fake_response):
+        with mock.patch("redaktion.pipeline.curator.call_json_with_fallback", return_value=fake_response):
             from redaktion.pipeline.curator import curate_pending
 
             curate_pending()
@@ -124,7 +124,7 @@ class TestCurator:
         assert other.selected_at is None
 
     def test_curator_no_response_returns_empty(self, candidate):
-        with mock.patch("redaktion.pipeline.curator.call_json", return_value=None):
+        with mock.patch("redaktion.pipeline.curator.call_json_with_fallback", return_value=None):
             from redaktion.pipeline.curator import curate_pending
 
             assert curate_pending() == []
@@ -141,7 +141,7 @@ class TestWriter:
             "lead": "Der BfDI hat eine Leitlinie veröffentlicht.",
             "body_html": "<p>Inhalt mit <a href='https://bfdi.bund.de/test-pressemitteilung'>Quelle</a>.</p>",
         }
-        with mock.patch("redaktion.pipeline.writer.call_json", return_value=fake_response):
+        with mock.patch("redaktion.pipeline.writer.call_json_with_fallback", return_value=fake_response):
             from redaktion.pipeline.writer import write_post_from_candidate
 
             post = write_post_from_candidate(
@@ -160,7 +160,7 @@ class TestWriter:
             "lead": "Lead – auch mit Strich.",
             "body_html": "<p>Body – mit Strich.</p>",
         }
-        with mock.patch("redaktion.pipeline.writer.call_json", return_value=fake_response):
+        with mock.patch("redaktion.pipeline.writer.call_json_with_fallback", return_value=fake_response):
             from redaktion.pipeline.writer import write_post_from_candidate
 
             post = write_post_from_candidate(
@@ -178,7 +178,7 @@ class TestWriter:
             "lead": "Lead ohne Link",
             "body_html": "<p>Body ganz ohne Quelle.</p>",
         }
-        with mock.patch("redaktion.pipeline.writer.call_json", return_value=fake_response):
+        with mock.patch("redaktion.pipeline.writer.call_json_with_fallback", return_value=fake_response):
             from redaktion.pipeline.writer import write_post_from_candidate
 
             post = write_post_from_candidate(
@@ -189,7 +189,7 @@ class TestWriter:
         assert candidate.quell_url in post.body_html
 
     def test_writer_returns_none_on_no_llm(self, candidate):
-        with mock.patch("redaktion.pipeline.writer.call_json", return_value=None):
+        with mock.patch("redaktion.pipeline.writer.call_json_with_fallback", return_value=None):
             from redaktion.pipeline.writer import write_post_from_candidate
 
             assert (
@@ -223,7 +223,7 @@ class TestVerifierPublisher:
 
     def test_high_confidence_publishes(self, draft_post):
         with mock.patch(
-            "redaktion.pipeline.verifier.call_json",
+            "redaktion.pipeline.verifier.call_json_with_fallback",
             return_value={"verified": True, "confidence": 0.92, "issues": []},
         ), mock.patch(
             "redaktion.pipeline.verifier._fetch_source_text", return_value="Quell-Text"
@@ -241,7 +241,7 @@ class TestVerifierPublisher:
 
     def test_low_confidence_holds(self, draft_post):
         with mock.patch(
-            "redaktion.pipeline.verifier.call_json",
+            "redaktion.pipeline.verifier.call_json_with_fallback",
             return_value={"verified": False, "confidence": 0.6, "issues": ["Aktenzeichen falsch"]},
         ), mock.patch(
             "redaktion.pipeline.verifier._fetch_source_text", return_value="Quell-Text"

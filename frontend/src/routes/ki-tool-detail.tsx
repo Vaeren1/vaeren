@@ -4,7 +4,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getKITool, updateKITool } from "@/lib/api/ki_inventar";
+import {
+  type KIToolCreatePayload,
+  getKITool,
+  updateKITool,
+} from "@/lib/api/ki_inventar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -22,12 +26,17 @@ export function KIToolDetailPage() {
   const [submitting, setSubmitting] = useState(false);
 
   if (isLoading) return <p>Lade …</p>;
-  if (isError || !data) return <p className="text-destructive">Fehler beim Laden.</p>;
+  if (isError || !data)
+    return <p className="text-destructive">Fehler beim Laden.</p>;
 
-  async function toggleField(field: "transparenz_information" | "menschliche_aufsicht") {
+  async function toggleField(
+    field: "transparenz_information" | "menschliche_aufsicht",
+  ) {
+    if (!data) return;
     setSubmitting(true);
     try {
-      await updateKITool(tid, { [field]: !data?.[field] } as any);
+      const patch: Partial<KIToolCreatePayload> = { [field]: !data[field] };
+      await updateKITool(tid, patch);
       qc.invalidateQueries({ queryKey: ["ki-tool", tid] });
     } catch {
       toast.error("Speichern fehlgeschlagen.");
@@ -42,7 +51,8 @@ export function KIToolDetailPage() {
         <CardHeader>
           <CardTitle>{data.name}</CardTitle>
           <p className="text-sm text-muted-foreground">
-            {data.anbieter} · Risiko: <strong>{data.risiko}</strong> · Status: {data.status}
+            {data.anbieter} · Risiko: <strong>{data.risiko}</strong> · Status:{" "}
+            {data.status}
           </p>
         </CardHeader>
         <CardContent className="space-y-3 text-sm">
@@ -53,7 +63,9 @@ export function KIToolDetailPage() {
               <p>{data.kategorie}</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Personendaten-Sensibilität</p>
+              <p className="text-muted-foreground">
+                Personendaten-Sensibilität
+              </p>
               <p>{data.datenkategorie_sensibilitaet}</p>
             </div>
             <div>
@@ -76,21 +88,32 @@ export function KIToolDetailPage() {
             <ul className="text-sm space-y-1">
               {data.avv_link && (
                 <li>
-                  AVV/DPA: <a href={data.avv_link} className="underline">{data.avv_link}</a>
+                  AVV/DPA:{" "}
+                  <a href={data.avv_link} className="underline">
+                    {data.avv_link}
+                  </a>
                 </li>
               )}
               {data.konformitaet_link && (
                 <li>
-                  Konformität: <a href={data.konformitaet_link} className="underline">{data.konformitaet_link}</a>
+                  Konformität:{" "}
+                  <a href={data.konformitaet_link} className="underline">
+                    {data.konformitaet_link}
+                  </a>
                 </li>
               )}
               {data.dpia_link && (
                 <li>
-                  DPIA: <a href={data.dpia_link} className="underline">{data.dpia_link}</a>
+                  DPIA:{" "}
+                  <a href={data.dpia_link} className="underline">
+                    {data.dpia_link}
+                  </a>
                 </li>
               )}
               {!data.avv_link && !data.konformitaet_link && !data.dpia_link && (
-                <li className="text-muted-foreground">Noch keine Verlinkungen hinterlegt.</li>
+                <li className="text-muted-foreground">
+                  Noch keine Verlinkungen hinterlegt.
+                </li>
               )}
             </ul>
           </div>
@@ -104,7 +127,9 @@ export function KIToolDetailPage() {
         <CardContent className="space-y-3 text-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium">Personal über KI-Einsatz informiert?</p>
+              <p className="font-medium">
+                Personal über KI-Einsatz informiert?
+              </p>
               <p className="text-xs text-muted-foreground">Art. 26 Abs. 7</p>
             </div>
             <Button
@@ -113,13 +138,17 @@ export function KIToolDetailPage() {
               disabled={submitting}
               onClick={() => toggleField("transparenz_information")}
             >
-              {data.transparenz_information ? "✓ Ja" : "Nein — als erledigt markieren"}
+              {data.transparenz_information
+                ? "✓ Ja"
+                : "Nein — als erledigt markieren"}
             </Button>
           </div>
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">Menschliche Aufsicht gewährleistet?</p>
-              <p className="text-xs text-muted-foreground">Art. 14 — Override-Möglichkeit</p>
+              <p className="text-xs text-muted-foreground">
+                Art. 14 — Override-Möglichkeit
+              </p>
             </div>
             <Button
               variant="outline"
@@ -127,7 +156,9 @@ export function KIToolDetailPage() {
               disabled={submitting}
               onClick={() => toggleField("menschliche_aufsicht")}
             >
-              {data.menschliche_aufsicht ? "✓ Ja" : "Nein — als erledigt markieren"}
+              {data.menschliche_aufsicht
+                ? "✓ Ja"
+                : "Nein — als erledigt markieren"}
             </Button>
           </div>
         </CardContent>
@@ -139,13 +170,20 @@ export function KIToolDetailPage() {
         </CardHeader>
         <CardContent className="space-y-1.5">
           {data.tasks.map((t) => (
-            <div key={t.id} className="text-sm flex justify-between border-b pb-1">
+            <div
+              key={t.id}
+              className="text-sm flex justify-between border-b pb-1"
+            >
               <span>{t.titel}</span>
-              <span className="text-muted-foreground">Frist: {t.frist} · {t.status}</span>
+              <span className="text-muted-foreground">
+                Frist: {t.frist} · {t.status}
+              </span>
             </div>
           ))}
           {data.tasks.length === 0 && (
-            <p className="text-muted-foreground text-sm">Keine offenen Tasks.</p>
+            <p className="text-muted-foreground text-sm">
+              Keine offenen Tasks.
+            </p>
           )}
         </CardContent>
       </Card>

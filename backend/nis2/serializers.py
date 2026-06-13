@@ -17,7 +17,10 @@ class BetroffenheitsCheckSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         )
-        read_only_fields = ("id", "created_at", "updated_at")
+        # klassifizierung ist deterministisch engine-abgeleitet (klassifiziere_automatisch)
+        # und darf NICHT vom Client gesetzt werden — sonst lässt sich die Einstufung
+        # frei überschreiben und die Determinismus-Garantie bricht.
+        read_only_fields = ("id", "klassifizierung", "created_at", "updated_at")
 
 
 class AssetSerializer(serializers.ModelSerializer):

@@ -39,11 +39,18 @@ const LEVEL_DOT_BG: Record<string, string> = {
 };
 
 export function Iso27001Dashboard() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["iso27001-dashboard"],
     queryFn: getIsoDashboard,
   });
 
+  if (isError) {
+    return (
+      <p className="text-destructive">
+        ISO-27001-Dashboard konnte nicht geladen werden. Bitte Seite neu laden.
+      </p>
+    );
+  }
   if (isLoading || !data) {
     return <p>Lade ISO-27001-Dashboard …</p>;
   }
@@ -53,8 +60,8 @@ export function Iso27001Dashboard() {
       <div>
         <h1 className="text-2xl font-semibold">ISO 27001</h1>
         <p className="text-sm text-muted-foreground">
-          Annex-A-2022 Evidence-Sammler. Vom Tenant verantwortet — Vaeren liefert das
-          Erfassungs-Werkzeug, KEIN Audit-Ergebnis.
+          Annex-A-2022 Evidence-Sammler. Vom Tenant verantwortet — Vaeren
+          liefert das Erfassungs-Werkzeug, KEIN Audit-Ergebnis.
         </p>
       </div>
 
@@ -64,8 +71,8 @@ export function Iso27001Dashboard() {
             <CardTitle>Coverage</CardTitle>
             <p className="text-xs text-muted-foreground">
               {data.coverage.verifiziert + data.coverage.umgesetzt} von{" "}
-              {data.coverage.total - data.coverage.nicht_anwendbar} anwendbaren Controls
-              umgesetzt.
+              {data.coverage.total - data.coverage.nicht_anwendbar} anwendbaren
+              Controls umgesetzt.
             </p>
           </CardHeader>
           <CardContent>
@@ -96,7 +103,9 @@ export function Iso27001Dashboard() {
         <Card>
           <CardHeader>
             <CardTitle>Auditor-Readiness</CardTitle>
-            <p className="text-xs text-muted-foreground">{data.readiness.detail}</p>
+            <p className="text-xs text-muted-foreground">
+              {data.readiness.detail}
+            </p>
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-2">
@@ -107,7 +116,9 @@ export function Iso27001Dashboard() {
               <li>Coverage: {data.readiness.coverage}%</li>
               <li>Risiken behandelt: {data.readiness.risiken}%</li>
               <li>Audit-Aktualität: {data.readiness.audit_aktualitaet}%</li>
-              <li>Mgt-Review-Aktualität: {data.readiness.mgt_review_aktualitaet}%</li>
+              <li>
+                Mgt-Review-Aktualität: {data.readiness.mgt_review_aktualitaet}%
+              </li>
               <li>Evidence-Coverage: {data.readiness.evidence_coverage}%</li>
             </ul>
           </CardContent>

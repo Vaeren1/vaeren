@@ -13,13 +13,14 @@ Public Endpoints (token-based, kein Login):
 
 from __future__ import annotations
 
+import logging
 import random
 import secrets
 from datetime import date
 from typing import ClassVar
 
 from dateutil.relativedelta import relativedelta
-from django.db import models, transaction
+from django.db import connection, models, transaction
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -35,7 +36,6 @@ from core.llm_client import generate as llm_generate
 from core.llm_validator import LLMValidationError
 from core.models import ComplianceTaskStatus, Mitarbeiter
 from core.permissions import KursPermission, SchulungsWellePermission
-from integrations.mailjet.client import send_schulung_invite
 
 from .models import (
     AntwortOption,
@@ -67,7 +67,9 @@ from .serializers import (
     VersendenResponseSerializer,
     ZuweisungSerializer,
 )
-from .tokens import make_token, parse_token
+from .tokens import parse_token
+
+logger = logging.getLogger(__name__)
 
 # --- Interne ViewSets ---------------------------------------------------
 
@@ -491,23 +493,30 @@ class SchulungsWelleViewSet(viewsets.ModelViewSet):
             )
         host = request.get_host()
         scheme = "https" if request.is_secure() else "http"
-        sent_count = 0
-        for task in tasks:
-            token = make_token(task.pk)
-            url = f"{scheme}://{host}/schulung/{token}"
-            res = send_schulung_invite(
-                to_email=task.mitarbeiter.email,
-                mitarbeiter_name=f"{task.mitarbeiter.vorname} {task.mitarbeiter.nachname}",
-                kurs_titel=welle.kurs.titel,
-                deadline=welle.deadline.strftime("%d.%m.%Y"),
-                schulungs_url=url,
-                einleitungs_text=welle.einleitungs_text,
-            )
-            if res.sent:
-                sent_count += 1
+        base_url = f"{scheme}://{host}"
+
+        # Mail-Versand asynchron via Celery (Spec §7: nie synchron im HTTP-Request
+        # — bei 50–300 Mitarbeitenden würde der sequentielle SMTP-Loop sonst in
+        # einen Gateway-Timeout laufen). Fällt auf synchronen Versand zurück, wenn
+        # der Broker nicht erreichbar ist → niemals schlechter als das bisherige
+        # Verhalten. Der Task ist idempotent (einladung_versendet_am).
+        from .tasks import versende_welle_einladungen
+
         welle.mark_sent()
+        try:
+            versende_welle_einladungen.delay(connection.schema_name, welle.pk, base_url)
+            versendet = len(tasks)
+        except Exception:  # pragma: no cover — Broker-Ausfall ist Infrastruktur
+            logger.warning(
+                "Celery-Enqueue für Welle %s fehlgeschlagen — synchroner Fallback.",
+                welle.pk,
+                exc_info=True,
+            )
+            result = versende_welle_einladungen(connection.schema_name, welle.pk, base_url)
+            versendet = result.get("sent", 0)
+
         out = VersendenResponseSerializer(
-            {"versendet_an": sent_count, "welle_status": welle.status}
+            {"versendet_an": versendet, "welle_status": welle.status}
         )
         return Response(out.data)
 
