@@ -42,4 +42,15 @@ app.conf.beat_schedule = {
         "task": "redaktion.daily_digest",
         "schedule": crontab(hour=16, minute=0),
     },
+    # Bundesanzeiger-Monitoring: Montag 05:00 UTC. War bisher toter Code (poll.py
+    # ohne Caller), obwohl bundesanzeiger_monitoring_aktiv es verspricht.
+    "transparenzregister-bundesanzeiger-weekly": {
+        "task": "transparenzregister.poll_bundesanzeiger",
+        "schedule": crontab(hour=5, minute=0, day_of_week="monday"),
+    },
+    # AVV-Verlängerungs-Erinnerung zeitgesteuert (nicht nur bei Save). Täglich 03:30 UTC.
+    "avv-renewals-daily": {
+        "task": "auftragsverarbeitung.sweep_avv_renewals",
+        "schedule": crontab(hour=3, minute=30),
+    },
 }

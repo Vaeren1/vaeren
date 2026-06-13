@@ -16,7 +16,7 @@ import { toast } from "sonner";
 
 export function Iso42001ManagementReviewPage() {
   const qc = useQueryClient();
-  const { data } = useQuery({
+  const { data, isError } = useQuery({
     queryKey: ["iso42001-management-reviews"],
     queryFn: listManagementReviews,
   });
@@ -37,15 +37,23 @@ export function Iso42001ManagementReviewPage() {
 
   return (
     <div className="space-y-4">
+      {isError && (
+        <p className="text-destructive">
+          Management-Reviews konnten nicht geladen werden — bitte Seite neu
+          laden.
+        </p>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold">AIMS Management-Review</h1>
           <p className="text-sm text-muted-foreground">
-            ISO 42001 Kap. 9.3 — jährliche Überprüfung des KI-Management-Systems durch
-            die Geschäftsführung.
+            ISO 42001 Kap. 9.3 — jährliche Überprüfung des KI-Management-Systems
+            durch die Geschäftsführung.
           </p>
         </div>
-        <Button onClick={() => setShowForm(true)}>+ Neue Review erfassen</Button>
+        <Button onClick={() => setShowForm(true)}>
+          + Neue Review erfassen
+        </Button>
       </div>
 
       <Card>

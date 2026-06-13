@@ -5,6 +5,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  type AiPolicy,
   GELTUNGSBEREICH_LABELS,
   createPolicyFromTemplate,
   listPolicies,
@@ -13,7 +14,6 @@ import {
   policyNewVersion,
   policyRatify,
   updatePolicy,
-  type AiPolicy,
 } from "@/lib/api/iso42001";
 import { useMitarbeiterList } from "@/lib/api/mitarbeiter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -22,7 +22,7 @@ import { toast } from "sonner";
 
 export function Iso42001PoliciesPage() {
   const qc = useQueryClient();
-  const { data: policies } = useQuery({
+  const { data: policies, isError: policiesError } = useQuery({
     queryKey: ["iso42001-policies"],
     queryFn: listPolicies,
   });
@@ -31,9 +31,8 @@ export function Iso42001PoliciesPage() {
     queryFn: listPolicyTemplates,
   });
   const [selected, setSelected] = useState<AiPolicy | null>(null);
-  const [kenntnisnahmePolicy, setKenntnisnahmePolicy] = useState<AiPolicy | null>(
-    null,
-  );
+  const [kenntnisnahmePolicy, setKenntnisnahmePolicy] =
+    useState<AiPolicy | null>(null);
 
   const createFromTemplate = useMutation({
     mutationFn: createPolicyFromTemplate,
@@ -58,8 +57,10 @@ export function Iso42001PoliciesPage() {
   });
 
   const newVersionMut = useMutation({
-    mutationFn: (vars: { id: number; payload: { titel?: string; inhalt_markdown?: string } }) =>
-      policyNewVersion(vars.id, vars.payload),
+    mutationFn: (vars: {
+      id: number;
+      payload: { titel?: string; inhalt_markdown?: string };
+    }) => policyNewVersion(vars.id, vars.payload),
     onSuccess: (p) => {
       qc.invalidateQueries({ queryKey: ["iso42001-policies"] });
       toast.success(`Neue Version v${p.version} angelegt.`);
@@ -83,11 +84,16 @@ export function Iso42001PoliciesPage() {
 
   return (
     <div className="space-y-4">
+      {policiesError && (
+        <p className="text-destructive">
+          Policies konnten nicht geladen werden — bitte Seite neu laden.
+        </p>
+      )}
       <div>
         <h1 className="text-2xl font-semibold">KI-Policies</h1>
         <p className="text-sm text-muted-foreground">
-          Versionierte Richtlinien für den verantwortungsvollen KI-Einsatz. Aktivierung
-          (Ratifizierung) durch die Geschäftsführung.
+          Versionierte Richtlinien für den verantwortungsvollen KI-Einsatz.
+          Aktivierung (Ratifizierung) durch die Geschäftsführung.
         </p>
       </div>
 
@@ -122,19 +128,25 @@ export function Iso42001PoliciesPage() {
           )}
           <ul className="divide-y">
             {policies?.results.map((p) => (
-              <li key={p.id} className="flex items-center justify-between gap-3 py-2">
+              <li
+                key={p.id}
+                className="flex items-center justify-between gap-3 py-2"
+              >
                 <button
                   type="button"
                   className="text-left"
                   onClick={() => setSelected(p)}
                 >
                   <div className="font-medium">
-                    {p.titel} <span className="text-xs text-slate-500">v{p.version}</span>
+                    {p.titel}{" "}
+                    <span className="text-xs text-slate-500">v{p.version}</span>
                   </div>
                   <div className="text-xs text-muted-foreground">
                     {GELTUNGSBEREICH_LABELS[p.geltungsbereich]} ·{" "}
                     {p.aktiv ? (
-                      <span className="text-emerald-700 font-medium">aktiv</span>
+                      <span className="text-emerald-700 font-medium">
+                        aktiv
+                      </span>
                     ) : (
                       <span>inaktiv</span>
                     )}{" "}
@@ -231,8 +243,8 @@ function KenntnisnahmeDialog({
         <h2 className="mb-2 text-lg font-semibold">Kenntnisnahme abgeben</h2>
         <p className="text-sm text-muted-foreground">
           Bestätigt, dass der/die gewählte Mitarbeiter:in die Policy{" "}
-          <strong>{policy.titel}</strong> v{policy.version} gelesen und verstanden
-          hat.
+          <strong>{policy.titel}</strong> v{policy.version} gelesen und
+          verstanden hat.
         </p>
         <div className="mt-3">
           <label className="text-sm font-medium">Mitarbeiter:in</label>
@@ -277,7 +289,8 @@ function PolicyEditor({
   const [titel, setTitel] = useState(policy.titel);
   const [inhalt, setInhalt] = useState(policy.inhalt_markdown);
   const saveMut = useMutation({
-    mutationFn: () => updatePolicy(policy.id, { titel, inhalt_markdown: inhalt }),
+    mutationFn: () =>
+      updatePolicy(policy.id, { titel, inhalt_markdown: inhalt }),
     onSuccess: () => {
       toast.success("Policy gespeichert.");
       onSaved();
@@ -307,7 +320,8 @@ function PolicyEditor({
           />
           {policy.aktiv && (
             <p className="text-xs text-amber-700">
-              Aktive Policies sind read-only — lege eine neue Version an, um Änderungen zu erfassen.
+              Aktive Policies sind read-only — lege eine neue Version an, um
+              Änderungen zu erfassen.
             </p>
           )}
           <div className="flex justify-end gap-2">
@@ -315,7 +329,10 @@ function PolicyEditor({
               Schließen
             </Button>
             {!policy.aktiv && (
-              <Button onClick={() => saveMut.mutate()} disabled={saveMut.isPending}>
+              <Button
+                onClick={() => saveMut.mutate()}
+                disabled={saveMut.isPending}
+              >
                 Speichern
               </Button>
             )}

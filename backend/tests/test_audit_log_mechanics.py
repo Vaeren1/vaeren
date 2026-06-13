@@ -212,3 +212,26 @@ def test_full_flow_create_via_api_logs_actor_and_ip(tenant_with_domain, settings
         assert latest.actor.email == "qm@auditapi.de"
         assert latest.actor_email_snapshot == "qm@auditapi.de"
         assert latest.ip_address in ("127.0.0.1", "::1")
+
+
+def test_audit_diff_records_changed_field_names(tenant):
+    """aenderung_diff: create → {created: True}; update → geänderte Feld-NAMEN
+    (keine Werte). Früher war der Diff immer leer (forensisch wertlos)."""
+    from core.models import AuditLog, AuditLogAction, Mitarbeiter
+    from tests.factories import MitarbeiterFactory
+
+    with schema_context(tenant.schema_name):
+        ma = MitarbeiterFactory(vorname="Diff", nachname="Test")
+        ct = ContentType.objects.get_for_model(Mitarbeiter)
+
+        create_log = AuditLog.objects.filter(
+            target_content_type=ct, target_object_id=ma.pk, aktion=AuditLogAction.CREATE
+        ).latest("timestamp")
+        assert create_log.aenderung_diff == {"created": True}
+
+        ma.abteilung = "Geänderte Abteilung"
+        ma.save()
+        update_log = AuditLog.objects.filter(
+            target_content_type=ct, target_object_id=ma.pk, aktion=AuditLogAction.UPDATE
+        ).latest("timestamp")
+        assert "abteilung" in update_log.aenderung_diff.get("geaenderte_felder", [])
